@@ -3,13 +3,34 @@ import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
+import { QueryClient, QueryClientProvider } from "react-query";
 import reportWebVitals from "./reportWebVitals";
+
+const queryClient = new QueryClient({
+  onError: (error, query) => {
+    console.log("onError", error);
+  },
+  onSuccess: (data) => {
+    console.log("전역이 업데이트됨?", data);
+  },
+  // defaultOptions: {
+  //   queries: {
+  //     retry: 0,
+  //     suspense: true,
+  //     refetchOnMount: false,
+  //     refetchOnReconnect: false,
+  //     refetchOnWindowFocus: false,
+  //   },
+  // },
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <HashRouter basename={"/"}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </HashRouter>
   </React.StrictMode>
 );
