@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import reportWebVitals from "./reportWebVitals";
 
 const queryClient = new QueryClient({
@@ -30,6 +31,9 @@ root.render(
     <HashRouter basename={"/"}>
       <QueryClientProvider client={queryClient}>
         <App />
+        {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
+        <ReactQueryDevtools initialIsOpen={true} />
+      */}
       </QueryClientProvider>
     </HashRouter>
   </React.StrictMode>
