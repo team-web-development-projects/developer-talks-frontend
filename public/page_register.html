@@ -33,34 +33,36 @@
           <tr>
             <!--th 스타일-->
             <th class="line"><label for="userName">이름</label><span class="star" title="필수사항">*</span></th>
-            <td class="line"><input type="text" required id="userName" required size="40" placeholder="이름을 입력해주세요"></td>
+            <td class="line"><input type="text" maxlength="20" required id="userName" required size="40"
+                placeholder="이름을 입력해주세요"></td>
           </tr>
           <tr>
             <th><label for="userId">아이디</label><span class="star" title="필수사항">*</span></th>
-            <td><input type="id" id="userId" required size="40" placeholder="영문,숫자 조합으로 입력해주세요">
-              <button value="중복체크">중복체크</button>
+            <td><input type="id" id="userId" maxlength="20" required size="40" placeholder="아이디를 입력해주세요">
+              <button title="중복체크">중복체크</button>
             </td>
           </tr>
           <tr>
-            <th><label for="userId">닉네임</label><span class="star" title="필수사항">*</span></th>
-            <td><input type="id" id="userId" required size="40" placeholder="영문,숫자 조합으로 입력해주세요">
-              <button value="중복체크">중복체크</button>
+            <th><label for="userNickname">닉네임</label><span class="star" title="필수사항">*</span></th>
+            <td><input type="id" id="userNickname" maxlength="20" required size="40" placeholder="닉네임을 입력해주세요">
+              <button title="중복체크">중복체크</button>
             </td>
           </tr>
           <tr>
             <th>
-              <lable for="">비밀번호</lable><span class="star" title="필수사항">*</span>
+              <lable for="password_1">비밀번호</lable><span class="star" title="필수사항">*</span>
             </th>
-            <td><input type="password" id="password_1" required size="30" placeholder="영문,숫자 조합으로 입력해주세요">
-              <input type="password" id="password_2" required size="30" placeholder="비밀번호를 한번 더 입력해주세요">
+            <td><input type="password" id="password_1" maxlength="20" required size="30"
+                placeholder="영문,숫자 조합으로 입력해주세요">
+              <input type="password" id="password_2" maxlength="20" required size="30" placeholder="비밀번호를 한 번 더 입력해주세요">
             </td>
           </tr>
           <tr>
 
             <th>
-              <lable for="">이메일</lable><span class="star" title="필수사항">*</span>
+              <lable for="email">이메일</lable><span class="star" title="필수사항">*</span>
             </th>
-            <td><input type="email" id="email" required size="20" placeholder="이메일을 입력해주세요"></td>
+            <td><input type="email" id="email" required size="30" placeholder="이메일을 입력해주세요"></td>
           </tr>
         </table>
       </fieldset>
