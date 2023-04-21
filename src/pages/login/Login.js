@@ -48,13 +48,12 @@ const Login = () => {
                 <input
                   type="text"
                   id="userId"
-                  required
                   placeholder="Guest"
                   tabindex="1"
                   aria-invalid={
-                    !isDirty ? undefined : errors.id ? "true" : "false"
+                    !isDirty ? undefined : errors.userId ? "true" : "false"
                   }
-                  {...register("id", {
+                  {...register("userId", {
                     required: "아이디는 필수 입력입니다.",
                     minLength: {
                       value: 4,
@@ -62,20 +61,21 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.id && <small role="alert">{errors.id.message}</small>}
+                {errors.userId && (
+                  <small role="alert">{errors.userId.message}</small>
+                )}
               </li>
               <li>
                 <label for="userPw">비밀번호</label>
                 <input
                   type="password"
                   id="userPw"
-                  required
                   placeholder="******"
                   tabindex="2"
                   aria-invalid={
-                    !isDirty ? undefined : errors.password ? "true" : "false"
+                    !isDirty ? undefined : errors.userPw ? "true" : "false"
                   }
-                  {...register("password", {
+                  {...register("userPw", {
                     required: "비밀번호는 필수 입력입니다.",
                     minLength: {
                       value: 8,
@@ -83,8 +83,8 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.password && (
-                  <small role="alert">{errors.password.message}</small>
+                {errors.userPw && (
+                  <small role="alert">{errors.userPw.message}</small>
                 )}
               </li>
             </ul>
