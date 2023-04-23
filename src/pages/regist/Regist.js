@@ -1,5 +1,6 @@
 import React from 'react';
 import './Regist.scss';
+import { useForm } from 'react-hook-form';
 
 const Regist = () => {
   return (
