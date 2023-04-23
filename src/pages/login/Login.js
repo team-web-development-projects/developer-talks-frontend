@@ -54,14 +54,15 @@ const Login = () => {
                   id="userId"
                   placeholder="Guest"
                   tabIndex="1"
+                  maxLength="15"
                   aria-invalid={
                     !isDirty ? undefined : errors.userId ? 'true' : 'false'
                   }
                   {...register('userId', {
                     required: '아이디는 필수 입력입니다.',
                     minLength: {
-                      value: 4,
-                      message: '4글자 이상 입력해주세요.',
+                      value: 5,
+                      message: '5자리 이상 15자리 이하로 입력해주세요.',
                     },
                   })}
                 />
@@ -78,6 +79,7 @@ const Login = () => {
                   id="userPw"
                   placeholder="******"
                   tabIndex="2"
+                  maxLength="15"
                   aria-invalid={
                     !isDirty ? undefined : errors.userPw ? 'true' : 'false'
                   }
@@ -85,7 +87,8 @@ const Login = () => {
                     required: '비밀번호는 필수 입력입니다.',
                     minLength: {
                       value: 8,
-                      message: '8자리 이상 비밀번호를 사용해주세요.',
+                      message:
+                        '8자리 이상 15자리 이하로 비밀번호를 사용해주세요.',
                     },
                   })}
                 />
