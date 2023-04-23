@@ -5,4 +5,9 @@ header {
     font-size: 30px;
     width: 100%;
   }
+  a {
+    &.is-active {
+      font-weight: bold;
+    }
+  }
 }
