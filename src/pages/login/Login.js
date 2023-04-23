@@ -1,5 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import Footer from '../../components/footer/Footer';
+// FIXME 파일 위치가 잘못된 것일까요?
 
 const Login = () => {
   const onSubmit = async (data) => {
@@ -51,7 +53,7 @@ const Login = () => {
                   type="text"
                   id="userId"
                   placeholder="Guest"
-                  tabindex="1"
+                  tabIndex="1"
                   aria-invalid={
                     !isDirty ? undefined : errors.userId ? 'true' : 'false'
                   }
@@ -68,14 +70,14 @@ const Login = () => {
                 )}
               </li>
               <li>
-                <label className="Pw" for="userPw">
+                <label className="Pw" htmlFor="userPw">
                   비밀번호
                 </label>
                 <input
                   type="password"
                   id="userPw"
                   placeholder="******"
-                  tabindex="2"
+                  tabIndex="2"
                   aria-invalid={
                     !isDirty ? undefined : errors.userPw ? 'true' : 'false'
                   }
@@ -93,7 +95,7 @@ const Login = () => {
               </li>
             </ul>
             <div className="button">
-              <button type="submit" tabindex="3" disabled={isSubmitting}>
+              <button type="submit" tabIndex="3" disabled={isSubmitting}>
                 {' '}
                 로그인
               </button>
@@ -101,6 +103,8 @@ const Login = () => {
           </fieldset>
         </form>
       </section>
+      <Footer />
+      {/* FIXME 여기에 풋터 컴포넌트를 넣고 싶었습니다..! */}
     </div>
   );
 };
