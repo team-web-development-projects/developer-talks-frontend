@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm_1 } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import './Regist.scss';
 
 const Regist = () => {
@@ -23,17 +23,16 @@ const Regist = () => {
     //   });
     console.log('data', data);
   };
-  // FIXME 로그인페이지 따라 했는데, 색이 로그인과 다르더라고요
   const {
     register,
-    handleSubmit_1,
+    handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm_1({ mode: 'onChange' });
+  } = useForm({ mode: 'onChange' });
 
   return (
     <div>
-      <form onSubmit={handleSubmit_1(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="form_1">
           <legend>정보입력</legend>
           <h2>Developer-Talks 계정 만들기</h2>
@@ -92,10 +91,10 @@ const Regist = () => {
                     },
                   })}
                 />
+                <button title="중복체크">중복체크</button>
                 {errors.userId && (
                   <small role="alert">{errors.userId.message}</small>
                 )}
-                <button title="중복체크">중복체크</button>
               </td>
             </tr>
             <tr>
@@ -126,10 +125,10 @@ const Regist = () => {
                     },
                   })}
                 />
+                <button title="중복체크">중복체크</button>
                 {errors.userNickname && (
                   <small role="alert">{errors.userNickname.message}</small>
                 )}
-                <button title="중복체크">중복체크</button>
               </td>
             </tr>
             <tr>
@@ -145,6 +144,7 @@ const Regist = () => {
                   id="password_1"
                   placeholder="영문,숫자 조합으로 입력해주세요"
                   tabIndex="4"
+                  size="15"
                   aria-invalid={
                     !isDirty ? undefined : errors.password_1 ? 'true' : 'false'
                   }
@@ -156,14 +156,12 @@ const Regist = () => {
                     },
                   })}
                 />
-                {errors.password_1 && (
-                  <small role="alert">{errors.password_1.message}</small>
-                )}
                 <input
                   type="password"
                   id="password_2"
                   placeholder="비밀번호를 한 번 더 입력해주세요"
                   tabIndex="5"
+                  size="15"
                   aria-invalid={
                     !isDirty ? undefined : errors.password_2 ? 'true' : 'false'
                   }
@@ -175,6 +173,9 @@ const Regist = () => {
                     },
                   })}
                 />
+                {errors.password_1 && (
+                  <small role="alert">{errors.password_1.message}</small>
+                )}
                 {errors.password_2 && (
                   <small role="alert">{errors.password_2.message}</small>
                 )}
