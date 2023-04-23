@@ -23,7 +23,7 @@ const Regist = () => {
     //   });
     console.log('data', data);
   };
-
+  // FIXME 로그인페이지 따라 했는데, 색이 로그인과 다르더라고요
   const {
     register,
     handleSubmit_1,
