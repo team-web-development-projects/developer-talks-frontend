@@ -6,10 +6,6 @@ import "./header.scss";
 const Header = () => {
   const location = useLocation();
 
-  useEffect(() => {
-    console.log(location.pathname);
-  }, [location]);
-
   return (
     <header>
       <h1>
