@@ -1,0 +1,21 @@
+/*NOTE 아래 테그 입니다 */
+div {
+  ul.foot {
+    width: 100%;
+    background-color: #ffffff;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 30px;
+    li {
+      list-style: none;
+      padding: 5px;
+      display: inline-block;
+    }
+  }
+
+  div p.foot_2 {
+    padding: 20px 0;
+    color: #595959;
+    font-size: 12px;
+  }
+}

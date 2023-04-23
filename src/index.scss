@@ -1,3 +1,16 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
 /*여백초기화*/
 /* reset.css */
 // @import font
@@ -25,23 +38,17 @@ a {
     text-decoration: none;
   }
   &:hover {
-    color: rgb(164, 164, 164);
+    color: #a4a4a4;
     text-decoration: none;
   }
   &:active {
-    color: rgb(0, 0, 0);
+    color: #000000;
     text-decoration: none;
   }
   &:focus {
     color: black;
     text-decoration: none;
   }
-}
-/*전체 레이아웃*/
-#wrap {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
 }
 
 @font-face {
@@ -57,85 +64,76 @@ a {
   모바일 767 
 */
 
-@media (min-width: 767px) {
-  /*헤더영억*/
-  header {
-    padding: 70px 0 50px;
-  }
-  h1 {
-    font-family: 'ChosunCentennial';
-    font-size: 30px;
-    width: 100%;
-  }
-  fieldset p {
+// @media (min-width: 767px) {
+
+/*NOTE form 영역입니다*/
+form {
+  margin: 0 auto;
+  padding: 30px 30px;
+  width: 430px;
+  background-color: #f5f5f5;
+  border: 1px solid #adb5b5;
+  border-radius: 10px;
+
+  /*NOTE 가입으로 다양한 사람들을 만나보세요!*/
+  p {
+    padding-bottom: 20px;
     line-height: 28px;
-    padding-bottom: 30px;
-    background-color: rgb(245, 245, 245);
-    background-color: #ccc;
+    font-weight: bold;
+    background-color: #f5f5f5;
   }
-  /*섹션영역*/
-  form {
-    margin: 0 auto;
-    padding: 50px 30px;
-    width: 430px;
-    border: 1px solid rgb(173, 181, 181);
-    border-radius: 10px;
-    background-color: rgb(245, 245, 245);
-  }
+
+  /*NOTE 아이디, 비밀번호 칠 수 있는 영역입니다*/
   ul.login_main {
-    border-collapse: collapse;
-    border-bottom: 1px solid black;
+    text-align: center;
+    padding: 0px 0;
+    background-color: #ffffff;
     border-left: 1px solid black;
     border-right: 1px solid black;
-  }
-  ul.login_main li {
-    display: inline-block;
-    padding: 5px 0;
-    width: 100%;
     border-top: 1px solid black;
-    font-weight: bold;
+    border-collapse: collapse;
+    li {
+      display: inline-block;
+      padding-left: 0;
+      padding: 5px 0;
+      font-weight: bold;
+      background-color: #ffffff;
+      border-bottom: 1px solid black;
+      label {
+        background-color: #ffffff;
+        &.Id {
+          padding: 15px 25px;
+        }
+        &.Pw {
+          padding: 15px 17px;
+        }
+      }
+      input {
+        padding: 18px 0;
+        width: 300px;
+        border: 0;
+      }
+    }
   }
-  input {
-    padding: 10px;
-    width: 300px;
-    /* background-color: rgb(255, 255, 255); */
-    border: 0;
-  }
-  /*아래영역*/
-  div.button {
-    padding: 50px 0 0;
-    background-color: rgb(245, 245, 245);
-  }
+}
+
+/*NOTE 버튼입니다 */
+div.button {
+  padding: 50px 0 0;
+  background-color: #f5f5f5;
   button {
-    border-radius: 10px;
-    color: rgb(255, 255, 255);
-    background-color: black;
-    border: 0;
+    &:hover {
+      background-color: #585858;
+    }
+    &:active {
+      background-color: #000000;
+    }
     width: 100%;
     height: 60px;
     font-size: 17px;
-  }
-  button:hover {
-    background-color: rgb(88, 88, 88);
-  }
-  button:active {
-    background-color: rgb(0, 0, 0);
-  }
-  ul.foot {
-    width: 100%;
-    background-color: rgb(255, 255, 255);
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 30px;
-  }
-  ul.foot li {
-    list-style: none;
-    padding: 5px;
-    display: inline-block;
-  }
-  section p.foot_2 {
-    padding: 20px 0;
-    color: rgb(89, 89, 89);
-    font-size: 12px;
+    color: #ffffff;
+    background-color: black;
+    border: 0;
+    border-radius: 10px;
   }
 }

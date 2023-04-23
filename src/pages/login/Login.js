@@ -1,5 +1,5 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
 const Login = () => {
   const onSubmit = async (data) => {
@@ -20,7 +20,7 @@ const Login = () => {
     //   .then(function () {
     //     // 항상 실행
     //   });
-    console.log("data", data);
+    console.log('data', data);
   };
 
   const {
@@ -28,7 +28,7 @@ const Login = () => {
     handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: 'onChange' });
 
   return (
     <div>
@@ -44,20 +44,22 @@ const Login = () => {
 
             <ul className="login_main">
               <li>
-                <label htmlFor="userId">아이디</label>
+                <label className="Id" htmlFor="userId">
+                  아이디
+                </label>
                 <input
                   type="text"
                   id="userId"
                   placeholder="Guest"
                   tabindex="1"
                   aria-invalid={
-                    !isDirty ? undefined : errors.userId ? "true" : "false"
+                    !isDirty ? undefined : errors.userId ? 'true' : 'false'
                   }
-                  {...register("userId", {
-                    required: "아이디는 필수 입력입니다.",
+                  {...register('userId', {
+                    required: '아이디는 필수 입력입니다.',
                     minLength: {
                       value: 4,
-                      message: "4글자 이상 입력해주세요.",
+                      message: '4글자 이상 입력해주세요.',
                     },
                   })}
                 />
@@ -66,20 +68,22 @@ const Login = () => {
                 )}
               </li>
               <li>
-                <label for="userPw">비밀번호</label>
+                <label className="Pw" for="userPw">
+                  비밀번호
+                </label>
                 <input
                   type="password"
                   id="userPw"
                   placeholder="******"
                   tabindex="2"
                   aria-invalid={
-                    !isDirty ? undefined : errors.userPw ? "true" : "false"
+                    !isDirty ? undefined : errors.userPw ? 'true' : 'false'
                   }
-                  {...register("userPw", {
-                    required: "비밀번호는 필수 입력입니다.",
+                  {...register('userPw', {
+                    required: '비밀번호는 필수 입력입니다.',
                     minLength: {
                       value: 8,
-                      message: "8자리 이상 비밀번호를 사용해주세요.",
+                      message: '8자리 이상 비밀번호를 사용해주세요.',
                     },
                   })}
                 />
@@ -90,7 +94,7 @@ const Login = () => {
             </ul>
             <div className="button">
               <button type="submit" tabindex="3" disabled={isSubmitting}>
-                {" "}
+                {' '}
                 로그인
               </button>
             </div>
