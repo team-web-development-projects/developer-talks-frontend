@@ -7,7 +7,7 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <header>
+    <header className="header">
       <h1>
         <Link to="/">Developer-Talks</Link>
       </h1>

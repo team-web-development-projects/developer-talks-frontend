@@ -1,102 +1,99 @@
-@font-face {
-  font-family: 'ChosunCentennial';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/ChosunCentennial.woff2')
-    format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-/*NOTE 테이블 위에 글*/
-form {
-  position: relative;
-  h2 {
-    padding-bottom: 20px;
-    text-align: left;
-    font-size: 16px;
-    font-weight: bolder;
-  }
-  p.p1 {
-    position: absolute;
-    top: 35px;
-    right: 40px;
-    font-size: 11px;
-    font-weight: bolder;
-    color: #e41a1a;
-  }
-}
-
-/*NOTE 테이블스타일*/
-table {
-  width: 100%;
-  border: 1px solid #bbbbbb;
-  th,
-  td {
-    padding: 10px 0;
-    background-color: #ffffff;
-    border-bottom: 1px solid #000000;
-    &.line {
-      border-top: 1px solid #000000;
-    }
-  }
-  th {
-    width: 100px;
-    font-size: 14px;
-    border-left: 1px solid #000000;
-    label {
+.regist-page {
+  form {
+    position: relative;
+    h2 {
+      padding-bottom: 20px;
+      text-align: left;
+      font-size: 16px;
       font-weight: bolder;
     }
-    span.star {
-      color: #f11616;
-    } /*NOTE 정보의 "별"표시입니다*/
+    .chk {
+      position: absolute;
+      top: 35px;
+      right: 40px;
+      font-size: 11px;
+      font-weight: bolder;
+      color: #e41a1a;
+    }
   }
-  td {
-    text-align: left;
-    border-right: 1px solid #000000;
-    input {
-      margin-left: 5px;
-      padding-left: 2px;
-      height: 40px;
-      border: 1px solid #e3e3e3;
+
+  /*NOTE 테이블스타일*/
+  table {
+    width: 100%;
+    border: 1px solid #bbbbbb;
+    tr {
+      border: 1px solid #000000;
+      border-bottom: 0;
+      &:last-child {
+        border-bottom: 1px solid #000000;
+      }
     }
-    small {
-      display: block;
+    th, td {
+      padding: 10px 0;
+      background-color: #ffffff;
     }
-    /*NOTE 중복체크 버튼입니다*/
-    button {
-      margin-left: 10px;
+    th {
       width: 100px;
-      height: 40px;
-      color: white;
-      background-color: #000000;
-      border-radius: 5px;
-      border: 1px solid black;
+      font-size: 14px;
+      label {
+        font-weight: bolder;
+      }
+      .star {
+        color: #f11616;
+      }
+    }
+    td {
+      text-align: left;
+      border-right: 1px solid #000000;
+      input {
+        margin-left: 5px;
+        padding-left: 6px;
+        height: 40px;
+        border: 1px solid #e3e3e3;
+        &::placeholder {
+          font-size: 13px;
+        }
+      }
+      small {
+        display: block;
+        font-size: 13px;
+        color: #f40b0b;
+      }
+      button {
+        margin-left: 10px;
+        width: 100px;
+        height: 40px;
+        color: white;
+        background-color: #000000;
+        border-radius: 5px;
+        border: 1px solid black;
+        &:hover {
+          background-color: #585858;
+        }
+        &:active {
+          background-color: #000000;
+        }
+      }
+    }
+  }
+
+  .submit {
+    text-align: center;
+    padding: 20px 0;
+    button {
+      border-radius: 10px;
+      width: 200px;
+      height: 60px;
+      font-size: 17px;
+      color: #ffffff;
+      background-color: black;
+      border: 0;
       &:hover {
         background-color: #585858;
       }
       &:active {
         background-color: #000000;
       }
-    }
-  }
-}
-
-/*NOTE 제출하기버튼*/
-div.submit {
-  text-align: center;
-  padding: 20px 0;
-  button {
-    border-radius: 10px;
-    width: 200px;
-    height: 60px;
-    font-size: 17px;
-    color: #ffffff;
-    background-color: black;
-    border: 0;
-    &:hover {
-      background-color: #585858;
-    }
-    &:active {
-      background-color: #000000;
     }
   }
 }

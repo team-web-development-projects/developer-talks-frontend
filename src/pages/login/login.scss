@@ -1,0 +1,44 @@
+.login-page {
+  .login_main {
+    margin-top: 19px;
+    padding: 0px 0;
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid black;
+    border-collapse: collapse;
+    li {
+      display: inline-block;
+      padding: 8px 0;
+      width: 100%;
+      font-weight: bold;
+      background-color: #ffffff;
+      &:nth-child(1) {
+        border-bottom: 1px solid #000000;
+      }
+      label {
+        background-color: #ffffff;
+        &.Id {
+          padding: 15px 25px;
+        }
+        &.Pw {
+          padding: 15px 17px;
+        }
+      }
+      input {
+        padding: 15px 0;
+        width: 270px;
+        font-size: 16px;
+        border: 1px solid rgb(207, 207, 207);
+      }
+      small {
+        display: block;
+        text-align: left;
+        font-size: 12px;
+        padding-left: 20px;
+      }
+    }
+  }
+  .button {
+    padding: 81px 0 0;
+  }
+}
