@@ -1,0 +1,17 @@
+$breakpoints-mobile: 767;
+
+@mixin media-mo() {
+  @media (max-width: ($breakpoints-mobile+'px')) {
+    @content;
+  }
+}
+
+@mixin font($value) {
+  @if($value =='cc') {
+    font-family: 'ChosunCentennial';
+  }
+
+  // @if($value =='cc') {
+  //   font-family: 'ChosunCentennial';
+  // }
+}

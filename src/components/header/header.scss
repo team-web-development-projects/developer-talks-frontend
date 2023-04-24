@@ -1,11 +1,13 @@
+@import 'assets/style/function.scss';
+
 .header {
   padding: 95px 0 47px;
   text-align: center;
   h1 {
     margin-bottom: 12px;
-    font-family: 'ChosunCentennial';
     font-weight: 600;
     font-size: 30px;
+    @include font('cc');
   }
   a {
     &.is-active {
