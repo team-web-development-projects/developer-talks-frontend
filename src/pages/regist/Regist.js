@@ -3,29 +3,39 @@ import { useForm } from "react-hook-form";
 import "./Regist.scss";
 import Footer from "../../components/footer/Footer";
 import Form from "components/form/Form";
+import axios from "axios";
+import { ROOT_API } from "constants/api";
+axios.defaults.withCredentials = true;
 
 const Regist = () => {
   const duplicatedId = ["dddd1", "dddd2"];
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    // axios
-    //   .post(`https://url`, {
-    //     modelName: data["modelName"],
-    //     brand: data["brand"],
-    //     price: data["price"],
-    //     // size: data["size"],
-    //   })
-    //   .then(function (response) {
-    //     // console.log("dta", response.data);
-    //     alert("회원가입 완료");
-    //   })
-    //   .catch(function (error) {
-    //     // 오류발생시 실행
-    //   })
-    //   .then(function () {
-    //     // 항상 실행
-    //   });
+    axios
+      .post(
+        `${ROOT_API}/sign-up`,
+        {
+          email: "teset@naver.com",
+          nickname: "codepadding",
+          userid: "tester훈",
+          password: "TVR7BN1D",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          withCredentials: true, // 쿠키 cors 통신 설정
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     console.log("data", data);
   };
   const {
@@ -104,8 +114,8 @@ const Regist = () => {
                     {...register("userNickname", {
                       required: "닉네임은 필수 입력입니다.",
                       minLength: {
-                        value: 8,
-                        message: "8자리 이상 입력해주세요.",
+                        value: 5,
+                        message: "5자리 이상 입력해주세요.",
                       },
                     })}
                   />
@@ -243,13 +253,13 @@ const Regist = () => {
             </tbody>
           </table>
         </fieldset>
+        <div className="submit">
+          <button type="submit" tabIndex="7" disabled={isSubmitting}>
+            {" "}
+            가입하기
+          </button>
+        </div>
       </Form>
-      <div className="submit">
-        <button type="submit" tabIndex="7" disabled={isSubmitting}>
-          {" "}
-          가입하기
-        </button>
-      </div>
       <Footer />
     </div>
   );
