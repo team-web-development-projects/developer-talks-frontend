@@ -10,11 +10,10 @@ axios.defaults.withCredentials = true;
 const Regist = () => {
   const duplicatedId = ["dddd1", "dddd2"];
 
-  const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
+  useEffect(() => {
     axios
       .post(
-        `${ROOT_API}/sign-up`,
+        `http://43.201.28.200:8080/sign-up`,
         {
           email: "teset@naver.com",
           nickname: "codepadding",
@@ -26,7 +25,6 @@ const Regist = () => {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
           },
-          withCredentials: true, // 쿠키 cors 통신 설정
         }
       )
       .then(function (response) {
@@ -35,7 +33,10 @@ const Regist = () => {
       .catch(function (error) {
         console.log(error);
       });
+  });
 
+  const onSubmit = async (data) => {
+    await new Promise((r) => setTimeout(r, 1000));
     console.log("data", data);
   };
   const {
@@ -195,11 +196,11 @@ const Regist = () => {
                         value: 15,
                         message: "15자리 이히 비밀번호를 사용해주세요.",
                       },
-                      pattern: {
-                        value:
-                          /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
-                        message: "특수문자를 포함해주세요",
-                      },
+                      // pattern: {
+                      //   value:
+                      //     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
+                      //   message: "특수문자를 포함해주세요",
+                      // },
                     })}
                   />
                   {errors.password_1 && (
@@ -238,11 +239,11 @@ const Regist = () => {
                         value: 15,
                         message: "15자리 이히 비밀번호를 사용해주세요.",
                       },
-                      pattern: {
-                        value:
-                          /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
-                        message: "특수문자를 포함해주세요",
-                      },
+                      // pattern: {
+                      //   value:
+                      //     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
+                      //   message: "특수문자를 포함해주세요",
+                      // },
                     })}
                   />
                   {errors.password_2 && (
