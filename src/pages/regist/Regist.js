@@ -4,17 +4,13 @@ import "./Regist.scss";
 import Footer from "../../components/footer/Footer";
 import Form from "components/form/Form";
 import axios from "axios";
-import { API_HEADER, ROOT_API } from "constants/api";
 import { useNavigate } from "react-router-dom";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { useDispatch } from "react-redux";
-import { SET_TOKEN } from "store/Auth";
-import Editor from "components/editor/Editor";
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
-  const dispatch = useDispatch();
   const duplicatedId = ["dddd1", "dddd2"];
   let navigate = useNavigate();
 
@@ -23,48 +19,7 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/sign-up`,
-        {
-          email: data.userEmail,
-          nickname: data.userNickname,
-          userid: data.userId,
-          password: data.password,
-        },
-        {
-          headers: {
-            API_HEADER,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("회원가입 성공:", response);
-        axios
-          .post(
-            `${ROOT_API}/sign-in`,
-            {
-              userid: data.userId,
-              password: data.password,
-            },
-            {
-              headers: {
-                API_HEADER,
-              },
-            }
-          )
-          .then(function (response) {
-            console.log("로그인 성공:", response);
-            dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-            setModal(true);
-          })
-          .catch(function (error) {
-            console.log("로그인 실패: ", error.response.data);
-          });
-      })
-      .catch(function (error) {
-        console.log("회원가입 실패:", error.response.data);
-      });
+    // NOTE: 이곳에서 통신
   };
 
   const {
