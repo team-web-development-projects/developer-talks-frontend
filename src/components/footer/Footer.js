@@ -9,10 +9,6 @@ const Footer = () => {
         <li>비밀번호찾기</li>
         <li>|</li>
         <li>아이디 찾기</li>
-        <li>|</li>
-        <li>
-          <Link to="/">회원가입</Link>
-        </li>
       </ul>
       <p className="copy">© Developer-Talks.</p>
     </footer>

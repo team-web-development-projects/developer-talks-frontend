@@ -2,9 +2,12 @@ import classNames from "classnames";
 import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const location = useLocation();
+  const auth = useSelector((state) => state.authToken);
+  console.log('auth:', auth);
 
   return (
     <header className="header">

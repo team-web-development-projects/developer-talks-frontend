@@ -8,6 +8,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import reportWebVitals from "./reportWebVitals";
 
+import store from "./store";
+import { Provider } from "react-redux";
+import { CookiesProvider } from "react-cookie";
+import { GOOGLE_ID } from "constants/api";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 const queryClient = new QueryClient({
   onError: (error, query) => {
     console.log("onError", error);
@@ -29,14 +35,20 @@ const queryClient = new QueryClient({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <HashRouter basename={"/"}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
+    <GoogleOAuthProvider clientId={GOOGLE_ID}>
+      <CookiesProvider>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HashRouter basename={"/"}>
+              <App />
+              {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
         <ReactQueryDevtools initialIsOpen={true} />
       */}
-      </QueryClientProvider>
-    </HashRouter>
+            </HashRouter>
+          </QueryClientProvider>
+        </Provider>
+      </CookiesProvider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
 
