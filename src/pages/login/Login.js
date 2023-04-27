@@ -2,6 +2,7 @@ import Footer from "components/footer/Footer";
 import Form from "components/form/Form";
 import { useForm } from "react-hook-form";
 import './login.scss';
+import Header from 'components/header/Header';
 
 const Login = () => {
   const onSubmit = async (data) => {
@@ -35,6 +36,7 @@ const Login = () => {
 
   return (
     <div>
+      <Header/>
       <section className="login-page page">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>

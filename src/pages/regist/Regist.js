@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import "./Regist.scss";
 import Footer from "../../components/footer/Footer";
 import Form from "components/form/Form";
+import Header from 'components/header/Header';
 
 const Regist = () => {
   const duplicatedId = ["dddd1", "dddd2"];
@@ -43,6 +44,7 @@ const Regist = () => {
 
   return (
     <div className="regist-page page">
+      <Header/>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="form_1">
           <legend>정보입력</legend>
