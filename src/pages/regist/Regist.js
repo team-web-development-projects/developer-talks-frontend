@@ -4,45 +4,74 @@ import "./Regist.scss";
 import Footer from "../../components/footer/Footer";
 import Form from "components/form/Form";
 import axios from "axios";
-import { ROOT_API } from "constants/api";
+import { API_HEADER, ROOT_API } from "constants/api";
+import { useNavigate } from "react-router-dom";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import { useDispatch } from "react-redux";
+import { SET_TOKEN } from "store/Auth";
+import Editor from "components/editor/Editor";
+
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
+  const dispatch = useDispatch();
   const duplicatedId = ["dddd1", "dddd2"];
+  let navigate = useNavigate();
 
-  useEffect(() => {
+
+  const [modal, setModal] = useState(false);
+
+  const onSubmit = async (data) => {
+    await new Promise((r) => setTimeout(r, 1000));
     axios
       .post(
-        `http://43.201.28.200:8080/sign-up`,
+        `${ROOT_API}/sign-up`,
         {
-          email: "teset@naver.com",
-          nickname: "codepadding",
-          userid: "tester훈",
-          password: "TVR7BN1D",
+          email: data.userEmail,
+          nickname: data.userNickname,
+          userid: data.userId,
+          password: data.password,
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            API_HEADER,
           },
         }
       )
       .then(function (response) {
-        console.log(response);
+        console.log("회원가입 성공:", response);
+        axios
+          .post(
+            `${ROOT_API}/sign-in`,
+            {
+              userid: data.userId,
+              password: data.password,
+            },
+            {
+              headers: {
+                API_HEADER,
+              },
+            }
+          )
+          .then(function (response) {
+            console.log("로그인 성공:", response);
+            dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+            setModal(true);
+          })
+          .catch(function (error) {
+            console.log("로그인 실패: ", error.response.data);
+          });
       })
       .catch(function (error) {
-        console.log(error);
+        console.log("회원가입 실패:", error.response.data);
       });
-  });
-
-  const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log("data", data);
   };
+
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
 
@@ -54,6 +83,13 @@ const Regist = () => {
 
   return (
     <div className="regist-page page">
+      {modal && (
+        <BasicModal setOnModal={() => setModal()}>
+          회원가입이 완료되었습니다. <br />
+          확인을 누르시면 메인으로 이동합니다.
+          <button onClick={() => navigate("/")}>확인</button>
+        </BasicModal>
+      )}
       <Form onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="form_1">
           <legend>정보입력</legend>
@@ -118,6 +154,12 @@ const Regist = () => {
                         value: 5,
                         message: "5자리 이상 입력해주세요.",
                       },
+                      // pattern: {
+                      //   value:
+                      //     /^[가-힣a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
+                      //   message:
+                      //     "닉네임에 특수문자가 포함되면 안되고 숫자로 시작하면 안됩니다!",
+                      // },
                     })}
                   />
                   <button title="중복체크">중복체크</button>
@@ -167,7 +209,7 @@ const Regist = () => {
 
               <tr>
                 <th>
-                  <label htmlFor="password_1">비밀번호</label>
+                  <label htmlFor="password">비밀번호</label>
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -175,8 +217,8 @@ const Regist = () => {
                 <td>
                   <input
                     type="password"
-                    id="password_1"
-                    placeholder="영문,숫자 조합으로 입력해주세요"
+                    id="password"
+                    placeholder="최소 1개의 특수문자를 포함해주세요"
                     maxLength={15}
                     tabIndex="4"
                     aria-invalid={
@@ -186,31 +228,30 @@ const Regist = () => {
                         ? "true"
                         : "false"
                     }
-                    {...register("password_1", {
+                    {...register("password", {
                       required: "비밀번호는 필수 입력입니다.",
                       minLength: {
-                        value: 5,
-                        message: "5자리 이상 비밀번호를 사용해주세요.",
+                        value: 8,
+                        message: "8자리 이상 비밀번호를 사용해주세요.",
                       },
                       maxLength: {
                         value: 15,
                         message: "15자리 이히 비밀번호를 사용해주세요.",
                       },
-                      // pattern: {
-                      //   value:
-                      //     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
-                      //   message: "특수문자를 포함해주세요",
-                      // },
+                      pattern: {
+                        value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                        message: "특수문자를 포함해주세요",
+                      },
                     })}
                   />
-                  {errors.password_1 && (
-                    <small role="alert">{errors.password_1.message}</small>
+                  {errors.password && (
+                    <small role="alert">{errors.password.message}</small>
                   )}
                 </td>
               </tr>
               <tr>
                 <th>
-                  <label htmlFor="password_2">비밀번호 확인</label>
+                  <label htmlFor="passwordChk">비밀번호 확인</label>
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -218,7 +259,7 @@ const Regist = () => {
                 <td>
                   <input
                     type="password"
-                    id="password_2"
+                    id="passwordChk"
                     placeholder="비밀번호를 한 번 더 입력해주세요"
                     tabIndex="5"
                     maxLength={15}
@@ -229,25 +270,29 @@ const Regist = () => {
                         ? "true"
                         : "false"
                     }
-                    {...register("password_2", {
+                    {...register("passwordChk", {
                       required: "비밀번호는 필수 입력입니다.",
                       minLength: {
-                        value: 5,
-                        message: "5자리 이상 비밀번호를 사용해주세요.",
+                        value: 8,
+                        message: "8자리 이상 비밀번호를 사용해주세요.",
                       },
                       maxLength: {
                         value: 15,
                         message: "15자리 이히 비밀번호를 사용해주세요.",
                       },
-                      // pattern: {
-                      //   value:
-                      //     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
-                      //   message: "특수문자를 포함해주세요",
-                      // },
+                      pattern: {
+                        value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                        message: "특수문자를 포함해주세요",
+                      },
+                      validate: (val) => {
+                        if (watch("password") !== val) {
+                          return "비밀번호가 일치하지 않습니다.";
+                        }
+                      },
                     })}
                   />
-                  {errors.password_2 && (
-                    <small role="alert">{errors.password_2.message}</small>
+                  {errors.passwordChk && (
+                    <small role="alert">{errors.passwordChk.message}</small>
                   )}
                 </td>
               </tr>

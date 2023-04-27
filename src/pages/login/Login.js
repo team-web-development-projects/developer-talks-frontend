@@ -1,28 +1,33 @@
 import Footer from "components/footer/Footer";
 import Form from "components/form/Form";
 import { useForm } from "react-hook-form";
-import './login.scss';
+import "./login.scss";
+import { ROOT_API, API_HEADER } from "constants/api";
+import axios from "axios";
+import LoginGoogle from "components/snsLogin/LoginGoogle";
 
 const Login = () => {
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    // axios
-    //   .post(`https://url`, {
-    //     modelName: data["modelName"],
-    //     brand: data["brand"],
-    //     price: data["price"],
-    //     // size: data["size"],
-    //   })
-    //   .then(function (response) {
-    //     // console.log("dta", response.data);
-    //     alert("회원가입 완료");
-    //   })
-    //   .catch(function (error) {
-    //     // 오류발생시 실행
-    //   })
-    //   .then(function () {
-    //     // 항상 실행
-    //   });
+    axios
+      .post(
+        `${ROOT_API}/sign-in`,
+        {
+          userid: data.userId,
+          password: data.password,
+        },
+        {
+          headers: {
+            API_HEADER,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+      });
     console.log("data", data);
   };
 
@@ -36,6 +41,7 @@ const Login = () => {
   return (
     <div>
       <section className="login-page page">
+        <LoginGoogle />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
             <legend>로그인페이지</legend>
@@ -56,7 +62,6 @@ const Login = () => {
                   placeholder="Developer-Talk Guest"
                   tabIndex="1"
                   maxLength="15"
-                  minLength="8"
                   aria-invalid={
                     !isDirty ? undefined : errors.userId ? "true" : "false"
                   }
@@ -73,20 +78,19 @@ const Login = () => {
                 )}
               </li>
               <li>
-                <label className="Pw" htmlFor="userPw">
+                <label className="Pw" htmlFor="password">
                   비밀번호
                 </label>
                 <input
                   type="password"
-                  id="userPw"
+                  id="password"
                   placeholder="********"
                   tabIndex="2"
                   maxLength="15"
-                  minLength="8"
                   aria-invalid={
-                    !isDirty ? undefined : errors.userPw ? "true" : "false"
+                    !isDirty ? undefined : errors.password ? "true" : "false"
                   }
-                  {...register("userPw", {
+                  {...register("password", {
                     required: "비밀번호는 필수 입력입니다.",
                     minLength: {
                       value: 8,
@@ -95,8 +99,8 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.userPw && (
-                  <small role="alert">{errors.userPw.message}</small>
+                {errors.password && (
+                  <small role="alert">{errors.password.message}</small>
                 )}
               </li>
             </ul>

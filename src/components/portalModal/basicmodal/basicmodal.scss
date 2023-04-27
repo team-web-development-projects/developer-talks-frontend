@@ -1,0 +1,16 @@
+@import 'assets/style/function.scss';
+
+.basic-modal {
+  width: 400px;
+  height: fit-content;
+  padding: 20px 24px 30px 24px;
+  border-radius: 12px;
+  @include media-mo {
+    width: 100%;
+  }
+  .title {
+    padding: 16px 0;
+    font-size: 20px;
+    text-align: center;
+  }
+}
