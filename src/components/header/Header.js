@@ -12,10 +12,10 @@ const Header = () => {
   return (
     <header className="header">
       <h1>
-        <Link to="/">Developer-Talks</Link>
+        <Link to={"/"}>Developer-Talks</Link>
       </h1>
       <Link
-        to="/login"
+        to={"/login"}
         className={classNames("", {
           "is-active": location.pathname === "/login",
         })}

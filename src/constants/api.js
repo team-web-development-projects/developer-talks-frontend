@@ -4,4 +4,4 @@ export const API_HEADER = {
   "Access-Control-Allow-Origin": "*",
 };
 export const GOOGLE_ID =
-  "501456863795-jsln82h66v9mrlljhtlme1s4aca31hf7.apps.googleusercontent.com";
+  "74289499334-e9sc61ekvo541qsb148ms0jnqecs808u.apps.googleusercontent.com";

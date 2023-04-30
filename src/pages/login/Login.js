@@ -2,9 +2,11 @@ import Footer from "components/footer/Footer";
 import Form from "components/form/Form";
 import { useForm } from "react-hook-form";
 import "./login.scss";
-import { ROOT_API, API_HEADER } from "constants/api";
+import { ROOT_API, API_HEADER, GOOGLE_ID } from "constants/api";
+import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import LoginGoogle from "components/snsLogin/LoginGoogle";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const onSubmit = async (data) => {
@@ -38,9 +40,27 @@ const Login = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
 
+  const googleParams = {
+    client_id:
+      "501456863795-jsln82h66v9mrlljhtlme1s4aca31hf7.apps.googleusercontent.com",
+    response_type: "code",
+    redirect_uri: "http://localhost:3000/login",
+    scope: "email profile",
+  };
+  const paramsG = new URLSearchParams(googleParams).toString();
+  const logOut = () => {
+    googleLogout();
+  };
+
   return (
     <div>
       <section className="login-page page">
+        {/*
+        <Link to={`https://accounts.google.com/o/oauth2/v2/auth?${paramsG}`}>
+          로그인
+        </Link>
+        <button onClick={logOut}>Log out</button>
+      */}
         <LoginGoogle />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
