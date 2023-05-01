@@ -1,8 +1,8 @@
-import classNames from "classnames";
-import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import "./header.scss";
-import { useSelector } from "react-redux";
+import classNames from 'classnames';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import './header.scss';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
   const location = useLocation();
@@ -12,21 +12,28 @@ const Header = () => {
   return (
     <header className="header">
       <h1>
-        <Link to="/">Developer-Talks</Link>
+        <Link
+          to="/individual"
+          className={classNames('', {
+            'is-active': location.pathname === '/individual',
+          })}
+        >
+          Developer-Talks
+        </Link>
       </h1>
       <Link
         to="/login"
-        className={classNames("", {
-          "is-active": location.pathname === "/login",
+        className={classNames('', {
+          'is-active': location.pathname === '/login',
         })}
       >
         로그인
       </Link>
-      {" | "}
+      {' | '}
       <Link
         to="/regist"
-        className={classNames("", {
-          "is-active": location.pathname === "/regist",
+        className={classNames('', {
+          'is-active': location.pathname === '/regist',
         })}
       >
         회원가입

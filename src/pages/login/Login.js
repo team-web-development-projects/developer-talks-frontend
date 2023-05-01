@@ -6,17 +6,6 @@ import { ROOT_API, API_HEADER } from 'constants/api';
 import axios from 'axios';
 import LoginGoogle from 'components/snsLogin/LoginGoogle';
 
-const handleApiCall = () => {
-  axios
-    .get('http://43.201.28.200:8080/oauth2/authorization/google')
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 const Login = () => {
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -102,7 +91,6 @@ const Login = () => {
                 {' '}
                 로그인
               </button>
-              <button onClick={handleApiCall}>API 호출</button>
             </div>
           </fieldset>
         </Form>
