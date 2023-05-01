@@ -2,7 +2,7 @@
   "name": "developer-talks-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://team-web-development-projects.github.io/developer-talks-frontend",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^37.1.0",
     "@ckeditor/ckeditor5-react": "^6.0.0",
@@ -11,7 +11,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.4.0",
+    "axios": "^1.3.6",
     "classnames": "^2.3.2",
     "gh-pages": "^5.0.0",
     "history": "^5.3.0",
@@ -23,7 +23,7 @@
     "react-query": "^3.39.3",
     "react-redux": "^8.0.5",
     "react-router": "^5.3.3",
-    "react-router-dom": "^6.10.0",
+    "react-router-dom": "^6.11.0",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
     "sass": "^1.62.0",
@@ -32,7 +32,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "react-scripts build && shx cp build/index.html build/404.html",
+    "deploy": "react-scripts build && gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -55,8 +55,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "shx": "^0.3.4"
   }
 }
