@@ -11,25 +11,7 @@ import { Link } from "react-router-dom";
 const Login = () => {
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/sign-in`,
-        {
-          userid: data.userId,
-          password: data.password,
-        },
-        {
-          headers: {
-            API_HEADER,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error.response.data);
-      });
+    
     console.log("data", data);
   };
 
