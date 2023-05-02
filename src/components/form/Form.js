@@ -1,8 +1,14 @@
 import React from "react";
-import './form.scss';
+import "./form.scss";
 
 const Form = ({ children, onSubmit }) => {
-  return <form onSubmit={onSubmit} className="user-form">{children}</form>;
+  return (
+    <div>
+      <form onSubmit={onSubmit} className="user-form">
+        {children}
+      </form>
+    </div>
+  );
 };
 
 export default Form;

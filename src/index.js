@@ -41,10 +41,12 @@ root.render(
     <CookiesProvider>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <App />
-          {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
+          <Router history={history}>
+            <App />
+            {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
         <ReactQueryDevtools initialIsOpen={true} />
       */}
+          </Router>
         </QueryClientProvider>
       </Provider>
     </CookiesProvider>

@@ -7,11 +7,30 @@ import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import LoginGoogle from "components/snsLogin/LoginGoogle";
 import { Link } from "react-router-dom";
+import FormUserGuide from "components/form/FormUserGuide";
 
 const Login = () => {
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    
+    axios
+      .post(
+        `${ROOT_API}/sign-in`,
+        {
+          userid: data.userId,
+          password: data.password,
+        },
+        {
+          headers: {
+            API_HEADER,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+      });
     console.log("data", data);
   };
 
@@ -22,28 +41,9 @@ const Login = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
 
-  const googleParams = {
-    client_id:
-      "501456863795-jsln82h66v9mrlljhtlme1s4aca31hf7.apps.googleusercontent.com",
-    response_type: "code",
-    redirect_uri: "http://localhost:3000/login",
-    scope: "email profile",
-  };
-  const paramsG = new URLSearchParams(googleParams).toString();
-  const logOut = () => {
-    googleLogout();
-  };
-
   return (
-    <div>
+    <>
       <section className="login-page page">
-        {/*
-        <Link to={`https://accounts.google.com/o/oauth2/v2/auth?${paramsG}`}>
-          로그인
-        </Link>
-        <button onClick={logOut}>Log out</button>
-      */}
-        <LoginGoogle />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
             <legend>로그인페이지</legend>
@@ -113,10 +113,11 @@ const Login = () => {
               </button>
             </div>
           </fieldset>
+          <LoginGoogle />
         </Form>
+        <FormUserGuide />
       </section>
-      <Footer />
-    </div>
+    </>
   );
 };
 

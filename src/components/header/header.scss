@@ -1,17 +1,28 @@
 @import 'assets/style/function.scss';
 
 .header {
-  padding: 95px 0 47px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: $content-max-width;;
+  margin: 0 auto;
+  padding: 15px 0 47px;
   text-align: center;
   h1 {
-    margin-bottom: 12px;
     font-weight: 600;
     font-size: 30px;
     @include font('cc');
+    a {
+      display: block;
+    }
   }
-  a {
-    &.is-active {
-      font-weight: bold;
+  .left {
+    display: flex;
+    align-items: center;
+    ul {
+      display: flex;
+      margin-left: 100px;
+      gap: 50px;
     }
   }
 }
