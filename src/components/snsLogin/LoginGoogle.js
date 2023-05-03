@@ -22,21 +22,20 @@ const LoginGoogle = () => {
       {/*
       <button onClick={() => login()}>버튼</button>
     */}
-    
-    <GoogleOAuthProvider clientId={clientId}></GoogleOAuthProvider>
-    <GoogleLogin
-      onSuccess={(res) => {
-        console.log(res);
-        const responsePayload = parseJwt(res.credential);
 
-        console.log("dd : ", responsePayload);
-      }}
-      onFailure={(err) => {
-        console.log(err);
-      }}
+      <GoogleOAuthProvider clientId={clientId}></GoogleOAuthProvider>
+      <GoogleLogin
+        onSuccess={(res) => {
+          console.log(res);
+          const responsePayload = parseJwt(res.credential);
+
+          console.log("dd : ", responsePayload);
+        }}
+        onFailure={(err) => {
+          console.log(err);
+        }}
       />
-    </
-    >
+    </>
   );
 };
 

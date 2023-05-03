@@ -1,10 +1,8 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ButtonBlack from "components/buttonBlack/ButtonBlack";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardCreate.module.scss";
-import "./editor.css";
-import ButtonBlack from 'components/buttonBlack/ButtonBlack';
+import CkEditor from "components/ckeditor/CkEditor";
 
 export default function BoardCreate() {
   const navigate = useNavigate();
@@ -39,24 +37,13 @@ export default function BoardCreate() {
           />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
-            <CKEditor
-              editor={ClassicEditor}
-              config={{
-                placeholder: "내용을 작성해주세요.",
-              }}
-              name="content"
-              value={form.content}
-              onChange={(e, editor) => {
-                const data = editor.getData();
-                setForm({ ...form, content: data });
-              }}
-            />
+            <CkEditor form={form} setForm={setForm} />
           </div>
           <div className={s.btnRgn}>
             <Link to="/board/main" className={s.cancel}>
               취소
             </Link>
-            <ButtonBlack name='저장'/>
+            <ButtonBlack name="저장" />
           </div>
         </div>
       </form>
