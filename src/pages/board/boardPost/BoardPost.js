@@ -1,10 +1,10 @@
 import ButtonBlack from "components/buttonBlack/ButtonBlack";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import s from "./boardCreate.module.scss";
+import s from "./boardPost.module.scss";
 import CkEditor from "components/ckeditor/CkEditor";
 
-export default function BoardCreate() {
+export default function BoardPost() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     title: "",

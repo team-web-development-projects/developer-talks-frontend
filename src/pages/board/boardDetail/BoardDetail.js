@@ -9,4 +9,4 @@ const BoardDetail = () => {
     );
 };
 
-export default boardDetail;
+export default BoardDetail;

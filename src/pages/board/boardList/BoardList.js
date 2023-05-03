@@ -3,9 +3,9 @@ import Pagination from "components/pagination/Pagination";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import s from "./boardMain.module.scss";
+import s from "./boardList.module.scss";
 
-const BoardMain = () => {
+const BoardList = () => {
   const [posts, setPosts] = useState([
     {
       id: "1",
@@ -164,4 +164,4 @@ const BoardMain = () => {
   );
 };
 
-export default BoardMain;
+export default BoardList;
