@@ -8,14 +8,14 @@
   }
 }
 .header {
-  margin: 30px 0px;
+  margin-top: 30px;
   padding: 30px;
   border-top: 1px solid #cfcccc;
   border-bottom: 1px solid #cfcccc;
-  .top {
+  .bottom {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-top: 15px;
   }
 }
 
@@ -31,4 +31,33 @@
     font-size: 16px;
     border: none;
   }
+}
+
+.boardContainer{
+  margin:0px 20px;
+  padding:30px;
+  border-bottom: solid 1px #cfcccc;
+  &:hover{
+    background: #eeeeee;
+  }
+  .title{
+    margin-bottom: 10px;
+    font-size:30px;
+    font-weight: 500;
+  }
+  .content{
+    margin-bottom: 10px;
+    font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .nickname{
+    color:#797979;
+  }
+}
+.pageContainer{
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px;
 }
