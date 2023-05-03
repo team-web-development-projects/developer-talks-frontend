@@ -40,9 +40,6 @@ function NavigateMain() {
     <>
       <Header />
       <div className="page">
-        <Link to="board/create">글쓰기</Link>
-        {/*
-         */}
         <Outlet />
       </div>
       <Footer />
@@ -54,7 +51,9 @@ function NavigateMain() {
 function NavigatePost() {
   return (
     <>
-      <Outlet />
+      <div className="page">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );

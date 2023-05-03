@@ -1,24 +1,32 @@
-import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import './header.scss';
-import { useSelector } from 'react-redux';
-import { BsHouse } from 'react-icons/bs';
-import { FiMenu } from 'react-icons/fi';
+import classNames from "classnames";
+import { useEffect, useState } from "react";
+import { BsHouse } from "react-icons/bs";
+import { FiMenu } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import "./header.scss";
 
+// alt + shiff + o 
 const Header = () => {
-  const [header, setHeader] = useState(false);
+  const [header, setHeader] = useState('false');
+  // [읽기, 쓰기] = useState('초기값') // 초기값 타입 : string, number ,array, json, boolean(true, false)
+
+
+  // return dom 그려질때. 추적하는 상태가 바뀔때.  
   useEffect(() => {
-    setHeader('👩🏻‍🦰');
+    setHeader("👩🏻‍🦰");
     // NOTE 로그인 이모지
-  }, []);
+    console.log("header State", header);
+  }, [header]);
 
   const location = useLocation();
   const auth = useSelector((state) => state.authToken);
-  console.log('auth:', auth);
+  console.log("auth:", auth);
 
   return (
     <header className="header">
+      <button onClick={() => setHeader('true')}>클릭</button>
+
       <div className="headerBox">
         <ul>
           <li>
@@ -33,7 +41,7 @@ const Header = () => {
         <nav>
           <ul className="right">
             <li>
-              <Link to="/">Q&A</Link>
+              <Link to="/board/main">Q&A</Link>
             </li>
 
             <li>
@@ -60,17 +68,17 @@ const Header = () => {
       </h1>
       <Link
         to="/login"
-        className={classNames('', {
-          'is-active': location.pathname === '/login',
+        className={classNames("", {
+          "is-active": location.pathname === "/login",
         })}
       >
         로그인
       </Link>
-      {' | '}
+      {" | "}
       <Link
         to="/regist"
-        className={classNames('', {
-          'is-active': location.pathname === '/regist',
+        className={classNames("", {
+          "is-active": location.pathname === "/regist",
         })}
       >
         회원가입

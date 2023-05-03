@@ -6,19 +6,31 @@
   display: flex;
   height: 58px;
   color: #ffffff;
+  @include media-ta {
+    justify-content: space-between;
+  }
   ul {
     vertical-align: middle;
+    @include media-ta {
+      padding: 0 5px;
+    }
     li {
+      @include media-ta {
+        padding: 17px 5px;
+      }
       p {
         vertical-align: middle;
         display: inline-block;
         margin: 0;
         font-size: 14px;
+        @include media-ta {
+          padding: 0 5px;
+        }
       }
     }
   }
 }
-Nav {
+nav {
   li {
     vertical-align: middle;
     &:hover {
@@ -63,19 +75,7 @@ Nav {
 }
 
 @media(max-width:1023px) {
-  .headerBox {
-    justify-content: space-between;
-    ul {
-      padding: 0 5px;
-      li {
-        padding: 17px 5px;
-        p {
-          padding: 0 5px;
-        }
-      }
-    }
-  }
-  Nav {
+  nav {
     ul.right {
       display: flex;
       li {
@@ -100,6 +100,11 @@ Nav {
     justify-content: center;
     ul {
       padding: 0 500px 0 0px;
+      &:after {
+        display: block;
+        clear: both;
+        content:'';
+      }
       li {
         padding: 17px 20px;
         float: left;

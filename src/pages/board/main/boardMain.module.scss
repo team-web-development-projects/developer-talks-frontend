@@ -34,9 +34,6 @@
 }
 
 .boardContainer{
-  margin:0px 20px;
-  padding:30px;
-  border-bottom: solid 1px #cfcccc;
   &:hover{
     background: #eeeeee;
   }
@@ -45,7 +42,7 @@
     font-size:30px;
     font-weight: 500;
   }
-  .content{
+  .content {
     margin-bottom: 10px;
     font-size: 20px;
     overflow: hidden;
