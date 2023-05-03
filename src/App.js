@@ -3,9 +3,7 @@ import Login from "./pages/login/Login";
 import Regist from "./pages/regist/Regist";
 import "./assets/style/index.scss";
 import BoardCreate from 'pages/board/create/BoardCreate';
-import BoardWrite from "pages/board/write/BoardWrite";
 import BoardMain from 'pages/board/main/BoardMain';
-import Header from "components/header/Header";
 
 function App() {
   return (
