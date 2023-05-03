@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter } from "react-router-dom";
+// import { HashRouter } from "react-router-dom";
+import { unstable_HistoryRouter as Router } from "react-router-dom";
 import App from "./App";
 // import "./index.scss";
 // import './assets/style/index.scss';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import reportWebVitals from "./reportWebVitals";
+import history from "./hooks/useHistory";
 
 import store from "./store";
 import { Provider } from "react-redux";
@@ -39,12 +41,12 @@ root.render(
       <CookiesProvider>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
-            <HashRouter basename={"/"}>
+            <Router history={history}>
               <App />
               {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
         <ReactQueryDevtools initialIsOpen={true} />
       */}
-            </HashRouter>
+            </Router>
           </QueryClientProvider>
         </Provider>
       </CookiesProvider>
