@@ -7,7 +7,7 @@ import BoardWrite from "pages/board/write/BoardWrite";
 import Main from "pages/main/Main";
 import Mypage from "pages/mypage/Mypage";
 import NotPage from "pages/NotPage";
-import Header from "components/header/Header";
+// import Header from "components/header/Header";
 import Footer from "components/footer/Footer";
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
+          <Route path="/developer-talks-frontend" element={<Main />} />
           <Route path="mypage" element={<Mypage />} />
           <Route path="*" element={<NotPage />} />
         </Route>
@@ -34,7 +35,9 @@ function App() {
 function NavigateMain() {
   return (
     <>
-      <Header />
+      {/*
+    <Header />
+   */}
       <div className="page">
         {/*
       <Link to="board/write">글쓰기</Link>
@@ -49,7 +52,9 @@ function NavigateMain() {
 function NavigatePost() {
   return (
     <>
-      <Header />
+      {/*
+    <Header />
+  */}
       <div className="page">
         <Outlet />
       </div>
