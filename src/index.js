@@ -10,18 +10,18 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import reportWebVitals from "./reportWebVitals";
 import history from "./hooks/useHistory";
 
-import store from "./store";
-import { Provider } from "react-redux";
-import { CookiesProvider } from "react-cookie";
-import { GOOGLE_ID } from "constants/api";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import store from './store';
+import { Provider } from 'react-redux';
+import { CookiesProvider } from 'react-cookie';
+import { GOOGLE_ID } from 'constants/api';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const queryClient = new QueryClient({
   onError: (error, query) => {
-    console.log("onError", error);
+    console.log('onError', error);
   },
   onSuccess: (data) => {
-    console.log("전역이 업데이트됨?", data);
+    console.log('전역이 업데이트됨?', data);
   },
   // defaultOptions: {
   //   queries: {
@@ -34,7 +34,7 @@ const queryClient = new QueryClient({
   // },
 });
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={GOOGLE_ID}>

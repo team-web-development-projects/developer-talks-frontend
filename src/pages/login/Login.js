@@ -1,17 +1,15 @@
 import Footer from "components/footer/Footer";
 import Form from "components/form/Form";
+import Header from 'components/header/Header';
+import LoginGoogle from "components/snsLogin/LoginGoogle";
 import { useForm } from "react-hook-form";
 import './login.scss';
-import Header from 'components/header/Header';
-import { ROOT_API, API_HEADER } from "constants/api";
-import axios from "axios";
-import LoginGoogle from "components/snsLogin/LoginGoogle";
 
 const Login = () => {
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    
-    console.log("data", data);
+
+    console.log('data', data);
   };
 
   const {
@@ -19,7 +17,7 @@ const Login = () => {
     handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: 'onChange' });
 
   return (
     <div>
@@ -47,13 +45,13 @@ const Login = () => {
                   tabIndex="1"
                   maxLength="15"
                   aria-invalid={
-                    !isDirty ? undefined : errors.userId ? "true" : "false"
+                    !isDirty ? undefined : errors.userId ? 'true' : 'false'
                   }
-                  {...register("userId", {
-                    required: "아이디는 필수 입력입니다.",
+                  {...register('userId', {
+                    required: '아이디는 필수 입력입니다.',
                     minLength: {
                       value: 5,
-                      message: "5자리 이상 15자리 이하로 입력해주세요.",
+                      message: '5자리 이상 15자리 이하로 입력해주세요.',
                     },
                   })}
                 />
@@ -72,14 +70,14 @@ const Login = () => {
                   tabIndex="2"
                   maxLength="15"
                   aria-invalid={
-                    !isDirty ? undefined : errors.password ? "true" : "false"
+                    !isDirty ? undefined : errors.password ? 'true' : 'false'
                   }
-                  {...register("password", {
-                    required: "비밀번호는 필수 입력입니다.",
+                  {...register('password', {
+                    required: '비밀번호는 필수 입력입니다.',
                     minLength: {
                       value: 8,
                       message:
-                        "8자리 이상 15자리 이하로 비밀번호를 사용해주세요.",
+                        '8자리 이상 15자리 이하로 비밀번호를 사용해주세요.',
                     },
                   })}
                 />
@@ -90,7 +88,7 @@ const Login = () => {
             </ul>
             <div className="button">
               <button type="submit" tabIndex="3" disabled={isSubmitting}>
-                {" "}
+                {' '}
                 로그인
               </button>
             </div>
