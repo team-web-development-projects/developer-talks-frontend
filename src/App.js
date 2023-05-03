@@ -5,16 +5,16 @@ import "./assets/style/index.scss";
 import BoardCreate from 'pages/board/create/BoardCreate';
 import BoardWrite from "pages/board/write/BoardWrite";
 import BoardMain from 'pages/board/main/BoardMain';
+import Header from "components/header/Header";
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path={"/login"} element={<Login />} />
-        <Route path={"/regist"} element={<Regist />} />
-        <Route path={"/board/create"} element={<BoardCreate/>}/>
-        <Route path={"/board/write"} element={<BoardWrite />} />
-        <Route path={"/board/main"} element={<BoardMain/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/regist" element={<Regist />} />
+        <Route path="/board/create" element={<BoardCreate />} />
+        <Route path="/board/main" element={<BoardMain />} />
       </Routes>
     </div>
   );
