@@ -104,7 +104,6 @@ const Regist = () => {
 
   return (
     <div className="regist-page page">
-      <Header/>
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
