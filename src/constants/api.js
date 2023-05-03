@@ -3,5 +3,3 @@ export const API_HEADER = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
 };
-export const GOOGLE_ID =
-  "501456863795-jsln82h66v9mrlljhtlme1s4aca31hf7.apps.googleusercontent.com";

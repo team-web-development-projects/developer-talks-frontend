@@ -1,25 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter } from "react-router-dom";
+// import { HashRouter } from "react-router-dom";
+import {
+  unstable_HistoryRouter as Router,
+  BrowserRouter,
+} from "react-router-dom";
 import App from "./App";
+import history from "./hooks/useHistory";
 // import "./index.scss";
 // import './assets/style/index.scss';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import reportWebVitals from "./reportWebVitals";
 
-import store from "./store";
-import { Provider } from "react-redux";
-import { CookiesProvider } from "react-cookie";
-import { GOOGLE_ID } from "constants/api";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import store from './store';
+import { Provider } from 'react-redux';
+import { CookiesProvider } from 'react-cookie';
+import { GOOGLE_ID } from 'constants/api';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const queryClient = new QueryClient({
   onError: (error, query) => {
-    console.log("onError", error);
+    console.log('onError', error);
   },
   onSuccess: (data) => {
-    console.log("전역이 업데이트됨?", data);
+    console.log('전역이 업데이트됨?', data);
   },
   // defaultOptions: {
   //   queries: {
@@ -32,23 +37,21 @@ const queryClient = new QueryClient({
   // },
 });
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={GOOGLE_ID}>
-      <CookiesProvider>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <HashRouter basename={"/"}>
-              <App />
-              {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
+    <CookiesProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <Router history={history}>
+            <App />
+            {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
         <ReactQueryDevtools initialIsOpen={true} />
       */}
-            </HashRouter>
-          </QueryClientProvider>
-        </Provider>
-      </CookiesProvider>
-    </GoogleOAuthProvider>
+          </Router>
+        </QueryClientProvider>
+      </Provider>
+    </CookiesProvider>
   </React.StrictMode>
 );
 
