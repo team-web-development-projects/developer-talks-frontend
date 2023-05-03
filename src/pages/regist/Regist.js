@@ -8,20 +8,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { useDispatch } from "react-redux";
+import { ROOT_API, API_HEADER } from "constants/api";
+import { SET_TOKEN } from "store/Auth";
+import { useRef } from "react";
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
-  const duplicatedId = ["dddd1", "dddd2"];
   let navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const useridRef = useRef(null);
+  const usernicknameRef = useRef(null);
 
   const [modal, setModal] = useState(false);
-
-  const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    // NOTE: 이곳에서 통신
-  };
+  const [duplicateId, setDuplicateId] = useState("");
+  const [duplicateNickName, setDuplicateNickName] = useState("");
 
   const {
     register,
@@ -31,10 +32,74 @@ const Regist = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
 
-  const validateId = (value) => {
-    if (duplicatedId.includes(value)) {
-      return "중복!!";
-    }
+  const onSubmit = async (data) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    axios
+      .post(
+        `${ROOT_API}/sign-up`,
+        {
+          email: data.userEmail,
+          nickname: data.userNickname,
+          userid: data.userId,
+          password: data.password,
+        },
+        {
+          headers: {
+            API_HEADER,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("회원가입 성공:", response);
+        axios
+          .post(
+            `${ROOT_API}/sign-in`,
+            {
+              userid: data.userId,
+              password: data.password,
+            },
+            {
+              headers: {
+                API_HEADER,
+              },
+            }
+          )
+          .then(function (response) {
+            console.log("로그인 성공:", response);
+            dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+            setModal(true);
+            reset();
+          })
+          .catch(function (error) {
+            console.log("로그인 실패: ", error.response.data);
+          });
+      })
+      .catch(function (error) {
+        console.log("회원가입 실패:", error.response.data);
+      });
+    // NOTE: 이곳에서 통신
+  };
+
+  let textTemp = ''
+
+  const validateDuplicate = (data) => {
+    const type = data;
+    const value = watch(data);
+    console.log('넣은 데이터', watch(data))
+    // setTextTemp(watch(data));
+    textTemp = watch(data);
+    axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {
+      if (type === "userId") {
+        response.data.duplicated === true
+          ? setDuplicateId("true")
+          : setDuplicateId("false");
+      }
+      if (type === "userNickname") {
+        response.data.duplicated === true
+          ? setDuplicateNickName("true")
+          : setDuplicateNickName("false");
+      }
+    });
   };
 
   return (
@@ -68,9 +133,6 @@ const Regist = () => {
                     id="userEmail"
                     placeholder="이메일을 입력해주세요"
                     tabIndex="1"
-                    aria-invalid={
-                      !isDirty ? undefined : errors.userEmail ? "true" : "false"
-                    }
                     {...register("userEmail", {
                       required: "이메일은 필수 입력입니다.",
                       pattern: {
@@ -97,14 +159,8 @@ const Regist = () => {
                     id="userNickname"
                     placeholder="닉네임을 입력해주세요"
                     tabIndex="2"
+                    ref={usernicknameRef}
                     maxLength={15}
-                    aria-invalid={
-                      !isDirty
-                        ? undefined
-                        : errors.userNickname
-                        ? "true"
-                        : "false"
-                    }
                     {...register("userNickname", {
                       required: "닉네임은 필수 입력입니다.",
                       minLength: {
@@ -119,10 +175,27 @@ const Regist = () => {
                       // },
                     })}
                   />
-                  <button title="중복체크">중복체크</button>
+                  <button
+                    title="중복체크"
+                    onClick={() => validateDuplicate("userNickname")}
+                  >
+                    중복체크
+                  </button>
                   {errors.userNickname && (
                     <small role="alert">{errors.userNickname.message}</small>
                   )}
+                  {!errors.userNickname &&
+                    duplicateNickName !== "" &&
+                    duplicateNickName === "true" && (
+                      <small className="alert">중복된 닉네임입니다.</small>
+                    )}
+                  {!errors.userNickname &&
+                    duplicateNickName !== "" &&
+                    duplicateNickName === "false" && (
+                      <small className="true">
+                        사용할 수 있는 닉네임입니다.
+                      </small>
+                    )}
                 </td>
               </tr>
               <tr>
@@ -138,10 +211,8 @@ const Regist = () => {
                     id="userId"
                     placeholder="아이디를 입력해주세요"
                     maxLength={15}
+                    ref={useridRef}
                     tabIndex="3"
-                    aria-invalid={
-                      !isDirty ? undefined : errors.userId ? "true" : "false"
-                    }
                     {...register("userId", {
                       required: "아이디는 필수 입력입니다.",
                       minLength: {
@@ -152,14 +223,22 @@ const Regist = () => {
                         value: 15,
                         message: "15자리 이하 아이디를 사용해주세요.",
                       },
-                      validate: validateId,
                     })}
                   />
-                  <button title="중복체크" onClick={validateId}>
+                  <button
+                    title="중복체크"
+                    onClick={() => validateDuplicate("userId")}
+                  >
                     중복체크
                   </button>
                   {errors.userId && (
                     <small role="alert">{errors.userId.message}</small>
+                  )}
+                  {duplicateId !== "" && duplicateId === "true" && (
+                    <small className="alert">중복된 아이디입니다.</small>
+                  )}
+                  {duplicateId !== "" && duplicateId === "false" && (
+                    <small className="true">사용할 수 있는 아이디입니다.</small>
                   )}
                 </td>
               </tr>
@@ -178,13 +257,6 @@ const Regist = () => {
                     placeholder="최소 1개의 특수문자를 포함해주세요"
                     maxLength={15}
                     tabIndex="4"
-                    aria-invalid={
-                      !isDirty
-                        ? undefined
-                        : errors.password_1
-                        ? "true"
-                        : "false"
-                    }
                     {...register("password", {
                       required: "비밀번호는 필수 입력입니다.",
                       minLength: {
@@ -220,13 +292,6 @@ const Regist = () => {
                     placeholder="비밀번호를 한 번 더 입력해주세요"
                     tabIndex="5"
                     maxLength={15}
-                    aria-invalid={
-                      !isDirty
-                        ? undefined
-                        : errors.password_2
-                        ? "true"
-                        : "false"
-                    }
                     {...register("passwordChk", {
                       required: "비밀번호는 필수 입력입니다.",
                       minLength: {

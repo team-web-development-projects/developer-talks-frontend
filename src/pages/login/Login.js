@@ -3,7 +3,12 @@ import Form from "components/form/Form";
 import Header from 'components/header/Header';
 import LoginGoogle from "components/snsLogin/LoginGoogle";
 import { useForm } from "react-hook-form";
-import './login.scss';
+import "./login.scss";
+import { ROOT_API, API_HEADER, GOOGLE_ID } from "constants/api";
+import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import FormUserGuide from "components/form/FormUserGuide";
 
 const Login = () => {
   const onSubmit = async (data) => {
@@ -20,10 +25,8 @@ const Login = () => {
   } = useForm({ mode: 'onChange' });
 
   return (
-    <div>
-      <Header/>
+    <>
       <section className="login-page page">
-        <LoginGoogle />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
             <legend>로그인페이지</legend>
@@ -93,10 +96,11 @@ const Login = () => {
               </button>
             </div>
           </fieldset>
+          <LoginGoogle />
         </Form>
+        <FormUserGuide />
       </section>
-      <Footer />
-    </div>
+    </>
   );
 };
 

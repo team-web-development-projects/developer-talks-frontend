@@ -30,4 +30,18 @@
       width: 44.37869822485%;
     }
   }
+
+  .form-user-guide {
+    width: 100%;
+    background-color: #ffffff;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 30px;
+
+    li {
+      list-style: none;
+      padding: 5px;
+      display: inline-block;
+    }
+  }
 }
