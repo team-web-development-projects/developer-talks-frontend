@@ -1,7 +1,16 @@
+$content-max-width: 1240px;
+
+$breakpoints-tablet: 1023;
 $breakpoints-mobile: 767;
 
 @mixin media-mo() {
   @media (max-width: ($breakpoints-mobile+'px')) {
+    @content;
+  }
+}
+
+@mixin media-ta() {
+  @media (max-width: ($breakpoints-tablet+'px')) {
     @content;
   }
 }

@@ -58,6 +58,9 @@
         display: block;
         font-size: 13px;
         color: #f40b0b;
+        &.true {
+          color: #7ac40c;
+        }
       }
       button {
         margin-left: 10px;

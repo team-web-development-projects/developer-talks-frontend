@@ -1,40 +1,25 @@
-import {
-  GoogleOAuthProvider,
-  GoogleLogin,
-  useGoogleLogin,
-} from "@react-oauth/google";
-import axios from "axios";
-import { GOOGLE_ID } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
+// import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { googleLogout } from "@react-oauth/google";
+import "./snsbutton.scss";
 
 const LoginGoogle = () => {
-  const clientId = GOOGLE_ID;
-  const GoogleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_ID}&response_type=token&redirect_uri=http://localhost:3000/redirect&scope=https://www.googleapis.com/auth/userinfo.email`;
+  const open = () => {
+    const popupY = window.screen.height / 2 - 600 / 2;
+    const popupX = document.body.offsetWidth / 2 - 400 / 2;
+    window.open(
+      process.env.REACT_APP_GOOGLELOGIN_URL,
+      "dd",
+      "status=no, height=600, width=500, left=" + popupX + ", top=" + popupY
+    );
+  };
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log(tokenResponse);
-    },
-  });
+  const logOut = () => {
+    googleLogout();
+  };
 
   return (
     <>
-      {/*
-      <button onClick={() => login()}>버튼</button>
-    */}
-
-      <GoogleOAuthProvider clientId={clientId}></GoogleOAuthProvider>
-      <GoogleLogin
-        onSuccess={(res) => {
-          console.log(res);
-          const responsePayload = parseJwt(res.credential);
-
-          console.log("dd : ", responsePayload);
-        }}
-        onFailure={(err) => {
-          console.log(err);
-        }}
-      />
+      <div onClick={() => open()}>Sign in with Google 🚀 </div>
     </>
   );
 };

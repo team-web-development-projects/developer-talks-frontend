@@ -1,17 +1,47 @@
 .user-form {
   margin: 0 auto;
-  padding: 30px 42px 51px 42px;
+  padding: 30px 42px 51px;
   width: 490px;
   background-color: #f5f5f5;
   border: 1px solid #adb5b5;
   border-radius: 10px;
   box-sizing: border-box;
+  text-align: center;
+
+  fieldset {
+    width: 100%;
+  }
+
   .desc {
-    margin-top: 25px;
-    padding-bottom: 20px;
-    text-align: center;
+    margin: 0 auto;
+    width: 300px;
     line-height: 28px;
     font-weight: bold;
     background-color: #f5f5f5;
+  }
+}
+
+@media(max-width:676px) {
+  .user-form {
+    padding: 30px 6.21301775148% 51px;
+    width: 72.48520710059%;
+
+    .desc {
+      width: 44.37869822485%;
+    }
+  }
+
+  .form-user-guide {
+    width: 100%;
+    background-color: #ffffff;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 30px;
+
+    li {
+      list-style: none;
+      padding: 5px;
+      display: inline-block;
+    }
   }
 }
