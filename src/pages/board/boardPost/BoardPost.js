@@ -16,7 +16,7 @@ export default function BoardPost() {
             내용: ${form.content}
         `);
     // TODO: 백엔드 통신: post
-    navigate("/board/main");
+    navigate("/board/list");
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +40,7 @@ export default function BoardPost() {
             <CkEditor form={form} setForm={setForm} />
           </div>
           <div className={s.btnRgn}>
-            <Link to="/board/main" className={s.cancel}>
+            <Link to="/board/list" className={s.cancel}>
               취소
             </Link>
             <ButtonBlack name="저장" />

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import s from "./boardList.module.scss";
+import BoardItem from "components/boardItem/BoardItem";
 
 const BoardList = () => {
   const [posts, setPosts] = useState([
@@ -136,19 +137,21 @@ const BoardList = () => {
         </form>
         <div className={s.bottom}>
           <ButtonBlack name="정렬기능" />
-          <Link to="/board/create">
+          <Link to="/board/post">
             <ButtonBlack name="✏️작성하기" />
           </Link>
         </div>
       </div>
       <ul>
         {currentPost(posts).map((board) => (
+          <BoardItem
+            key={board.id}
+            id={board.id}
+            title={board.title}
+            content={board.content}
+            nickname={board.nickname}
+          />
           // <Link to={`/board/${board.id}`}>
-            <li key={board.id} className={s.boardContainer}>
-              <p className={s.title}>{board.title}</p>
-              <p className={s.content}>{board.content}</p>
-              <p className={s.nickname}>{board.nickname}</p>
-            </li>
           // </Link>
         ))}
       </ul>

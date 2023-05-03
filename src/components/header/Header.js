@@ -41,7 +41,7 @@ const Header = () => {
         <nav>
           <ul className="right">
             <li>
-              <Link to="/board/main">Q&A</Link>
+              <Link to="/board/list">Q&A</Link>
             </li>
 
             <li>
