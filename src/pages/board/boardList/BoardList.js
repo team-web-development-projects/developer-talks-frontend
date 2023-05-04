@@ -5,8 +5,13 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import s from "./boardList.module.scss";
+import Select from "components/select/Select";
 
 const BoardList = () => {
+  const options = [
+    { id: 0, text: "최신순" },
+    { id: 1, text: "조회순" },
+  ];
   const [posts, setPosts] = useState([
     {
       id: "1",
@@ -136,7 +141,7 @@ const BoardList = () => {
           <input type="text" placeholder="원하는 내용을 검색해보세요~!" />
         </form>
         <div className={s.bottom}>
-          <Button>정렬기능</Button>
+          <Select init="최신순" options={options} />
           <Link to="/board/post">
             <Button>✏️작성하기</Button>
           </Link>

@@ -3,21 +3,26 @@ import s from "./select.module.scss";
 import { useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 
-const Select = ({ options }) => {
-  const [select, setSelect] = useState("자유");
+const Select = ({ init, options }) => {
+  const [select, setSelect] = useState(init);
   const [dropdown, setDropDown] = useState(false);
-  const handleChange = (opt) => {
-    setSelect(opt.text);
-    setDropDown(false);
-  };
+
   return (
     <div className={s.container}>
-      <label>{select}</label>
-      <AiFillCaretDown className={s.icon} onClick={() => setDropDown(true)} />
+      <div onClick={() => {dropdown?setDropDown(false):setDropDown(true)}}>
+        <label>{select}</label>
+        <AiFillCaretDown className={s.icon} />
+      </div>
       {dropdown && (
-        <ul className={s.selectBox} onClick={handleChange}>
+        <ul className={s.selectBox}>
           {options.map((opt) => (
-            <li key={opt.id}>
+            <li
+              key={opt.id}
+              onClick={() => {
+                setDropDown(false);
+                setSelect(opt.text);
+              }}
+            >
               <p>{opt.text}</p>
             </li>
           ))}

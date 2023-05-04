@@ -40,8 +40,8 @@ export default function BoardPost() {
         </BasicModal>
       )}
       {/* TODO: 시연님이 만든 헤더 컴포넌트 사용하기 */}
-      <Select options={options} />
       <form onSubmit={handleSubmit}>
+        <Select init={"자유"} options={options} className={s.select}/>
         <div className={s.container}>
           <input
             className={s.title}
