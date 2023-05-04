@@ -1,10 +1,10 @@
-import ButtonBlack from "components/buttonBlack/ButtonBlack";
+import BoardItem from "components/boardItem/BoardItem";
+import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import s from "./boardList.module.scss";
-import BoardItem from "components/boardItem/BoardItem";
 
 const BoardList = () => {
   const [posts, setPosts] = useState([
@@ -136,9 +136,9 @@ const BoardList = () => {
           <input type="text" placeholder="원하는 내용을 검색해보세요~!" />
         </form>
         <div className={s.bottom}>
-          <ButtonBlack name="정렬기능" />
+          <Button>정렬기능</Button>
           <Link to="/board/post">
-            <ButtonBlack name="✏️작성하기" />
+            <Button>✏️작성하기</Button>
           </Link>
         </div>
       </div>

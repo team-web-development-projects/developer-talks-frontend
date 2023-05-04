@@ -1,8 +1,8 @@
-import ButtonBlack from "components/buttonBlack/ButtonBlack";
+import Button from "components/button/Button";
+import CkEditor from "components/ckeditor/CkEditor";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
-import CkEditor from "components/ckeditor/CkEditor";
 
 export default function BoardPost() {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function BoardPost() {
             <Link to="/board/list" className={s.cancel}>
               취소
             </Link>
-            <ButtonBlack name="저장" />
+            <Button>저장</Button>
           </div>
         </div>
       </form>

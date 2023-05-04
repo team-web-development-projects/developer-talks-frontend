@@ -1,7 +1,12 @@
 import React from "react";
+import s from "./button.module.scss";
 
-const Button = ({ children, classname }) => {
-  return <Button className={classname}>{children}</Button>;
+const Button = ({ children }) => {
+  return (
+    <button className={s.button}>
+      <p>{children}</p>
+    </button>
+  );
 };
 
 export default Button;
