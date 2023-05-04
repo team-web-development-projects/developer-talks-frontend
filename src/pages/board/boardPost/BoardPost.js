@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import Select from "components/select/Select";
 
 export default function BoardPost() {
   const [modal, setModal] = useState(false);
@@ -12,6 +13,10 @@ export default function BoardPost() {
     title: "",
     content: "",
   });
+  const options = [
+    { id: 0, text: "자유" },
+    { id: 1, text: "Q&A" },
+  ];
   const handleSubmit = (e) => {
     e.preventDefault();
     setModal(true);
@@ -29,11 +34,13 @@ export default function BoardPost() {
     <>
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
-          게시글이 정상적으로 등록되었습니다. 확인을 눌러주세요.
+          게시글이 정상적으로 등록되었습니다. <br />
+          확인을 눌러주세요.
           <button onClick={() => navigate("/board/list")}>확인</button>
         </BasicModal>
       )}
       {/* TODO: 시연님이 만든 헤더 컴포넌트 사용하기 */}
+      <Select options={options} />
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
           <input
