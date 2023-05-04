@@ -3,20 +3,23 @@ import CkEditor from "components/ckeditor/CkEditor";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
 
 export default function BoardPost() {
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     title: "",
     content: "",
   });
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setModal(true);
     console.log(`
             제목: ${form.title}
             내용: ${form.content}
         `);
     // TODO: 백엔드 통신: post
-    navigate("/board/list");
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +27,12 @@ export default function BoardPost() {
   };
   return (
     <>
+      {modal && (
+        <BasicModal setOnModal={() => setModal()}>
+          게시글이 정상적으로 등록되었습니다. 확인을 눌러주세요.
+          <button onClick={() => navigate("/board/list")}>확인</button>
+        </BasicModal>
+      )}
       {/* TODO: 시연님이 만든 헤더 컴포넌트 사용하기 */}
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
