@@ -1,14 +1,8 @@
-import Footer from "components/footer/Footer";
-import Form from "components/form/Form";
-import Header from 'components/header/Header';
-import LoginGoogle from "components/snsLogin/LoginGoogle";
-import { useForm } from "react-hook-form";
-import "./login.scss";
-import { ROOT_API, API_HEADER, GOOGLE_ID } from "constants/api";
-import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import FormUserGuide from "components/form/FormUserGuide";
+import Form from 'components/form/Form';
+import FormUserGuide from 'components/form/FormUserGuide';
+import LoginGoogle from 'components/snsLogin/LoginGoogle';
+import { useForm } from 'react-hook-form';
+import './login.scss';
 
 const Login = () => {
   const onSubmit = async (data) => {

@@ -1,7 +1,9 @@
 // import { Component } from 'react';
 import Left from 'components/left/Left';
+import { useEffect, useState } from 'react';
+import '../../components/scrolltop/Scrolltop';
 import './Individual.scss';
-import { useState, useEffect } from 'react';
+import Scrolltop from '../../components/scrolltop/Scrolltop';
 
 const Main = () => {
   const [notes, setNotes] = useState([]);
@@ -77,6 +79,7 @@ const Main = () => {
           </section>
         </div>
       </main>
+      <Scrolltop />
     </div>
   );
 };

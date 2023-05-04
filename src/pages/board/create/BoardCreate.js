@@ -1,16 +1,16 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import s from "./boardCreate.module.scss";
-import "./editor.css";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import s from './boardCreate.module.scss';
+import './editor.css';
 import ButtonBlack from 'components/buttonBlack/ButtonBlack';
 
 export default function BoardCreate() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    title: "",
-    content: "",
+    title: '',
+    content: '',
   });
   const handleSubmit = () => {
     console.log(`
@@ -18,7 +18,7 @@ export default function BoardCreate() {
             내용: ${form.content}
         `);
     // TODO: 백엔드 통신: post
-    navigate("/board/main");
+    navigate('/board/main');
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +42,7 @@ export default function BoardCreate() {
             <CKEditor
               editor={ClassicEditor}
               config={{
-                placeholder: "내용을 작성해주세요.",
+                placeholder: '내용을 작성해주세요.',
               }}
               name="content"
               value={form.content}
@@ -56,7 +56,7 @@ export default function BoardCreate() {
             <Link to="/board/main" className={s.cancel}>
               취소
             </Link>
-            <ButtonBlack name='저장'/>
+            <ButtonBlack name="저장" />
           </div>
         </div>
       </form>
