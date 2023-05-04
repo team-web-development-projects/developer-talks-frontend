@@ -9,6 +9,7 @@ import Main from "pages/main/Main";
 import Regist from "pages/regist/Regist";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./assets/style/index.scss";
+import BoardDetail from "pages/board/boardDetail/BoardDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="individual" element={<Individual />} />
           <Route path="*" element={<NotPage />} />
+          <Route path="/board/list/1" element={<BoardDetail />} />
         </Route>
 
         <Route element={<NavigatePost />}>
