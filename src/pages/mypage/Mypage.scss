@@ -1,3 +1,48 @@
+.main {
+  display: flex;
+}
+
+.notes {
+  margin: 0 auto;
+  justify-content: center;
+  height: 100vh;
+
+  ul {
+    display: flex;
+  }
+
+  li {
+    padding: 20px 0;
+    width: 120px;
+    height: 30px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 17px;
+
+    .select {
+      background-color: rgb(164, 164, 164);
+      border: 0;
+
+      &:hover {
+        background-color: #585858;
+      }
+
+      &:active {
+        background-color: #000000;
+
+        p {
+          background-color: aquamarine;
+          display: none;
+
+          .selects {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
 // main {
 //   .section {
 //     display: flex;

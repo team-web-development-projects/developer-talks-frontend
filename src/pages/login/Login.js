@@ -1,15 +1,51 @@
+import axios from 'axios';
 import Form from 'components/form/Form';
 import FormUserGuide from 'components/form/FormUserGuide';
+import BasicModal from 'components/portalModal/basicmodal/BasicModal';
 import LoginGoogle from 'components/snsLogin/LoginGoogle';
+import { API_HEADER, ROOT_API } from 'constants/api';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { SET_TOKEN } from 'store/Auth';
+
 import './login.scss';
 
+axios.defaults.withCredentials = true;
+
 const Login = () => {
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [modal, setModal] = useState(false);
+
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-
-    console.log('data', data);
+    axios
+      .post(
+        `${ROOT_API}/sign-in`,
+        {
+          userid: data.userId,
+          password: data.password,
+        },
+        {
+          headers: {
+            API_HEADER,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log('로그인 성공:', response);
+        dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+        setModal(true);
+        reset();
+      })
+      .catch(function (error) {
+        console.log('로그인 실패: ', error.response.data);
+      });
   };
+
+  // NOTE: 이곳에서 통신
 
   const {
     register,
@@ -20,6 +56,13 @@ const Login = () => {
 
   return (
     <>
+      {modal && (
+        <BasicModal setOnModal={() => setModal(false)}>
+          로그인이 완료되었습니다. <br />
+          확인을 누르시면 메인으로 이동합니다.
+          <button onClick={() => navigate('/')}>확인</button>
+        </BasicModal>
+      )}
       <section className="login-page page">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
@@ -97,5 +140,6 @@ const Login = () => {
     </>
   );
 };
-
 export default Login;
+
+// FIXME 500에러- 로그인 페이지에 아이디, 비밀번호 입력 시 500에러 납니다

@@ -1,30 +1,28 @@
-.app {
-  section.side {
-    background-color: #f3f3f3;
-    height: 100vh;
-    width: 250px;
+.side {
+  background-color: #f3f3f3;
+  height: 100vh;
+  width: 250px;
 
-    img {
-      padding: 20px;
-      width: 200px;
-      height: 200px;
-    }
+  img {
+    padding: 20px;
+    width: 200px;
+    height: 200px;
+  }
 
-    ul {
-      margin-left: 0;
-      padding-left: 0;
+  ul {
+    margin-left: 0;
+    padding-left: 0;
 
-      li {
-        padding: 10px;
-        list-style: none;
+    li {
+      padding: 10px;
+      list-style: none;
 
-        &:hover {
-          background-color: #b6b6b6;
-        }
+      &:hover {
+        background-color: #b6b6b6;
+      }
 
-        a {
-          display: block;
-        }
+      a {
+        display: block;
       }
     }
   }
