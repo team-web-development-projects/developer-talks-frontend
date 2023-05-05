@@ -12,6 +12,7 @@ const BoardList = () => {
     { id: 0, text: "최신순" },
     { id: 1, text: "조회순" },
   ];
+  //TODO: 백엔드 통신: Get/post/all
   const [posts, setPosts] = useState([
     {
       id: "1",
@@ -99,6 +100,7 @@ const BoardList = () => {
       nickname: "Lotto",
     },
   ]);
+  //TODO: Page 컴포넌트로 분리하기
   const [currentPage, setCurrentPage] = useState(1);
   const postPerPage = 10;
   const indexOfLast = currentPage * postPerPage;

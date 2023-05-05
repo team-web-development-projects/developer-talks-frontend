@@ -4,8 +4,8 @@ import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
-import axios from 'axios';
-import { ROOT_API } from 'constants/api';
+import axios from "axios";
+import { ROOT_API } from "constants/api";
 
 export default function BoardPost() {
   const [modal, setModal] = useState(false);
@@ -19,24 +19,27 @@ export default function BoardPost() {
     //         제목: ${form.title}
     //         내용: ${form.content}
     //     `);
-    // TODO: 백엔드 통신: post
     e.preventDefault();
-    await new Promise((r)=>setTimeout(r,1000));
-    axios.post(
-      `${ROOT_API}/post`,
-      {
-        title: form.title,
-        content: form.content,
-      },
-      {
-        headers:{
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": localStorage.getItem("token"),
+    await new Promise((r) => setTimeout(r, 1000));
+    axios
+      .post(
+        `${ROOT_API}/post`,
+        {
+          title: form.title,
+          content: form.content,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": localStorage.getItem("token"),
+          },
         }
-      }
-    )
-    .then(()=>setModal(true))
-    .catch()
+      )
+      .then((response) => {
+        console.log(response);
+        setModal(true);
+      })
+      .catch((error) => console.log(error));
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
