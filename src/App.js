@@ -1,15 +1,15 @@
 import Footer from "components/footer/Footer";
 import Header from "components/header/Header";
 import NotPage from "pages/NotPage";
+import BoardDetail from "pages/board/boardDetail/BoardDetail";
 import BoardList from "pages/board/boardList/BoardList";
-import BoardPost from 'pages/board/boardPost/BoardPost';
+import BoardPost from "pages/board/boardPost/BoardPost";
 import Individual from "pages/individual/Individual";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Regist from "pages/regist/Regist";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./assets/style/index.scss";
-import BoardDetail from "pages/board/boardDetail/BoardDetail";
 
 function App() {
   return (
@@ -22,6 +22,7 @@ function App() {
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="individual" element={<Individual />} />
           <Route path="/board/list" element={<BoardList />} />
+          <Route path="/board/list/:postId" element={<BoardDetail />}></Route>
           <Route path="*" element={<NotPage />} />
         </Route>
 
