@@ -1,10 +1,11 @@
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import Select from "components/select/Select";
+import axios from 'axios';
+import { ROOT_API } from 'constants/api';
 
 export default function BoardPost() {
   const [modal, setModal] = useState(false);
@@ -13,18 +14,29 @@ export default function BoardPost() {
     title: "",
     content: "",
   });
-  const options = [
-    { id: 0, text: "자유" },
-    { id: 1, text: "Q&A" },
-  ];
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setModal(true);
-    console.log(`
-            제목: ${form.title}
-            내용: ${form.content}
-        `);
+  const handleSubmit = async (e) => {
+    // console.log(`
+    //         제목: ${form.title}
+    //         내용: ${form.content}
+    //     `);
     // TODO: 백엔드 통신: post
+    e.preventDefault();
+    await new Promise((r)=>setTimeout(r,1000));
+    axios.post(
+      `${ROOT_API}/post`,
+      {
+        title: form.title,
+        content: form.content,
+      },
+      {
+        headers:{
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": localStorage.getItem("token"),
+        }
+      }
+    )
+    .then(()=>setModal(true))
+    .catch()
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +53,6 @@ export default function BoardPost() {
       )}
       {/* TODO: 시연님이 만든 헤더 컴포넌트 사용하기 */}
       <form onSubmit={handleSubmit}>
-        <Select init={"자유"} options={options} className={s.select}/>
         <div className={s.container}>
           <input
             className={s.title}
