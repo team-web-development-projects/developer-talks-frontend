@@ -3,11 +3,15 @@ import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import s from "./boardList.module.scss";
 import Select from "components/select/Select";
+import BasicModal from 'components/portalModal/basicmodal/BasicModal';
 
 const BoardList = () => {
+  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
+  const isLogin = localStorage.getItem("token") === null ? false : true;
   const options = [
     { id: 0, text: "최신순" },
     { id: 1, text: "조회순" },
@@ -113,7 +117,10 @@ const BoardList = () => {
   const handleSearch = () => {
     console.log("search");
   };
-
+  const handleClick = () => {
+    console.log("작성하기 클릭");
+    isLogin ? navigate("/board/post") : setModal(true);
+  };
   // TODO: useQuery 사용해보려 했으나, 에러 발생
   // const {
   //   isLoading,
@@ -132,6 +139,11 @@ const BoardList = () => {
   // if (error) return <p>{error}</p>;
   return (
     <>
+    {modal && (
+        <BasicModal setOnModal={() => setModal()}>
+          로그인을 하면 게시글을 작성할 수 있어요.
+        </BasicModal>
+      )}
       {/* TODO: 시연님이 만든 헤더 컴포넌트 사용하기*/}
       <div className={s.banner}>
         <p>⭐자유주제⭐</p>
@@ -144,9 +156,10 @@ const BoardList = () => {
         </form>
         <div className={s.bottom}>
           <Select init="최신순" options={options} />
-          <Link to="/board/post">
+          {/* <Link to="/board/post">
             <Button>✏️작성하기</Button>
-          </Link>
+          </Link> */}
+          <Button handleClick={handleClick}>✏️작성하기</Button>
         </div>
       </div>
       <ul>

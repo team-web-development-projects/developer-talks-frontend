@@ -21,13 +21,12 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="individual" element={<Individual />} />
+          <Route path="/board/list" element={<BoardList />} />
           <Route path="*" element={<NotPage />} />
-          <Route path="/board/list/1" element={<BoardDetail />} />
         </Route>
 
         <Route element={<NavigatePost />}>
           <Route path="/board/post" element={<BoardPost />} />
-          <Route path="/board/list" element={<BoardList />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
         </Route>
