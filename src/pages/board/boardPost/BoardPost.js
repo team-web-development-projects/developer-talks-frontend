@@ -1,11 +1,11 @@
+import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import { ROOT_API } from "constants/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
-import axios from "axios";
-import { ROOT_API } from "constants/api";
 
 export default function BoardPost() {
   const [modal, setModal] = useState(false);
@@ -54,7 +54,6 @@ export default function BoardPost() {
           <button onClick={() => navigate("/board/list")}>확인</button>
         </BasicModal>
       )}
-      {/* TODO: 시연님이 만든 헤더 컴포넌트 사용하기 */}
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
           <input
