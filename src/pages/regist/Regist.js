@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import "./Regist.scss";
 import Footer from "../../components/footer/Footer";
 import Form from "components/form/Form";
-import Header from 'components/header/Header';
+import Header from "components/header/Header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
@@ -67,6 +67,7 @@ const Regist = () => {
           .then(function (response) {
             console.log("로그인 성공:", response);
             dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+            localStorage.setItem("token", response.data.accessToken);
             setModal(true);
             reset();
           })
@@ -80,12 +81,12 @@ const Regist = () => {
     // NOTE: 이곳에서 통신
   };
 
-  let textTemp = ''
+  let textTemp = "";
 
   const validateDuplicate = (data) => {
     const type = data;
     const value = watch(data);
-    console.log('넣은 데이터', watch(data))
+    console.log("넣은 데이터", watch(data));
     // setTextTemp(watch(data));
     textTemp = watch(data);
     axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {

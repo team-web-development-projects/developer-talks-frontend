@@ -10,8 +10,8 @@ const Pagination = ({ postPerPage, totalPost, paginate }) => {
     <>
       <ul className={s.container}>
         {pageNumbers.map((number) => (
-          <li key={number}>
-            <span onClick={() => paginate(number)}>
+          <li key={number} onClick={() => paginate(number)}>
+            <span>
               {number}
             </span>
           </li>
