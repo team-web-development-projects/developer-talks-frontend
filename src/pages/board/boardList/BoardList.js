@@ -100,7 +100,7 @@ const BoardList = () => {
     },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(10);
+  const postPerPage = 10;
   const indexOfLast = currentPage * postPerPage;
   const indexOfFirst = indexOfLast - postPerPage;
   const currentPost = (post) => {
