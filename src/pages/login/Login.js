@@ -141,5 +141,3 @@ const Login = () => {
   );
 };
 export default Login;
-
-// FIXME 500에러- 로그인 페이지에 아이디, 비밀번호 입력 시 500에러 납니다

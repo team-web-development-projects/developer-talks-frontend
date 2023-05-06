@@ -30,7 +30,6 @@ function Scrolltop() {
         setShowButton(false);
       }
     };
-    //FIXME 이것도 DOM이던데 이렇게 써도 될까요?
     window.addEventListener('scroll', handleShowButton);
     return () => {
       window.removeEventListener('scroll', handleShowButton);
@@ -53,5 +52,4 @@ function Scrolltop() {
     </div>
   );
 }
-//FIXME 버튼이 위에서는 맨 밑으로 가는 버튼이 보이고 버튼이 아래에서는 위로가는 버튼을 만들고 싶었었습니다
 export default Scrolltop;
