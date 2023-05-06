@@ -1,14 +1,15 @@
-import Footer from "components/footer/Footer";
-import Header from "components/header/Header";
-import NotPage from "pages/NotPage";
-import BoardCreate from "pages/board/create/BoardCreate";
-import BoardMain from "pages/board/main/BoardMain";
-import Mypage from "pages/mypage/Mypage";
-import Login from "pages/login/Login";
-import Main from "pages/main/Main";
-import Regist from "pages/regist/Regist";
-import { Outlet, Route, Routes, Link } from "react-router-dom";
-import "./assets/style/index.scss";
+import Footer from 'components/footer/Footer';
+import Header from 'components/header/Header';
+import NotPage from 'pages/NotPage';
+import BoardCreate from 'pages/board/create/BoardCreate';
+import BoardMain from 'pages/board/main/BoardMain';
+import Mypage from 'pages/mypage/Mypage';
+import Login from 'pages/login/Login';
+import Main from 'pages/main/Main';
+import Regist from 'pages/regist/Regist';
+import { Outlet, Route, Routes, Link } from 'react-router-dom';
+import './assets/style/index.scss';
+import Account from 'pages/mypage/Account';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="mypage" element={<Mypage />} />
+          <Route path="account" element={<Account />} />
           <Route path="*" element={<NotPage />} />
         </Route>
 

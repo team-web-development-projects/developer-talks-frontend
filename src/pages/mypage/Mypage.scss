@@ -19,29 +19,67 @@
     border-radius: 10px;
     font-size: 17px;
 
-    .select {
-      background-color: rgb(164, 164, 164);
-      border: 0;
 
-      &:hover {
-        background-color: #585858;
-      }
-
-      &:active {
-        background-color: #000000;
-
-        p {
-          background-color: aquamarine;
-          display: none;
-
-          .selects {
-            display: block;
-          }
-        }
-      }
-    }
   }
 }
+
+//FIXME 스타일 안먹는 이유가 뭔가요?
+.select {
+  background-color: rgb(164, 164, 164);
+  border: 0;
+
+  &:hover {
+    background-color: #585858;
+  }
+
+  &:active {
+    background-color: #000000;
+
+    .selects {
+      left: 0;
+      top: 0;
+      position: relative;
+
+      &:hover {
+        background: #eeeeee;
+      }
+
+      .title {
+        position: absolute;
+        margin-bottom: 10px;
+        font-size: 30px;
+        font-weight: 500;
+        left: 0;
+      }
+
+      .content {
+        position: absolute;
+        left: 0;
+        margin-bottom: 10px;
+        font-size: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .nickname {
+        position: absolute;
+        left: 0;
+        color: #797979;
+      }
+    }
+
+  }
+}
+
+
+// .pageContainer{
+//   display: flex;
+//   justify-content: center;
+//   margin: 20px 0px;
+// }
+
+
 
 // main {
 //   .section {

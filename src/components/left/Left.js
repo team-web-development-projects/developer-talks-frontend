@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import loginuser from './loginuser.jpg';
+import user from './user.jpg';
 import './Left.scss';
 
 const Left = () => {
@@ -7,15 +9,15 @@ const Left = () => {
   return (
     <>
       <section className="side">
-        <img src="user.jpg" alt="" />
+        <img src={loginuser} alt="" />
         <p>{name}</p>
         <p>{line}</p>
         <ul>
           <li>
-            <Link>활동내역</Link>
+            <Link to="/mypage">활동내역</Link>
           </li>
           <li>
-            <Link>회원정보</Link>
+            <Link to="/account">회원정보</Link>
           </li>
         </ul>
       </section>
