@@ -137,6 +137,7 @@ const Mypage = () => {
               >
                 {contact.type}
               </button>
+              {/*FIXME 리스트가 배열처럼 나오게 만들고 싶어요 */}
               <div className={`${select === contact.type ? 'selects' : ''}`}>
                 {select === index && 
                 user.map((contacts[select].line, index ) => (
