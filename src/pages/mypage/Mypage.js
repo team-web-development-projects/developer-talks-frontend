@@ -11,27 +11,6 @@ const Mypage = () => {
   const auth = useSelector((state) => state.authToken);
   console.log('auth:', auth.accessToken);
 
-  // let [user, setUser] = useState([
-  //   {
-  //     id: '1',
-  //     amount: 'test1',
-  //     data: '사랑의 앞이 튼튼하며, 거친 사막이다. 청춘의 보배를 기쁘며, 날카로우나 구하지 하여도 그러므로 뿐이다. 이상 무엇을 목숨을 그들에게 천하를 능히 위하여, 그들은 듣기만 부패뿐이다. 내는 오직 실로 두손을 봄바람이다. 어디 무엇이 소금이라 있으며, 예가 기관과 인류의 뿐이다. 풀이 청춘의 지혜는 창공에 인간은 때까지 봄바람이다. 인류의 피는 주며, 자신과 쓸쓸하랴? 돋고, 그들의 것은 위하여, 그와 위하여서. 수 웅대한 설레는 피가 청춘이 피고, 것이다. 이는 이상이 구하기 생생하며, 천하를 운다.',
-  //     nickname: 'Ann',
-  //   },
-  //   {
-  //     id: '2',
-  //     amount: 'test2',
-  //     data: 'bbbbbbbbbbbbbbb',
-  //     nickname: 'Tree',
-  //   },
-  //   {
-  //     id: '3',
-  //     amount: 'test3',
-  //     data: 'ccccccccccccccccccccc',
-  //     nickname: 'Lotto',
-  //   },
-  // ]);
-
   const contacts = [
     {
       id: 0,
@@ -45,7 +24,6 @@ const Mypage = () => {
         },
       ],
     },
-    //FIXME line배열 3가지 리스트들이 다 보였으면 하는데 안보입니다!
     {
       id: 1,
       type: '내가 쓴 글',
@@ -106,16 +84,11 @@ const Mypage = () => {
         },
       ],
     },
-
-    // { id: 1, type: '내가 쓴 글', line: '최근 내가 쓴 글들' },
-    // { id: 2, type: '댓글', line: '최근 댓글' },
-    // { id: 3, type: '스크랩', line: '스크랩 한 글들' },
   ];
-  const [select, setSelect] = useState('');
+  const [select, setSelect] = useState(-1);
   const onSelect = (type) => {
     setSelect(type);
   };
-
   const LoginRegist = () => {
     return (
       <div>
@@ -136,6 +109,7 @@ const Mypage = () => {
         >
           회원가입
         </Link>
+        1
       </div>
     );
   };
@@ -147,9 +121,8 @@ const Mypage = () => {
       <section className="notes">
         <ul>
           {contacts.map((contact, index) => (
-            <li>
+            <li key={index}>
               <button
-                key={contact.id}
                 onClick={() => onSelect(index)}
                 className={`${select === index ? 'select' : ''}`}
               >
@@ -159,7 +132,7 @@ const Mypage = () => {
           ))}
         </ul>
         <div className="">
-          {select &&
+          {select !== -1 &&
             contacts[select].line.map((item, index) => (
               <div key={index}>
                 <div className="title">{item.title}</div>
@@ -174,23 +147,3 @@ const Mypage = () => {
 };
 
 export default Mypage;
-
-// {/* <div> {contacts[select].line.time}</div> */}
-// {/* <div className="title">
-//     {select === index && contacts[select].line.title}
-//   </div>
-//   <div className="content">
-//     {select === index && contacts[select].line.content}
-//   </div>
-//   <div className="title">
-//     {select === index && contacts[select].line.title}
-//   </div>
-//   <div className="content">
-//     {select === index && contacts[select].line.content}
-//   </div>
-//   <div className="title">
-//     {select === index && contacts[select].line.title}
-//   </div>
-//   <div className="content">
-//     {select === index && contacts[select].line.content}
-//   </div> */}
