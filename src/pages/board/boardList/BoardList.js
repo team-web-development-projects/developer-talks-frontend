@@ -11,8 +11,11 @@ import s from "./boardList.module.scss";
 // import { data } from "./dummydata";
 import { useQuery } from "react-query";
 import { ROOT_API } from "constants/api";
+import { useSelector } from "react-redux";
 
 const BoardList = ({ type }) => {
+  const auth = useSelector((state) => state.authToken);
+  console.log("auth:", auth.accessToken);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const isLogin = localStorage.getItem("token") === null ? false : true;
@@ -58,51 +61,51 @@ const BoardList = ({ type }) => {
   // if (isLoading) return <p>Loading...</p>;
   // if (error) return <p>{error}</p>;
 
-  // const { status, data, error, isFetching, refetch } = useQuery(
-  //   "lists",
-  //   async () => {
-  //     const res = await axios.get(
-  //       `${ROOT_API}/questions/all`,
-  //       {
-  //  params: {
-  //           page: 1,
-  //           size: 10,
-  //         // },
+  const { status, data, error, isFetching, refetch } = useQuery(
+    "lists",
+    async () => {
+      const res = await axios.get(
+        `${ROOT_API}/questions/all`,
+        {
+          params: {
+            page: 1,
+            size: 10,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      );
+      return res.data;
+    }
+  );
+  console.log("da", data);
+
+  // axios
+  //   .get(
+  //     `${ROOT_API}/post/all`,
+  //     {
+  //       params: {
+  //         page: 1,
+  //         size: 10,
   //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "X-AUTH-TOKEN":
-  //             "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzQ0NDU3NywiZXhwIjoxNjgzNDU1Mzc3fQ.mwLbJMYeSvkkLuhMKvuvkZ-9jfXvHzy4RrA_xSCnvzg",
-  //         },
-  //       }
-  //     );
-  //     return res.data;
-  //   }
-  // );
-  // console.log("da", data);
-  axios
-    .get(
-      `${ROOT_API}/post/all`,
-      {
-        params: {
-          page: 1,
-          size: 10,
-        },
-      },
-      {
-        headers: {
-          "X-AUTH-TOKEN":
-            "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMkBuYXZlci5jb20iLCJ1c2VyaWQiOiIyMjIyMiIsIm5pY2tuYW1lIjoiMjIyMjIiLCJpYXQiOjE2ODM0NDYyMjEsImV4cCI6MTY4MzQ1NzAyMX0.UzRuB4jjBs3hBe35ywApWOMpIlOYjpRJ-l1BV_OIA5Y",
-        },
-      }
-    )
-    .then(function (response) {
-      console.log("로그인 성공:", response);
-    })
-    .catch(function (error) {
-      console.log("로그인 실패: ", error.response);
-    });
+  //     },
+  //     {
+  //       headers: {
+  //         "X-AUTH-TOKEN":
+  //           "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzQ0NzY5MiwiZXhwIjoxNjgzNDU4NDkyfQ.muOK32zu9BThE-nyOEDi5OlGjarNHlDHrWveAKR4BEM",
+  //       },
+  //     }
+  //   )
+  //   .then(function (response) {
+  //     console.log("로그인 성공:", response);
+  //   })
+  //   .catch(function (error) {
+  //     console.log("로그인 실패: ", error.response);
+  //   });
 
   return (
     <>

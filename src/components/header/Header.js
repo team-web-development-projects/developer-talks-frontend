@@ -16,6 +16,18 @@ const Header = () => {
     <header className="header">
       <div className="headerBox">
         <ul>
+      {/* <button onClick={() => setHeader('true')}>클릭</button> */}
+      <div className="logo">
+        <Link to="/">Developer-Talks</Link>
+      </div>
+      <nav className="navBar">
+        <ul className="right">
+          <li>
+            <Link to="/qna/list">Q&A</Link>
+          </li>
+          <li>
+            <Link to="/qna/list">커뮤니티</Link>
+          </li>
           <li>
             <Link to="/">
               <p>게시판 홈</p>
