@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import "./Regist.scss";
-import Footer from "../../components/footer/Footer";
-import Form from "components/form/Form";
-import Header from "components/header/Header";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import { useDispatch } from "react-redux";
-import { ROOT_API, API_HEADER } from "constants/api";
-import { SET_TOKEN } from "store/Auth";
-import { useRef } from "react";
+import axios from 'axios';
+import Form from 'components/form/Form';
+import BasicModal from 'components/portalModal/basicmodal/BasicModal';
+import { API_HEADER, ROOT_API } from 'constants/api';
+import { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { SET_TOKEN } from 'store/Auth';
+import Footer from '../../components/footer/Footer';
+import './Regist.scss';
 
 axios.defaults.withCredentials = true;
 
@@ -21,8 +19,8 @@ const Regist = () => {
   const usernicknameRef = useRef(null);
 
   const [modal, setModal] = useState(false);
-  const [duplicateId, setDuplicateId] = useState("");
-  const [duplicateNickName, setDuplicateNickName] = useState("");
+  const [duplicateId, setDuplicateId] = useState('');
+  const [duplicateNickName, setDuplicateNickName] = useState('');
 
   const {
     register,
@@ -30,7 +28,7 @@ const Regist = () => {
     reset,
     watch,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: 'onChange' });
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -50,7 +48,7 @@ const Regist = () => {
         }
       )
       .then(function (response) {
-        console.log("회원가입 성공:", response);
+        console.log('회원가입 성공:', response);
         axios
           .post(
             `${ROOT_API}/sign-in`,
@@ -65,40 +63,40 @@ const Regist = () => {
             }
           )
           .then(function (response) {
-            console.log("로그인 성공:", response);
+            console.log('로그인 성공:', response);
             dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
             localStorage.setItem("token", response.data.accessToken);
             setModal(true);
             reset();
           })
           .catch(function (error) {
-            console.log("로그인 실패: ", error.response.data);
+            console.log('로그인 실패: ', error.response.data);
           });
       })
       .catch(function (error) {
-        console.log("회원가입 실패:", error.response.data);
+        console.log('회원가입 실패:', error.response.data);
       });
     // NOTE: 이곳에서 통신
   };
 
-  let textTemp = "";
+  let textTemp = '';
 
   const validateDuplicate = (data) => {
     const type = data;
     const value = watch(data);
-    console.log("넣은 데이터", watch(data));
+    console.log('넣은 데이터', watch(data));
     // setTextTemp(watch(data));
     textTemp = watch(data);
     axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {
-      if (type === "userId") {
+      if (type === 'userId') {
         response.data.duplicated === true
-          ? setDuplicateId("true")
-          : setDuplicateId("false");
+          ? setDuplicateId('true')
+          : setDuplicateId('false');
       }
-      if (type === "userNickname") {
+      if (type === 'userNickname') {
         response.data.duplicated === true
-          ? setDuplicateNickName("true")
-          : setDuplicateNickName("false");
+          ? setDuplicateNickName('true')
+          : setDuplicateNickName('false');
       }
     });
   };
@@ -109,7 +107,7 @@ const Regist = () => {
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
           확인을 누르시면 메인으로 이동합니다.
-          <button onClick={() => navigate("/")}>확인</button>
+          <button onClick={() => navigate('/')}>확인</button>
         </BasicModal>
       )}
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -133,11 +131,11 @@ const Regist = () => {
                     id="userEmail"
                     placeholder="이메일을 입력해주세요"
                     tabIndex="1"
-                    {...register("userEmail", {
-                      required: "이메일은 필수 입력입니다.",
+                    {...register('userEmail', {
+                      required: '이메일은 필수 입력입니다.',
                       pattern: {
                         value: /\S+@\S+\.\S+/,
-                        message: "이메일 형식에 맞지 않습니다.",
+                        message: '이메일 형식에 맞지 않습니다.',
                       },
                     })}
                   />
@@ -161,11 +159,11 @@ const Regist = () => {
                     tabIndex="2"
                     ref={usernicknameRef}
                     maxLength={15}
-                    {...register("userNickname", {
-                      required: "닉네임은 필수 입력입니다.",
+                    {...register('userNickname', {
+                      required: '닉네임은 필수 입력입니다.',
                       minLength: {
                         value: 5,
-                        message: "5자리 이상 입력해주세요.",
+                        message: '5자리 이상 입력해주세요.',
                       },
                       // pattern: {
                       //   value:
@@ -177,7 +175,7 @@ const Regist = () => {
                   />
                   <button
                     title="중복체크"
-                    onClick={() => validateDuplicate("userNickname")}
+                    onClick={() => validateDuplicate('userNickname')}
                   >
                     중복체크
                   </button>
@@ -185,13 +183,13 @@ const Regist = () => {
                     <small role="alert">{errors.userNickname.message}</small>
                   )}
                   {!errors.userNickname &&
-                    duplicateNickName !== "" &&
-                    duplicateNickName === "true" && (
+                    duplicateNickName !== '' &&
+                    duplicateNickName === 'true' && (
                       <small className="alert">중복된 닉네임입니다.</small>
                     )}
                   {!errors.userNickname &&
-                    duplicateNickName !== "" &&
-                    duplicateNickName === "false" && (
+                    duplicateNickName !== '' &&
+                    duplicateNickName === 'false' && (
                       <small className="true">
                         사용할 수 있는 닉네임입니다.
                       </small>
@@ -213,31 +211,31 @@ const Regist = () => {
                     maxLength={15}
                     ref={useridRef}
                     tabIndex="3"
-                    {...register("userId", {
-                      required: "아이디는 필수 입력입니다.",
+                    {...register('userId', {
+                      required: '아이디는 필수 입력입니다.',
                       minLength: {
                         value: 5,
-                        message: "5자리 이상 아이디를 사용해주세요.",
+                        message: '5자리 이상 아이디를 사용해주세요.',
                       },
                       maxLength: {
                         value: 15,
-                        message: "15자리 이하 아이디를 사용해주세요.",
+                        message: '15자리 이하 아이디를 사용해주세요.',
                       },
                     })}
                   />
                   <button
                     title="중복체크"
-                    onClick={() => validateDuplicate("userId")}
+                    onClick={() => validateDuplicate('userId')}
                   >
                     중복체크
                   </button>
                   {errors.userId && (
                     <small role="alert">{errors.userId.message}</small>
                   )}
-                  {duplicateId !== "" && duplicateId === "true" && (
+                  {duplicateId !== '' && duplicateId === 'true' && (
                     <small className="alert">중복된 아이디입니다.</small>
                   )}
-                  {duplicateId !== "" && duplicateId === "false" && (
+                  {duplicateId !== '' && duplicateId === 'false' && (
                     <small className="true">사용할 수 있는 아이디입니다.</small>
                   )}
                 </td>
@@ -257,19 +255,19 @@ const Regist = () => {
                     placeholder="최소 1개의 특수문자를 포함해주세요"
                     maxLength={15}
                     tabIndex="4"
-                    {...register("password", {
-                      required: "비밀번호는 필수 입력입니다.",
+                    {...register('password', {
+                      required: '비밀번호는 필수 입력입니다.',
                       minLength: {
                         value: 8,
-                        message: "8자리 이상 비밀번호를 사용해주세요.",
+                        message: '8자리 이상 비밀번호를 사용해주세요.',
                       },
                       maxLength: {
                         value: 15,
-                        message: "15자리 이히 비밀번호를 사용해주세요.",
+                        message: '15자리 이히 비밀번호를 사용해주세요.',
                       },
                       pattern: {
                         value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                        message: "특수문자를 포함해주세요",
+                        message: '특수문자를 포함해주세요',
                       },
                     })}
                   />
@@ -292,23 +290,23 @@ const Regist = () => {
                     placeholder="비밀번호를 한 번 더 입력해주세요"
                     tabIndex="5"
                     maxLength={15}
-                    {...register("passwordChk", {
-                      required: "비밀번호는 필수 입력입니다.",
+                    {...register('passwordChk', {
+                      required: '비밀번호는 필수 입력입니다.',
                       minLength: {
                         value: 8,
-                        message: "8자리 이상 비밀번호를 사용해주세요.",
+                        message: '8자리 이상 비밀번호를 사용해주세요.',
                       },
                       maxLength: {
                         value: 15,
-                        message: "15자리 이히 비밀번호를 사용해주세요.",
+                        message: '15자리 이히 비밀번호를 사용해주세요.',
                       },
                       pattern: {
                         value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                        message: "특수문자를 포함해주세요",
+                        message: '특수문자를 포함해주세요',
                       },
                       validate: (val) => {
-                        if (watch("password") !== val) {
-                          return "비밀번호가 일치하지 않습니다.";
+                        if (watch('password') !== val) {
+                          return '비밀번호가 일치하지 않습니다.';
                         }
                       },
                     })}
@@ -323,7 +321,7 @@ const Regist = () => {
         </fieldset>
         <div className="submit">
           <button type="submit" tabIndex="7" disabled={isSubmitting}>
-            {" "}
+            {' '}
             가입하기
           </button>
         </div>

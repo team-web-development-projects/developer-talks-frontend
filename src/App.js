@@ -10,6 +10,8 @@ import Main from "pages/main/Main";
 import Regist from "pages/regist/Regist";
 import { Outlet, Route, Routes } from "react-router-dom";
 import "./assets/style/index.scss";
+import Mypage from "pages/mypage/Mypage";
+import Account from "pages/mypage/Account";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="individual" element={<Individual />} />
           <Route path="/board/list" element={<BoardList />} />
           <Route path="/board/list/:postId" element={<BoardDetail />}></Route>
+          <Route path="mypage" element={<Mypage />} />
+          <Route path="account" element={<Account />} />
           <Route path="*" element={<NotPage />} />
         </Route>
 
