@@ -44,7 +44,7 @@ function Scrolltop() {
       </button>
     </div>
   ) : (
-    <div>
+    <div className="scroll__container">
       <button id="bottom" onClick={scrollToBottom} type="button">
         {' '}
         Bottom

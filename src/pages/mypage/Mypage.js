@@ -11,41 +11,43 @@ const Mypage = () => {
   const auth = useSelector((state) => state.authToken);
   console.log('auth:', auth.accessToken);
 
-  let [user, setUser] = useState([
-    {
-      id: '1',
-      amount: 'test1',
-      data: '사랑의 앞이 튼튼하며, 거친 사막이다. 청춘의 보배를 기쁘며, 날카로우나 구하지 하여도 그러므로 뿐이다. 이상 무엇을 목숨을 그들에게 천하를 능히 위하여, 그들은 듣기만 부패뿐이다. 내는 오직 실로 두손을 봄바람이다. 어디 무엇이 소금이라 있으며, 예가 기관과 인류의 뿐이다. 풀이 청춘의 지혜는 창공에 인간은 때까지 봄바람이다. 인류의 피는 주며, 자신과 쓸쓸하랴? 돋고, 그들의 것은 위하여, 그와 위하여서. 수 웅대한 설레는 피가 청춘이 피고, 것이다. 이는 이상이 구하기 생생하며, 천하를 운다.',
-      nickname: 'Ann',
-    },
-    {
-      id: '2',
-      amount: 'test2',
-      data: 'bbbbbbbbbbbbbbb',
-      nickname: 'Tree',
-    },
-    {
-      id: '3',
-      amount: 'test3',
-      data: 'ccccccccccccccccccccc',
-      nickname: 'Lotto',
-    },
-  ]);
+  // let [user, setUser] = useState([
+  //   {
+  //     id: '1',
+  //     amount: 'test1',
+  //     data: '사랑의 앞이 튼튼하며, 거친 사막이다. 청춘의 보배를 기쁘며, 날카로우나 구하지 하여도 그러므로 뿐이다. 이상 무엇을 목숨을 그들에게 천하를 능히 위하여, 그들은 듣기만 부패뿐이다. 내는 오직 실로 두손을 봄바람이다. 어디 무엇이 소금이라 있으며, 예가 기관과 인류의 뿐이다. 풀이 청춘의 지혜는 창공에 인간은 때까지 봄바람이다. 인류의 피는 주며, 자신과 쓸쓸하랴? 돋고, 그들의 것은 위하여, 그와 위하여서. 수 웅대한 설레는 피가 청춘이 피고, 것이다. 이는 이상이 구하기 생생하며, 천하를 운다.',
+  //     nickname: 'Ann',
+  //   },
+  //   {
+  //     id: '2',
+  //     amount: 'test2',
+  //     data: 'bbbbbbbbbbbbbbb',
+  //     nickname: 'Tree',
+  //   },
+  //   {
+  //     id: '3',
+  //     amount: 'test3',
+  //     data: 'ccccccccccccccccccccc',
+  //     nickname: 'Lotto',
+  //   },
+  // ]);
+
   const contacts = [
     {
       id: 0,
       type: '최근활동',
-      line: {
-        id: 0,
-        title: '자바스트립트 궁금합니다',
-        content: 'ㅣㄴ아ㅓ니아ㅓ니',
-        nickname: 'Ann',
-      },
+      line: [
+        {
+          id: 0,
+          title: '자바스트립트 궁금합니다',
+          content: 'ㅣㄴ아ㅓ니아ㅓ니',
+          nickname: 'Ann',
+        },
+      ],
     },
-
     //FIXME line배열 3가지 리스트들이 다 보였으면 하는데 안보입니다!
     {
-      id: 2,
+      id: 1,
       type: '내가 쓴 글',
       line: [
         {
@@ -69,24 +71,40 @@ const Mypage = () => {
       ],
     },
     {
-      id: 3,
+      id: 2,
       type: '댓글',
-      line: {
-        id: 0,
-        title: '요즘 무슨 개발 하시나요?',
-        content: '나이러니ㅏ러',
-        nickname: 'bee',
-      },
+      line: [
+        {
+          id: 0,
+          title: '요즘 무슨 개발 하시나요?',
+          content: '나이러니ㅏ러',
+          nickname: 'bee',
+        },
+      ],
     },
     {
-      id: 4,
+      id: 3,
       type: '스크랩',
-      line: {
-        id: 0,
-        title: '할말이 있습니다',
-        content: 'dd',
-        nickname: 'Araaa',
-      },
+      line: [
+        {
+          id: 0,
+          title: '할말이 있습니다1',
+          content: 'dd',
+          nickname: 'Araaa',
+        },
+        {
+          id: 1,
+          title: '할말이 있습니다',
+          content: 'dd',
+          nickname: 'Araaa',
+        },
+        {
+          id: 2,
+          title: '할말이 있습니다',
+          content: 'dd',
+          nickname: 'Araaa',
+        },
+      ],
     },
 
     // { id: 1, type: '내가 쓴 글', line: '최근 내가 쓴 글들' },
@@ -133,31 +151,23 @@ const Mypage = () => {
               <button
                 key={contact.id}
                 onClick={() => onSelect(index)}
-                className={`${select === index && 'select'}`}
+                className={`${select === index ? 'select' : ''}`}
               >
                 {contact.type}
               </button>
-              {/*FIXME 리스트가 배열처럼 나오게 만들고 싶어요 */}
-              <div className={`${select === contact.type ? 'selects' : ''}`}>
-                {select === index && 
-                user.map((contacts[select].line, index ) => (
-                  
-                  <div key={index} className='useritem'>
-                    <div className="title">
-                      {contacts[select].line.title}
-                      </div>
-                    <div className="content">
-                      {contacts[select].line.content}
-                    </div>
-                    <div className="nickname">
-                      {contacts[select].line.nickname}
-                    </div>
-                  </div>
-                ))}
-              </div>
             </li>
           ))}
         </ul>
+        <div className="">
+          {select &&
+            contacts[select].line.map((item, index) => (
+              <div key={index}>
+                <div className="title">{item.title}</div>
+                <div className="content">{item.content}</div>
+                <div className="nickname">{item.nickname}</div>
+              </div>
+            ))}
+        </div>
       </section>
     </main>
   );
