@@ -103,6 +103,26 @@ const Header = () => {
         <Link to="/">
           <FiMenu size={24} />
         </Link>
+        <nav>
+          <ul className="right">
+            <li>
+              <Link to="/qna/list">Q&A</Link>
+            </li>
+
+            <li>
+              <Link to="/board/list">커뮤니티</Link>
+            </li>
+
+            <li>
+              <Link to="/">공지사항</Link>
+            </li>
+            <li>
+              <Link to="/">
+                <FiMenu size={24} />
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </div>
     </header>
   );

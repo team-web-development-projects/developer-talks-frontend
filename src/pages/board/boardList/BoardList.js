@@ -3,12 +3,16 @@ import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Select from "components/select/Select";
+import axios from "axios";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardList.module.scss";
+// import { data } from "./dummydata";
+import { useQuery } from "react-query";
+import { ROOT_API } from "constants/api";
 
-const BoardList = () => {
+const BoardList = ({ type }) => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const isLogin = localStorage.getItem("token") === null ? false : true;
@@ -19,93 +23,7 @@ const BoardList = () => {
   //TODO: 백엔드 통신: Get/post/all
   //로그인을 안한 유저도 게시글은 볼 수 있게 만들려면, 백엔드랑 통신할 때 헤더에 토큰값이 필요없겠죠..?
   //백엔드 담당분께 말씀드려야할 지,,!
-  const [posts, setPosts] = useState([
-    {
-      id: "1",
-      title: "test1",
-      content:
-        "사랑의 앞이 튼튼하며, 거친 사막이다. 청춘의 보배를 기쁘며, 날카로우나 구하지 하여도 그러므로 뿐이다. 이상 무엇을 목숨을 그들에게 천하를 능히 위하여, 그들은 듣기만 부패뿐이다. 내는 오직 실로 두손을 봄바람이다. 어디 무엇이 소금이라 있으며, 예가 기관과 인류의 뿐이다. 풀이 청춘의 지혜는 창공에 인간은 때까지 봄바람이다. 인류의 피는 주며, 자신과 쓸쓸하랴? 돋고, 그들의 것은 위하여, 그와 위하여서. 수 웅대한 설레는 피가 청춘이 피고, 것이다. 이는 이상이 구하기 생생하며, 천하를 운다.",
-      nickname: "Ann",
-    },
-    {
-      id: "2",
-      title: "test2",
-      content: "bbbbbbbbbbbbbbb",
-      nickname: "Tree",
-    },
-    {
-      id: "3",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "4",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "5",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "6",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "7",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "8",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "9",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "10",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "11",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "12",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "13",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-    {
-      id: "14",
-      title: "test3",
-      content: "ccccccccccccccccccccc",
-      nickname: "Lotto",
-    },
-  ]);
+  // const [posts, setPosts] = useState(data);
   //TODO: Page 컴포넌트로 분리하기
   const [currentPage, setCurrentPage] = useState(1);
   const postPerPage = 10;
@@ -139,6 +57,53 @@ const BoardList = () => {
   // );
   // if (isLoading) return <p>Loading...</p>;
   // if (error) return <p>{error}</p>;
+
+  // const { status, data, error, isFetching, refetch } = useQuery(
+  //   "lists",
+  //   async () => {
+  //     const res = await axios.get(
+  //       `${ROOT_API}/questions/all`,
+  //       {
+  //  params: {
+  //           page: 1,
+  //           size: 10,
+  //         // },
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "X-AUTH-TOKEN":
+  //             "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzQ0NDU3NywiZXhwIjoxNjgzNDU1Mzc3fQ.mwLbJMYeSvkkLuhMKvuvkZ-9jfXvHzy4RrA_xSCnvzg",
+  //         },
+  //       }
+  //     );
+  //     return res.data;
+  //   }
+  // );
+  // console.log("da", data);
+  axios
+    .get(
+      `${ROOT_API}/post/all`,
+      {
+        params: {
+          page: 1,
+          size: 10,
+        },
+      },
+      {
+        headers: {
+          "X-AUTH-TOKEN":
+            "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMkBuYXZlci5jb20iLCJ1c2VyaWQiOiIyMjIyMiIsIm5pY2tuYW1lIjoiMjIyMjIiLCJpYXQiOjE2ODM0NDYyMjEsImV4cCI6MTY4MzQ1NzAyMX0.UzRuB4jjBs3hBe35ywApWOMpIlOYjpRJ-l1BV_OIA5Y",
+        },
+      }
+    )
+    .then(function (response) {
+      console.log("로그인 성공:", response);
+    })
+    .catch(function (error) {
+      console.log("로그인 실패: ", error.response);
+    });
+
   return (
     <>
       {modal && (
@@ -167,21 +132,24 @@ const BoardList = () => {
         </div>
       </div>
       <ul>
-        {currentPost(posts).map((board) => (
-          <BoardItem
-            key={board.id}
-            id={board.id}
-            title={board.title}
-            content={board.content}
-            nickname={board.nickname}
-          />
-        ))}
+        {
+          // data &&
+          // data.map((board) => (
+          //   <BoardItem
+          //     key={board.id}
+          //     id={board.id}
+          //     title={board.title}
+          //     content={board.content}
+          //     nickname={board.nickname}
+          //   />
+          // ))
+        }
       </ul>
 
       <div className={s.pageContainer}>
         <Pagination
           postPerPage={postPerPage}
-          totalPost={posts.length}
+          // totalPost={posts.length}
           paginate={setCurrentPage}
         />
       </div>

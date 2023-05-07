@@ -23,15 +23,20 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="individual" element={<Individual />} />
-          <Route path="/board/list" element={<BoardList />} />
-          <Route path="/board/list/:postId" element={<BoardDetail />}></Route>
           <Route path="mypage" element={<Mypage />} />
           <Route path="account" element={<Account />} />
+
+          <Route path="/board/list" element={<BoardList type="board" />} />
+          <Route path="/board/list/:postId" element={<BoardDetail type="board" />} />
+
+          <Route path="/qna/list" element={<BoardList type="qna" />} />
+          <Route path="/qna/list/:postId" element={<BoardDetail type="qna" />} />
           <Route path="*" element={<NotPage />} />
         </Route>
 
         <Route element={<NavigatePost />}>
           <Route path="/board/post" element={<BoardPost />} />
+          <Route path="/qna/post" element={<BoardPost type="qna"/>} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
         </Route>
