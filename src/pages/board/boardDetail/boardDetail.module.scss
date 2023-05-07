@@ -1,0 +1,54 @@
+.container {
+  margin: 20px;
+  padding: 50px;
+  border: solid 1px #cfcccc;
+  header {
+    border-bottom: solid 1px #cfcccc;
+    .nick {
+      font-size: 25px;
+      color: black;
+    }
+    .info {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      font-weight: 500;
+      color: #8b8b8b;
+    }
+  }
+  main {
+    .title {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 45px;
+      font-weight: 500;
+    }
+    .content {
+      font-size: 25px;
+    }
+  }
+  .reply {
+    margin-top: 40px;
+    border-top: solid 1px #cfcccc;
+    .title {
+      margin-top: 30px;
+      color: #8b8b8b;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    input {
+      margin-top: 30px;
+      width:96%;
+      border: solid 1px #cfcccc;
+      border-radius: 10px;
+      padding: 20px;
+      font-size: 20px;
+    }
+    .replies{
+        
+    }
+  }
+}
