@@ -34,7 +34,9 @@ const BoardList = ({ type }) => {
   };
   const handleClick = () => {
     console.log("작성하기 클릭");
-    isLogin ? navigate("/board/post") : setModal(true);
+    isLogin
+      ? navigate(`/${type === "post" ? "board" : "qna"}/post`)
+      : setModal(true);
   };
 
   async function fetchProjects(currentPage) {
