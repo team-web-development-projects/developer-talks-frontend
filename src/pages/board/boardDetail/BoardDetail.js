@@ -3,8 +3,9 @@ import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
+import BoardReply from "components/boardReply/BoardReply";
 
-const BoardDetail = () => {
+const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const [post, setPost] = useState([]);
   useEffect(() => {
@@ -37,10 +38,10 @@ const BoardDetail = () => {
         <div className={s.reply}>
           <p className={s.title}>답변 0</p>
           <form>
-            <input type="text" placeholder='답변을 작성해보세요.'/>
+            <input type="text" placeholder="답변을 작성해보세요." />
           </form>
           <ul className={s.replies}>
-
+            <BoardReply type={type} />
           </ul>
         </div>
       </div>

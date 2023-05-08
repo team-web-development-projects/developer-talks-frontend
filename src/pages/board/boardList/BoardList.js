@@ -8,14 +8,15 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardList.module.scss";
-// import { data } from "./dummydata";
+import { data } from "./dummydata";
 import { useQuery } from "react-query";
 import { ROOT_API } from "constants/api";
 import { useSelector } from "react-redux";
+import react, { useEffect } from "react";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
-  console.log("auth:", auth.accessToken);
+  console.log("auth:", auth);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const isLogin = localStorage.getItem("token") === null ? false : true;
@@ -61,51 +62,56 @@ const BoardList = ({ type }) => {
   // if (isLoading) return <p>Loading...</p>;
   // if (error) return <p>{error}</p>;
 
-  const { status, data, error, isFetching, refetch } = useQuery(
-    "lists",
-    async () => {
-      const res = await axios.get(
+  // const { status, data, error, isFetching, refetch } = useQuery(
+  //   "lists",
+  //   async () => {
+  //     const res = await axios.get(
+  //       `${ROOT_API}/post/all`,
+  //       {
+  //         params: { page: 1, size: 10 },
+  //         headers: {
+  //           "X-AUTH-TOKEN":
+  //             "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzQ0NDU3NywiZXhwIjoxNjgzNDU1Mzc3fQ.mwLbJMYeSvkkLuhMKvuvkZ-9jfXvHzy4RrA_xSCnvzg",
+  //         },
+  //       },
+  //       { withCredentials: false }
+  //     );
+  //     return res.data;
+  //   }
+  // );
+  // console.log("da", data);
+  useEffect(() => {
+    axios
+      .get(
         `${ROOT_API}/questions/all`,
         {
-          params: {
-            page: 1,
-            size: 10,
-          },
+          params: { page: 1, size: 10 },
         },
         {
           headers: {
             "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
+            "X-AUTH-TOKEN": localStorage.getItem("token"),
           },
         }
-      );
-      return res.data;
-    }
-  );
-  console.log("da", data);
+      )
+      .then(function (response) {
+        console.log("리스트 불러온 값:", response);
+      })
+      .catch(function (error) {
+        console.log("리스트 불러오기 실패: ", error.response);
+      });
 
-  // axios
-  //   .get(
-  //     `${ROOT_API}/post/all`,
-  //     {
-  //       params: {
-  //         page: 1,
-  //         size: 10,
-  //       },
-  //     },
-  //     {
-  //       headers: {
-  //         "X-AUTH-TOKEN":
-  //           "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzQ0NzY5MiwiZXhwIjoxNjgzNDU4NDkyfQ.muOK32zu9BThE-nyOEDi5OlGjarNHlDHrWveAKR4BEM",
-  //       },
-  //     }
-  //   )
-  //   .then(function (response) {
-  //     console.log("로그인 성공:", response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log("로그인 실패: ", error.response);
-  //   });
+    axios
+      .get("https://httpbin.org/get", {
+        params: { answer: 2 },
+      })
+      .then(function (response) {
+        console.log("params 테스트 성공:", response);
+      })
+      .catch(function (error) {
+        console.log("params 테스트 실패: ", error.response);
+      });
+  }, []);
 
   return (
     <>
@@ -118,8 +124,8 @@ const BoardList = ({ type }) => {
         </BasicModal>
       )}
       <div className={s.banner}>
-        <p>⭐자유주제⭐</p>
-        <p>여러 회원들과 자유롭게 대화하세요😀</p>
+        <p>{type === "board" ? "⭐자유주제⭐" : ""}</p>
+        <p>{type === "board" ? "여러 회원들과 자유롭게 대화하세요😀" : ""}</p>
       </div>
       <div className={s.header}>
         <form className={s.search} onSubmit={handleSearch}>
@@ -131,22 +137,21 @@ const BoardList = ({ type }) => {
           {/* <Link to="/board/post">
             <Button>✏️작성하기</Button>
           </Link> */}
-          <Button handleClick={handleClick}>✏️작성하기</Button>
+          <Button onClick={handleClick}>✏️작성하기</Button>
         </div>
       </div>
       <ul>
-        {
-          // data &&
-          // data.map((board) => (
-          //   <BoardItem
-          //     key={board.id}
-          //     id={board.id}
-          //     title={board.title}
-          //     content={board.content}
-          //     nickname={board.nickname}
-          //   />
-          // ))
-        }
+        {data &&
+          data.map((board) => (
+            <BoardItem
+              key={board.id}
+              id={board.id}
+              title={board.title}
+              content={board.content}
+              nickname={board.nickname}
+              type={type}
+            />
+          ))}
       </ul>
 
       <div className={s.pageContainer}>

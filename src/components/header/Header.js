@@ -59,10 +59,10 @@ const Header = () => {
       <nav className="navBar">
         <ul className="right">
           <li>
-            <Link to="/board/list">Q&A</Link>
+            <Link to="/qna/list">Q&A</Link>
           </li>
           <li>
-            <Link to="/">커뮤니티</Link>
+            <Link to="/board/list">커뮤니티</Link>
           </li>
           <li>
             <Link to="/">스터디공간</Link>
