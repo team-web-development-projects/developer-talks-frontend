@@ -35,7 +35,7 @@ function App() {
         </Route>
 
         <Route element={<NavigatePost />}>
-          <Route path="/board/post" element={<BoardPost />} />
+          <Route path="/board/post" element={<BoardPost type="post"/>} />
           <Route path="/qna/post" element={<BoardPost type="qna"/>} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />

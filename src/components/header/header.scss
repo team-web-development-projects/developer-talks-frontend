@@ -9,6 +9,7 @@
   color: #ffffff;
   font-size: 17px;
   align-items: center;
+
   @include media-ta {
     justify-content: space-between;
   }
@@ -16,11 +17,12 @@
   .logo {
     @include font('cc');
     font-size: 20px;
+
     a {
       padding: 26px;
     }
   }
-  
+
   .right {
     position: relative;
   }
@@ -30,11 +32,14 @@
       display: flex;
       align-items: center;
       align-items: space-between;
+
       li {
         padding: 0 30px;
+
         &.popover-link {
           cursor: pointer;
         }
+
         .popover {
           position: absolute;
           top: calc(100% + 10px);
@@ -48,8 +53,10 @@
           border-radius: 8px;
           border: 1px solid #ccc
         }
+
         a {
           display: block;
+
           &:hover {
             // padding: 20px;
             // background-color: aquamarine;

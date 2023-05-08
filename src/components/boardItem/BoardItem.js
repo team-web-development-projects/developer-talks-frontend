@@ -2,7 +2,7 @@ import React from "react";
 import s from "./boardItem.module.scss";
 import { useNavigate } from "react-router-dom";
 
-const BoardItem = ({ id, title, content, nickname }) => {
+const BoardItem = ({ id, title, content, nickname, type }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -10,7 +10,9 @@ const BoardItem = ({ id, title, content, nickname }) => {
         key={id}
         className={s.boardContainer}
         onClick={() => {
-          navigate(`/board/list/${id}`);
+          type === "board"
+            ? navigate(`/board/list/${id}`)
+            : navigate(`/qna/list/${id}`);
         }}
       >
         <p className={s.title}>{title}</p>

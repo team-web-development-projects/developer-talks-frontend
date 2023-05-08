@@ -1,20 +1,20 @@
 .button {
-    padding: 20px 0;
-    width: 120px;
-    height: 60px;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 17px;
-    background-color: black;
-    border: 0;
-    &:hover {
-      background-color: #585858;
-    }
-    &:active {
-      background-color: #000000;
-    }
-    p{
-      color:white;
-    }
+  padding: 20px 0;
+  width: 120px;
+  height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 17px;
+  background-color: black;
+  border: 0;
+  &:hover {
+    background-color: #585858;
   }
-  
+  &:active {
+    background-color: #000000;
+  }
+
+  p {
+    color:white;
+  }
+}
