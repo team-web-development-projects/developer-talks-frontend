@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react';
 
 function Scrolltop() {
   const [showButton, setShowButton] = useState(false);
-
-  console.log(window.scrollY);
-
+  
   const scrollToBottom = () => {
     //아래
     window.scroll({
