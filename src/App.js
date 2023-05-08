@@ -4,7 +4,6 @@ import NotPage from "pages/NotPage";
 import BoardDetail from "pages/board/boardDetail/BoardDetail";
 import BoardList from "pages/board/boardList/BoardList";
 import BoardPost from "pages/board/boardPost/BoardPost";
-import Individual from "pages/individual/Individual";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Regist from "pages/regist/Regist";
@@ -22,7 +21,6 @@ function App() {
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
-          <Route path="individual" element={<Individual />} />
           <Route path="mypage" element={<Mypage />} />
           <Route path="account" element={<Account />} />
 
