@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import Left from 'components/left/Left';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import './Mypage.scss';
 
 import { Link, useLocation } from 'react-router-dom';
@@ -10,6 +11,7 @@ const Mypage = () => {
   const location = useLocation();
   const auth = useSelector((state) => state.authToken);
   console.log('auth:', auth.accessToken);
+  let navigate = useNavigate();
 
   const contacts = [
     {
@@ -89,6 +91,7 @@ const Mypage = () => {
   const onSelect = (type) => {
     setSelect(type);
   };
+
   const LoginRegist = () => {
     return (
       <div>
@@ -116,7 +119,7 @@ const Mypage = () => {
 
   return (
     <main className="main">
-      {auth ? '로그아웃' : <LoginRegist />}
+      {!auth ? '로그아웃' : <LoginRegist />}
       <Left />
       <section className="notes">
         <ul>

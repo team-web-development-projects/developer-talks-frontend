@@ -10,7 +10,7 @@ const BoardItem = ({ id, title, content, nickname, type }) => {
         key={id}
         className={s.boardContainer}
         onClick={() => {
-          type === "board"
+          type === "post"
             ? navigate(`/board/list/${id}`)
             : navigate(`/qna/list/${id}`);
         }}
