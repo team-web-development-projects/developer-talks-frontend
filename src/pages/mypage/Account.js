@@ -1,25 +1,62 @@
-import Left from "components/left/Left";
-import "./Account.scss";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { parseJwt } from "hooks/useParseJwt";
-// import { Form } from "react-router-dom";
-// import { Link } from 'react-router-dom';
+import Left from 'components/left/Left';
+import './Account.scss';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+// import { parseJwt } from 'hooks/useParseJwt';
+import Form from 'components/form/Form';
+import { useNavigate } from 'react-router-dom';
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
-  console.log("auth:", auth.accessToken);
+  console.log('auth:', auth.accessToken);
 
-  const tabTitle = ["회원정보 수정", "회원 탈퇴"];
+  // const userData = parseJwt(localStorage.getItem('token')); //NOTE - 토큰
+  const [userData, setUserData] = useState({
+    id: 1,
+    username: '김모양',
+    usernickname: '1111',
+    usersub: '1@naver.com',
+    userid: '11111',
+    userpass: '!1111111',
+  });
+
+  const tabTitle = ['회원정보 수정', '회원 탈퇴'];
   const [select, setSelect] = useState(null);
   const onSelect = (type) => {
     setSelect(type);
   };
+  const [username, setUsername] = useState(userData.username);
+  const [usernickname, setUsernickname] = useState(userData.usernickname);
+  const [usersub, setUsersub] = useState(userData.usersub);
+  const [userid, setUserid] = useState(userData.userid);
+  const [userpass, setUserpass] = useState(userData.userpass);
 
-  const userData = parseJwt(localStorage.getItem("token"));
+  const navigate = useNavigate();
+  const submit = () => {
+    //NOTE - 저장
+    const updateData = {
+      id: userData.id,
+      userid: userid,
+      usernickname: usernickname,
+      userpass: userpass,
+      username: username,
+      usersub: usersub,
+    };
+    setUserData(updateData);
+    console.log(updateData);
+    navigate('/mypage');
+  };
 
-  const userEdit = () => {};
-  
+  const reset = (e) => {
+    //NOTE - 리셋
+    setUserid(userData.userid);
+    setUsernickname(userData.usernickname);
+    setUserpass(userData.userpass);
+    setUsername(userData.username);
+    setUsersub(userData.usersub);
+    e.preventDefault();
+    console.log(userData);
+  };
 
   return (
     <main className="main">
@@ -27,11 +64,10 @@ function Account() {
       <section className="notes">
         <ul>
           {tabTitle.map((item, index) => (
-            <li>
+            <li key={index}>
               <button
-                key={index}
                 onClick={() => onSelect(index)}
-                className={`${select === index && "select"}`}
+                className={`${select === index && 'select'}`}
               >
                 {item}
               </button>
@@ -40,43 +76,63 @@ function Account() {
         </ul>
         {select === 0 && (
           <div>
-            비밀번호 선 인증 필요
-            <form onSubmit={userEdit}>
-              {/*FIXME 이번엔 클릭 시 두개가 똑같이 나오네요  */}
-              {/* FIXME key오류, <formImpl>, useSubmitImpl must be used within a data router. 오류 */}
+            {/* 비밀번호 선 인증 필요*/}
+            {/* FIXME 버튼 말고 폼에 연결해야 할까요 */}
+            {/* <Form onSubmit={userEdit}> */}
+            <Form>
               <div className="">
                 <fieldset>
                   <legend>회원정보 수정</legend>
-                  <input
-                    // value={contacts[select].line.userEmail}
-                    value={userData && userData.sub}
-                    type="text"
-                  />
-                  <label>이메일</label>
-
-                  <input
-                    // value={contacts[select].line.userName}
-                    value={userData && userData.userid}
-                    type="text"
-                  />
-                  <label>아이디</label>
-
-                  <input
-                    // value={contacts[select].line.userNickName}
-                    value={userData && userData.nickname}
-                    type="text"
-                  />
-                  <label>닉네임</label>
-
-                  <input
-                    // value={contacts[select].line.userPassword}
-                    value={"비밀번호 선 인증에서 받은 비밀번호"}
-                    type="password"
-                  />
-                  <label> 비밀번호</label>
+                  <label>
+                    이름 : {''}
+                    <input
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      type="text"
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    이메일 : {''}
+                    <input
+                      value={usersub}
+                      onChange={(e) => setUsersub(e.target.value)}
+                      type="text"
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    아이디 : {''}
+                    <input
+                      value={userid}
+                      onChange={(e) => setUserid(e.target.value)}
+                      type="text"
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    닉네임 : {''}
+                    <input
+                      value={usernickname}
+                      onChange={(e) => setUsernickname(e.target.value)}
+                      type="text"
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    비밀번호 : {''}
+                    <input
+                      value={userpass}
+                      onChange={(e) => setUserpass(e.target.value)}
+                      type="password"
+                    />
+                  </label>
+                  <hr />
+                  <button onClick={submit}>저장</button>
+                  <button onClick={reset}>리셋</button>
                 </fieldset>
               </div>
-            </form>
+            </Form>
           </div>
         )}
         {select === 1 && <div>회원탈퇴 버튼</div>}

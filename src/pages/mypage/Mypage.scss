@@ -24,7 +24,6 @@
   }
 }
 
-//FIXME 스타일 안먹는 이유가 뭔가요?
 .select {
   background-color: rgb(164, 164, 164);
   border: 0;
@@ -36,155 +35,26 @@
   &:active {
     background-color: #000000;
 
-    .selects {
-      left: 0;
-      top: 0;
-      position: relative;
-
-      &:hover {
-        background: #eeeeee;
-      }
-
-      .title {
-        position: absolute;
-        margin-bottom: 10px;
-        font-size: 30px;
-        font-weight: 500;
-        left: 0;
-      }
-
-      .content {
-        position: absolute;
-        left: 0;
-        margin-bottom: 10px;
-        font-size: 20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .nickname {
-        position: absolute;
-        left: 0;
-        color: #797979;
-      }
-    }
-
   }
 }
 
+.title {
+  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: 500;
+  left: 0;
+}
 
-// .pageContainer{
-//   display: flex;
-//   justify-content: center;
-//   margin: 20px 0px;
-// }
+.content {
+  left: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-
-
-// main {
-//   .section {
-//     display: flex;
-
-//     section.notes {
-//       position: relative;
-//       width: 100%;
-//       padding: 10px;
-//       // background-color: #000000;
-
-//       h2 {
-//         position: absolute;
-//         left: 20px;
-//         color: #000000;
-//         animation: side 1s ease-in-out;
-
-//       }
-
-//       @keyframes side {
-
-//         from {
-//           left: 50px;
-//           opacity: 0;
-//         }
-
-//         to {
-//           left: 20px;
-//           opacity: 1;
-//         }
-//       }
-
-//       @keyframes disapper {
-
-//         from {
-//           left: 20px;
-//           opacity: 1;
-//         }
-
-//         to {
-//           left: 50px;
-//           opacity: 0;
-//         }
-//       }
-
-//       form {
-//         margin-top: 50px;
-//         display: flex;
-//         height: 50px;
-//         column-gap: 10px;
-
-//         input {
-//           width: 100%;
-//           border: 1px solid rgb(255, 255, 255);
-//           border-bottom: 1px dotted lightgray;
-//           border-radius: 8px;
-//           padding: 0 15px;
-//           outline: none;
-//         }
-
-//         button {
-//           border: 1px solid lightgrey;
-//           border-radius: 8px;
-//           width: 100px;
-//           background-color: #000000;
-//           color: white;
-
-//           &:hover {
-//             background-color: #3d3d3d;
-//           }
-//         }
-//       }
-
-
-//     }
-//   }
-// }
-
-
-// ul {
-//   list-style: none;
-//   margin: 20px 10px;
-//   // color: white;
-
-//   li {
-//     border-bottom: 1px dotted lightgray;
-//     padding-bottom: 7px;
-//     margin-bottom: 7px;
-
-//     p {
-//       float: right;
-//       cursor: pointer;
-//     }
-//   }
-// }
-
-// div {
-//   background-color: #000000;
-
-//   pre {
-
-//     code {
-//       color: rgb(255, 255, 255);
-//       background-color: #000000;
-//     }
-//   }
-// }
+.nickname {
+  left: 0;
+  color: #797979;
+}
