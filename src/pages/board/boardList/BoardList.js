@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
+  console.log("a", auth.accessToken);
   const location = useLocation();
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
@@ -51,15 +52,18 @@ const BoardList = ({ type }) => {
   }
 
   useEffect(() => {
-    setCurrentPage(1);
+    // setCurrentPage(1);
   }, [location]);
 
   const { status, data, error, isFetching, isPreviousData } = useQuery({
     queryKey: [type, currentPage],
     queryFn: () => fetchProjects(currentPage),
     keepPreviousData: true,
+    refetchOnMount: false,
     staleTime: 5000,
   });
+
+  console.log('dd', data);
 
   return (
     <>
@@ -92,7 +96,7 @@ const BoardList = ({ type }) => {
               key={board.id}
               id={board.id}
               title={board.title}
-              content={board.content}
+              // content={board.content}
               nickname={board.nickname}
               type={type}
             />
