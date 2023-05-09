@@ -1,6 +1,7 @@
 // import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { googleLogout } from "@react-oauth/google";
 import "./snsbutton.scss";
+import { Link } from "react-router-dom";
 
 const LoginGoogle = () => {
   const open = () => {
@@ -19,7 +20,12 @@ const LoginGoogle = () => {
 
   return (
     <>
+      {/*
       <div onClick={() => open()}>Sign in with Google 🚀 </div>
+     */}
+      <Link to="https://dtalks-api.site/oauth2/authorization/google">
+        구글 로그인
+      </Link>
     </>
   );
 };

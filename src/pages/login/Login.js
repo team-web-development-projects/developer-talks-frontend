@@ -41,7 +41,7 @@ const Login = () => {
         reset();
       })
       .catch(function (error) {
-        console.log('로그인 실패: ', error.response.data);
+        console.log('로그인 실패: ', error.response);
       });
   };
 

@@ -1,88 +1,88 @@
-import classNames from 'classnames';
-import Left from 'components/left/Left';
-import { useSelector } from 'react-redux';
+import classNames from "classnames";
+import Left from "components/left/Left";
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import './Mypage.scss';
+import "./Mypage.scss";
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 const Mypage = () => {
   const location = useLocation();
   const auth = useSelector((state) => state.authToken);
-  console.log('auth:', auth.accessToken);
+  console.log("auth:", auth.accessToken);
   let navigate = useNavigate();
 
   const contacts = [
     {
       id: 0,
-      type: '최근활동',
+      type: "최근활동",
       line: [
         {
           id: 0,
-          title: '자바스트립트 궁금합니다',
-          content: 'ㅣㄴ아ㅓ니아ㅓ니',
-          nickname: 'Ann',
+          title: "자바스트립트 궁금합니다",
+          content: "ㅣㄴ아ㅓ니아ㅓ니",
+          nickname: "Ann",
         },
       ],
     },
     {
       id: 1,
-      type: '내가 쓴 글',
+      type: "내가 쓴 글",
       line: [
         {
           id: 0,
-          title: '리액트 궁금합니다',
-          content: 'dd',
-          nickname: 'Anne',
+          title: "리액트 궁금합니다",
+          content: "dd",
+          nickname: "Anne",
         },
         {
           id: 1,
-          title: '리액트 궁금합니다',
-          content: 'dd',
-          nickname: 'Anne',
+          title: "리액트 궁금합니다",
+          content: "dd",
+          nickname: "Anne",
         },
         {
           id: 2,
-          title: '리액트 궁금합니다',
-          content: 'dd',
-          nickname: 'Anne',
+          title: "리액트 궁금합니다",
+          content: "dd",
+          nickname: "Anne",
         },
       ],
     },
     {
       id: 2,
-      type: '댓글',
+      type: "댓글",
       line: [
         {
           id: 0,
-          title: '요즘 무슨 개발 하시나요?',
-          content: '나이러니ㅏ러',
-          nickname: 'bee',
+          title: "요즘 무슨 개발 하시나요?",
+          content: "나이러니ㅏ러",
+          nickname: "bee",
         },
       ],
     },
     {
       id: 3,
-      type: '스크랩',
+      type: "스크랩",
       line: [
         {
           id: 0,
-          title: '할말이 있습니다1',
-          content: 'dd',
-          nickname: 'Araaa',
+          title: "할말이 있습니다1",
+          content: "dd",
+          nickname: "Araaa",
         },
         {
           id: 1,
-          title: '할말이 있습니다',
-          content: 'dd',
-          nickname: 'Araaa',
+          title: "할말이 있습니다",
+          content: "dd",
+          nickname: "Araaa",
         },
         {
           id: 2,
-          title: '할말이 있습니다',
-          content: 'dd',
-          nickname: 'Araaa',
+          title: "할말이 있습니다",
+          content: "dd",
+          nickname: "Araaa",
         },
       ],
     },
@@ -92,22 +92,28 @@ const Mypage = () => {
     setSelect(type);
   };
 
+  useEffect(() => {
+    if (auth.accessToken === null) {
+      navigate('/login', {replace: true});
+    }
+  }, []);
+
   const LoginRegist = () => {
     return (
       <div>
         <Link
           to="/login"
-          className={classNames('', {
-            'is-active': location.pathname === '/login',
+          className={classNames("", {
+            "is-active": location.pathname === "/login",
           })}
         >
           로그인
         </Link>
-        {' | '}
+        {" | "}
         <Link
           to="/regist"
-          className={classNames('', {
-            'is-active': location.pathname === '/regist',
+          className={classNames("", {
+            "is-active": location.pathname === "/regist",
           })}
         >
           회원가입
@@ -119,7 +125,7 @@ const Mypage = () => {
 
   return (
     <main className="main">
-      {!auth ? '로그아웃' : <LoginRegist />}
+      {!auth ? "로그아웃" : <LoginRegist />}
       <Left />
       <section className="notes">
         <ul>
@@ -127,7 +133,7 @@ const Mypage = () => {
             <li key={index}>
               <button
                 onClick={() => onSelect(index)}
-                className={`${select === index ? 'select' : ''}`}
+                className={`${select === index ? "select" : ""}`}
               >
                 {contact.type}
               </button>
