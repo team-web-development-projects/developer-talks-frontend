@@ -59,7 +59,7 @@ const BoardList = ({ type }) => {
     queryKey: [type, currentPage],
     queryFn: () => fetchProjects(currentPage),
     keepPreviousData: true,
-    refetchOnMount: false,
+    // refetchOnMount: false,
     staleTime: 5000,
   });
 

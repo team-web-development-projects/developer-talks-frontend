@@ -6,11 +6,14 @@ import s from "./boardDetail.module.scss";
 import BoardReply from "components/boardReply/BoardReply";
 import { useSelector } from "react-redux";
 import Editor from "components/editor/Editor";
+import { parseJwt } from "hooks/useParseJwt";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const auth = useSelector((state) => state.authToken);
   const [post, setPost] = useState([]);
+
+  const nickname = parseJwt(auth.accessToken).nickname;
   useEffect(() => {
     axios
       .get(`${ROOT_API}/${type}/${postId}`, {
@@ -45,11 +48,11 @@ const BoardDetail = ({ type }) => {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then((res) => console.log(res.data))
+      .then((res) => console.log(res))
       .catch((error) => console.log(error));
-  }
+  };
 
-  console.log("cc", post);
+  
   return (
     <>
       <div className={s.container}>
@@ -59,10 +62,12 @@ const BoardDetail = ({ type }) => {
             <p>2023.05.06 •</p>
             <p>👁️‍🗨️100</p>
           </div>
-          <div>
-            <button>수정</button>
-            <button onClick={deletePost}>삭제</button>
-          </div>
+          {nickname === post.nickname && (
+            <div>
+              <button>수정</button>
+              <button onClick={deletePost}>삭제</button>
+            </div>
+          )}
         </header>
         <main>
           <p className={s.title}>{post.title}</p>
