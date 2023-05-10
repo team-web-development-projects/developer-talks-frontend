@@ -51,14 +51,14 @@ const BoardList = ({ type }) => {
     return data;
   }
 
-  const { status, data, error, isFetching, isPreviousData } = useQuery({
-    queryKey: [type, currentPage],
-    queryFn: () => fetchProjects(currentPage),
-    keepPreviousData: true,
-    // refetchOnMount: false,
-    staleTime: 5000,
-    structuralSharing: false,
-  });
+  // const { status, data, error, isFetching, isPreviousData } = useQuery({
+  //   queryKey: [type, currentPage],
+  //   queryFn: () => fetchProjects(currentPage),
+  //   keepPreviousData: true,
+  //   // refetchOnMount: false,
+  //   staleTime: 5000,
+  //   structuralSharing: false,
+  // });
 
   return (
     <>
