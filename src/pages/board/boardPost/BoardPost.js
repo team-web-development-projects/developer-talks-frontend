@@ -6,10 +6,12 @@ import { ROOT_API } from "constants/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
+import { useSelector } from "react-redux";
 
 export default function BoardPost() {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.authToken);
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -31,7 +33,7 @@ export default function BoardPost() {
         {
           headers: {
             "Content-Type": "application/json",
-            "X-AUTH-TOKEN": localStorage.getItem("token"),
+            "X-AUTH-TOKEN": auth.accessToken,
           },
         }
       )

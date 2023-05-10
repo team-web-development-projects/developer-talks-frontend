@@ -1,24 +1,23 @@
 import axios from "axios";
 import BoardItem from "components/boardItem/BoardItem";
 import Button from "components/button/Button";
-import Scrolltop from "components/scrolltop/Scrolltop";
 import Pagination from "components/pagination/Pagination";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import Scrolltop from "components/scrolltop/Scrolltop";
 import Select from "components/select/Select";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import s from "./boardList.module.scss";
 // import { data } from "./dummydata";
 import { ROOT_API } from "constants/api";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
-  console.log("a", auth.accessToken);
-  const location = useLocation();
+  console.log('auth', auth)
+  const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const isLogin = localStorage.getItem("token") === null ? false : true;
@@ -27,14 +26,15 @@ const BoardList = ({ type }) => {
     { id: 1, text: "조회순" },
   ];
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    pageRouter.state ? pageRouter.state : 1
+  );
   const postPerPage = 10;
 
   const handleSearch = () => {
     console.log("search");
   };
   const handleClick = () => {
-    console.log("작성하기 클릭");
     isLogin
       ? navigate(`/${type === "post" ? "board" : "qna"}/post`)
       : setModal(true);
@@ -51,27 +51,11 @@ const BoardList = ({ type }) => {
     return data;
   }
 
-  if (location.state && location.state.currentPage) {
-    setCurrentPage(location.state.currentPage);
-  }
-
-  useEffect(() => {
-    const handlePopstate = () => {
-      setCurrentPage(location.state?.currentPage || 1);
-    };
-
-    window.addEventListener("popstate", handlePopstate);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopstate);
-    };
-  }, [location.state]);
-
   const { status, data, error, isFetching, isPreviousData } = useQuery({
     queryKey: [type, currentPage],
     queryFn: () => fetchProjects(currentPage),
     keepPreviousData: true,
-    refetchOnMount: false,
+    // refetchOnMount: false,
     staleTime: 5000,
   });
 
