@@ -57,6 +57,7 @@ const BoardList = ({ type }) => {
     keepPreviousData: true,
     // refetchOnMount: false,
     staleTime: 5000,
+    structuralSharing: false,
   });
 
   return (

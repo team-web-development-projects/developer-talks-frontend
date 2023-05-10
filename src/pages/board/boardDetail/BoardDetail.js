@@ -76,7 +76,7 @@ const BoardDetail = ({ type }) => {
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
         </main>
-        <div className={s.reply}>
+        <div className={s.notice_reply}>
           <p className={s.title}>답변 0</p>
           <Editor />
           <button>작성</button>
