@@ -1,19 +1,30 @@
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useMatch, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import BoardReply from "components/boardReply/BoardReply";
 import { useSelector } from "react-redux";
 import Editor from "components/editor/Editor";
 import { parseJwt } from "hooks/useParseJwt";
+import { useNavigate } from "react-router-dom";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const auth = useSelector((state) => state.authToken);
+  const match = useMatch(`/${type}/list/:postId`);
+  const location = useLocation();
   const [post, setPost] = useState([]);
+  const navigate = useNavigate();
 
   const nickname = parseJwt(auth.accessToken).nickname;
+
+  useEffect(() => {
+    if (match && !location.state) {
+      navigate(`/${type}`, { replace: true });
+    }
+  }, [match, location.state, navigate, type]);
+
   useEffect(() => {
     axios
       .get(`${ROOT_API}/${type}/${postId}`, {
@@ -52,7 +63,6 @@ const BoardDetail = ({ type }) => {
       .catch((error) => console.log(error));
   };
 
-  
   return (
     <>
       <div className={s.container}>

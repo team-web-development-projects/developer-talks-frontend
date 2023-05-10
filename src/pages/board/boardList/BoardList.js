@@ -51,19 +51,29 @@ const BoardList = ({ type }) => {
     return data;
   }
 
+  if (location.state && location.state.currentPage) {
+    setCurrentPage(location.state.currentPage);
+  }
+
   useEffect(() => {
-    // setCurrentPage(1);
-  }, [location]);
+    const handlePopstate = () => {
+      setCurrentPage(location.state?.currentPage || 1);
+    };
+
+    window.addEventListener("popstate", handlePopstate);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+    };
+  }, [location.state]);
 
   const { status, data, error, isFetching, isPreviousData } = useQuery({
     queryKey: [type, currentPage],
     queryFn: () => fetchProjects(currentPage),
     keepPreviousData: true,
-    // refetchOnMount: false,
+    refetchOnMount: false,
     staleTime: 5000,
   });
-
-  console.log('dd', data);
 
   return (
     <>
@@ -99,6 +109,7 @@ const BoardList = ({ type }) => {
               // content={board.content}
               nickname={board.nickname}
               type={type}
+              currentPage={currentPage}
             />
           ))
         ) : (
