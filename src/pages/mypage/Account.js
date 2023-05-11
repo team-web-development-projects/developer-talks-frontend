@@ -30,6 +30,7 @@ function Account() {
   const [usersub, setUsersub] = useState(userData.usersub);
   const [userid, setUserid] = useState(userData.userid);
   const [userpass, setUserpass] = useState(userData.userpass);
+  // 객체로 만들어서 관리 보드는 참고하기
 
   const navigate = useNavigate();
   const submit = () => {

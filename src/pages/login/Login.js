@@ -39,8 +39,16 @@ const Login = () => {
       )
       .then(function (response) {
         console.log('로그인 성공:', response);
-        setRefreshToken({ refreshToken: response.data.refresh_token });
-        dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+        setRefreshToken({
+          refreshToken:
+            'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzgwNDc0MiwiZXhwIjoxNjgzODE1NTQyfQ.htbOEkkGGpHtmOKuySKWSqNgs_YSkWc5g1Dxt7FyI1o',
+        });
+        dispatch(
+          SET_TOKEN({
+            accessToken:
+              'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxQG5hdmVyLmNvbSIsInVzZXJpZCI6IjExMTExIiwibmlja25hbWUiOiIxMTExMSIsImlhdCI6MTY4MzgwNDc0MiwiZXhwIjoxNjgzODE1NTQyfQ.htbOEkkGGpHtmOKuySKWSqNgs_YSkWc5g1Dxt7FyI1o',
+          })
+        );
         setModal(true);
         reset();
       })

@@ -18,21 +18,18 @@ const LoginGoogle = () => {
     await new Promise((r) => setTimeout(r, 1000));
     window.location.href =
       'https://dtalks-api.site/oauth2/authorization/google';
+
     dispatch(
       SET_TOKEN({
         accessToken:
-          'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4MzcxMzU1MiwiZXhwIjoxNjgzNzI0MzUyfQ.WG8pFSP7dG49R3jakEIuWhxNbOtDfCwevz8mzgoSaYo&refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4MzcxMzU1MiwiZXhwIjoxNjgzNzk5OTUyfQ.NRgWfWGvRw1mX1wDhVXnoWyjYJExqhX5J_1G_zI4ZxQ',
+          '현재 url가져와서 자바스크립트로 끊어서 놓고 텍스트 잘라서 가져오기',
       })
     );
-    return setModal(true);
-  };
 
-
-  
-  const onSuccess = () => {
     //NOTE - 로그인 성공
     console.log('구글로그인 성공:');
-    history.push('/mypage');
+    history.push('/');
+    return setModal(true);
   };
 
   const logOut = () => {
