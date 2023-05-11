@@ -3,32 +3,19 @@ import { FiMenu } from 'react-icons/fi';
 import { AiFillBell } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
 import './header.scss';
-import useHistory from 'hooks/useHistory';
-// import AlertModal from 'components/portalModal/AlertModal';
-// import { Children } from 'react';
-// import List from 'components/list/List';
-
-// const User = (user) => {
-//   user.title(user.amount);
-// };
-// alt + shiff + o
 const Header = () => {
-  const history = useHistory;
-  // const history = useHistory;
   const [popover, setPopover] = useState(false);
   const [header, setHeader] = useState('false');
   const showPopover = () => {
     setPopover(!popover);
   };
-  history.listen((location, action) => {
+  const location = useLocation(); //url 정보 들어 있음.
+
+  useEffect(() => {
     setPopover(false);
-  });
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   console.log(location);
-  // }, [location]);
-
+  }, [location]);
+  // useEffect 훅을 사용하여, location 값이 변경될 때마다 popover 상태를 false로 업데이트
+  // []한번 실행
   let [user, setUser] = useState([
     {
       id: '1',
