@@ -6,7 +6,6 @@ import LoginGoogle from 'components/snsLogin/LoginGoogle';
 import LoginKakao from 'components/snsLogin/LoginKakao';
 import LoginNaver from 'components/snsLogin/LoginNaver';
 
-import { loginUser } from '../../api/Users';
 import { setRefreshToken } from '../../store/Cookie';
 import { API_HEADER, ROOT_API } from 'constants/api';
 import { useState } from 'react';
@@ -40,6 +39,7 @@ const Login = () => {
       )
       .then(function (response) {
         console.log('로그인 성공:', response);
+        setRefreshToken({ refreshToken: response.data.refresh_token });
         dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
         setModal(true);
         reset();
@@ -51,33 +51,11 @@ const Login = () => {
   // NOTE: 이곳에서 통신
   const {
     register,
-    setValue,
+    // setValue,
     handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: 'onChange' });
-
-  //FIXME -onvalid 사용하는 방법
-
-  // submit 이후 동작할 코드
-  // 백으로 유저 정보 전달
-  const onValid = async ({ userId, password }) => {
-    // input 태그 값 비워주는 코드
-    setValue('password', '');
-
-    // 백으로부터 받은 응답
-    const response = await loginUser({ userId, password });
-
-    if (response.status) {
-      // 쿠키에 Refresh Token, store에 Access Token 저장
-      setRefreshToken(response.json.refresh_token);
-      dispatch(SET_TOKEN(response.json.access_token));
-
-      return console.log('로그인', response.json);
-    } else {
-      console.log(response.json);
-    }
-  };
 
   return (
     <>
@@ -89,7 +67,7 @@ const Login = () => {
         </BasicModal>
       )}
       <section className="login-page page">
-        <Form onSubmit={handleSubmit(onValid)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
             <legend>로그인페이지</legend>
             <p className="desc">
