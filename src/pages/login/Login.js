@@ -3,13 +3,17 @@ import Form from 'components/form/Form';
 import FormUserGuide from 'components/form/FormUserGuide';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
 import LoginGoogle from 'components/snsLogin/LoginGoogle';
+import LoginKakao from 'components/snsLogin/LoginKakao';
+import LoginNaver from 'components/snsLogin/LoginNaver';
+
+import { loginUser } from '../../api/Users';
+import { setRefreshToken } from '../../store/Cookie';
 import { API_HEADER, ROOT_API } from 'constants/api';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
-
 import './login.scss';
 
 axios.defaults.withCredentials = true;
@@ -44,15 +48,36 @@ const Login = () => {
         console.log('로그인 실패: ', error.response.data);
       });
   };
-
   // NOTE: 이곳에서 통신
-
   const {
     register,
+    setValue,
     handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: 'onChange' });
+
+  //FIXME -onvalid 사용하는 방법
+
+  // submit 이후 동작할 코드
+  // 백으로 유저 정보 전달
+  const onValid = async ({ userId, password }) => {
+    // input 태그 값 비워주는 코드
+    setValue('password', '');
+
+    // 백으로부터 받은 응답
+    const response = await loginUser({ userId, password });
+
+    if (response.status) {
+      // 쿠키에 Refresh Token, store에 Access Token 저장
+      setRefreshToken(response.json.refresh_token);
+      dispatch(SET_TOKEN(response.json.access_token));
+
+      return console.log('로그인', response.json);
+    } else {
+      console.log(response.json);
+    }
+  };
 
   return (
     <>
@@ -64,7 +89,7 @@ const Login = () => {
         </BasicModal>
       )}
       <section className="login-page page">
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onValid)}>
           <fieldset>
             <legend>로그인페이지</legend>
             <p className="desc">
@@ -133,7 +158,17 @@ const Login = () => {
               </button>
             </div>
           </fieldset>
-          <LoginGoogle />
+          <br />
+          <div className="line-style">
+            <div className="jb-division-line"></div>
+            <span>SNS 로그인</span>
+            <div className="jb-division-line"></div>
+          </div>
+          <div className="snsbuttonwrap">
+            <LoginGoogle />
+            <LoginNaver />
+            <LoginKakao />
+          </div>
         </Form>
         <FormUserGuide />
       </section>

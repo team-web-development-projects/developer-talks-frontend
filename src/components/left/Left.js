@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import loginuser from './loginuser.jpg';
-import user from './user.jpg';
+// import user from './user.jpg';
 import './Left.scss';
 
 const Left = () => {
@@ -18,6 +18,9 @@ const Left = () => {
           </li>
           <li>
             <Link to="/account">회원정보</Link>
+          </li>
+          <li>
+            <Link to="/">로그아웃</Link>
           </li>
         </ul>
       </section>

@@ -65,7 +65,7 @@ const Regist = () => {
           .then(function (response) {
             console.log('로그인 성공:', response);
             dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-            localStorage.setItem("token", response.data.accessToken);
+            localStorage.setItem('token', response.data.accessToken);
             setModal(true);
             reset();
           })
@@ -142,6 +142,7 @@ const Regist = () => {
                   {errors.userEmail && (
                     <small role="alert">{errors.userEmail.message}</small>
                   )}
+                  <button>이메일인증</button>
                 </td>
               </tr>
               <tr>

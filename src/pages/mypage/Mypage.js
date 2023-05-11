@@ -1,16 +1,8 @@
-import classNames from 'classnames';
 import Left from 'components/left/Left';
-import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import './Mypage.scss';
 
-import { Link, useLocation } from 'react-router-dom';
-
 const Mypage = () => {
-  const location = useLocation();
-  const auth = useSelector((state) => state.authToken);
-  console.log('auth:', auth.accessToken);
-
   const contacts = [
     {
       id: 0,
@@ -89,34 +81,9 @@ const Mypage = () => {
   const onSelect = (type) => {
     setSelect(type);
   };
-  const LoginRegist = () => {
-    return (
-      <div>
-        <Link
-          to="/login"
-          className={classNames('', {
-            'is-active': location.pathname === '/login',
-          })}
-        >
-          로그인
-        </Link>
-        {' | '}
-        <Link
-          to="/regist"
-          className={classNames('', {
-            'is-active': location.pathname === '/regist',
-          })}
-        >
-          회원가입
-        </Link>
-        1
-      </div>
-    );
-  };
 
   return (
     <main className="main">
-      {auth ? '로그아웃' : <LoginRegist />}
       <Left />
       <section className="notes">
         <ul>

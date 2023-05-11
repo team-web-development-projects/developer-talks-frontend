@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { FiMenu } from "react-icons/fi";
-import { AiFillBell } from "react-icons/ai";
-import { Link, useLocation } from "react-router-dom";
-import "./header.scss";
+import { useEffect, useState } from 'react';
+import { FiMenu } from 'react-icons/fi';
+import { AiFillBell } from 'react-icons/ai';
+import { Link, useLocation } from 'react-router-dom';
+import './header.scss';
+import useHistory from 'hooks/useHistory';
 // import AlertModal from 'components/portalModal/AlertModal';
 // import { Children } from 'react';
 // import List from 'components/list/List';
@@ -12,30 +13,40 @@ import "./header.scss";
 // };
 // alt + shiff + o
 const Header = () => {
+  const history = useHistory;
+  // const history = useHistory;
   const [popover, setPopover] = useState(false);
-  const [header, setHeader] = useState("false");
+  const [header, setHeader] = useState('false');
   const showPopover = () => {
     setPopover(!popover);
   };
+  history.listen((location, action) => {
+    setPopover(false);
+  });
+  // const location = useLocation();
+
+  // useEffect(() => {
+  //   console.log(location);
+  // }, [location]);
 
   let [user, setUser] = useState([
     {
-      id: "1",
-      amount: "test1",
-      data: "사랑의 앞이 튼튼하며, 거친 사막이다. 청춘의 보배를 기쁘며, 날카로우나 구하지 하여도 그러므로 뿐이다. 이상 무엇을 목숨을 그들에게 천하를 능히 위하여, 그들은 듣기만 부패뿐이다. 내는 오직 실로 두손을 봄바람이다. 어디 무엇이 소금이라 있으며, 예가 기관과 인류의 뿐이다. 풀이 청춘의 지혜는 창공에 인간은 때까지 봄바람이다. 인류의 피는 주며, 자신과 쓸쓸하랴? 돋고, 그들의 것은 위하여, 그와 위하여서. 수 웅대한 설레는 피가 청춘이 피고, 것이다. 이는 이상이 구하기 생생하며, 천하를 운다.",
-      nickname: "Ann",
+      id: '1',
+      amount: 'test1',
+      data: '사랑의 앞이 튼튼하며, 거친 사막이다. 청춘의 보배를 기쁘며, 날카로우나 구하지 하여도 그러므로 뿐이다. 이상 무엇을 목숨을 그들에게 천하를 능히 위하여, 그들은 듣기만 부패뿐이다. 내는 오직 실로 두손을 봄바람이다. 어디 무엇이 소금이라 있으며, 예가 기관과 인류의 뿐이다. 풀이 청춘의 지혜는 창공에 인간은 때까지 봄바람이다. 인류의 피는 주며, 자신과 쓸쓸하랴? 돋고, 그들의 것은 위하여, 그와 위하여서. 수 웅대한 설레는 피가 청춘이 피고, 것이다. 이는 이상이 구하기 생생하며, 천하를 운다.',
+      nickname: 'Ann',
     },
     {
-      id: "2",
-      amount: "test2",
-      data: "bbbbbbbbbbbbbbb",
-      nickname: "Tree",
+      id: '2',
+      amount: 'test2',
+      data: 'bbbbbbbbbbbbbbb',
+      nickname: 'Tree',
     },
     {
-      id: "3",
-      amount: "test3",
-      data: "ccccccccccccccccccccc",
-      nickname: "Lotto",
+      id: '3',
+      amount: 'test3',
+      data: 'ccccccccccccccccccccc',
+      nickname: 'Lotto',
     },
   ]);
 
@@ -45,9 +56,9 @@ const Header = () => {
 
   // return dom 그려질때. 추적하는 상태가 바뀔때.
   useEffect(() => {
-    setHeader("👩🏻‍🦰");
+    setHeader('👩🏻‍🦰');
     // NOTE 로그인 이모지
-    console.log("header State", header);
+    console.log('header State', header);
   }, [header]);
 
   return (
