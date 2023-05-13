@@ -57,8 +57,8 @@ const Login = () => {
       });
   };
 
-  //TODORefresh Token으로 새로운 Access Token 발급 API  ??
-  axios.post('/api/auth/refresh', (req, res) => {
+  //Refresh Token으로 새로운 Access Token 발급 API
+  axios.post((req, res) => {
     const { refresh_token } = req.body;
     try {
       const newAccessToken = setRefreshToken(refresh_token);

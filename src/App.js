@@ -1,16 +1,16 @@
-import Footer from "components/footer/Footer";
-import Header from "components/header/Header";
-import NotPage from "pages/NotPage";
-import BoardDetail from "pages/board/boardDetail/BoardDetail";
-import BoardList from "pages/board/boardList/BoardList";
-import BoardPost from "pages/board/boardPost/BoardPost";
-import Login from "pages/login/Login";
-import Main from "pages/main/Main";
-import Regist from "pages/regist/Regist";
-import { Outlet, Route, Routes } from "react-router-dom";
-import "./assets/style/index.scss";
-import Mypage from "pages/mypage/Mypage";
-import Account from "pages/mypage/Account";
+import Footer from 'components/footer/Footer';
+import Header from 'components/header/Header';
+import NotPage from 'pages/NotPage';
+import BoardDetail from 'pages/board/boardDetail/BoardDetail';
+import BoardList from 'pages/board/boardList/BoardList';
+import BoardPost from 'pages/board/boardPost/BoardPost';
+import Login from 'pages/login/Login';
+import Main from 'pages/main/Main';
+import Regist from 'pages/regist/Regist';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import './assets/style/index.scss';
+import Mypage from 'pages/mypage/Mypage';
+import Account from 'pages/mypage/Account';
 
 function App() {
   return (
@@ -25,16 +25,22 @@ function App() {
           <Route path="account" element={<Account />} />
 
           <Route path="/board/list" element={<BoardList type="board" />} />
-          <Route path="/board/list/:postId" element={<BoardDetail type="board" />} />
+          <Route
+            path="/board/list/:postId"
+            element={<BoardDetail type="board" />}
+          />
 
           <Route path="/qna/list" element={<BoardList type="qna" />} />
-          <Route path="/qna/list/:postId" element={<BoardDetail type="qna" />} />
+          <Route
+            path="/qna/list/:postId"
+            element={<BoardDetail type="qna" />}
+          />
           <Route path="*" element={<NotPage />} />
         </Route>
 
         <Route element={<NavigatePost />}>
-          <Route path="/board/post" element={<BoardPost type="post"/>} />
-          <Route path="/qna/post" element={<BoardPost type="qna"/>} />
+          <Route path="/board/post" element={<BoardPost type="post" />} />
+          <Route path="/qna/post" element={<BoardPost type="qna" />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
         </Route>

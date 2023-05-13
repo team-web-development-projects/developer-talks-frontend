@@ -26,14 +26,16 @@ const LoginGoogle = () => {
     window.location.href =
       'https://dtalks-api.site/oauth2/authorization/google';
 
-    setRefreshToken({
-      refreshToken:
-        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4Mzk0MTkzNywiZXhwIjoxNjg0MDI4MzM3fQ.yNm9xYGt5YqVOje4m4PMpLwrkm7TI1lMkdTMl5Po_HU',
-    });
+    const params =
+      'http://localhost:3000/?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJydWR3bm9rQGdtYWlsLmNvbSIsInVzZXJpZCI6InJ1ZHdub2tAZ21haWwuY29tIiwibmlja25hbWUiOiLqsr0iLCJpYXQiOjE2ODM5NzYzMjcsImV4cCI6MTY4Mzk4NzEyN30.EnqcRjKM1oLaACljmE2WZnv7HhK9MRnjEUW6rH-nglk&refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJydWR3bm9rQGdtYWlsLmNvbSIsInVzZXJpZCI6InJ1ZHdub2tAZ21haWwuY29tIiwibmlja25hbWUiOiLqsr0iLCJpYXQiOjE2ODM5NzYzMjcsImV4cCI6MTY4NDA2MjcyN30.QRf8m9LwTS9gSTi1ibo3cfWfW4w3MGWlq_xv3ElbS_E';
+    const accessToken = params
+      .split('accessToken=')[1]
+      .split('&refreshToken=')[0];
+    console.log(accessToken);
+
     dispatch(
       SET_TOKEN({
-        accessToken:
-          'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4Mzk0MTkzNywiZXhwIjoxNjgzOTUyNzM3fQ.ef4JIaHkB16BUxx6VUBBk_JGZufGwyb1lG6MSRCJIoE',
+        accessToken: accessToken,
       })
     );
 
