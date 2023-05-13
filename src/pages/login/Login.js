@@ -56,6 +56,18 @@ const Login = () => {
         console.log('로그인 실패: ', error.response.data);
       });
   };
+
+  //TODORefresh Token으로 새로운 Access Token 발급 API  ??
+  axios.post('/api/auth/refresh', (req, res) => {
+    const { refresh_token } = req.body;
+    try {
+      const newAccessToken = setRefreshToken(refresh_token);
+      res.status(200).json({ access_token: newAccessToken });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
   // NOTE: 이곳에서 통신
   const {
     register,
