@@ -1,24 +1,25 @@
-import axios from "axios";
-import Button from "components/button/Button";
-import CkEditor from "components/ckeditor/CkEditor";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import { ROOT_API } from "constants/api";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import s from "./boardPost.module.scss";
+import axios from 'axios';
+import Button from 'components/button/Button';
+import CkEditor from 'components/ckeditor/CkEditor';
+import BasicModal from 'components/portalModal/basicmodal/BasicModal';
+import { ROOT_API } from 'constants/api';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import s from './boardPost.module.scss';
 
 export default function BoardPost() {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    title: "",
-    content: "",
+    //NOTE 참고
+    title: '',
+    content: '',
   });
   const handleSubmit = async (e) => {
-    // console.log(`
-    //         제목: ${form.title}
-    //         내용: ${form.content}
-    //     `);
+    console.log(`
+            제목: ${form.title}
+            내용: ${form.content}
+        `);
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
     axios
@@ -30,8 +31,8 @@ export default function BoardPost() {
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": localStorage.getItem("token"),
+            'Content-Type': 'application/json',
+            'X-AUTH-TOKEN': localStorage.getItem('token'),
           },
         }
       )
@@ -51,7 +52,7 @@ export default function BoardPost() {
         <BasicModal setOnModal={() => setModal()}>
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.
-          <button onClick={() => navigate("/board/list")}>확인</button>
+          <button onClick={() => navigate('/board/list')}>확인</button>
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>
