@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useHistory } from 'react-router/cjs/react-router.min';
 import { SET_TOKEN } from 'store/Auth';
+import { setRefreshToken } from '../../store/Cookie';
+
 import './snsbutton.scss';
 const LoginGoogle = () => {
   const navigate = useNavigate();
@@ -18,11 +20,32 @@ const LoginGoogle = () => {
     await new Promise((r) => setTimeout(r, 1000));
     window.location.href =
       'https://dtalks-api.site/oauth2/authorization/google';
+    // const urls =
+    //   "http://localhost:3000/?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4MzgxNjA3NywiZXhwIjoxNjgzODI2ODc3fQ.tPc7XoQ2qNmFHRB1dpSpuWLEEdPMLg1tdoi_Z2Jm7h0&refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4MzgxNjA3NywiZXhwIjoxNjgzOTAyNDc3fQ.OLMcOBACp4ldi4jxUEqM2p3rdZzn8aEoH7EF9SRZP_I";
 
+    // // 문자열에서 accessToken과 refreshToken 추출
+    // const accessToken = urls
+    //   .split("accessToken=")[1]
+    //   .split("&refreshToken=")[0];
+    // const refreshToken = urls.split("&refreshToken=")[1];
+
+    // const params = new URLSearchParams(window.location.search);
+    // const accessToken = params
+    //   .split('accessToken=')[1]
+    //   .split('&refreshToken=')[0];
+    // const refreshToken = params.split('&refreshToken=')[1];
+    // console.log(accessToken);
+    // console.log(refreshToken);
+    // console.log('dd');
+
+    setRefreshToken({
+      refreshToken:
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4Mzk0MTkzNywiZXhwIjoxNjg0MDI4MzM3fQ.yNm9xYGt5YqVOje4m4PMpLwrkm7TI1lMkdTMl5Po_HU',
+    });
     dispatch(
       SET_TOKEN({
         accessToken:
-          '현재 url가져와서 자바스크립트로 끊어서 놓고 텍스트 잘라서 가져오기',
+          'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4Mzk0MTkzNywiZXhwIjoxNjgzOTUyNzM3fQ.ef4JIaHkB16BUxx6VUBBk_JGZufGwyb1lG6MSRCJIoE',
       })
     );
 

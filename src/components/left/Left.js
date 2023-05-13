@@ -21,10 +21,7 @@ const Left = () => {
             <Link to="/account">회원정보</Link>
           </li>
           <li>
-            <Link to="/">
-              <Logout>로그아웃</Logout>
-              ㅇㅇ
-            </Link>
+            <Link to="/">{/* <Logout>로그아웃</Logout> */}</Link>
           </li>
         </ul>
       </section>
