@@ -26,15 +26,15 @@ const queryClient = new QueryClient({
   onSuccess: (data) => {
     console.log('전역이 업데이트됨?', data);
   },
-  // defaultOptions: {
-  //   queries: {
-  //     retry: 0,
-  //     suspense: true,
-  //     refetchOnMount: false,
-  //     refetchOnReconnect: false,
-  //     refetchOnWindowFocus: false,
-  //   },
-  // },
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      suspense: true,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

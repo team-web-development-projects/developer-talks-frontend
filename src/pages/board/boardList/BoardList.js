@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
-  console.log('auth', auth)
   const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
@@ -51,14 +50,17 @@ const BoardList = ({ type }) => {
     return data;
   }
 
-  // const { status, data, error, isFetching, isPreviousData } = useQuery({
-  //   queryKey: [type, currentPage],
-  //   queryFn: () => fetchProjects(currentPage),
-  //   keepPreviousData: true,
-  //   // refetchOnMount: false,
-  //   staleTime: 5000,
-  //   structuralSharing: false,
-  // });
+  const { status, data, error, isFetching, isPreviousData, isLoading } =
+    useQuery({
+      queryKey: [type, currentPage],
+      queryFn: () => fetchProjects(currentPage),
+      suspense: true,
+    });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (status === "loading") return <div>Loading...</div>;
+
+  console.log("data", data);
 
   return (
     <>
