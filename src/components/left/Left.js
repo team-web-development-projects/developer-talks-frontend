@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import loginuser from './loginuser.jpg';
-import { Logout } from '../../pages/logout/Logout';
 // import user from './user.jpg';
 import './Left.scss';
+import Logout from 'pages/logout/Logout';
 
 const Left = () => {
   const name = '유저네임';
@@ -21,7 +21,7 @@ const Left = () => {
             <Link to="/account">회원정보</Link>
           </li>
           <li>
-            <Link to="/">{/* <Logout>로그아웃</Logout> */}</Link>
+            <Logout />
           </li>
         </ul>
       </section>
