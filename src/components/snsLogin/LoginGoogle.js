@@ -1,4 +1,8 @@
-// import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import {
+  GoogleOAuthProvider,
+  GoogleLogin,
+  useGoogleLogin,
+} from '@react-oauth/google';
 import { googleLogout } from '@react-oauth/google';
 // import '../button/button.module.scss';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
@@ -16,27 +20,11 @@ const LoginGoogle = () => {
   const history = useHistory();
   const [modal, setModal] = useState(false);
 
+  //TODO url추출 후 dispatch를 통해 유저 스토어에 저장
   const open = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
     window.location.href =
       'https://dtalks-api.site/oauth2/authorization/google';
-    // const urls =
-    //   "http://localhost:3000/?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4MzgxNjA3NywiZXhwIjoxNjgzODI2ODc3fQ.tPc7XoQ2qNmFHRB1dpSpuWLEEdPMLg1tdoi_Z2Jm7h0&refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsImlhdCI6MTY4MzgxNjA3NywiZXhwIjoxNjgzOTAyNDc3fQ.OLMcOBACp4ldi4jxUEqM2p3rdZzn8aEoH7EF9SRZP_I";
-
-    // // 문자열에서 accessToken과 refreshToken 추출
-    // const accessToken = urls
-    //   .split("accessToken=")[1]
-    //   .split("&refreshToken=")[0];
-    // const refreshToken = urls.split("&refreshToken=")[1];
-
-    // const params = new URLSearchParams(window.location.search);
-    // const accessToken = params
-    //   .split('accessToken=')[1]
-    //   .split('&refreshToken=')[0];
-    // const refreshToken = params.split('&refreshToken=')[1];
-    // console.log(accessToken);
-    // console.log(refreshToken);
-    // console.log('dd');
 
     setRefreshToken({
       refreshToken:

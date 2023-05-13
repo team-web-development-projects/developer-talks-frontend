@@ -88,7 +88,6 @@ const Header = () => {
               //     return <div key={a.id}>{a.amount}</div>;
               // })
             }
-            {/* FIXME Key도 넣었는데 이게 왜 오류가 날까요? */}
           </li>
           <li>
             <Link to="/mypage">
