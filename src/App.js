@@ -24,7 +24,6 @@ function App() {
 
   useEffect(() => {
     if (window.location.href.includes("accessToken")) {
-      console.log("dd");
       const accessToken = window.location.href.split("accessToken=")[1];
       const refreshToken = window.location.href
         .split("accessToken=")[1]
