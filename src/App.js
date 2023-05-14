@@ -16,7 +16,7 @@ import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setRefreshToken } from "store/Cookie";
+import { setRefreshToken, getCookieToken } from "store/Cookie";
 
 function App() {
   const navigate = useNavigate();
@@ -38,17 +38,17 @@ function App() {
 
   // axios
   //   .get(`${ROOT_API}/token/refresh`, {
-  //     params: { refreshToken: cookies.get("refresh_token") },
+  //     params: { refreshToken: getCookieToken() },
   //     headers: {
   //       "Content-Type": "application/json",
   //       // "X-AUTH-TOKEN": auth.accessToken,
   //     },
   //   })
   //   .then(function (response) {
-  //     console.log("로그인 성공:", response);
+  //     console.log("재갱신 성공:", response);
   //   })
   //   .catch(function (error) {
-  //     console.log("로그인 실패: ", error.response.data);
+  //     console.log("재갱신 실패: ", error.response.data);
   //   });
 
   return (
