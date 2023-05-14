@@ -7,14 +7,35 @@ import BoardPost from "pages/board/boardPost/BoardPost";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Regist from "pages/regist/Regist";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { SET_TOKEN } from "store/Auth";
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import "./assets/style/index.scss";
 import Mypage from "pages/mypage/Mypage";
 import Account from "pages/mypage/Account";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setRefreshToken } from "store/Cookie";
 
 function App() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (window.location.href.includes("accessToken")) {
+      console.log("dd");
+      const accessToken = window.location.href.split("accessToken=")[1];
+      const refreshToken = window.location.href
+        .split("accessToken=")[1]
+        .split("&refreshToken=")[0];
+
+      dispatch(SET_TOKEN({ accessToken: accessToken }));
+      setRefreshToken({ refreshToken: refreshToken });
+      navigate("/");
+    }
+  }, [dispatch, navigate]);
+
   // axios
   //   .get(`${ROOT_API}/token/refresh`, {
   //     params: { refreshToken: cookies.get("refresh_token") },

@@ -2,11 +2,11 @@ import { googleLogout } from "@react-oauth/google";
 // import '../button/button.module.scss';
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import { useEffect } from "react";
 import "./snsbutton.scss";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { setRefreshToken } from "store/Cookie";
 
 const LoginGoogle = () => {
@@ -23,19 +23,6 @@ const LoginGoogle = () => {
     window.location.href =
       "https://dtalks-api.site/oauth2/authorization/google";
   };
-
-  // useEffect(() => {
-  //   if (window.location.href.includes("accessToken")) {
-  //     console.log('dd');
-  //     const accessToken = window.location.href.split("accessToken=")[1];
-  //     const refreshToken = window.location.href.split("accessToken=")[1].split('&refreshToken=')[0];
-
-  //     dispatch(SET_TOKEN({ accessToken: accessToken }));
-  //     setRefreshToken({ refreshToken: refreshToken });
-  //     console.log("auth", auth);
-  //     navigate("/");
-  //   }
-  // }, [locate, dispatch, auth, navigate]);
 
   const logOut = () => {
     googleLogout();
