@@ -1,18 +1,35 @@
-import Footer from 'components/footer/Footer';
-import Header from 'components/header/Header';
-import NotPage from 'pages/NotPage';
-import BoardDetail from 'pages/board/boardDetail/BoardDetail';
-import BoardList from 'pages/board/boardList/BoardList';
-import BoardPost from 'pages/board/boardPost/BoardPost';
-import Login from 'pages/login/Login';
-import Main from 'pages/main/Main';
-import Regist from 'pages/regist/Regist';
-import { Outlet, Route, Routes } from 'react-router-dom';
-import './assets/style/index.scss';
-import Mypage from 'pages/mypage/Mypage';
-import Account from 'pages/mypage/Account';
+import Footer from "components/footer/Footer";
+import Header from "components/header/Header";
+import NotPage from "pages/NotPage";
+import BoardDetail from "pages/board/boardDetail/BoardDetail";
+import BoardList from "pages/board/boardList/BoardList";
+import BoardPost from "pages/board/boardPost/BoardPost";
+import Login from "pages/login/Login";
+import Main from "pages/main/Main";
+import Regist from "pages/regist/Regist";
+import { Outlet, Route, Routes } from "react-router-dom";
+import "./assets/style/index.scss";
+import Mypage from "pages/mypage/Mypage";
+import Account from "pages/mypage/Account";
+import axios from "axios";
+import { ROOT_API } from "constants/api";
 
 function App() {
+  // axios
+  //   .get(`${ROOT_API}/token/refresh`, {
+  //     params: { refreshToken: cookies.get("refresh_token") },
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       // "X-AUTH-TOKEN": auth.accessToken,
+  //     },
+  //   })
+  //   .then(function (response) {
+  //     console.log("로그인 성공:", response);
+  //   })
+  //   .catch(function (error) {
+  //     console.log("로그인 실패: ", error.response.data);
+  //   });
+
   return (
     <div className="App">
       <Routes>

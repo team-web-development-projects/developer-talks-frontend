@@ -1,5 +1,6 @@
 .user-form {
   margin: 0 auto;
+  margin-top: 10%;
   padding: 30px 42px 51px;
   width: 490px;
   background-color: #f5f5f5;
@@ -31,17 +32,17 @@
     }
   }
 
-  .form-user-guide {
-    width: 100%;
-    background-color: #ffffff;
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 30px;
+}
+.form-user-guide {
+  width: 100%;
+  background-color: #ffffff;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 30px;
 
-    li {
-      list-style: none;
-      padding: 5px;
-      display: inline-block;
-    }
+  li {
+    list-style: none;
+    padding: 5px;
+    display: inline-block;
   }
 }
