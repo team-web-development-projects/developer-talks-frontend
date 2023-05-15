@@ -8,7 +8,13 @@ import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Regist from "pages/regist/Regist";
 import { SET_TOKEN } from "store/Auth";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import "./assets/style/index.scss";
 import Mypage from "pages/mypage/Mypage";
 import Account from "pages/mypage/Account";
@@ -17,23 +23,39 @@ import { ROOT_API } from "constants/api";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRefreshToken, getCookieToken } from "store/Cookie";
+import { isDev } from "util/Util";
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
+    if (isDev) {
+      console.log("dev");
+    } else {
+      console.log("prod");
+    }
     if (window.location.href.includes("accessToken")) {
       const accessToken = window.location.href.split("accessToken=")[1];
       const refreshToken = window.location.href
         .split("accessToken=")[1]
         .split("&refreshToken=")[0];
-
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
-      navigate("/");
+      console.log("토큰있음");
+      navigate("/", { replace: true });
+      if (isDev) {
+        console.log("dev 확인");
+        // window.location.href = "http://localhost:3000/";
+      } else {
+        // window.location.href =
+        //   "https://team-web-development-projects.github.io/developer-talks-frontend/";
+
+        console.log("dev prod");
+      }
     }
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, location]);
 
   // axios
   //   .get(`${ROOT_API}/token/refresh`, {
@@ -54,7 +76,6 @@ function App() {
     <div className="App">
       <Routes>
         {/* */}
-
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
