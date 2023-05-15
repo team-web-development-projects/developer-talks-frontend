@@ -13,12 +13,10 @@ const CkEditor = ({ form, setForm, placeholder }) => {
         }}
         name="content"
         value={form.content}
+        data={form.content}
         onChange={(e, editor) => {
           const data = editor.getData();
           setForm({ ...form, content: data });
-        }}
-        onReady={(e,editor)=>{
-          editor.setData(form.content)
         }}
       />
     </>
