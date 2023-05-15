@@ -11,6 +11,7 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import "./assets/style/index.scss";
 import Mypage from "pages/mypage/Mypage";
 import Account from "pages/mypage/Account";
+import BoardUpdate from 'pages/board/boardUpdate/BoardUpdate';
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
         <Route element={<NavigatePost />}>
           <Route path="/board/post" element={<BoardPost type="post" />} />
           <Route path="/qna/post" element={<BoardPost type="questions" />} />
+          <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
+          <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
         </Route>

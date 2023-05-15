@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import BoardReply from "components/boardReply/BoardReply";
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { parseJwt } from "hooks/useParseJwt";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
+  const navigate=useNavigate();
   const auth = useSelector((state) => state.authToken);
   const [post, setPost] = useState([]);
   let nickname = "";
@@ -55,7 +56,9 @@ const BoardDetail = ({ type }) => {
       .then((res) => console.log(res))
       .catch((error) => console.log(error));
   };
-
+  const clickUpdate=()=>{
+    navigate(`/${type==='post'?'board':'qna'}/update/${post.id}`,{state:{title:post.title, content:post.content}})
+  }
   return (
     <>
       <div className={s.container}>
@@ -67,7 +70,7 @@ const BoardDetail = ({ type }) => {
           </div>
           {nickname === post.nickname && (
             <div>
-              <button>수정</button>
+              <button onClick={clickUpdate}>수정</button>
               <button onClick={deletePost}>삭제</button>
             </div>
           )}

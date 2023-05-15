@@ -1,31 +1,30 @@
-import axios from "axios";
-import Button from "components/button/Button";
-import CkEditor from "components/ckeditor/CkEditor";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import { ROOT_API } from "constants/api";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import s from "./boardPost.module.scss";
+import Button from 'components/button/Button';
+import BasicModal from 'components/portalModal/basicmodal/BasicModal';
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import s from '../boardPost/boardPost.module.scss'
+import CkEditor from "components/ckeditor/CkEditor";
+import axios from 'axios';
+import { ROOT_API } from 'constants/api';
 
-export default function BoardPost() {
+const BoardUpdate = ({type}) => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const { postId } = useParams();
+  const {state}=useLocation();
   const auth = useSelector((state) => state.authToken);
-  const [form, setForm] = useState({
-    title: "",
-    content: "",
-  });
+  const [form, setForm] = useState({ title: state.title, content: state.content });
   const handleSubmit = async (e) => {
-    // console.log(`
-    //         제목: ${form.title}
-    //         내용: ${form.content}
-    //     `);
+    console.log(`
+            제목: ${form.title}
+            내용: ${form.content}
+        `);
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
     axios
-      .post(
-        `${ROOT_API}/post`,
+      .put(
+        `${ROOT_API}/post/${postId}`,
         {
           title: form.title,
           content: form.content,
@@ -49,35 +48,36 @@ export default function BoardPost() {
   };
   return (
     <>
-      {modal && (
-        <BasicModal setOnModal={() => setModal()}>
-          게시글이 정상적으로 등록되었습니다. <br />
-          확인을 눌러주세요.
-          <button onClick={() => navigate("/board/list")}>확인</button>
-        </BasicModal>
-      )}
-      <form onSubmit={handleSubmit}>
+        {modal&&(
+            <BasicModal setOnModal={()=>setModal()}>
+                게시글이 정상적으로 수정되었습니다.<br/>
+                확인을 눌러주세요.
+                <button onClick={()=>navigate(-1)}>확인</button>
+            </BasicModal>
+        )}
+        <form onSubmit={handleSubmit}>
         <div className={s.container}>
           <input
             className={s.title}
             type="text"
             name="title"
             value={form.title}
-            placeholder="제목을 작성해주세요."
             onChange={handleChange}
           />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
-            <CkEditor form={form} setForm={setForm} placeholder={'내용을 입력해주세요.'}/>
+            <CkEditor form={form} setForm={setForm}/>
           </div>
           <div className={s.btnRgn}>
             <Link to="/board/list" className={s.cancel}>
               취소
             </Link>
-            <Button>저장</Button>
+            <Button>수정</Button>
           </div>
         </div>
       </form>
     </>
   );
-}
+};
+
+export default BoardUpdate;
