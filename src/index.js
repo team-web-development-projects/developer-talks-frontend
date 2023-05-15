@@ -29,8 +29,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 0,
-      suspense: true,
-      refetchOnMount: false,
+      suspense: false,
+      refetchOnMount: true,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     },

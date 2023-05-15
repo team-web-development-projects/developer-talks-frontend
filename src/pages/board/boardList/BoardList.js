@@ -30,11 +30,13 @@ const BoardList = ({ type }) => {
   );
   const postPerPage = 10;
 
+  console.log("dd", auth);
+
   const handleSearch = () => {
     console.log("search");
   };
   const handleClick = () => {
-    isLogin
+    auth && auth.accessToken
       ? navigate(`/${type === "post" ? "board" : "qna"}/post`)
       : setModal(true);
   };
@@ -42,10 +44,10 @@ const BoardList = ({ type }) => {
   async function fetchProjects(currentPage) {
     const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
       params: { page: currentPage - 1, size: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "X-AUTH-TOKEN": auth.accessToken,
+      // },
     });
     return data;
   }
@@ -54,7 +56,7 @@ const BoardList = ({ type }) => {
     useQuery({
       queryKey: [type, currentPage],
       queryFn: () => fetchProjects(currentPage),
-      suspense: true,
+      // suspense: true,
     });
 
   if (isLoading) return <div>Loading...</div>;

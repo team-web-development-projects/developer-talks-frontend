@@ -12,8 +12,12 @@ const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const auth = useSelector((state) => state.authToken);
   const [post, setPost] = useState([]);
+  let nickname = "";
 
-  const nickname = parseJwt(auth.accessToken).nickname;
+  if (auth.accessToken !== null) {
+    nickname = parseJwt(auth.accessToken).nickname;
+  }
+
   useEffect(() => {
     axios
       .get(`${ROOT_API}/${type}/${postId}`, {
