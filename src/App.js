@@ -45,15 +45,6 @@ function App() {
       setRefreshToken({ refreshToken: refreshToken });
       console.log("토큰있음");
       navigate("/", { replace: true });
-      if (isDev) {
-        console.log("dev 확인");
-        // window.location.href = "http://localhost:3000/";
-      } else {
-        // window.location.href =
-        //   "https://team-web-development-projects.github.io/developer-talks-frontend/";
-
-        console.log("dev prod");
-      }
     }
   }, [dispatch, navigate, location]);
 
