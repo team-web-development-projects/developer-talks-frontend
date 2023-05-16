@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/developer-talks-frontend/static/css/main.d9f47e76.css",
-    "main.js": "/developer-talks-frontend/static/js/main.eb0e39d5.js",
+    "main.css": "/developer-talks-frontend/static/css/main.2549c0b0.css",
+    "main.js": "/developer-talks-frontend/static/js/main.c651ab6b.js",
     "static/js/787.7716a02c.chunk.js": "/developer-talks-frontend/static/js/787.7716a02c.chunk.js",
     "static/media/loginuser.jpg": "/developer-talks-frontend/static/media/loginuser.1da143cf6bd027194069.jpg",
     "index.html": "/developer-talks-frontend/index.html",
-    "main.d9f47e76.css.map": "/developer-talks-frontend/static/css/main.d9f47e76.css.map",
-    "main.eb0e39d5.js.map": "/developer-talks-frontend/static/js/main.eb0e39d5.js.map",
+    "main.2549c0b0.css.map": "/developer-talks-frontend/static/css/main.2549c0b0.css.map",
+    "main.c651ab6b.js.map": "/developer-talks-frontend/static/js/main.c651ab6b.js.map",
     "787.7716a02c.chunk.js.map": "/developer-talks-frontend/static/js/787.7716a02c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d9f47e76.css",
-    "static/js/main.eb0e39d5.js"
+    "static/css/main.2549c0b0.css",
+    "static/js/main.c651ab6b.js"
   ]
 }
