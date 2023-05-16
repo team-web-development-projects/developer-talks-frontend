@@ -1,16 +1,33 @@
 import React from "react";
 import s from "./boardItem.module.scss";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SET_ROUTER } from "store/PageRouter";
+import axios from 'axios';
+import { ROOT_API } from 'constants/api';
 
 const BoardItem = ({ id, title, content, nickname, type, currentPage }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const auth = useSelector((state) => state.authToken);
   const linkClick = (id, type) => {
     if (type === "post") {
-      navigate(`/board/list/${id}`);
+        // axios
+        //   .put(
+        //     `${ROOT_API}/post/view/${id}`,
+        //     {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //         "X-AUTH-TOKEN": auth.accessToken,
+        //       },
+        //     }
+        //   )
+        //   .then((response) => {
+        //     console.log(response);
+        //     navigate(`/board/list/${id}`);
+        //   })
+        //   .catch((error) => console.log(error));
+          navigate(`/board/list/${id}`);
     } else {
       navigate(`/qna/list/${id}`);
     }

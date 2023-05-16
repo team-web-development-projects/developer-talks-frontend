@@ -63,10 +63,10 @@ const BoardDetail = ({ type }) => {
     <>
       <div className={s.container}>
         <header>
-          <p className={s.nick}>{post.nickname}</p>
+          <span className={s.nick}>{post.nickname}</span>
           <div className={s.info}>
-            <p>2023.05.06 •</p>
-            <p>👁️‍🗨️100</p>
+            <span>{post.createDate} •</span>
+            <span>👁️‍🗨️{post.viewCount}</span>
           </div>
           {nickname === post.nickname && (
             <div>
@@ -76,7 +76,7 @@ const BoardDetail = ({ type }) => {
           )}
         </header>
         <main>
-          <p className={s.title}>{post.title}</p>
+          <span className={s.title}>{post.title}</span>
           {/* TODO: content 내용 이슈 */}
           <div
             className={s.content}
@@ -84,7 +84,7 @@ const BoardDetail = ({ type }) => {
           ></div>
         </main>
         <div className={s.notice_reply}>
-          <p className={s.title}>답변 0</p>
+          <span className={s.title}>답변 0</span>
           <Editor />
           <button>작성</button>
           <ul className={s.replies}>
