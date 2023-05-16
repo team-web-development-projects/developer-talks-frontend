@@ -21,6 +21,10 @@
       color: white;
       background-color: black;
     }
+    &.is_select {
+      background: black;
+      color: white;
+    }
   }
   span {
     &:hover::after,

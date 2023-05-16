@@ -1,5 +1,6 @@
 // import '../button/button.module.scss';
 import "./snsbutton.scss";
+import { Link } from "react-router-dom";
 
 const LoginGoogle = () => {
 
