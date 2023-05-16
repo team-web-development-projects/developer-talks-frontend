@@ -1,18 +1,19 @@
-import axios from 'axios';
-import Form from 'components/form/Form';
-import FormUserGuide from 'components/form/FormUserGuide';
-import BasicModal from 'components/portalModal/basicmodal/BasicModal';
-import LoginGoogle from 'components/snsLogin/LoginGoogle';
-import { API_HEADER, ROOT_API } from 'constants/api';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { SET_TOKEN } from 'store/Auth';
+import axios from "axios";
+import Form from "components/form/Form";
+import FormUserGuide from "components/form/FormUserGuide";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import LoginGoogle from "components/snsLogin/LoginGoogle";
+import LoginKakao from "components/snsLogin/LoginKakao";
+import LoginNaver from "components/snsLogin/LoginNaver";
 
-import './login.scss';
-
-axios.defaults.withCredentials = true;
+import { setRefreshToken } from "store/Cookie";
+import { API_HEADER, ROOT_API } from "constants/api";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { SET_TOKEN } from "store/Auth";
+import "./login.scss";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -35,32 +36,35 @@ const Login = () => {
         }
       )
       .then(function (response) {
-        console.log('로그인 성공:', response);
+        console.log("로그인 성공:", response);
+        setRefreshToken({ refreshToken: response.data.refreshToken });
         dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
         setModal(true);
         reset();
       })
       .catch(function (error) {
-        console.log('로그인 실패: ', error.response);
+        console.log("로그인 실패: ", error.response);
       });
   };
 
-  // NOTE: 이곳에서 통신
-
   const {
     register,
+    // setValue,
     handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({ mode: "onChange" });
 
   return (
     <>
       {modal && (
-        <BasicModal setOnModal={() => setModal(false)}>
+        <BasicModal
+          setOnModal={() => setModal(false)}
+          dimClick={() => navigate("/")}
+        >
           로그인이 완료되었습니다. <br />
           확인을 누르시면 메인으로 이동합니다.
-          <button onClick={() => navigate('/')}>확인</button>
+          <button onClick={() => navigate("/")}>확인</button>
         </BasicModal>
       )}
       <section className="login-page page">
@@ -85,13 +89,13 @@ const Login = () => {
                   tabIndex="1"
                   maxLength="15"
                   aria-invalid={
-                    !isDirty ? undefined : errors.userId ? 'true' : 'false'
+                    !isDirty ? undefined : errors.userId ? "true" : "false"
                   }
-                  {...register('userId', {
-                    required: '아이디는 필수 입력입니다.',
+                  {...register("userId", {
+                    required: "아이디는 필수 입력입니다.",
                     minLength: {
                       value: 5,
-                      message: '5자리 이상 15자리 이하로 입력해주세요.',
+                      message: "5자리 이상 15자리 이하로 입력해주세요.",
                     },
                   })}
                 />
@@ -110,14 +114,14 @@ const Login = () => {
                   tabIndex="2"
                   maxLength="15"
                   aria-invalid={
-                    !isDirty ? undefined : errors.password ? 'true' : 'false'
+                    !isDirty ? undefined : errors.password ? "true" : "false"
                   }
-                  {...register('password', {
-                    required: '비밀번호는 필수 입력입니다.',
+                  {...register("password", {
+                    required: "비밀번호는 필수 입력입니다.",
                     minLength: {
                       value: 8,
                       message:
-                        '8자리 이상 15자리 이하로 비밀번호를 사용해주세요.',
+                        "8자리 이상 15자리 이하로 비밀번호를 사용해주세요.",
                     },
                   })}
                 />
@@ -128,12 +132,22 @@ const Login = () => {
             </ul>
             <div className="button">
               <button type="submit" tabIndex="3" disabled={isSubmitting}>
-                {' '}
+                {" "}
                 로그인
               </button>
             </div>
           </fieldset>
-          <LoginGoogle />
+          <br />
+          <div className="line-style">
+            <div className="jb-division-line"></div>
+            <span>SNS 로그인</span>
+            <div className="jb-division-line"></div>
+          </div>
+          <div className="snsbuttonwrap">
+            <LoginGoogle />
+            <LoginNaver />
+            <LoginKakao />
+          </div>
         </Form>
         <FormUserGuide />
       </section>

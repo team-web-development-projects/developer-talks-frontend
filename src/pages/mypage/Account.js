@@ -4,58 +4,50 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 // import { parseJwt } from 'hooks/useParseJwt';
 import Form from 'components/form/Form';
-import { useNavigate } from 'react-router-dom';
+import Button from 'components/button/Button';
+// import { useNavigate } from 'react-router-dom';
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
   console.log('auth:', auth.accessToken);
-
   // const userData = parseJwt(localStorage.getItem('token')); //NOTE - 토큰
-  const [userData, setUserData] = useState({
-    id: 1,
-    username: '김모양',
-    usernickname: '1111',
-    usersub: '1@naver.com',
-    userid: '11111',
-    userpass: '!1111111',
-  });
 
   const tabTitle = ['회원정보 수정', '회원 탈퇴'];
   const [select, setSelect] = useState(null);
   const onSelect = (type) => {
     setSelect(type);
   };
-  const [username, setUsername] = useState(userData.username);
-  const [usernickname, setUsernickname] = useState(userData.usernickname);
-  const [usersub, setUsersub] = useState(userData.usersub);
-  const [userid, setUserid] = useState(userData.userid);
-  const [userpass, setUserpass] = useState(userData.userpass);
 
-  const navigate = useNavigate();
-  const submit = () => {
-    //NOTE - 저장
-    const updateData = {
-      id: userData.id,
-      userid: userid,
-      usernickname: usernickname,
-      userpass: userpass,
-      username: username,
-      usersub: usersub,
-    };
-    setUserData(updateData);
-    console.log(updateData);
-    navigate('/mypage');
+  const initialFormState = {
+    username: '김모양',
+    usernickname: '1111',
+    usersub: '1@naver.com',
+    userid: '11111',
+    userpass: '!1111111',
   };
 
-  const reset = (e) => {
-    //NOTE - 리셋
-    setUserid(userData.userid);
-    setUsernickname(userData.usernickname);
-    setUserpass(userData.userpass);
-    setUsername(userData.username);
-    setUsersub(userData.usersub);
+  const [userData, setUserData] = useState(initialFormState);
+
+  const userEdit = (e) => {
+    //NOTE 수정
     e.preventDefault();
-    console.log(userData);
+    console.log(`
+      이름: ${userData.username}
+      닉네임: ${userData.usernickname}
+      이메일: ${userData.usersub}
+      아이디: ${userData.userid}
+      비밀번호: ${userData.userpass}   
+    `);
+  };
+
+  const reset = () => {
+    //NOTE 리셋
+    setUserData(initialFormState);
+  };
+
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
   };
 
   return (
@@ -76,18 +68,16 @@ function Account() {
         </ul>
         {select === 0 && (
           <div>
-            {/* 비밀번호 선 인증 필요*/}
-            {/* FIXME 버튼 말고 폼에 연결해야 할까요 */}
-            {/* <Form onSubmit={userEdit}> */}
-            <Form>
+            <Form onSubmit={userEdit}>
               <div className="">
                 <fieldset>
                   <legend>회원정보 수정</legend>
                   <label>
                     이름 : {''}
                     <input
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
+                      name="username"
+                      value={userData.username}
+                      onChange={handleChange}
                       type="text"
                     />
                   </label>
@@ -95,8 +85,9 @@ function Account() {
                   <label>
                     이메일 : {''}
                     <input
-                      value={usersub}
-                      onChange={(e) => setUsersub(e.target.value)}
+                      name="usersub"
+                      value={userData.usersub}
+                      onChange={handleChange}
                       type="text"
                     />
                   </label>
@@ -104,8 +95,9 @@ function Account() {
                   <label>
                     아이디 : {''}
                     <input
-                      value={userid}
-                      onChange={(e) => setUserid(e.target.value)}
+                      name="userid"
+                      value={userData.userid}
+                      onChange={handleChange}
                       type="text"
                     />
                   </label>
@@ -113,8 +105,9 @@ function Account() {
                   <label>
                     닉네임 : {''}
                     <input
-                      value={usernickname}
-                      onChange={(e) => setUsernickname(e.target.value)}
+                      name="usernickname"
+                      value={userData.usernickname}
+                      onChange={handleChange}
                       type="text"
                     />
                   </label>
@@ -122,14 +115,15 @@ function Account() {
                   <label>
                     비밀번호 : {''}
                     <input
-                      value={userpass}
-                      onChange={(e) => setUserpass(e.target.value)}
+                      name="userpass"
+                      value={userData.userpass}
+                      onChange={handleChange}
                       type="password"
                     />
                   </label>
                   <hr />
-                  <button onClick={submit}>저장</button>
-                  <button onClick={reset}>리셋</button>
+                  <Button>저장</Button>
+                  <Button onClick={reset}>리셋</Button>
                 </fieldset>
               </div>
             </Form>

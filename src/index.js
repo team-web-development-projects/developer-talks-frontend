@@ -13,18 +13,19 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import reportWebVitals from "./reportWebVitals";
 
-import store from './store';
-import { Provider } from 'react-redux';
-import { CookiesProvider } from 'react-cookie';
-import { GOOGLE_ID } from 'constants/api';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import store from "./store";
+import { Provider } from "react-redux";
+import { CookiesProvider } from "react-cookie";
+import { GOOGLE_ID } from "constants/api";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { isDev } from "util/Util";
 
 const queryClient = new QueryClient({
   onError: (error, query) => {
-    console.log('onError', error);
+    console.log("onError", error);
   },
   onSuccess: (data) => {
-    console.log('전역이 업데이트됨?', data);
+    console.log("전역이 업데이트됨?", data);
   },
   defaultOptions: {
     queries: {
@@ -37,18 +38,24 @@ const queryClient = new QueryClient({
   },
 });
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <CookiesProvider>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <Router history={history}>
+          <BrowserRouter
+            basename={
+              isDev
+                ? "/"
+                : "https://team-web-development-projects.github.io/developer-talks-frontend"
+            }
+          >
             <App />
             {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
         <ReactQueryDevtools initialIsOpen={true} />
       */}
-          </Router>
+          </BrowserRouter>
         </QueryClientProvider>
       </Provider>
     </CookiesProvider>

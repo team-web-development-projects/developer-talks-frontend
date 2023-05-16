@@ -1,23 +1,35 @@
 import { useEffect, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { AiFillBell } from "react-icons/ai";
+import { BsFillPersonFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import "./header.scss";
-// import AlertModal from 'components/portalModal/AlertModal';
-// import { Children } from 'react';
-// import List from 'components/list/List';
+import { parseJwt } from "hooks/useParseJwt";
+import { ROOT_API } from "constants/api";
 
-// const User = (user) => {
-//   user.title(user.amount);
-// };
-// alt + shiff + o
 const Header = () => {
+  const auth = useSelector((state) => state.authToken);
   const [popover, setPopover] = useState(false);
-  const [header, setHeader] = useState("false");
+  let nickname = "";
   const showPopover = () => {
     setPopover(!popover);
   };
+  const location = useLocation(); //url 정보 들어 있음.
 
+  // console.log('auth', auth)
+
+  if (auth.accessToken !== null) {
+    nickname = parseJwt(auth.accessToken).nickname;
+  }
+
+  useEffect(() => {
+    setPopover(false);
+  }, [location]);
+  // useEffect 훅을 사용하여, location 값이 변경될 때마다 popover 상태를 false로 업데이트
+  // []한번 실행
   let [user, setUser] = useState([
     {
       id: "1",
@@ -39,16 +51,32 @@ const Header = () => {
     },
   ]);
 
+  async function fetchProjects() {
+    const { data } = await axios.get(`${ROOT_API}/post/list/user/${nickname}`, {
+      // params: { page: currentPage - 1, size: 10 },
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    });
+    return data;
+  }
+
+  const { status, data, error, isFetching, isPreviousData, isLoading } =
+    useQuery({
+      queryKey: ['popover'],
+      queryFn: () => fetchProjects(),
+      // suspense: true,
+    });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (status === "loading") return <div>Loading...</div>;
+
+  console.log("data", data);
+
   // const UserList = users.map((user) => <User />);
 
   // [읽기, 쓰기] = useState('초기값') // 초기값 타입 : string, number ,array, json, boolean(true, false)
-
-  // return dom 그려질때. 추적하는 상태가 바뀔때.
-  useEffect(() => {
-    setHeader("👩🏻‍🦰");
-    // NOTE 로그인 이모지
-    console.log("header State", header);
-  }, [header]);
 
   return (
     <header className="header">
@@ -90,11 +118,10 @@ const Header = () => {
               //     return <div key={a.id}>{a.amount}</div>;
               // })
             }
-            {/* FIXME Key도 넣었는데 이게 왜 오류가 날까요? */}
           </li>
           <li>
             <Link to="/mypage">
-              <span>{header && header}</span>
+              <BsFillPersonFill size={24} />
             </Link>
           </li>
         </ul>
