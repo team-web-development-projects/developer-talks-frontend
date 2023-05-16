@@ -95,8 +95,10 @@ const BoardList = ({ type }) => {
               key={board.id}
               id={board.id}
               title={board.title}
-              // content={board.content}
               nickname={board.nickname}
+              vCnt={board.viewCount}
+              fCnt={board.favoriteCount}
+              rCnt={board.recommendCount}
               type={type}
               currentPage={currentPage}
             />
