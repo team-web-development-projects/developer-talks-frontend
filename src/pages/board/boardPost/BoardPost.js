@@ -39,8 +39,13 @@ export default function BoardPost() {
         }
       )
       .then((response) => {
+        console.log(response);
+        setModal(true);
+      })
+      .catch((error) => console.log(error));
   };
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
   return (

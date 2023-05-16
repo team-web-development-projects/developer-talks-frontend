@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRefreshToken, getCookieToken } from "store/Cookie";
 import { isDev } from "util/Util";
+import BoardUpdate from 'pages/board/boardUpdate/BoardUpdate';
 
 function App() {
   const navigate = useNavigate();
