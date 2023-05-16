@@ -19,13 +19,14 @@
 }
 .selectBox {
   position: absolute;
-  top: 45px;
+  top: 100%;
   left: 0;
   width: 100%;
   overflow: hidden;
   border-radius: 8px;
   background-color: #222222;
   color: #fefefe;
+  z-index: 1;
   li {
     font-size: 20px;
     padding: 8px 20px;
