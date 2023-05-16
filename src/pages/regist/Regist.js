@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
 import Footer from '../../components/footer/Footer';
 import './Regist.scss';
+import { useEffect } from 'react';
 
 axios.defaults.withCredentials = true;
 
@@ -101,15 +102,20 @@ const Regist = () => {
     });
   };
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(''); //FIXME - 왜 항상 ''인지??
   const handleAuthentication = (e) => {
+    e.preventDefault();
     if (!/\S+@\S+\.\S+/.test(email)) {
       alert('올바른 이메일 주소를 입력해주세요.');
     } else {
       // TODO: 인증 이메일 발송
       alert('인증메일이 발송되었습니다. 확인해주세요.');
     }
+    console.log(email);
   };
+  useEffect(() => {
+    console.log(email);
+  }, [email]);
 
   const check = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -155,7 +161,7 @@ const Regist = () => {
                     {...register('userEmail', {
                       required: '이메일은 필수 입력입니다.',
                       pattern: {
-                        value: email,
+                        value: /\S+@\S+\.\S+/,
                         message: '이메일 형식에 맞지 않습니다.',
                       },
                     })}

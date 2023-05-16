@@ -22,7 +22,7 @@ import Introduction from 'pages/mypage/Introduction';
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const auth = useSelector((state) => state.authToken).accessToken;
   useEffect(() => {
     if (window.location.href.includes('accessToken')) {
       const accessToken = window.location.href.split('accessToken=')[1];
@@ -36,20 +36,24 @@ function App() {
     }
   }, [dispatch, navigate]);
 
-  // axios
-  //   .get(`${ROOT_API}/token/refresh`, {
-  //     params: { refreshToken: getCookieToken() },
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       // 'X-AUTH-TOKEN': auth.accessToken,
-  //     },
-  //   })
-  //   .then(function (response) {
-  //     console.log('재갱신 성공:', response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log('재갱신 실패: ', error.response);
-  //   });
+  // localStorage.getItem('token')
+  //         ? localStorage.getItem('token')
+  //         : { refreshToken: getCookieToken() }
+  axios
+    .post(`${ROOT_API}/token/refresh`, {
+      params: { refreshToken: getCookieToken().refreshToken },
+      // headers: {
+      // "Content-Type": "application/json",
+      // "X-AUTH-TOKEN": auth.accessToken,
+      // },
+    })
+    .then(function (response) {
+      console.log('재갱신 성공:', response);
+      // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+    })
+    .catch(function (error) {
+      console.log('재갱신 실패: ', error.response.data);
+    });
 
   return (
     <div className="App">
