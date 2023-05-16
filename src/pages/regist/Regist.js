@@ -101,6 +101,24 @@ const Regist = () => {
     });
   };
 
+  const [email, setEmail] = useState('');
+  const handleAuthentication = (e) => {
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert('올바른 이메일 주소를 입력해주세요.');
+    } else {
+      // TODO: 인증 이메일 발송
+      alert('인증메일이 발송되었습니다. 확인해주세요.');
+    }
+  };
+
+  const check = async (data) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    axios.get(`${ROOT_API}/email/verify`, {
+      email: 'djflsn@naser.div',
+      code: '9Rj7G61i',
+    });
+  };
+
   return (
     <div className="regist-page page">
       {modal && (
@@ -131,10 +149,13 @@ const Regist = () => {
                     id="userEmail"
                     placeholder="이메일을 입력해주세요"
                     tabIndex="1"
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                     {...register('userEmail', {
                       required: '이메일은 필수 입력입니다.',
                       pattern: {
-                        value: /\S+@\S+\.\S+/,
+                        value: email,
                         message: '이메일 형식에 맞지 않습니다.',
                       },
                     })}
@@ -142,7 +163,20 @@ const Regist = () => {
                   {errors.userEmail && (
                     <small role="alert">{errors.userEmail.message}</small>
                   )}
-                  <button>이메일인증</button>
+                  <button onClick={handleAuthentication}>이메일인증</button>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label>이메일 인증</label>
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    id="mails"
+                    placeholder="인증번호를 입력해주세요"
+                  ></input>
+                  <button onClick={''}>확인</button>
                 </td>
               </tr>
               <tr>
