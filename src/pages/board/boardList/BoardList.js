@@ -44,10 +44,10 @@ const BoardList = ({ type }) => {
   async function fetchProjects(currentPage) {
     const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
       params: { page: currentPage - 1, size: 10 },
-      // headers: {
-      //   "Content-Type": "application/json",
-      //   "X-AUTH-TOKEN": auth.accessToken,
-      // },
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
     });
     return data;
   }

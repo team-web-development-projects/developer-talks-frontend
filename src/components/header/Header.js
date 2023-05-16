@@ -3,13 +3,27 @@ import { FiMenu } from "react-icons/fi";
 import { AiFillBell } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import "./header.scss";
+import { parseJwt } from "hooks/useParseJwt";
+import { ROOT_API } from "constants/api";
+
 const Header = () => {
+  const auth = useSelector((state) => state.authToken);
   const [popover, setPopover] = useState(false);
+  let nickname = "";
   const showPopover = () => {
     setPopover(!popover);
   };
   const location = useLocation(); //url 정보 들어 있음.
+
+  // console.log('auth', auth)
+
+  if (auth.accessToken !== null) {
+    nickname = parseJwt(auth.accessToken).nickname;
+  }
 
   useEffect(() => {
     setPopover(false);
@@ -36,6 +50,29 @@ const Header = () => {
       nickname: "Lotto",
     },
   ]);
+
+  async function fetchProjects() {
+    const { data } = await axios.get(`${ROOT_API}/post/list/user/${nickname}`, {
+      // params: { page: currentPage - 1, size: 10 },
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    });
+    return data;
+  }
+
+  const { status, data, error, isFetching, isPreviousData, isLoading } =
+    useQuery({
+      queryKey: ['popover'],
+      queryFn: () => fetchProjects(),
+      // suspense: true,
+    });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (status === "loading") return <div>Loading...</div>;
+
+  console.log("data", data);
 
   // const UserList = users.map((user) => <User />);
 
