@@ -44,17 +44,9 @@ root.render(
     <CookiesProvider>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <BrowserRouter
-            basename={
-              isDev
-                ? "/"
-                : "https://team-web-development-projects.github.io/developer-talks-frontend"
-            }
-          >
+          <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
             <App />
-            {/* NOTE: 추후에 react-query 작업하실때 아래의 컴포넌트로 query 테스트 할수 있습니다. 
-        <ReactQueryDevtools initialIsOpen={true} />
-      */}
+            <ReactQueryDevtools initialIsOpen={false} />
           </BrowserRouter>
         </QueryClientProvider>
       </Provider>

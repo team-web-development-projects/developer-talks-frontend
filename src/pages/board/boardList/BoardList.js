@@ -19,7 +19,6 @@ const BoardList = ({ type }) => {
   const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const isLogin = localStorage.getItem("token") === null ? false : true;
   const options = [
     { id: 0, text: "최신순" },
     { id: 1, text: "조회순" },
@@ -52,6 +51,7 @@ const BoardList = ({ type }) => {
     return data;
   }
 
+  
   const { status, data, error, isFetching, isPreviousData, isLoading } =
     useQuery({
       queryKey: [type, currentPage],
@@ -60,7 +60,6 @@ const BoardList = ({ type }) => {
     });
 
   if (isLoading) return <div>Loading...</div>;
-  if (status === "loading") return <div>Loading...</div>;
 
   console.log("data", data);
 
@@ -84,7 +83,7 @@ const BoardList = ({ type }) => {
           <input type="text" placeholder="원하는 내용을 검색해보세요~!" />
         </form>
         <div className={s.bottom}>
-          <Select init="최신순" options={options} />
+          <Select init="최신순" options={["최신순", "조회순"]} />
           <Button onClick={handleClick}>✏️작성하기</Button>
         </div>
       </div>

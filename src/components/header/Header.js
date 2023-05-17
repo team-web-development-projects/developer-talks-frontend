@@ -93,7 +93,7 @@ const Header = () => {
             <Link to="/board/list">커뮤니티</Link>
           </li>
           <li>
-            <Link to="/">스터디공간</Link>
+            <Link to="/studyroom">스터디공간</Link>
           </li>
           <li>
             <Link to="/">공지사항</Link>
