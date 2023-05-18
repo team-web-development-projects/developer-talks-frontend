@@ -23,6 +23,7 @@ const BoardDetail = ({ type }) => {
   const [modalD, setModalD] = useState(false);
   const [modalF, setModalF] = useState(false);
   const [modalR, setModalR] = useState(false);
+  const [modalS, setModalS]=useState(false);
 
   useEffect(() => {
     axios
@@ -87,6 +88,7 @@ const BoardDetail = ({ type }) => {
       setModalL(true);
     } else if (nickname === post.nickname) {
       console.log("본인글 즐겨찾기 불가");
+      setModalS(true);
     } else {
       if (!checkStatus.favorite) {
         e.preventDefault();
@@ -119,6 +121,7 @@ const BoardDetail = ({ type }) => {
       setModalL(true);
     } else if (nickname === post.nickname) {
       console.log("본인글 추천 불가");
+      setModalS(true)
     } else {
       if (!checkStatus.recommend) {
         e.preventDefault();
@@ -197,6 +200,12 @@ const BoardDetail = ({ type }) => {
           <br />
         </BasicModal>
       )}
+      {modalS && (
+        <BasicModal setOnModal={() => setModalS()}>
+          본인이 작성한 글은 즐겨찾기 및 추천을 할 수 없어요🥲
+          <br />
+        </BasicModal>
+      )}
       <div className={s.container}>
         <header>
           <span className={s.nick}>{post.nickname}</span>
@@ -219,7 +228,7 @@ const BoardDetail = ({ type }) => {
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
         </main>
-        <div className={s.countContainer} on>
+        <div className={s.countContainer}>
           <Button classname={s.btn} onClick={handleClickFavorite}>
             <AiOutlineStar />
             <p>{post.favoriteCount}</p>

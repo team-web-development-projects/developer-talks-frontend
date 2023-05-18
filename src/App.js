@@ -79,15 +79,15 @@ function App() {
           <Route path="mypage" element={<Mypage />} />
           <Route path="account" element={<Account />} />
           <Route path="studyroom" element={<StudyRoom />} />
-          <Route path="/board/list" element={<BoardList type="post" />} />
+          <Route path="board" element={<BoardList type="post" />} />
           <Route
-            path="/board/list/:postId"
+            path="/board/:postId"
             element={<BoardDetail type="post" />}
           />
 
-          <Route path="/qna/list" element={<BoardList type="questions" />} />
+          <Route path="qna" element={<BoardList type="questions" />} />
           <Route
-            path="/qna/list/:postId"
+            path="/qna/:postId"
             element={<BoardDetail type="questions" />}
           />
           <Route path="*" element={<NotPage />} />

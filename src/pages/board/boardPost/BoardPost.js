@@ -95,7 +95,7 @@ export default function BoardPost({ type }) {
             />
           </div>
           <div className={s.btnRgn}>
-            <Link to="/board/list" className={s.cancel}>
+            <Link to="/board" className={s.cancel}>
               취소
             </Link>
             <Button>저장</Button>

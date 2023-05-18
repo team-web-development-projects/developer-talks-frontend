@@ -20,9 +20,9 @@ const BoardItem = ({
   const auth = useSelector((state) => state.authToken);
   const linkClick = (id, type) => {
     if (type === "post") {
-      navigate(`/board/list/${id}`);
+      navigate(`/board/${id}`);
     } else {
-      navigate(`/qna/list/${id}`);
+      navigate(`/qna/${id}`);
     }
     dispatch(SET_ROUTER({ state: currentPage }));
   };
