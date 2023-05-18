@@ -83,7 +83,7 @@ const BoardDetail = ({ type }) => {
       state: { title: post.title, content: post.content },
     });
   };
-  const handleClickFavorite = async (e) => {
+  const handleClickFavorite = async () => {
     if (auth.accessToken === null) {
       setModalL(true);
     } else if (nickname === post.nickname) {
@@ -91,7 +91,6 @@ const BoardDetail = ({ type }) => {
       setModalS(true);
     } else {
       if (!checkStatus.favorite) {
-        e.preventDefault();
         await new Promise((r) => setTimeout(r, 1000));
         axios
           .post(
@@ -116,7 +115,7 @@ const BoardDetail = ({ type }) => {
       }
     }
   };
-  const handleClickRecommend = async (e) => {
+  const handleClickRecommend = async () => {
     if (auth.accessToken === null) {
       setModalL(true);
     } else if (nickname === post.nickname) {
@@ -124,7 +123,6 @@ const BoardDetail = ({ type }) => {
       setModalS(true)
     } else {
       if (!checkStatus.recommend) {
-        e.preventDefault();
         await new Promise((r) => setTimeout(r, 1000));
         axios
           .post(

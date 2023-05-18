@@ -80,6 +80,7 @@ function App() {
           <Route path="account" element={<Account />} />
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
+          <Route path="board/search/:keyword" element={<BoardList type="post" />} />
           <Route
             path="/board/:postId"
             element={<BoardDetail type="post" />}

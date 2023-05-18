@@ -9,9 +9,13 @@ const SearchInput = () => {
   const {keyword}=useParams();
   const navigate=useNavigate();
   const [text, setText] = useState("");
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate(`/board/search/${text}`)
+  const handleSubmit = () => {
+    if(text===""){
+      navigate("/board")
+    }
+    else{
+      navigate(`/board/search/${text}`)
+    }
   };
   useEffect(()=>{setText(keyword||''); console.log(keyword)},[keyword]);
   return (
@@ -23,7 +27,7 @@ const SearchInput = () => {
         onChange={(e) => setText(e.target.value)}
       />
       <button>
-        <BiSearch />
+        <BiSearch size={30}/>
       </button>
     </form>
   );
