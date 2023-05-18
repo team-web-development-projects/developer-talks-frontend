@@ -17,9 +17,12 @@ const BoardDetail = ({ type }) => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const [post, setPost] = useState([]);
+  const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [nickname, setNickName]=useState("");
+  const [modalL, setModalL] = useState(false);
+  const [modalD, setModalD] = useState(false);
+  const [modalF, setModalF] = useState(false);
+  const [modalR, setModalR] = useState(false);
 
   useEffect(() => {
     axios
@@ -43,7 +46,7 @@ const BoardDetail = ({ type }) => {
         .then(({ data }) => {
           setCheckStatus(data);
           console.log(data);
-          console.log('nickname parseJWT: ',nickname)
+          console.log("nickname parseJWT: ", nickname);
         })
         .catch((error) => console.log(error));
     }
@@ -71,7 +74,7 @@ const BoardDetail = ({ type }) => {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then((res) => console.log(res))
+      .then((res) => setModalD(true))
       .catch((error) => console.log(error));
   };
   const clickUpdate = () => {
@@ -81,7 +84,7 @@ const BoardDetail = ({ type }) => {
   };
   const handleClickFavorite = async (e) => {
     if (auth.accessToken === null) {
-      setModal(true);
+      setModalL(true);
     } else if (nickname === post.nickname) {
       console.log("본인글 즐겨찾기 불가");
     } else {
@@ -100,22 +103,23 @@ const BoardDetail = ({ type }) => {
               },
             }
           )
-          .then((response) => {
-            console.log(response);
+          .then(() => {
             setCheckStatus({ ...checkStatus, ["favorite"]: true });
+            
           })
           .catch((error) => console.log(error));
       } else {
         console.log("즐겨찾기는 한 번만 누를 수 있어");
+        setModalF(true);
       }
     }
   };
   const handleClickRecommend = async (e) => {
     if (auth.accessToken === null) {
-      setModal(true);
+      setModalL(true);
     } else if (nickname === post.nickname) {
       console.log("본인글 추천 불가");
-    }else {
+    } else {
       if (!checkStatus.recommend) {
         e.preventDefault();
         await new Promise((r) => setTimeout(r, 1000));
@@ -131,22 +135,65 @@ const BoardDetail = ({ type }) => {
               },
             }
           )
-          .then((response) => {
-            console.log(response);
+          .then(() => {
+            setCheckStatus({ ...checkStatus, ["recommend"]: true });
           })
           .catch((error) => console.log(error));
-      }else {
+      } else {
         console.log("추천은 한 번만 누를 수 있어");
+        setModalR(true);
       }
     }
   };
+  const handleClickCancle = async (type) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    axios
+      .delete(
+        `${ROOT_API}/post/${type}/${post.id}`,
+        {
+          headers: {
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setCheckStatus({ ...checkStatus, [type]: false });
+        navigate(-1)
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <>
-      {modal && (
-        <BasicModal setOnModal={() => setModal()}>
+      {modalL && (
+        <BasicModal setOnModal={() => setModalL()}>
           로그인한 사용자만 이용할 수 있어요☺️
           <br />
           <Link to="/login">[로그인 하러 가기]</Link>
+          <br />
+        </BasicModal>
+      )}
+      {modalD && (
+        <BasicModal setOnModal={() => setModalD()}>
+          게시글이 삭제되었습니다.
+          <br />
+          <button onClick={() => navigate(-1)}>확인</button>
+          <br />
+        </BasicModal>
+      )}
+      {modalF && (
+        <BasicModal setOnModal={() => setModalF()}>
+          즐겨찾기를 취소하시겠습니까?
+          <br />
+          <button onClick={()=>handleClickCancle("favorite")}>확인</button>
+          <br />
+        </BasicModal>
+      )}
+      {modalR && (
+        <BasicModal setOnModal={() => setModalR()}>
+          추천을 취소하시겠습니까?
+          <br />
+          <button onClick={()=>handleClickCancle("recommend")}>확인</button>
           <br />
         </BasicModal>
       )}
