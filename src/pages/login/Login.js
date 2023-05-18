@@ -58,7 +58,10 @@ const Login = () => {
   return (
     <>
       {modal && (
-        <BasicModal setOnModal={() => setModal(false)}>
+        <BasicModal
+          setOnModal={() => setModal(false)}
+          dimClick={() => navigate("/")}
+        >
           로그인이 완료되었습니다. <br />
           확인을 누르시면 메인으로 이동합니다.
           <button onClick={() => navigate("/")}>확인</button>

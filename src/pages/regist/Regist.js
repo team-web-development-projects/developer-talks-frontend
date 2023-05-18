@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
 import Footer from '../../components/footer/Footer';
 import './Regist.scss';
-import { useEffect } from 'react';
 
 axios.defaults.withCredentials = true;
 
@@ -102,27 +101,17 @@ const Regist = () => {
     });
   };
 
-  const [email, setEmail] = useState(''); //FIXME - 왜 항상 ''인지??
-  const handleAuthentication = (e) => {
+  const verityEmail = (e) => {
     e.preventDefault();
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      alert('올바른 이메일 주소를 입력해주세요.');
-    } else {
-      // TODO: 인증 이메일 발송
-      alert('인증메일이 발송되었습니다. 확인해주세요.');
-    }
-    console.log(email);
-  };
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
-
-  const check = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    axios.get(`${ROOT_API}/email/verify`, {
-      email: 'djflsn@naser.div',
-      code: '9Rj7G61i',
-    });
+    console.log('dc', watch().userEmail);
+    axios
+      .get(`${ROOT_API}/email/verify`, {
+        params: { email: watch().userEmail },
+      })
+      .then(function (response) {
+        console.log('이메일 보내기:', response);
+        alert('이메일을 전송했습니다.');
+      });
   };
 
   return (
@@ -155,9 +144,6 @@ const Regist = () => {
                     id="userEmail"
                     placeholder="이메일을 입력해주세요"
                     tabIndex="1"
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
                     {...register('userEmail', {
                       required: '이메일은 필수 입력입니다.',
                       pattern: {
@@ -166,23 +152,27 @@ const Regist = () => {
                       },
                     })}
                   />
+                  <button onClick={verityEmail}>이메일인증</button>
                   {errors.userEmail && (
                     <small role="alert">{errors.userEmail.message}</small>
                   )}
-                  <button onClick={handleAuthentication}>이메일인증</button>
                 </td>
               </tr>
               <tr>
                 <th>
                   <label>이메일 인증</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
                 </th>
                 <td>
                   <input
                     type="text"
-                    id="mails"
-                    placeholder="인증번호를 입력해주세요"
-                  ></input>
-                  <button onClick={''}>확인</button>
+                    id="userEmails"
+                    placeholder="입력해주세요"
+                    tabIndex="1"
+                  />
+                  <button>확인</button>
                 </td>
               </tr>
               <tr>
