@@ -12,10 +12,12 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardList.module.scss";
+import { useRef } from 'react';
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
   const { keyword } = useParams();
+  const refetchQuery = useRef();
   const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
@@ -57,13 +59,15 @@ const BoardList = ({ type }) => {
     }
   }
 
-  const { status, data, error, isFetching, isPreviousData, isLoading } =
+  const { status, data, error, isFetching, isPreviousData, isLoading, refetch } =
     useQuery({
       queryKey: [type, currentPage],
       queryFn: fetchProjectsOrSearch,
     });
+    refetchQuery.current=refetch;
   useEffect(() => {
     setCurrentPage(1);
+    refetchQuery.current();
   }, [keyword]);
 
   if (isLoading) return <div>Loading...</div>;

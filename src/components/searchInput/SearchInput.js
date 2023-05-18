@@ -9,7 +9,8 @@ const SearchInput = () => {
   const {keyword}=useParams();
   const navigate=useNavigate();
   const [text, setText] = useState("");
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if(text===""){
       navigate("/board")
     }
