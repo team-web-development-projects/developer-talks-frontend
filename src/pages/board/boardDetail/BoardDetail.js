@@ -21,24 +21,6 @@ const BoardDetail = ({ type }) => {
   const [modal, setModal] = useState(false);
   let nickname = "";
 
-  if (auth.accessToken !== null) {
-    nickname = parseJwt(auth.accessToken).nickname;
-    // NOTE: favorite, recommend값을 1번이 아니라 여러번을 불러옴..왜지..
-    // NOTE: qna게시판 상세화면과 post게시판 상세화면에서 사용하는 api들이 많이 달라서 qna 페이지를 따로 빼는 건 어떠신지..!
-    axios
-      .get(`${ROOT_API}/post/check/status/${postId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then(({ data }) => {
-        setCheckStatus(data);
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  }
-
   useEffect(() => {
     axios
       .get(`${ROOT_API}/${type}/${postId}`, {
@@ -49,6 +31,21 @@ const BoardDetail = ({ type }) => {
       })
       .then((res) => setPost(res.data))
       .catch((error) => console.log(error));
+    if (auth.accessToken !== null) {
+      nickname = parseJwt(auth.accessToken).nickname;
+      axios
+        .get(`${ROOT_API}/post/check/status/${postId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        })
+        .then(({ data }) => {
+          setCheckStatus(data);
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+    }
   }, []);
 
   // TODO: 백엔드 통신: 답변 가져오기
@@ -85,7 +82,20 @@ const BoardDetail = ({ type }) => {
     if (auth.accessToken === null) {
       setModal(true);
     } else {
-      //TODO: 게시글 즐겨찾기 api
+      //TODO: 게시글 즐겨찾기 api, swagger, postman에서는 되나 axios로 요청하니 안됨.
+      if (!checkStatus.favorite) {
+        axios
+          .post(`${ROOT_API}/post/recommend/${post.id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => console.log(error));
+      }
     }
   };
   const handleClickRecommend = () => {
