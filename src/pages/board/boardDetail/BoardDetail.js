@@ -19,7 +19,7 @@ const BoardDetail = ({ type }) => {
   const [post, setPost] = useState([]);
   const [checkStatus, setCheckStatus] = useState([]);
   const [modal, setModal] = useState(false);
-  let nickname = "";
+  const [nickname, setNickName]=useState("");
 
   useEffect(() => {
     axios
@@ -32,7 +32,7 @@ const BoardDetail = ({ type }) => {
       .then((res) => setPost(res.data))
       .catch((error) => console.log(error));
     if (auth.accessToken !== null) {
-      nickname = parseJwt(auth.accessToken).nickname;
+      setNickName(parseJwt(auth.accessToken).nickname);
       axios
         .get(`${ROOT_API}/post/check/status/${postId}`, {
           headers: {
@@ -43,6 +43,7 @@ const BoardDetail = ({ type }) => {
         .then(({ data }) => {
           setCheckStatus(data);
           console.log(data);
+          console.log('nickname parseJWT: ',nickname)
         })
         .catch((error) => console.log(error));
     }
@@ -78,31 +79,65 @@ const BoardDetail = ({ type }) => {
       state: { title: post.title, content: post.content },
     });
   };
-  const handleClickFavorite = () => {
+  const handleClickFavorite = async (e) => {
     if (auth.accessToken === null) {
       setModal(true);
+    } else if (nickname === post.nickname) {
+      console.log("본인글 즐겨찾기 불가");
     } else {
-      //TODO: 게시글 즐겨찾기 api, swagger, postman에서는 되나 axios로 요청하니 안됨.
       if (!checkStatus.favorite) {
+        e.preventDefault();
+        await new Promise((r) => setTimeout(r, 1000));
         axios
-          .post(`${ROOT_API}/post/recommend/${post.id}`, {
-            headers: {
-              "Content-Type": "application/json",
-              "X-AUTH-TOKEN": auth.accessToken,
+          .post(
+            `${ROOT_API}/post/favorite/${post.id}`,
+            {
+              //요청데이터
             },
+            {
+              headers: {
+                "X-AUTH-TOKEN": auth.accessToken,
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response);
+            setCheckStatus({ ...checkStatus, ["favorite"]: true });
           })
+          .catch((error) => console.log(error));
+      } else {
+        console.log("즐겨찾기는 한 번만 누를 수 있어");
+      }
+    }
+  };
+  const handleClickRecommend = async (e) => {
+    if (auth.accessToken === null) {
+      setModal(true);
+    } else if (nickname === post.nickname) {
+      console.log("본인글 추천 불가");
+    }else {
+      if (!checkStatus.recommend) {
+        e.preventDefault();
+        await new Promise((r) => setTimeout(r, 1000));
+        axios
+          .post(
+            `${ROOT_API}/post/recommend/${post.id}`,
+            {
+              //요청데이터
+            },
+            {
+              headers: {
+                "X-AUTH-TOKEN": auth.accessToken,
+              },
+            }
+          )
           .then((response) => {
             console.log(response);
           })
           .catch((error) => console.log(error));
+      }else {
+        console.log("추천은 한 번만 누를 수 있어");
       }
-    }
-  };
-  const handleClickRecommend = () => {
-    if (auth.accessToken === null) {
-      setModal(true);
-    } else {
-      //TODO: 게시글 추천 api
     }
   };
   return (
