@@ -18,13 +18,8 @@ const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
   const { keyword } = useParams();
   const refetchQuery = useRef();
-  const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const options = [
-    { id: 0, text: "최신순" },
-    { id: 1, text: "조회순" },
-  ];
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -57,11 +52,7 @@ const BoardList = ({ type }) => {
   }
 
   const {
-    status,
     data,
-    error,
-    isFetching,
-    isPreviousData,
     isLoading,
     refetch,
   } = useQuery({
@@ -72,7 +63,7 @@ const BoardList = ({ type }) => {
   useEffect(() => {
     setCurrentPage(1);
     refetchQuery.current();
-  }, [keyword]);
+  }, [keyword, type]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -95,7 +86,7 @@ const BoardList = ({ type }) => {
         </p>
       </div>
       <div className={s.header}>
-        <SearchInput />
+        <SearchInput type={type}/>
         <div className={s.bottom}>
           <Select init="최신순" options={["최신순", "조회순"]} />
           <Button onClick={handleClick}>✏️작성하기</Button>

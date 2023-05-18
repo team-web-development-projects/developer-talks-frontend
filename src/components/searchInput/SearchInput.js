@@ -5,17 +5,18 @@ import { useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
-const SearchInput = () => {
+const SearchInput = ({type}) => {
+  const t=type==='post'?"board":"qna";
   const {keyword}=useParams();
   const navigate=useNavigate();
   const [text, setText] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     if(text===""){
-      navigate("/board")
+      navigate(`/${t}`)
     }
     else{
-      navigate(`/board/search/${text}`)
+      navigate(`/${t}/search/${text}`)
     }
   };
   useEffect(()=>setText(keyword||''),[keyword]);
