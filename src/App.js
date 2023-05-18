@@ -53,23 +53,21 @@ function App() {
     }
   }, [dispatch, navigate, location]);
 
-  if (getCookieToken()) {
-    axios
-      .post(`${ROOT_API}/token/refresh`, {
-        params: { refreshToken: getCookieToken().refreshToken },
-        // headers: {
-        // "Content-Type": "application/json",
-        // "X-AUTH-TOKEN": auth.accessToken,
-        // },
-      })
-      .then(function (response) {
-        console.log("재갱신 성공:", response);
-        // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-      })
-      .catch(function (error) {
-        console.log("재갱신 실패: ", error.response.data);
-      });
-  }
+  // axios
+  //   .post(`${ROOT_API}/token/refresh`, {
+  //     params: { refreshToken: getCookieToken().refreshToken },
+  //     // headers: {
+  //       // "Content-Type": "application/json",
+  //       // "X-AUTH-TOKEN": auth.accessToken,
+  //     // },
+  //   })
+  //   .then(function (response) {
+  //     console.log("재갱신 성공:", response);
+  //     // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+  //   })
+  //   .catch(function (error) {
+  //     console.log("재갱신 실패: ", error.response.data);
+  //   });
 
   return (
     <div className="App">

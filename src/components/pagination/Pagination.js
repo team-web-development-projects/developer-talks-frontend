@@ -21,6 +21,8 @@ const Pagination = ({ postPerPage, totalPost, paginate }) => {
             onClick={() => {
               paginate(item);
               setNumber(item);
+              console.log("아이템 값은 ",item, "넘버의 값은", number);
+              console.log("페이지넘버",pageNumbers)
             }}
             className={classnames("", {
               [s.is_select]: item === number,

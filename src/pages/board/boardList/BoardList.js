@@ -9,7 +9,6 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardList.module.scss";
-// import { data } from "./dummydata";
 import { ROOT_API } from "constants/api";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
