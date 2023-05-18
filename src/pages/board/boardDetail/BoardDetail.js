@@ -1,22 +1,42 @@
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import BoardReply from "components/boardReply/BoardReply";
 import { useSelector } from "react-redux";
 import Editor from "components/editor/Editor";
 import { parseJwt } from "hooks/useParseJwt";
+import Button from "components/button/Button";
+import { AiOutlineStar } from "react-icons/ai";
+import { FiThumbsUp } from "react-icons/fi";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const [post, setPost] = useState([]);
+  const [checkStatus, setCheckStatus] = useState([]);
+  const [modal, setModal] = useState(false);
   let nickname = "";
 
   if (auth.accessToken !== null) {
     nickname = parseJwt(auth.accessToken).nickname;
+    // NOTE: favorite, recommend값을 1번이 아니라 여러번을 불러옴..왜지..
+    // NOTE: qna게시판 상세화면과 post게시판 상세화면에서 사용하는 api들이 많이 달라서 qna 페이지를 따로 빼는 건 어떠신지..!
+    axios
+      .get(`${ROOT_API}/post/check/status/${postId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(({ data }) => {
+        setCheckStatus(data);
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
   }
 
   useEffect(() => {
@@ -56,17 +76,41 @@ const BoardDetail = ({ type }) => {
       .then((res) => console.log(res))
       .catch((error) => console.log(error));
   };
-  const clickUpdate=()=>{
-    navigate(`/${type==='post'?'board':'qna'}/update/${post.id}`,{state:{title:post.title, content:post.content}})
-  }
+  const clickUpdate = () => {
+    navigate(`/${type === "post" ? "board" : "qna"}/update/${post.id}`, {
+      state: { title: post.title, content: post.content },
+    });
+  };
+  const handleClickFavorite = () => {
+    if (auth.accessToken === null) {
+      setModal(true);
+    } else {
+      //TODO: 게시글 즐겨찾기 api
+    }
+  };
+  const handleClickRecommend = () => {
+    if (auth.accessToken === null) {
+      setModal(true);
+    } else {
+      //TODO: 게시글 추천 api
+    }
+  };
   return (
     <>
+      {modal && (
+        <BasicModal setOnModal={() => setModal()}>
+          로그인한 사용자만 이용할 수 있어요☺️
+          <br />
+          <Link to="/login">[로그인 하러 가기]</Link>
+          <br />
+        </BasicModal>
+      )}
       <div className={s.container}>
         <header>
-          <p className={s.nick}>{post.nickname}</p>
+          <span className={s.nick}>{post.nickname}</span>
           <div className={s.info}>
-            <p>2023.05.06 •</p>
-            <p>👁️‍🗨️100</p>
+            <span>{post.createDate} •</span>
+            <span>조회수 {post.viewCount}</span>
           </div>
           {nickname === post.nickname && (
             <div>
@@ -76,15 +120,25 @@ const BoardDetail = ({ type }) => {
           )}
         </header>
         <main>
-          <p className={s.title}>{post.title}</p>
+          <span className={s.title}>{post.title}</span>
           {/* TODO: content 내용 이슈 */}
           <div
             className={s.content}
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
         </main>
+        <div className={s.countContainer} on>
+          <Button classname={s.btn} onClick={handleClickFavorite}>
+            <AiOutlineStar />
+            <p>{post.favoriteCount}</p>
+          </Button>
+          <Button classname={s.btn} onClick={handleClickRecommend}>
+            <FiThumbsUp />
+            <p>{post.recommendCount}</p>
+          </Button>
+        </div>
         <div className={s.notice_reply}>
-          <p className={s.title}>답변 0</p>
+          <span className={s.title}>답변 0</span>
           <Editor />
           <button>작성</button>
           <ul className={s.replies}>

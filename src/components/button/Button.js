@@ -11,7 +11,7 @@ const Button = ({ children, onClick, classname, type }) => {
       })}
       onClick={onClick}
     >
-      <p>{children}</p>
+      <div className={s.child}>{children}</div>
     </button>
   );
 };
