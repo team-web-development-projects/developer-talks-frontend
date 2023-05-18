@@ -12,7 +12,7 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardList.module.scss";
-import { useRef } from 'react';
+import { useRef } from "react";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -26,10 +26,7 @@ const BoardList = ({ type }) => {
     { id: 1, text: "조회순" },
   ];
 
-  const [currentPage, setCurrentPage] = useState(
-    pageRouter.state ? pageRouter.state : 1
-  );
-  const postPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleClick = () => {
     auth && auth.accessToken
@@ -59,12 +56,19 @@ const BoardList = ({ type }) => {
     }
   }
 
-  const { status, data, error, isFetching, isPreviousData, isLoading, refetch } =
-    useQuery({
-      queryKey: [type, currentPage],
-      queryFn: fetchProjectsOrSearch,
-    });
-    refetchQuery.current=refetch;
+  const {
+    status,
+    data,
+    error,
+    isFetching,
+    isPreviousData,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: [type, currentPage],
+    queryFn: fetchProjectsOrSearch,
+  });
+  refetchQuery.current = refetch;
   useEffect(() => {
     setCurrentPage(1);
     refetchQuery.current();
@@ -119,8 +123,8 @@ const BoardList = ({ type }) => {
 
       <div className={s.pageContainer}>
         <Pagination
-          postPerPage={postPerPage}
-          totalPost={data && data.totalElements}
+          currentPage={data.pageable.pageNumber+1}
+          totalPage={data.totalPages}
           paginate={setCurrentPage}
         />
       </div>

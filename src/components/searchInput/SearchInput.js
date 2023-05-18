@@ -18,7 +18,7 @@ const SearchInput = () => {
       navigate(`/board/search/${text}`)
     }
   };
-  useEffect(()=>{setText(keyword||''); console.log(keyword)},[keyword]);
+  useEffect(()=>setText(keyword||''),[keyword]);
   return (
     <form className={s.search} onSubmit={handleSubmit}>
       <input
