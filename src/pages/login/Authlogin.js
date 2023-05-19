@@ -17,6 +17,7 @@ const Authlogin = () => {
   const [modal, setModal] = useState(false);
 
   const [autoLogin, setAutoLogin] = useState(false);
+  const [duplicateNickName, setDuplicateNickName] = useState('');
 
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
@@ -56,9 +57,26 @@ const Authlogin = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: 'onChange' });
 
+  let textTemp = '';
+
+  const validateDuplicate = (data) => {
+    const type = data;
+    const value = watch(data);
+    console.log('넣은 데이터', watch(data));
+    // setTextTemp(watch(data));
+    textTemp = watch(data);
+    axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {
+      if (type === 'userNickname') {
+        response.data.duplicated === true
+          ? setDuplicateNickName('true')
+          : setDuplicateNickName('false');
+      }
+    });
+  };
   return (
     <>
       {modal && (
@@ -129,7 +147,25 @@ const Authlogin = () => {
                 {errors.password && (
                   <small role="alert">{errors.password.message}</small>
                 )}
-                <button>중복체크</button>
+                <button
+                  title="중복체크"
+                  onClick={() => validateDuplicate('userNickname')}
+                >
+                  중복체크
+                </button>
+                {errors.userNickname && (
+                  <small role="alert">{errors.userNickname.message}</small>
+                )}
+                {!errors.userNickname &&
+                  duplicateNickName !== '' &&
+                  duplicateNickName === 'true' && (
+                    <small className="alert">중복된 닉네임입니다.</small>
+                  )}
+                {!errors.userNickname &&
+                  duplicateNickName !== '' &&
+                  duplicateNickName === 'false' && (
+                    <small className="true">사용할 수 있는 닉네임입니다.</small>
+                  )}
               </li>
             </ul>
             <label>자동로그인</label>
