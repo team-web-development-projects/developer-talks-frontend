@@ -56,11 +56,12 @@ const BoardList = ({ type }) => {
     queryFn: fetchProjectsOrSearch,
   });
   refetchQuery.current = refetch;
-  
+
   useEffect(() => {
     setCurrentPage(1);
     refetchQuery.current();
   }, [keyword, type]);
+
 
   if (isLoading) return <div>Loading...</div>;
 

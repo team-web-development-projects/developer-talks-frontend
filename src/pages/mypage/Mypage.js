@@ -4,6 +4,7 @@ import "./Mypage.scss";
 import { useNavigate } from "react-router-dom";
 import { contacts } from "./dummyData";
 import { useSelector } from "react-redux";
+import { getCookieToken } from "store/Cookie";
 
 const Mypage = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Mypage = () => {
   };
 
   useEffect(() => {
-    if (auth.accessToken === null) {
+    if (auth.accessToken == null && getCookieToken() == null) {
       navigate("/login", { replace: true });
     }
   }, [auth.accessToken, navigate]);

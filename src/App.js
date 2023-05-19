@@ -43,10 +43,13 @@ function App() {
     }
 
     if (window.location.href.includes("accessToken")) {
-      const accessToken = window.location.href.split("accessToken=")[1];
-      const refreshToken = window.location.href
+      const accessToken = window.location.href
         .split("accessToken=")[1]
         .split("&refreshToken=")[0];
+      const refreshToken = window.location.href
+        .split("accessToken=")[1]
+        .split("&refreshToken=")[1];
+      console.log("app ", accessToken);
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
       console.log("토큰있음");
@@ -72,7 +75,7 @@ function App() {
           console.log("재갱신 실패: ", error.response.data);
         });
     }
-  }, [auth.accessToken, dispatch]);
+  }, [auth.accessToken, dispatch, location]);
 
   return (
     <div className="App">
