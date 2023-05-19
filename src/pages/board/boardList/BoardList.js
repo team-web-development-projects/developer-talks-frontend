@@ -4,63 +4,68 @@ import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
+import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
-import { useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
-import s from "./boardList.module.scss";
 import { ROOT_API } from "constants/api";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import s from "./boardList.module.scss";
+import { useRef } from "react";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
-  const pageRouter = useSelector((state) => state.pageRouter);
+  const { keyword } = useParams();
+  const refetchQuery = useRef();
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const options = [
-    { id: 0, text: "최신순" },
-    { id: 1, text: "조회순" },
-  ];
 
-  const [currentPage, setCurrentPage] = useState(
-    pageRouter.state ? pageRouter.state : 1
-  );
-  const postPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("dd", auth);
-
-  const handleSearch = () => {
-    console.log("search");
-  };
   const handleClick = () => {
     auth && auth.accessToken
       ? navigate(`/${type === "post" ? "board" : "qna"}/post`)
       : setModal(true);
   };
 
-  async function fetchProjects(currentPage) {
-    const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
-      params: { page: currentPage - 1, size: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
+  async function fetchProjectsOrSearch() {
+    if (keyword) {
+      const { data } = await axios.get(`${ROOT_API}/${type}/search`, {
+        params: { keyword: keyword, page: currentPage - 1, size: 10 },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      });
+      return data;
+    } else {
+      const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
+        params: { page: currentPage - 1, size: 10 },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      });
+      return data;
+    }
   }
 
-  
-  const { status, data, error, isFetching, isPreviousData, isLoading } =
-    useQuery({
-      queryKey: [type, currentPage],
-      queryFn: () => fetchProjects(currentPage),
-      // suspense: true,
-    });
+  const {
+    data,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: [type, currentPage],
+    queryFn: fetchProjectsOrSearch,
+  });
+  refetchQuery.current = refetch;
+  useEffect(() => {
+    setCurrentPage(1);
+    refetchQuery.current();
+  }, [keyword, type]);
 
   if (isLoading) return <div>Loading...</div>;
-
-  console.log("data", data);
 
   return (
     <>
@@ -73,14 +78,15 @@ const BoardList = ({ type }) => {
         </BasicModal>
       )}
       <div className={s.banner}>
-        <p>{type === "post" ? "⭐자유주제⭐" : ""}</p>
-        <p>{type === "post" ? "여러 회원들과 자유롭게 대화하세요😀" : ""}</p>
+        <p>{type === "post" ? "⭐자유주제⭐" : "❓Q&A❓"}</p>
+        <p>
+          {type === "post"
+            ? "여러 회원들과 자유롭게 대화하세요😀"
+            : "궁금한 것이 있다면 무엇이든 질문해보아요😊"}
+        </p>
       </div>
       <div className={s.header}>
-        <form className={s.search} onSubmit={handleSearch}>
-          <BiSearch />
-          <input type="text" placeholder="원하는 내용을 검색해보세요~!" />
-        </form>
+        <SearchInput type={type}/>
         <div className={s.bottom}>
           <Select init="최신순" options={["최신순", "조회순"]} />
           <Button onClick={handleClick}>✏️작성하기</Button>
@@ -108,8 +114,8 @@ const BoardList = ({ type }) => {
 
       <div className={s.pageContainer}>
         <Pagination
-          postPerPage={postPerPage}
-          totalPost={data && data.totalElements}
+          currentPage={data.pageable.pageNumber+1}
+          totalPage={data.totalPages}
           paginate={setCurrentPage}
         />
       </div>

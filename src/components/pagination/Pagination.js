@@ -4,11 +4,9 @@ import classnames from "classnames";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Pagination = ({ postPerPage, totalPost, paginate }) => {
-  const pageRouter = useSelector((state) => state.pageRouter);
-  const [number, setNumber] = useState(pageRouter.state ? pageRouter.state : 1);
+const Pagination = ({currentPage,totalPage, paginate}) => {
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalPost / postPerPage); i++) {
+  for (let i = 1; i <= totalPage; i++) {
     pageNumbers.push(i);
   }
 
@@ -20,12 +18,9 @@ const Pagination = ({ postPerPage, totalPost, paginate }) => {
             key={index}
             onClick={() => {
               paginate(item);
-              setNumber(item);
-              console.log("아이템 값은 ",item, "넘버의 값은", number);
-              console.log("페이지넘버",pageNumbers)
             }}
             className={classnames("", {
-              [s.is_select]: item === number,
+              [s.is_select]: item === currentPage,
             })}
           >
             <span>{item}</span>
