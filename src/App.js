@@ -55,7 +55,7 @@ function App() {
   }, [dispatch, navigate, location]);
 
   useEffect(() => {
-    if (auth.accessToken === null) {
+    if (auth.accessToken === null && getCookieToken() !== undefined) {
       axios
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: getCookieToken().refreshToken,

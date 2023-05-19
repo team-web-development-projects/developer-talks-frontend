@@ -51,15 +51,12 @@ const BoardList = ({ type }) => {
     }
   }
 
-  const {
-    data,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
     queryFn: fetchProjectsOrSearch,
   });
   refetchQuery.current = refetch;
+  
   useEffect(() => {
     setCurrentPage(1);
     refetchQuery.current();
@@ -86,7 +83,7 @@ const BoardList = ({ type }) => {
         </p>
       </div>
       <div className={s.header}>
-        <SearchInput type={type}/>
+        <SearchInput type={type} />
         <div className={s.bottom}>
           <Select init="최신순" options={["최신순", "조회순"]} />
           <Button onClick={handleClick}>✏️작성하기</Button>
@@ -114,7 +111,7 @@ const BoardList = ({ type }) => {
 
       <div className={s.pageContainer}>
         <Pagination
-          currentPage={data.pageable.pageNumber+1}
+          currentPage={data.pageable.pageNumber + 1}
           totalPage={data.totalPages}
           paginate={setCurrentPage}
         />

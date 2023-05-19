@@ -10,7 +10,7 @@ const Logout = () => {
   const logout = () => {
     removeCookieToken();
     dispatch(DELETE_TOKEN());
-    navigate("/login");
+    navigate("/");
   };
 
   return <button onClick={logout}>로그아웃</button>;

@@ -32,12 +32,14 @@ export default function BoardPost({ type }) {
   }, [type]);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    await new Promise((r) => setTimeout(r, 1000));
     console.log(`
             제목: ${form.title}
             내용: ${form.content}
         `);
-    e.preventDefault();
-    await new Promise((r) => setTimeout(r, 1000));
+
+    console.log('post auth', auth.accessToken);
     axios
       .post(
         `${ROOT_API}/${type}`,
