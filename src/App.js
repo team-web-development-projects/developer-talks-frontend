@@ -1,22 +1,22 @@
-import axios from 'axios';
-import Footer from 'components/footer/Footer';
-import Header from 'components/header/Header';
-import { ROOT_API } from 'constants/api';
-import NotPage from 'pages/NotPage';
-import BoardDetail from 'pages/board/boardDetail/BoardDetail';
-import BoardList from 'pages/board/boardList/BoardList';
-import BoardPost from 'pages/board/boardPost/BoardPost';
+import axios from "axios";
+import Footer from "components/footer/Footer";
+import Header from "components/header/Header";
+import { ROOT_API } from "constants/api";
+import NotPage from "pages/NotPage";
+import BoardDetail from "pages/board/boardDetail/BoardDetail";
+import BoardList from "pages/board/boardList/BoardList";
+import BoardPost from "pages/board/boardPost/BoardPost";
 import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
-import Login from 'pages/login/Login';
-import Main from 'pages/main/Main';
-import Account from 'pages/mypage/Account';
-import Introduction from 'pages/mypage/Introduction';
-import Mypage from 'pages/mypage/Mypage';
-import Regist from 'pages/regist/Regist';
+import Login from "pages/login/Login";
+import Main from "pages/main/Main";
+import Account from "pages/mypage/Account";
+import Introduction from "pages/mypage/Introduction";
+import Mypage from "pages/mypage/Mypage";
+import Regist from "pages/regist/Regist";
 import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Outlet,
   Route,
@@ -24,7 +24,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { SET_TOKEN } from 'store/Auth';
+import { SET_TOKEN } from "store/Auth";
 import { getCookieToken, setRefreshToken } from "store/Cookie";
 import { isDev } from "util/Util";
 import "./assets/style/index.scss";
@@ -37,38 +37,42 @@ function App() {
 
   useEffect(() => {
     if (isDev) {
-      console.log('dev');
+      console.log("dev");
     } else {
-      console.log('prod');
+      console.log("prod");
     }
 
     if (window.location.href.includes("accessToken")) {
       const accessToken = window.location.href.split("accessToken=")[1];
       const refreshToken = window.location.href
-        .split('accessToken=')[1]
-        .split('&refreshToken=')[0];
+        .split("accessToken=")[1]
+        .split("&refreshToken=")[0];
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
-      console.log('토큰있음');
-      navigate('/', { replace: true });
+      console.log("토큰있음");
+      navigate("/", { replace: true });
     }
   }, [dispatch, navigate, location]);
 
-  axios
-    .post(`${ROOT_API}/token/refresh`, {
-      refreshToken: getCookieToken().refreshToken,
-      headers: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(function (response) {
-      console.log('재갱신 성공:', response);
-      dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-    })
-    .catch(function (error) {
-      console.log('재갱신 실패: ', error.response.data);
-    });
+  useEffect(() => {
+    if (auth.accessToken === null) {
+      axios
+        .post(`${ROOT_API}/token/refresh`, {
+          refreshToken: getCookieToken().refreshToken,
+          headers: {
+            accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(function (response) {
+          console.log("재갱신 성공:", response);
+          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+        })
+        .catch(function (error) {
+          console.log("재갱신 실패: ", error.response.data);
+        });
+    }
+  }, [auth.accessToken, dispatch]);
 
   return (
     <div className="App">
