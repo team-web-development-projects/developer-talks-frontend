@@ -25,7 +25,6 @@ const Introduction = () => {
       <main>
         <Left />
         <div className="notewrap">
-          <hr />
           <div className="note">
             <p dangerouslySetInnerHTML={{ __html: submittedValue }}></p>
             <form onSubmit={handleSubmit}>
@@ -35,6 +34,7 @@ const Introduction = () => {
                 onChange={handleChange}
                 placeholder="Enter your input"
               />
+              <hr />
               <Button type="submit">Submit</Button>
             </form>
             <div>

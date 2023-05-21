@@ -148,6 +148,7 @@ const Authlogin = () => {
                   <small role="alert">{errors.password.message}</small>
                 )}
                 <button
+                  tabIndex="3"
                   title="중복체크"
                   onClick={() => validateDuplicate('userNickname')}
                 >
@@ -175,7 +176,7 @@ const Authlogin = () => {
               onChange={handleCheckboxChange}
             />
             <div className="button">
-              <button type="submit" tabIndex="3" disabled={isSubmitting}>
+              <button type="submit" tabIndex="4" disabled={isSubmitting}>
                 {' '}
                 로그인
               </button>
