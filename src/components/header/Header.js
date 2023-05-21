@@ -13,17 +13,24 @@ import { ROOT_API } from 'constants/api';
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
   const [popover, setPopover] = useState(false);
+  const [userhi, setUserhi] = useState(false);
   let nickname = '';
   const showPopover = () => {
     setPopover(!popover);
   };
   const location = useLocation(); //url 정보 들어 있음.
 
-  // console.log('auth', auth)
-
+  console.log('auth', auth);
   if (auth.accessToken !== null) {
     nickname = parseJwt(auth.accessToken).nickname;
   }
+  useEffect(() => {
+    if (auth.accessToken == null) {
+      setUserhi(false);
+    } else {
+      setUserhi(true);
+    }
+  }, [auth.accessToken]);
 
   useEffect(() => {
     setPopover(false);
@@ -95,9 +102,6 @@ const Header = () => {
           <li>
             <Link to="/studyroom">스터디공간</Link>
           </li>
-          <li>
-            <Link to="/">공지사항</Link>
-          </li>
 
           <li className="popover-link">
             <span onClick={showPopover}>
@@ -121,7 +125,14 @@ const Header = () => {
           </li>
           <li>
             <Link to="/mypage">
-              <BsFillPersonFill size={24} />
+              {userhi ? (
+                <>
+                  <BsFillPersonFill size={24} />
+                  <span>{`${nickname}님`}</span>
+                </>
+              ) : (
+                <span>{'로그인'}</span>
+              )}
             </Link>
           </li>
         </ul>
