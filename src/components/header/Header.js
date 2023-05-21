@@ -51,28 +51,26 @@ const Header = () => {
     },
   ]);
 
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/post/list/user/${nickname}`, {
-      // params: { page: currentPage - 1, size: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
-  }
+  // async function fetchProjects() {
+  //   const { data } = await axios.get(`${ROOT_API}/post/list/user/${nickname}`, {
+  //     // params: { page: currentPage - 1, size: 10 },
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "X-AUTH-TOKEN": auth.accessToken,
+  //     },
+  //   });
+  //   return data;
+  // }
 
   const { status, data, error, isFetching, isPreviousData, isLoading } =
     useQuery({
       queryKey: ['popover'],
-      queryFn: () => fetchProjects(),
+      // queryFn: () => fetchProjects(),
       // suspense: true,
     });
 
   if (isLoading) return <div>Loading...</div>;
   if (status === "loading") return <div>Loading...</div>;
-
-  console.log("data", data);
 
   // const UserList = users.map((user) => <User />);
 

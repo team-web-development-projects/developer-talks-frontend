@@ -1,18 +1,18 @@
 import axios from "axios";
-import BoardItem from "components/boardItem/BoardItem";
 import Button from "components/button/Button";
+import CardItem from "components/cardItem/CardItem";
 import Pagination from "components/pagination/Pagination";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
 import Select from "components/select/Select";
+import { ROOT_API } from "constants/api";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
-import s from "./studyroom.module.scss";
-// import { data } from "./dummydata";
-import { ROOT_API } from "constants/api";
+import { BsFillPeopleFill, BsLock, BsUnlock } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import s from "./studyroom.module.scss";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -35,7 +35,7 @@ const BoardList = ({ type }) => {
     auth && auth.accessToken ? navigate(`/studyroom/post`) : setModal(true);
   };
 
-  async function fetchProjects(currentPage) {
+  async function fetchProjects() {
     const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
       params: { page: currentPage - 1, size: 10 },
       headers: {
@@ -49,16 +49,15 @@ const BoardList = ({ type }) => {
   const { status, data, error, isFetching, isPreviousData, isLoading } =
     useQuery({
       queryKey: [type, currentPage],
-      queryFn: () => fetchProjects(currentPage),
+      queryFn: fetchProjects,
     });
 
   if (isLoading) return <div>Loading...</div>;
-  if (status === "loading") return <div>Loading...</div>;
 
   console.log("data", data);
 
   return (
-    <>
+    <div className={s.studyroom}>
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           로그인을 하면 게시글을 작성할 수 있어요.
@@ -78,27 +77,41 @@ const BoardList = ({ type }) => {
         </form>
         <div className={s.bottom}>
           <Select init="최신순" options={["최신순", "조회순"]} />
-          <Button onClick={handleClick}>✏️작성하기</Button>
+          <Button onClick={handleClick}>✏️룸 만들기</Button>
         </div>
       </div>
-      <ul>
-        {
-          //   data ? (
-          //   data.content.map((board) => (
-          //     <BoardItem
-          //       key={board.id}
-          //       id={board.id}
-          //       title={board.title}
-          //       // content={board.content}
-          //       nickname={board.nickname}
-          //       type={type}
-          //       currentPage={currentPage}
-          //     />
-          //   ))
-          // ) : (
-          //   <li>등록된 게시글이 없습니다.</li>
-          // )
-        }
+      <ul className={s.list}>
+        {data ? (
+          data.content.map((item, index) => (
+            <li key={index} className={s.card_list}>
+              <Link to={`/studyroom/${item.id}`}>
+                <div className={s.autojoin}>
+                  {item.autoJoin ? (
+                    <BsUnlock size={24} />
+                  ) : (
+                    <BsLock size={24} />
+                  )}
+                </div>
+                <div className={s.title}>{item.title}</div>
+                <div className={s.tag}>
+                  <span>react</span>
+                  <span>java</span>
+                </div>
+                <div className={s.info}>
+                  <div className={s.maker}>
+                    {item.studyRoomUsers[0].nickname}
+                  </div>
+                  <div className={s.icon}>
+                    <BsFillPeopleFill size={16} />
+                    <span>{item.studyRoomUsers.length}</span>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))
+        ) : (
+          <li>등록된 게시글이 없습니다.</li>
+        )}
       </ul>
 
       <div className={s.pageContainer}>
@@ -109,7 +122,7 @@ const BoardList = ({ type }) => {
         />
       </div>
       <Scrolltop />
-    </>
+    </div>
   );
 };
 

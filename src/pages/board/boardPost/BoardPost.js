@@ -71,7 +71,7 @@ export default function BoardPost({ type }) {
       {modal && (
         <BasicModal
           setOnModal={() => setModal()}
-          dimClick={() => navigate(`/${getType}/list`)}
+          dimClick={() => navigate(`/${getType}`)}
         >
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.

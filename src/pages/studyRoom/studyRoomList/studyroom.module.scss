@@ -11,7 +11,6 @@
   margin-top: 30px;
   padding: 30px;
   border-top: 1px solid #cfcccc;
-  border-bottom: 1px solid #cfcccc;
   .bottom {
     display: flex;
     justify-content: space-between;
@@ -34,9 +33,6 @@
 }
 
 .boardContainer{
-  &:hover{
-    background: #eeeeee;
-  }
   .title{
     margin-bottom: 10px;
     font-size:30px;
@@ -57,4 +53,63 @@
   display: flex;
   justify-content: center;
   margin: 20px 0px;
+}
+
+
+.studyroom {
+  .list {
+    display: grid;
+    margin-top: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+    gap: 20px;
+  }
+  .card_list {
+    position: relative;
+    height: 260px;
+    border-radius: 30px;
+    border: 2px solid #d1d1d1;
+    box-sizing: border-box;
+    cursor: pointer;
+    a {
+      display: block;
+      height: 100%;
+      padding: 20px;
+    }
+    .title {
+      margin-bottom: 10px;
+      font-size: 24px;
+      font-weight: 500;
+    }
+    .autojoin {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .tag {
+      display: flex;
+      gap: 10px;
+      span {
+        padding: 3px 10px;
+        height: 22px;
+        background: #f2f4f8;
+        border-radius: 15px;
+        font-size: 13px;
+        color: #3e86f5;
+        font-weight: 700;
+      }
+    }
+    .info {
+      display: flex;
+      position: absolute;
+      width: calc(100% - 40px);
+      bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .icon {
+      svg {
+        transform: translateY(2px);
+        margin-right: 4px;
+      }
+    }
+  }
 }
