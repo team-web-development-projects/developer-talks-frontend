@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Blackbutton from 'components/button/Blacbutton';
 import Form from 'components/form/Form';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
 import { API_HEADER, ROOT_API } from 'constants/api';
@@ -9,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
 import Footer from '../../components/footer/Footer';
-import Inputmodule from './Inputmodule';
 import './Regist.scss';
 
 axios.defaults.withCredentials = true;
@@ -133,174 +131,230 @@ const Regist = () => {
           <table>
             <thead />
             <tbody>
-              <Inputmodule
-                id={'userEmail'}
-                text={'이메일'}
-                placeholder="이메일을 입력해주세요"
-                tab={1}
-                pattern={{
-                  required: '이메일은 필수 입력입니다.',
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: '이메일 형식에 맞지 않습니다.',
-                  },
-                }}
-                title={'이메일 인증'}
-                buttontab={2}
-                onClick={{ verityEmail }}
-                errormessage={
-                  errors.userEmail && (
+              <tr>
+                <th>
+                  <label htmlFor="userEmail">이메일</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
+                </th>
+                <td>
+                  <input
+                    type="email"
+                    id="userEmail"
+                    placeholder="이메일을 입력해주세요"
+                    tabIndex="1"
+                    {...register('userEmail', {
+                      required: '이메일은 필수 입력입니다.',
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: '이메일 형식에 맞지 않습니다.',
+                      },
+                    })}
+                  />
+                  <button onClick={verityEmail}>이메일인증</button>
+                  {errors.userEmail && (
                     <small role="alert">{errors.userEmail.message}</small>
-                  )
-                }
-              />
-              <Inputmodule
-                id={'userEmails'}
-                placeholder={'입력해주세요'}
-                tab={3}
-                title={'확인'}
-              />
-
-              <Inputmodule
-                id={'userNickname'}
-                text={'닉네임'}
-                placeholder={'닉네임을 입력해주세요'}
-                tab={4}
-                ref={usernicknameRef}
-                maxLength={15}
-                pattern={{
-                  required: '닉네임은 필수 입력입니다.',
-                  minLength: {
-                    value: 5,
-                    message: '5자리 이상 입력해주세요.',
-                  },
-                  // pattern: {
-                  //   value:
-                  //     /^[가-힣a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
-                  //   message:
-                  //     "닉네임에 특수문자가 포함되면 안되고 숫자로 시작하면 안됩니다!",
-                  // },
-                }}
-                title={'중복체크'}
-                buttontab={5}
-                click={() => validateDuplicate('userNickname')}
-                errormessage={[
-                  errors.userNickname && (
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label>이메일 인증</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    id="userEmails"
+                    placeholder="입력해주세요"
+                    tabIndex="1"
+                  />
+                  <button>확인</button>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label htmlFor="userNickname">닉네임</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    id="userNickname"
+                    placeholder="닉네임을 입력해주세요"
+                    tabIndex="2"
+                    ref={usernicknameRef}
+                    maxLength={15}
+                    {...register('userNickname', {
+                      required: '닉네임은 필수 입력입니다.',
+                      minLength: {
+                        value: 5,
+                        message: '5자리 이상 입력해주세요.',
+                      },
+                      // pattern: {
+                      //   value:
+                      //     /^[가-힣a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
+                      //   message:
+                      //     "닉네임에 특수문자가 포함되면 안되고 숫자로 시작하면 안됩니다!",
+                      // },
+                    })}
+                  />
+                  <button
+                    title="중복체크"
+                    onClick={() => validateDuplicate('userNickname')}
+                  >
+                    중복체크
+                  </button>
+                  {errors.userNickname && (
                     <small role="alert">{errors.userNickname.message}</small>
-                  ),
-                  !errors.userNickname &&
+                  )}
+                  {!errors.userNickname &&
                     duplicateNickName !== '' &&
                     duplicateNickName === 'true' && (
                       <small className="alert">중복된 닉네임입니다.</small>
-                    ),
-                  !errors.userNickname &&
+                    )}
+                  {!errors.userNickname &&
                     duplicateNickName !== '' &&
                     duplicateNickName === 'false' && (
                       <small className="true">
                         사용할 수 있는 닉네임입니다.
                       </small>
-                    ),
-                ]}
-              />
-              <Inputmodule
-                id={'userId'}
-                text={'아이디'}
-                errormessage={[
-                  errors.userId && (
+                    )}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label htmlFor="userId">아이디</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    id="userId"
+                    placeholder="아이디를 입력해주세요"
+                    maxLength={15}
+                    ref={useridRef}
+                    tabIndex="3"
+                    {...register('userId', {
+                      required: '아이디는 필수 입력입니다.',
+                      minLength: {
+                        value: 5,
+                        message: '5자리 이상 아이디를 사용해주세요.',
+                      },
+                      maxLength: {
+                        value: 15,
+                        message: '15자리 이하 아이디를 사용해주세요.',
+                      },
+                    })}
+                  />
+                  <button
+                    title="중복체크"
+                    onClick={() => validateDuplicate('userId')}
+                  >
+                    중복체크
+                  </button>
+                  {errors.userId && (
                     <small role="alert">{errors.userId.message}</small>
-                  ),
-                  duplicateId !== '' && duplicateId === 'true' && (
+                  )}
+                  {duplicateId !== '' && duplicateId === 'true' && (
                     <small className="alert">중복된 아이디입니다.</small>
-                  ),
-                  duplicateId !== '' && duplicateId === 'false' && (
+                  )}
+                  {duplicateId !== '' && duplicateId === 'false' && (
                     <small className="true">사용할 수 있는 아이디입니다.</small>
-                  ),
-                ]}
-                placeholder={'아이디를 입력해주세요'}
-                maxLength={15}
-                ref={useridRef}
-                tab={6}
-                pattern={{
-                  required: '아이디는 필수 입력입니다.',
-                  minLength: {
-                    value: 5,
-                    message: '5자리 이상 아이디를 사용해주세요.',
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: '15자리 이하 아이디를 사용해주세요.',
-                  },
-                }}
-                title={'중복체크'}
-                buttontab={7}
-                click={() => validateDuplicate('userId')}
-              />
-              <Inputmodule
-                id={'password'}
-                text={'비밀번호'}
-                placeholder="최소 1개의 특수문자를 포함해주세요"
-                maxLength={15}
-                pattern={{
-                  required: '비밀번호는 필수 입력입니다.',
-                  minLength: {
-                    value: 8,
-                    message: '8자리 이상 비밀번호를 사용해주세요.',
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: '15자리 이히 비밀번호를 사용해주세요.',
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: '특수문자를 포함해주세요',
-                  },
-                }}
-                errormessage={
-                  errors.password && (
+                  )}
+                </td>
+              </tr>
+
+              <tr>
+                <th>
+                  <label htmlFor="password">비밀번호</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
+                </th>
+                <td>
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="최소 1개의 특수문자를 포함해주세요"
+                    maxLength={15}
+                    tabIndex="4"
+                    {...register('password', {
+                      required: '비밀번호는 필수 입력입니다.',
+                      minLength: {
+                        value: 8,
+                        message: '8자리 이상 비밀번호를 사용해주세요.',
+                      },
+                      maxLength: {
+                        value: 15,
+                        message: '15자리 이히 비밀번호를 사용해주세요.',
+                      },
+                      pattern: {
+                        value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                        message: '특수문자를 포함해주세요',
+                      },
+                    })}
+                  />
+                  {errors.password && (
                     <small role="alert">{errors.password.message}</small>
-                  )
-                }
-              />
-              <Inputmodule
-                id={'passwordChk'}
-                text={'비밀번호 확인'}
-                placeholder="비밀번호를 한 번 더 입력해주세요"
-                tab={8}
-                pattern={{
-                  required: '비밀번호는 필수 입력입니다.',
-                  minLength: {
-                    value: 8,
-                    message: '8자리 이상 비밀번호를 사용해주세요.',
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: '15자리 이히 비밀번호를 사용해주세요.',
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: '특수문자를 포함해주세요',
-                  },
-                  validate: (val) => {
-                    if (watch('password') !== val) {
-                      return '비밀번호가 일치하지 않습니다.';
-                    }
-                  },
-                }}
-                errormessage={
-                  errors.passwordChk && (
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label htmlFor="passwordChk">비밀번호 확인</label>
+                  <span className="star" title="필수사항">
+                    *
+                  </span>
+                </th>
+                <td>
+                  <input
+                    type="password"
+                    id="passwordChk"
+                    placeholder="비밀번호를 한 번 더 입력해주세요"
+                    tabIndex="5"
+                    maxLength={15}
+                    {...register('passwordChk', {
+                      required: '비밀번호는 필수 입력입니다.',
+                      minLength: {
+                        value: 8,
+                        message: '8자리 이상 비밀번호를 사용해주세요.',
+                      },
+                      maxLength: {
+                        value: 15,
+                        message: '15자리 이히 비밀번호를 사용해주세요.',
+                      },
+                      pattern: {
+                        value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                        message: '특수문자를 포함해주세요',
+                      },
+                      validate: (val) => {
+                        if (watch('password') !== val) {
+                          return '비밀번호가 일치하지 않습니다.';
+                        }
+                      },
+                    })}
+                  />
+                  {errors.passwordChk && (
                     <small role="alert">{errors.passwordChk.message}</small>
-                  )
-                }
-              />
+                  )}
+                </td>
+              </tr>
             </tbody>
           </table>
         </fieldset>
         <div className="submit">
-          <Blackbutton
-            title={'가입하기'}
-            buttontab={9}
-            disabled={isSubmitting}
-          />
+          <button type="submit" tabIndex="7" disabled={isSubmitting}>
+            {' '}
+            가입하기
+          </button>
         </div>
       </Form>
       <Footer />
