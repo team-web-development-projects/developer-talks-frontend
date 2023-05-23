@@ -7,6 +7,7 @@ import BoardDetail from "pages/board/boardDetail/BoardDetail";
 import BoardList from "pages/board/boardList/BoardList";
 import BoardPost from "pages/board/boardPost/BoardPost";
 import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
+import Authlogin from "pages/login/Authlogin";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Account from "pages/mypage/Account";
@@ -129,6 +130,7 @@ function App() {
           />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/authlogin" element={<Authlogin />} />
         </Route>
       </Routes>
     </div>

@@ -5,7 +5,7 @@ import Button from 'components/button/Button';
 
 const Introduction = () => {
   const [inputValue, setInputValue] = useState(
-    `	<img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white" />`
+    `<p>안녕하세요</p> <p>테그를 사용하여 글을 작성하실 수 있어요</p> <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white" />`
   );
   const [submittedValue, setSubmittedValue] = useState('');
   const handleChange = (e) => {
@@ -25,8 +25,6 @@ const Introduction = () => {
       <main>
         <Left />
         <div className="notewrap">
-          <p>안녕하세요</p>
-          <hr />
           <div className="note">
             <p dangerouslySetInnerHTML={{ __html: submittedValue }}></p>
             <form onSubmit={handleSubmit}>
@@ -36,6 +34,7 @@ const Introduction = () => {
                 onChange={handleChange}
                 placeholder="Enter your input"
               />
+              <hr />
               <Button type="submit">Submit</Button>
             </form>
             <div>
