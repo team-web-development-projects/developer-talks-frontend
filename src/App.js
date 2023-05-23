@@ -28,6 +28,7 @@ import { SET_TOKEN } from "store/Auth";
 import { getCookieToken, setRefreshToken } from "store/Cookie";
 import { isDev } from "util/Util";
 import "./assets/style/index.scss";
+import StudyRoomDetqil from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
 
 function App() {
   const navigate = useNavigate();
@@ -94,6 +95,10 @@ function App() {
             element={<BoardList type="post" />}
           />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
+          <Route
+            path="/studyroom/:postId"
+            element={<StudyRoomDetqil type="post" />}
+          />
 
           <Route path="qna" element={<BoardList type="questions" />} />
           <Route
