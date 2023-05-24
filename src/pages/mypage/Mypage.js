@@ -15,8 +15,8 @@ const Mypage = ({ type }) => {
   const navigate = useNavigate();
   const [select, setSelect] = useState(-1);
   const [favorite, setFavorite] = useState([]);
-  const [post, setPost] = useState('post');
-  const [types, setTypes] = useState('favorite');
+  const [post, setPost] = useState();
+  const [types, setTypes] = useState();
   const { favo } = useParams();
   const dispatch = useDispatch();
 
@@ -30,24 +30,32 @@ const Mypage = ({ type }) => {
   };
 
   useEffect(() => {
-    if (select === 3) {
-      setPost('post');
-      setTypes('favorite');
-    } else if (select === 2) {
-      setPost('post');
-      setTypes('user');
-    } else if (select === 1) {
-      setPost('comment');
-      setTypes('user');
-    }
-    // console.log(setTypes, 'dddddfsdjfsdlkfjsdklfjsdljsdlkfjsldkfjsdflksf');
-  }, [select]);
-
-  useEffect(() => {
+    console.log(post, types);
+    console.log(select, 'dddddf');
+    switch (select) {
+      case 3:
+        setPost('post');
+        setTypes('favorite');
+        break;
+      case 2:
+        setPost('post');
+        setTypes('user');
+        break;
+      case 1:
+        setPost('comment');
+        setTypes('user');
+        break;
+      case 0:
+        setPost('post');
+        setTypes('favorite');
+        break;
+      default:
+        setPost('');
+        setTypes('');
+    } //FIXME 정렬이 이상함
     const fetchData = async () => {
       const response = await axios.get(
         `${ROOT_API}/${post}/list/${types}/${nickname}`, //NOTE page=0 ??
-
         // https://dtalks-api.site/post/list/favorite/11111?page=0 //3번
         // https://dtalks-api.site/post/list/user/11111?page=0 //2번
         // https://dtalks-api.site/comment/list/user/11111 //1번
@@ -60,16 +68,17 @@ const Mypage = ({ type }) => {
         }
       );
       setFavorite(response.data.content);
-      console.log(response.data.content, 'ddd');
+      console.log(`${ROOT_API}/${post}/list/${types}/${nickname}`);
     };
 
     if (auth.accessToken === null) {
       navigate('/login', { replace: true });
     } else {
-      fetchData();
-      dispatch(SET_TOKEN({ accessToken: auth.accessToken }));
+      if (post !== undefined && types !== undefined) {
+        fetchData();
+      }
     }
-  }, [auth.accessToken, navigate, nickname, favo, select]);
+  }, [auth.accessToken, navigate, favo, select]);
 
   return (
     <>
@@ -93,14 +102,18 @@ const Mypage = ({ type }) => {
             <div className="">
               {select !== -1 &&
                 contacts[select] &&
-                favorite !== undefined &&
-                favorite.map((item, index) => (
-                  <div key={index}>
-                    <div className="title">{item.title}</div>
-                    <div className="content">{item.content}</div>
-                    <div className="nickname">{item.nickname}</div>
-                  </div>
+                (favorite !== undefined ? (
+                  favorite.map((item, index) => (
+                    <div key={index}>
+                      <div className="title">{item.title}</div>
+                      <div className="content">{item.content}</div>
+                      <div className="nickname">{item.nickname}</div>
+                    </div>
+                  ))
+                ) : (
+                  <div></div>
                 ))}
+              {console.log(select)}
             </div>
           </section>
         </main>
