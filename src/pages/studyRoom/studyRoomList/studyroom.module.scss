@@ -1,3 +1,5 @@
+@import 'assets/style/function.scss';
+
 .banner {
   padding: 30px;
   color: white;
@@ -65,14 +67,15 @@
   }
   .card_list {
     position: relative;
-    height: 260px;
+    height: 290px;
     padding: 20px;
     border-radius: 30px;
     border: 2px solid #d1d1d1;
     box-sizing: border-box;
     cursor: pointer;
     .title {
-      margin-bottom: 10px;
+      @include multi-dotdotdot(24px, 2);
+      margin-bottom: 16px;
       font-size: 24px;
       font-weight: 500;
     }
@@ -82,7 +85,8 @@
     }
     .tag {
       display: flex;
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: 7px;
       span {
         padding: 3px 10px;
         height: 22px;

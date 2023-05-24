@@ -14,6 +14,7 @@ import Account from "pages/mypage/Account";
 import Introduction from "pages/mypage/Introduction";
 import Mypage from "pages/mypage/Mypage";
 import Regist from "pages/regist/Regist";
+import StudyRoomDetqil from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
 import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
 import { useEffect } from "react";
@@ -29,7 +30,6 @@ import { SET_TOKEN } from "store/Auth";
 import { getCookieToken, setRefreshToken } from "store/Cookie";
 import { isDev } from "util/Util";
 import "./assets/style/index.scss";
-import StudyRoomDetqil from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
 
 function App() {
   const navigate = useNavigate();

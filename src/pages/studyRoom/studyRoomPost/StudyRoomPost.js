@@ -46,15 +46,13 @@ const StudyRoomPost = ({ type }) => {
         joinableCount: ${selectedTags.joinableCount}
       `
     );
-    console.log('dd', selectedTags.tags)
-    console.log('cc', typeof(selectedTags.tags))
     axios
       .post(
         `${ROOT_API}/study-room`,
         {
           title: form.title,
           content: form.content,
-          skills: ['JAVA', 'REACT'],
+          skills: selectedTags.tags,
           autoJoin: selectedTags.authJoin,
           joinableCount: selectedTags.joinableCount,
         },

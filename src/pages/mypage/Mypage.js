@@ -23,7 +23,7 @@ const Mypage = () => {
   return (
     <>
       {auth.accessToken !== null ? (
-        <main className="main">
+        <main className="mypage">
           <Left />
           <section className="notes">
             <ul>

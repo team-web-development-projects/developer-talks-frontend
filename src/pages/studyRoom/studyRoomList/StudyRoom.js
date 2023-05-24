@@ -5,14 +5,14 @@ import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
 import Select from "components/select/Select";
 import { ROOT_API } from "constants/api";
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { BsFillPeopleFill, BsLock, BsUnlock } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
-import { useEffect } from "react";
+import { parseJwt } from "hooks/useParseJwt";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -21,6 +21,7 @@ const BoardList = ({ type }) => {
   const [secretModal, setecretModal] = useState(false);
   const navigate = useNavigate();
   const refetchQuery = useRef();
+  const [roomId, setRoomId] = useState(-1);
 
   const [currentPage, setCurrentPage] = useState(
     pageRouter.state ? pageRouter.state : 1
@@ -35,10 +36,37 @@ const BoardList = ({ type }) => {
     auth && auth.accessToken ? navigate(`/studyroom/post`) : setModal(true);
   };
 
-  const joinRoomClick = (autoJoin, id) => {
+  const joinRoomClick = (autoJoin, id, leaderNickname) => {
+    setRoomId(id);
     if (auth && auth.accessToken) {
-      autoJoin === true ? navigate(`/studyroom/${id}`) : setecretModal(true);
+      autoJoin === true ||
+      leaderNickname === parseJwt(auth.accessToken).nickname
+        ? navigate(`/studyroom/${id}`)
+        : setecretModal(true);
     }
+  };
+
+  const requestRoom = () => {
+    axios
+      .post(
+        `${ROOT_API}/study-room/join/${roomId}`,
+        {
+          id: roomId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("로그인 성공:", response);
+        setecretModal(false);
+      })
+      .catch(function (error) {
+        console.log("로그인 실패: ", error.response);
+      });
   };
 
   async function fetchProjects() {
@@ -70,6 +98,8 @@ const BoardList = ({ type }) => {
     refetchQuery.current();
   }, []);
 
+  console.log("dd", data);
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -87,8 +117,8 @@ const BoardList = ({ type }) => {
           생성자의 승인 후 입장할 수 있는 스터디룸입니다.
           <br />
           승인 요청 하시겠나요?
-          <button>요청하기</button>
-          <button>돌아가기</button>
+          <button onClick={requestRoom}>요청하기</button>
+          <button onClick={() => setecretModal(false)}>돌아가기</button>
         </BasicModal>
       )}
       <div className={s.banner}>
@@ -111,21 +141,29 @@ const BoardList = ({ type }) => {
             <li
               key={index}
               className={s.card_list}
-              onClick={() => joinRoomClick(item.autoJoin, item.id)}
+              onClick={() =>
+                joinRoomClick(
+                  item.autoJoin,
+                  item.id,
+                  item.studyRoomUsers[0].nickname
+                )
+              }
             >
               <div className={s.autojoin}>
                 {item.autoJoin ? <BsUnlock size={24} /> : <BsLock size={24} />}
               </div>
               <div className={s.title}>{item.title}</div>
               <div className={s.tag}>
-                <span>react</span>
-                <span>java</span>
+                {item.skills.map((items, indexs) => (
+                  <span key={indexs}>{items}</span>
+                ))}
               </div>
               <div className={s.info}>
                 <div className={s.maker}>{item.studyRoomUsers[0].nickname}</div>
                 <div className={s.icon}>
                   <BsFillPeopleFill size={16} />
-                  <span>{item.studyRoomUsers.length}</span>
+                  <span>{item.studyRoomUsers.length}</span>/
+                  <span>{item.joinableCount}</span>
                 </div>
               </div>
             </li>

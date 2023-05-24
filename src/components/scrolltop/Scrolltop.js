@@ -2,13 +2,9 @@ import { useEffect, useState } from 'react';
 import './Scrolltop.scss';
 
 function Scrolltop() {
-  const [scrollY, setScrollY] = useState(0);
   const isScrollAtBottom =
     window.scrollY + window.innerHeight >=
     document.documentElement.scrollHeight;
-  useEffect(() => {
-    console.log(scrollY, 'dd');
-  }, [scrollY]);
 
   const [showButton, setShowButton] = useState(false);
   const scrollToBottom = () => {
@@ -29,8 +25,6 @@ function Scrolltop() {
 
   useEffect(() => {
     const handleShowButton = () => {
-      setScrollY(window.scrollY);
-
       if (window.scrollY > 500) {
         setShowButton(true);
       } else {
