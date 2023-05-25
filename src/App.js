@@ -25,11 +25,11 @@ import {
   Routes,
   useLocation,
   useNavigate,
-} from "react-router-dom";
-import { SET_TOKEN } from "store/Auth";
-import { getCookieToken, setRefreshToken } from "store/Cookie";
-import { isDev } from "util/Util";
-import "./assets/style/index.scss";
+} from 'react-router-dom';
+import { SET_TOKEN } from 'store/Auth';
+import { getCookieToken, setRefreshToken } from 'store/Cookie';
+import { isDev } from 'util/Util';
+import './assets/style/index.scss';
 
 function App() {
   const navigate = useNavigate();
@@ -39,23 +39,20 @@ function App() {
 
   useEffect(() => {
     if (isDev) {
-      console.log("dev");
+      console.log('dev');
     } else {
-      console.log("prod");
+      console.log('prod');
     }
 
-    if (window.location.href.includes("accessToken")) {
-      const accessToken = window.location.href
-        .split("accessToken=")[1]
-        .split("&refreshToken=")[0];
+    if (window.location.href.includes('accessToken')) {
+      const accessToken = window.location.href.split('accessToken=')[1];
       const refreshToken = window.location.href
-        .split("accessToken=")[1]
-        .split("&refreshToken=")[1];
-      console.log("app ", accessToken);
+        .split('accessToken=')[1]
+        .split('&refreshToken=')[0];
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
-      console.log("토큰있음");
-      navigate("/", { replace: true });
+      console.log('토큰있음');
+      navigate('/', { replace: true });
     }
   }, [dispatch, navigate, location]);
 
@@ -65,16 +62,16 @@ function App() {
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: getCookieToken().refreshToken,
           headers: {
-            accept: "*/*",
-            "Content-Type": "application/json",
+            accept: '*/*',
+            'Content-Type': 'application/json',
           },
         })
         .then(function (response) {
-          console.log("재갱신 성공:", response);
+          console.log('재갱신 성공:', response);
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
         })
         .catch(function (error) {
-          console.log("재갱신 실패: ", error.response.data);
+          console.log('재갱신 실패: ', error.response.data);
         });
     }
   }, [auth.accessToken, dispatch, location]);
@@ -87,6 +84,10 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="mypage" element={<Mypage />} />
+          <Route
+            path="list/favorite/:userId"
+            element={<Mypage type="post" />}
+          />
           <Route path="account" element={<Account />} />
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
