@@ -39,7 +39,7 @@ const Mypage = ({ type }) => {
       case 1:
         axios
           .get(
-            'https://dtalks-api.site/post/list/user/11111', //1번
+            `https://dtalks-api.site/post/list/user/${nickname}`, //1번
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
@@ -55,7 +55,7 @@ const Mypage = ({ type }) => {
       case 2:
         axios
           .get(
-            'https://dtalks-api.site/post/list/favorite/11111', //1번
+            `https://dtalks-api.site/post/list/favorite/${nickname}`, //1번
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
@@ -71,7 +71,7 @@ const Mypage = ({ type }) => {
       case 3:
         axios
           .get(
-            'https://dtalks-api.site/post/list/favorite/11111', //1번
+            `https://dtalks-api.site/post/list/favorite/${nickname}`, //1번
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
