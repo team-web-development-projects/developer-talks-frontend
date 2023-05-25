@@ -42,12 +42,11 @@ const Left = () => {
   return (
     <>
       <section className="side">
-        <img src={loginuser} alt="" />
+        <div className="imgwrap">
+          <img src={loginuser} alt="" />
+          <input type="file" name="" id="" />
+        </div>
         <p>{userinfo.nickname} 님 </p>
-        {/* <p>{line}</p> */}
-
-        <button onClick={handleSubmit}>파일업로드</button>
-        {/*  필요없음 */}
         <ul>
           <li>
             <Link to="/introduction">{line}</Link>

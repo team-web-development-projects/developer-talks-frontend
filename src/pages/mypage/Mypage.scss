@@ -25,6 +25,19 @@
     }
   }
 
+  .user-data {
+    border-bottom: 1px solid #ccc;
+    &:last-child {
+      border-bottom: none;
+    }
+    .title {
+      cursor: pointer;
+      &:hover {
+        color: #009800;
+      }
+    }
+  }
+
   .select {
     background-color: rgb(164, 164, 164);
     border: 0;

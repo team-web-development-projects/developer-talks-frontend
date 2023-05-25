@@ -80,4 +80,17 @@
     display: none;
     padding: 20px;
   }
+  .header-user {
+    position: relative;
+    text-align: center;
+    span {
+      position: absolute;
+      width: max-content;
+      left: 0;
+      right: 0;
+      margin: auto;
+      font-size: 14px;
+      bottom: -16px;
+    }
+  }
 }
