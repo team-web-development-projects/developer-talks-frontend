@@ -15,9 +15,9 @@ const Mypage = ({ type }) => {
   const [favorite, setFavorite] = useState([]);
   const dispatch = useDispatch();
 
-  let nickname = "";
+  let userId = "";
   if (auth.accessToken !== null) {
-    nickname = parseJwt(auth.accessToken).nickname;
+    userId = parseJwt(auth.accessToken).userid;
   }
   if (auth.accessToken === null) {
     navigate("/login", { replace: true });
@@ -33,7 +33,7 @@ const Mypage = ({ type }) => {
         // axios
         //   .get(
         //     // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함
-        //     `${ROOT_API}/post/list/user/${nickname}`,
+        //     `${ROOT_API}/post/list/user/${userId}`,
         //     {
         //       params: { page: 0, size: 10 }, //NOTE 파람스??
         //       headers: {
@@ -50,7 +50,7 @@ const Mypage = ({ type }) => {
         axios
           .get(
             // 작성글
-            `${ROOT_API}/post/list/user/${nickname}`,
+            `${ROOT_API}/post/list/user/${userId}`,
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
@@ -67,7 +67,7 @@ const Mypage = ({ type }) => {
         axios
           .get(
             // 댓글
-            `${ROOT_API}/comment/list/user/${nickname}`,
+            `${ROOT_API}/comment/list/user/${userId}`,
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
@@ -84,7 +84,7 @@ const Mypage = ({ type }) => {
         axios
           .get(
             // 즐겨찾기 & 스크랩
-            `${ROOT_API}/post/list/favorite/${nickname}`, //1번
+            `${ROOT_API}/post/list/favorite/${userId}`, //1번
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
@@ -100,7 +100,7 @@ const Mypage = ({ type }) => {
       default:
     }
     console.log("dd");
-  }, [auth.accessToken, navigate, select, nickname]);
+  }, [auth.accessToken, navigate, select, userId]);
 
   return (
     <>
@@ -122,7 +122,7 @@ const Mypage = ({ type }) => {
               ))}
             </ul>
             <div className="">
-              {select !== -1 && favorite ? (
+              {favorite ? (
                 favorite.map((item, index) => (
                   <div key={index} className="user-data">
                     <div className="create-time">{item.createDate}</div>
