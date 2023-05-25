@@ -133,7 +133,7 @@ const Header = () => {
                 <span>{"로그인"}</span>
               )}
             </Link>
-            <span>{`${nickname}님`}</span>
+            {nickname && <span>{`${nickname}님`}</span>}
           </li>
         </ul>
       </nav>
