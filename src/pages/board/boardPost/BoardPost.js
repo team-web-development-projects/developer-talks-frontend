@@ -32,12 +32,14 @@ export default function BoardPost({ type }) {
   }, [type]);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    await new Promise((r) => setTimeout(r, 1000));
     console.log(`
             제목: ${form.title}
             내용: ${form.content}
         `);
-    e.preventDefault();
-    await new Promise((r) => setTimeout(r, 1000));
+
+    console.log('post auth', auth.accessToken);
     axios
       .post(
         `${ROOT_API}/${type}`,
@@ -69,7 +71,7 @@ export default function BoardPost({ type }) {
       {modal && (
         <BasicModal
           setOnModal={() => setModal()}
-          dimClick={() => navigate(`/${getType}/list`)}
+          dimClick={() => navigate(`/${getType}`)}
         >
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.

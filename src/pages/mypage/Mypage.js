@@ -1,11 +1,12 @@
-import axios from 'axios';
-import Left from 'components/left/Left';
-import { parseJwt } from 'hooks/useParseJwt';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import './Mypage.scss';
-import { contacts } from './dummyData';
+import axios from "axios";
+import Left from "components/left/Left";
+import { parseJwt } from "hooks/useParseJwt";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import "./Mypage.scss";
+import { contacts } from "./dummyData";
+import { ROOT_API } from "constants/api";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -14,9 +15,12 @@ const Mypage = ({ type }) => {
   const [favorite, setFavorite] = useState([]);
   const dispatch = useDispatch();
 
-  let nickname = '';
+  let userId = "";
   if (auth.accessToken !== null) {
-    nickname = parseJwt(auth.accessToken).nickname;
+    userId = parseJwt(auth.accessToken).userid;
+  }
+  if (auth.accessToken === null) {
+    navigate("/login", { replace: true });
   }
 
   const onSelect = (type) => {
@@ -26,76 +30,82 @@ const Mypage = ({ type }) => {
   useEffect(() => {
     switch (select) {
       case 0:
-        // axios.get(
-        //   'https://dtalks-api.site/comment/list/user/11111' //1번
-        //   {
-        //     params: { favo: favo, page: 0, size: 1 }, //NOTE 파람스??
-        //     headers: {
-        //       'X-AUTH-TOKEN': auth.accessToken,
-        //     },
-        //   }
-        // );
+        // axios
+        //   .get(
+        //     // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함
+        //     `${ROOT_API}/post/list/user/${userId}`,
+        //     {
+        //       params: { page: 0, size: 10 }, //NOTE 파람스??
+        //       headers: {
+        //         "X-AUTH-TOKEN": auth.accessToken,
+        //       },
+        //     }
+        //   )
+        //   .then((res) => {
+        //     setFavorite(res.data.content);
+        //     console.log("1", res.data.content);
+        //   });
         break;
       case 1:
         axios
           .get(
-            `https://dtalks-api.site/post/list/user/${nickname}`, //1번
+            // 작성글
+            `${ROOT_API}/post/list/user/${userId}`,
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
-                'X-AUTH-TOKEN': auth.accessToken,
+                "X-AUTH-TOKEN": auth.accessToken,
               },
             }
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log('2', res);
+            console.log("1", res.data.content);
           });
         break;
       case 2:
         axios
           .get(
-            `https://dtalks-api.site/post/list/favorite/${nickname}`, //1번
+            // 댓글
+            `${ROOT_API}/comment/list/user/${userId}`,
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
-                'X-AUTH-TOKEN': auth.accessToken,
+                "X-AUTH-TOKEN": auth.accessToken,
               },
             }
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log('21', res);
+            console.log("2", res.data.content);
           });
         break;
       case 3:
         axios
           .get(
-            `https://dtalks-api.site/post/list/favorite/${nickname}`, //1번
+            // 즐겨찾기 & 스크랩
+            `${ROOT_API}/post/list/favorite/${userId}`, //1번
             {
               params: { page: 0, size: 10 }, //NOTE 파람스??
               headers: {
-                'X-AUTH-TOKEN': auth.accessToken,
+                "X-AUTH-TOKEN": auth.accessToken,
               },
             }
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log('21', res);
+            console.log("3", res.data.content);
           });
         break;
       default:
-    } //FIXME 정렬이 이상함
-
-    if (auth.accessToken === null) {
-      navigate('/login', { replace: true });
     }
-  }, [auth.accessToken, navigate, select, nickname]);
+    console.log("dd");
+  }, [auth.accessToken, navigate, select, userId]);
 
   return (
     <>
       {auth.accessToken !== null ? (
-        <main className="main">
+        <main className="mypage">
           <Left />
 
           <section className="notes">
@@ -104,7 +114,7 @@ const Mypage = ({ type }) => {
                 <li key={index}>
                   <button
                     onClick={() => onSelect(index)}
-                    className={`${select === index ? 'select' : ''}`}
+                    className={`${select === index ? "select" : ""}`}
                   >
                     {contact.type}
                   </button>
@@ -112,10 +122,21 @@ const Mypage = ({ type }) => {
               ))}
             </ul>
             <div className="">
-              {select !== -1 &&
-                favorite &&
-                favorite.map((item, index) => <div key="index">{item.title}</div>)}
-              {console.log(select)}
+              {favorite ? (
+                favorite.map((item, index) => (
+                  <div key={index} className="user-data">
+                    <div className="create-time">{item.createDate}</div>
+                    <span
+                      className="title"
+                      onClick={() => navigate(`/board/${item.id}`)}
+                    >
+                      {item.title}{" "}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <>내용이 없습니다.</>
+              )}
             </div>
           </section>
         </main>

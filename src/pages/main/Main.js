@@ -25,7 +25,7 @@ const Main = () => {
         <strong>추천수 베스트 5</strong>
         <ul>
           {data && data.map((item, index) => (
-              <li key={index} onClick={() => naviate(`/board/list/${item.id}`)}>
+              <li key={index} onClick={() => naviate(`/board/${item.id}`)}>
                 <div className="info">
                   <span>
                     {item.nickname} {item.createDate}

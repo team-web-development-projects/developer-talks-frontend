@@ -1,23 +1,24 @@
-import axios from 'axios';
-import Footer from 'components/footer/Footer';
-import Header from 'components/header/Header';
-import { ROOT_API } from 'constants/api';
-import NotPage from 'pages/NotPage';
-import BoardDetail from 'pages/board/boardDetail/BoardDetail';
-import BoardList from 'pages/board/boardList/BoardList';
-import BoardPost from 'pages/board/boardPost/BoardPost';
-import BoardUpdate from 'pages/board/boardUpdate/BoardUpdate';
-import Authlogin from 'pages/login/Authlogin';
-import Login from 'pages/login/Login';
-import Main from 'pages/main/Main';
-import Account from 'pages/mypage/Account';
-import Introduction from 'pages/mypage/Introduction';
-import Mypage from 'pages/mypage/Mypage';
-import Regist from 'pages/regist/Regist';
-import StudyRoom from 'pages/studyRoom/studyRoomList/StudyRoom';
-import StudyRoomPost from 'pages/studyRoom/studyRoomPost/StudyRoomPost';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import axios from "axios";
+import Footer from "components/footer/Footer";
+import Header from "components/header/Header";
+import { ROOT_API } from "constants/api";
+import NotPage from "pages/NotPage";
+import BoardDetail from "pages/board/boardDetail/BoardDetail";
+import BoardList from "pages/board/boardList/BoardList";
+import BoardPost from "pages/board/boardPost/BoardPost";
+import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
+import Authlogin from "pages/login/Authlogin";
+import Login from "pages/login/Login";
+import Main from "pages/main/Main";
+import Account from "pages/mypage/Account";
+import Introduction from "pages/mypage/Introduction";
+import Mypage from "pages/mypage/Mypage";
+import Regist from "pages/regist/Regist";
+import StudyRoomDetqil from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
+import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
+import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Outlet,
   Route,
@@ -73,7 +74,7 @@ function App() {
           console.log('재갱신 실패: ', error.response.data);
         });
     }
-  }, [auth.accessToken, dispatch]);
+  }, [auth.accessToken, dispatch, location]);
 
   return (
     <div className="App">
@@ -96,6 +97,10 @@ function App() {
             element={<BoardList type="post" />}
           />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
+          <Route
+            path="/studyroom/:postId"
+            element={<StudyRoomDetqil type="post" />}
+          />
 
           <Route path="qna" element={<BoardList type="questions" />} />
           <Route
