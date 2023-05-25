@@ -1,4 +1,4 @@
-import Left from 'components/left/Left';
+import Userside from 'components/userside/Userside';
 import './Account.scss';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
@@ -52,7 +52,7 @@ function Account() {
 
   return (
     <main className="main">
-      <Left />
+      <Userside />
       <section className="notes">
         <ul>
           {tabTitle.map((item, index) => (

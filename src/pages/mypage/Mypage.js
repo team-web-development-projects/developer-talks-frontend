@@ -1,5 +1,5 @@
 import axios from "axios";
-import Left from "components/left/Left";
+import Userside from "components/userside/Userside";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -106,7 +106,7 @@ const Mypage = ({ type }) => {
     <>
       {auth.accessToken !== null ? (
         <main className="mypage">
-          <Left />
+          <Userside />
 
           <section className="notes">
             <ul>

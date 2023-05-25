@@ -1,4 +1,4 @@
-import Left from 'components/left/Left';
+import Userside from 'components/userside/Userside';
 import { useState } from 'react';
 import './Introduction.scss';
 import Button from 'components/button/Button';
@@ -23,7 +23,7 @@ const Introduction = () => {
   return (
     <>
       <main>
-        <Left />
+        <Userside />
         <div className="notewrap">
           <div className="note">
             <p dangerouslySetInnerHTML={{ __html: submittedValue }}></p>
