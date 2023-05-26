@@ -1,0 +1,67 @@
+.userregistname {
+  margin-top: 10%;
+  text-align: center;
+}
+
+.headername {
+  p {
+    font-size: 30px;
+    font-weight: 700;
+  }
+}
+
+.line-style {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .jb-division-line {
+    width: 130px;
+    margin: 10px;
+    border-top: 1px solid #a4a4a4;
+  }
+}
+
+.prople {
+  margin: 20px auto;
+  height: 200px;
+  width: 200px;
+  border-radius: 30px;
+  border: 2px solid #d1d1d1;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.gaider {
+  margin: 50px auto;
+  padding: 10px;
+  width: 350px;
+  border-radius: 10px;
+  background: #ececec;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+
+.registIDform {
+  width: 500px;
+  padding: 10px;
+  margin: 0 auto;
+
+  label {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    border: 2px solid #d1d1d1;
+    box-sizing: border-box;
+  }
+}

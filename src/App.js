@@ -30,6 +30,8 @@ import { SET_TOKEN } from 'store/Auth';
 import { getCookieToken, setRefreshToken } from 'store/Cookie';
 import { isDev } from 'util/Util';
 import './assets/style/index.scss';
+import Agreement from "pages/agreement/Agreement";
+import Userregist from "pages/userregist/Userregist";
 
 function App() {
   const navigate = useNavigate();
@@ -44,6 +46,7 @@ function App() {
       console.log('prod');
     }
 
+    //NOTE 토큰 재갱신
     if (window.location.href.includes('accessToken')) {
       const accessToken = window.location.href.split('accessToken=')[1];
       const refreshToken = window.location.href
@@ -52,7 +55,8 @@ function App() {
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
       console.log('토큰있음');
-      navigate('/', { replace: true });
+      navigate('/agreement', { replace: true });
+      console.log("구글 로그인 시 리다이렉션")
     }
   }, [dispatch, navigate, location]);
 
@@ -132,6 +136,8 @@ function App() {
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
           <Route path="/authlogin" element={<Authlogin />} />
+          <Route path="/agreement" element={<Agreement />} />
+          <Route path="/userregist" element={<Userregist />} />
         </Route>
       </Routes>
     </div>

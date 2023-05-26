@@ -33,14 +33,19 @@ const Userside = () => {
       })
       .catch((error) => console.log(error));
   };
+
+
+  const { isActive } = this.state;
+
   // 'file=@logo192.png;type=image/png'
   const auth = useSelector((state) => state.authToken).accessToken;
   const userinfo = parseJwt(auth);
-  const line = '내 소개';
+
   // const [file,setFile]=useState();
 
   return (
     <>
+      <section className="sidebackground"></section>
       <section className="side">
         <div className="imgwrap">
           <img src={loginuser} alt="" />
@@ -49,13 +54,13 @@ const Userside = () => {
         <p>{userinfo.nickname} 님 </p>
         <ul>
           <li>
-            <Link to="/introduction">{line}</Link>
+            <Link to="/introduction" className={isActive ? 'active' : ''} onClick={""}>🎆 내소개</Link>
           </li>
           <li>
-            <Link to="/mypage">활동내역</Link>
+            <Link to="/mypage" className={isActive ? 'active' : ''} onClick={""}>🧥 활동내역</Link>
           </li>
           <li>
-            <Link to="/account">회원정보수정 및 탈퇴</Link>
+            <Link to="/account" className={isActive ? 'active' : ''} onClick={""}>🐹 회원정보수정 및 탈퇴</Link>
           </li>
         </ul>
         <Logout />

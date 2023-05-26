@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import "./studyroomdetail.scss";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";

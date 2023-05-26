@@ -52,7 +52,7 @@ const Mypage = ({ type }) => {
             // 작성글
             `${ROOT_API}/post/list/user/${userId}`,
             {
-              params: { page: 0, size: 10 }, //NOTE 파람스??
+              params: { page: 0, size: 10 },
               headers: {
                 "X-AUTH-TOKEN": auth.accessToken,
               },
@@ -69,7 +69,7 @@ const Mypage = ({ type }) => {
             // 댓글
             `${ROOT_API}/comment/list/user/${userId}`,
             {
-              params: { page: 0, size: 10 }, //NOTE 파람스??
+              params: { page: 0, size: 10 },
               headers: {
                 "X-AUTH-TOKEN": auth.accessToken,
               },
@@ -86,7 +86,7 @@ const Mypage = ({ type }) => {
             // 즐겨찾기 & 스크랩
             `${ROOT_API}/post/list/favorite/${userId}`, //1번
             {
-              params: { page: 0, size: 10 }, //NOTE 파람스??
+              params: { page: 0, size: 10 },
               headers: {
                 "X-AUTH-TOKEN": auth.accessToken,
               },
