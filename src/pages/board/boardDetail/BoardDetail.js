@@ -231,14 +231,13 @@ const BoardDetail = ({ type }) => {
             <FiThumbsUp />
             <p>{post.recommendCount}</p>
           </Button>
-          <BoardCount
+          {/* <BoardCount
             type={"favorite"}
             token={auth.accessToken}
             isOwner={nickname === post.nickname}
             checkStatus={checkStatus}
             setCheckStatus={setCheckStatus}
             postId={post.id}
-            handleClickCancle={handleClickCancle}
             cnt={post.favoriteCount}
           >
             <AiOutlineStar />
@@ -250,11 +249,10 @@ const BoardDetail = ({ type }) => {
             checkStatus={checkStatus}
             setCheckStatus={setCheckStatus}
             postId={post.id}
-            handleClickCancle={handleClickCancle}
             cnt={post.recommendCount}
           >
             <FiThumbsUp />
-          </BoardCount>
+          </BoardCount> */}
         </div>
         <div className={s.notice_reply}>
           <span className={s.title}>답변 0</span>

@@ -24,68 +24,66 @@ const BoardCount = ({
   const [modalS, setModalS] = useState(false);
   const [modalF, setModalF] = useState(false);
   const [modalR, setModalR] = useState(false);
-  async function postCount() {
-    await axios.post(
-      `${ROOT_API}/post/${type}/${postId}`,
-      {},
-      {
-        headers: {
-          "X-AUTH-TOKEN": token,
-        },
-      }
-    );
-  }
-  async function deleteCount() {
-    await axios.delete(`${ROOT_API}/post/${type}/${postId}`, {
-      params: {},
-      headers: {
-        "X-AUTH-TOKEN": token,
-      },
-    });
-  }
-  const handleCount = useMutation(postCount, {
-    onSuccess: () => {
-      console.log("post success");
-      setCheckStatus({ ...checkStatus, [type]: true });
-    },
-    onError: () => {
-      console.log("error");
-    },
-  });
-  useEffect(() => {cnt+=1}, [
-    type === "favorite" ? checkStatus.favorite : checkStatus.recommend,
-  ]);
+  // async function postCount() {
+  //   await axios.post(
+  //     `${ROOT_API}/post/${type}/${postId}`,
+  //     {},
+  //     {
+  //       headers: {
+  //         "X-AUTH-TOKEN": token,
+  //       },
+  //     }
+  //   );
+  // }
+  // async function deleteCount() {
+  //   await axios.delete(`${ROOT_API}/post/${type}/${postId}`, {
+  //     params: {},
+  //     headers: {
+  //       "X-AUTH-TOKEN": token,
+  //     },
+  //   });
+  // }
+  // const handleCount = useMutation(postCount, {
+  //   onSuccess: () => {
+  //     console.log("post success");
+  //     setCheckStatus({ ...checkStatus, [type]: true });
+  //   },
+  //   onError: () => {
+  //     console.log("error");
+  //   },
+  // });
+  useEffect(() => {}, []);
 
   const handleClick = async () => {
     console.log(checkStatus);
     if (token === null) {
       setModalL(true);
-    } else if (isOwner) {
+    } else if (!isOwner) {
       console.log("본인글 추천 및 즐겨찾기 불가");
       setModalS(true);
     } else {
       if (
         type === "favorite" ? !checkStatus.favorite : !checkStatus.recommend
       ) {
-        // await new Promise((r) => setTimeout(r, 1000));
-        // axios
-        //   .post(
-        //     `${ROOT_API}/post/${type}/${postId}`,
-        //     {
-        //       //요청데이터
-        //     },
-        //     {
-        //       headers: {
-        //         "X-AUTH-TOKEN": token,
-        //       },
-        //     }
-        //   )
-        //   .then(() => {
-        //     setCheckStatus({ ...checkStatus, [type]: true });
-        //   })
-        //   .catch((error) => console.log(error));
-        console.log(handleCount);
-        handleCount.mutate();
+        await new Promise((r) => setTimeout(r, 1000));
+        axios
+          .post(
+            `${ROOT_API}/post/${type}/${postId}`,
+            {
+              //요청데이터
+            },
+            {
+              headers: {
+                "X-AUTH-TOKEN": token,
+              },
+            }
+          )
+          .then(() => {
+            setCheckStatus({ ...checkStatus, [type]: true });
+          })
+          .catch((error) => console.log(error));
+        // console.log(handleCount);
+        // handleCount.mutate();
       } else {
         type === "favorite" ? setModalF(true) : setModalR(true);
       }
