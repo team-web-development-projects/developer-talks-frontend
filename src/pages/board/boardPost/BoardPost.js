@@ -73,7 +73,7 @@ export default function BoardPost({ type }) {
         >
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.
-          <button onClick={() => navigate(`/${getType}/list`)}>확인</button>
+          <button onClick={() => navigate(`/${getType}`)}>확인</button>
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>

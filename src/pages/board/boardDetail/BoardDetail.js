@@ -11,6 +11,7 @@ import Button from "components/button/Button";
 import { AiOutlineStar } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import BoardCount from "components/boardCount/BoardCount";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -23,7 +24,7 @@ const BoardDetail = ({ type }) => {
   const [modalD, setModalD] = useState(false);
   const [modalF, setModalF] = useState(false);
   const [modalR, setModalR] = useState(false);
-  const [modalS, setModalS]=useState(false);
+  const [modalS, setModalS] = useState(false);
 
   useEffect(() => {
     axios
@@ -47,7 +48,6 @@ const BoardDetail = ({ type }) => {
         .then(({ data }) => {
           setCheckStatus(data);
           console.log(data);
-          console.log("nickname parseJWT: ", nickname);
         })
         .catch((error) => console.log(error));
     }
@@ -71,11 +71,10 @@ const BoardDetail = ({ type }) => {
     axios
       .delete(`${ROOT_API}/${type}/${postId}`, {
         headers: {
-          "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then((res) => setModalD(true))
+      .then(() => setModalD(true))
       .catch((error) => console.log(error));
   };
   const clickUpdate = () => {
@@ -106,7 +105,7 @@ const BoardDetail = ({ type }) => {
           )
           .then(() => {
             setCheckStatus({ ...checkStatus, ["favorite"]: true });
-            
+            setPost({ ...post, ["favorite"]: post.favorite + 1 });
           })
           .catch((error) => console.log(error));
       } else {
@@ -120,7 +119,7 @@ const BoardDetail = ({ type }) => {
       setModalL(true);
     } else if (nickname === post.nickname) {
       console.log("본인글 추천 불가");
-      setModalS(true)
+      setModalS(true);
     } else {
       if (!checkStatus.recommend) {
         await new Promise((r) => setTimeout(r, 1000));
@@ -149,18 +148,15 @@ const BoardDetail = ({ type }) => {
   const handleClickCancle = async (type) => {
     await new Promise((r) => setTimeout(r, 1000));
     axios
-      .delete(
-        `${ROOT_API}/post/${type}/${post.id}`,
-        {
-          headers: {
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      .delete(`${ROOT_API}/post/${type}/${post.id}`, {
+        headers: {
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
       .then((response) => {
         console.log(response);
         setCheckStatus({ ...checkStatus, [type]: false });
-        navigate(-1)
+        navigate(-1);
       })
       .catch((error) => console.log(error));
   };
@@ -186,7 +182,7 @@ const BoardDetail = ({ type }) => {
         <BasicModal setOnModal={() => setModalF()}>
           즐겨찾기를 취소하시겠습니까?
           <br />
-          <button onClick={()=>handleClickCancle("favorite")}>확인</button>
+          <button onClick={() => handleClickCancle("favorite")}>확인</button>
           <br />
         </BasicModal>
       )}
@@ -194,7 +190,7 @@ const BoardDetail = ({ type }) => {
         <BasicModal setOnModal={() => setModalR()}>
           추천을 취소하시겠습니까?
           <br />
-          <button onClick={()=>handleClickCancle("recommend")}>확인</button>
+          <button onClick={() => handleClickCancle("recommend")}>확인</button>
           <br />
         </BasicModal>
       )}
@@ -235,6 +231,30 @@ const BoardDetail = ({ type }) => {
             <FiThumbsUp />
             <p>{post.recommendCount}</p>
           </Button>
+          <BoardCount
+            type={"favorite"}
+            token={auth.accessToken}
+            isOwner={nickname === post.nickname}
+            checkStatus={checkStatus}
+            setCheckStatus={setCheckStatus}
+            postId={post.id}
+            handleClickCancle={handleClickCancle}
+            cnt={post.favoriteCount}
+          >
+            <AiOutlineStar />
+          </BoardCount>
+          <BoardCount
+            type={"recommend"}
+            token={auth.accessToken}
+            isOwner={nickname === post.nickname}
+            checkStatus={checkStatus}
+            setCheckStatus={setCheckStatus}
+            postId={post.id}
+            handleClickCancle={handleClickCancle}
+            cnt={post.recommendCount}
+          >
+            <FiThumbsUp />
+          </BoardCount>
         </div>
         <div className={s.notice_reply}>
           <span className={s.title}>답변 0</span>

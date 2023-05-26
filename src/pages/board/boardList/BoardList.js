@@ -20,16 +20,15 @@ const BoardList = ({ type }) => {
   const refetchQuery = useRef();
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleClick = () => {
+  const handleClickPost = () => {
     auth && auth.accessToken
       ? navigate(`/${type === "post" ? "board" : "qna"}/post`)
       : setModal(true);
   };
 
-  async function fetchProjectsOrSearch() {
+  async function getBoardList() {
     if (keyword) {
       const { data } = await axios.get(`${ROOT_API}/${type}/search`, {
         params: { keyword: keyword, page: currentPage - 1, size: 10 },
@@ -57,7 +56,7 @@ const BoardList = ({ type }) => {
     refetch,
   } = useQuery({
     queryKey: [type, currentPage],
-    queryFn: fetchProjectsOrSearch,
+    queryFn: getBoardList,
   });
   refetchQuery.current = refetch;
   useEffect(() => {
@@ -89,7 +88,7 @@ const BoardList = ({ type }) => {
         <SearchInput type={type}/>
         <div className={s.bottom}>
           <Select init="최신순" options={["최신순", "조회순"]} />
-          <Button onClick={handleClick}>✏️작성하기</Button>
+          <Button onClick={handleClickPost}>✏️작성하기</Button>
         </div>
       </div>
       <ul>
