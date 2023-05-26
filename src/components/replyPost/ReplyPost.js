@@ -104,9 +104,11 @@ const ReplyPost = ({ nickname }) => {
             <ReplyItem
               key={reply.id}
               id={reply.id}
+              postId={postId}
               content={reply.content}
               nickname={reply.nickname}
               secret={reply.secret}
+              childrenList={reply.childrenList}
             />
           ))
         ) : (
