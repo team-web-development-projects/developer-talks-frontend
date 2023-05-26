@@ -10,13 +10,23 @@
   font-size: 17px;
   align-items: center;
 
+  a {
+    &:hover {
+      color: #a4a4a4;
+    }
+  }
+
   @include media-ta {
     justify-content: space-between;
   }
 
   .logo {
     @include font('cc');
+    padding-left: 10px;
     font-size: 20px;
+    background: url(dt.png);
+    background-size: 30px;
+    background-repeat: no-repeat;
 
     a {
       padding: 26px;
@@ -69,5 +79,18 @@
   .menuBar {
     display: none;
     padding: 20px;
+  }
+  .header-user {
+    position: relative;
+    text-align: center;
+    span {
+      position: absolute;
+      width: max-content;
+      left: 0;
+      right: 0;
+      margin: auto;
+      font-size: 14px;
+      bottom: -16px;
+    }
   }
 }

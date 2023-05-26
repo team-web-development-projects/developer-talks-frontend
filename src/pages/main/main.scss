@@ -1,0 +1,25 @@
+.main-page {
+  padding-top: 20px;
+  section {
+    strong {
+      display: block;
+      padding: 16px 20px;
+      width: 100%;
+      background: #767676;
+      color: white;
+      border-radius: 16px;
+      box-sizing: border-box;
+    }
+  }
+  ul {
+    margin-top: 14px;
+  }
+  li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    cursor: pointer;
+    p {
+      font-weight: 600;
+    }
+  }
+}
