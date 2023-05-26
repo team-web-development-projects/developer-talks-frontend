@@ -40,6 +40,9 @@ const Regist = () => {
           nickname: data.userNickname,
           userid: data.userId,
           password: data.password,
+          skills: "DJANGO",
+          "description": "string",
+          "registrationId": "string"
         },
         {
           headers: {
