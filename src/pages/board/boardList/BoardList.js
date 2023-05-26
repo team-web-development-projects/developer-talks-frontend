@@ -85,7 +85,8 @@ const BoardList = ({ type }) => {
       <div className={s.header}>
         <SearchInput type={type} />
         <div className={s.bottom}>
-          <Select init="최신순" options={["최신순", "조회순"]} />
+          {/* TODO: 옛날순 정렬 */}
+          <Select init="최신순" options={["최신순", "옛날순"]} />
           <Button onClick={handleClickPost}>✏️작성하기</Button>
         </div>
       </div>

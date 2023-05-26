@@ -12,6 +12,7 @@ import { AiOutlineStar } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import BoardCount from "components/boardCount/BoardCount";
+import ReplyPost from 'components/replyPost/ReplyPost';
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -254,14 +255,8 @@ const BoardDetail = ({ type }) => {
             <FiThumbsUp />
           </BoardCount> */}
         </div>
-        <div className={s.notice_reply}>
-          <span className={s.title}>답변 0</span>
-          <Editor />
-          <button>작성</button>
-          <ul className={s.replies}>
-            <BoardReply type={type} />
-          </ul>
-        </div>
+        <ReplyPost nickname={nickname}/>
+        <BoardReply type={type} />
       </div>
     </>
   );

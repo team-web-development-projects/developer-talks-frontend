@@ -41,33 +41,4 @@
       margin:0px 10px;
     }
   }
-
-  .notice_reply {
-    margin-top: 40px;
-    .title {
-      margin-top: 30px;
-      color: #8b8b8b;
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    input {
-      margin-top: 30px;
-      width:96%;
-      border: solid 1px #cfcccc;
-      border-radius: 10px;
-      padding: 20px;
-      font-size: 20px;
-    }
-    .replies{
-      margin-top: 50px;
-      padding-top: 40px;
-      border-top: solid 1px #cfcccc;
-    }
-    :global(.ck-editor__editable) {
-      min-height: 200px;
-      max-height: 200px;
-      // height: 60px;
-    }
-  }
 }
