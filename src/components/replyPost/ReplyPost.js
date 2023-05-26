@@ -7,21 +7,29 @@ import { useSelector } from "react-redux";
 import CkEditor from "components/ckeditor/CkEditor";
 import Button from "components/button/Button";
 import { BsLock, BsUnlock } from "react-icons/bs";
+import ReplyItem from "components/replyItem/ReplyItem";
 
 const ReplyPost = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
   const { postId } = useParams();
   const [replyList, setReplyList] = useState([]);
-  const [replyLength, setReplyLength]= useState(0);
+  const [replyLength, setReplyLength] = useState(0);
   const [isToggle, setIsToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
     secret: false,
   });
+  const scrollDown = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
   const handleClick = () => {
     setIsToggle((prev) => !prev);
     console.log("toggle값: ", isToggle);
   };
+  //TODO: 시크릿 에러 잡기
   const toggleSecret = () => {
     setForm((prevForm) => {
       return { ...prevForm, secret: !prevForm.secret };
@@ -44,12 +52,14 @@ const ReplyPost = ({ nickname }) => {
         }
       )
       .then((response) => {
-        setReplyLength(prev=>prev+1);
+        setReplyLength((prev) => prev + 1);
+        scrollDown();
         console.log(response);
       })
       .catch((error) => console.log(error));
   };
   useEffect(() => {
+    setIsToggle(false);
     axios
       .get(`${ROOT_API}/comment/list/post/${postId}`, {
         headers: {
@@ -73,7 +83,8 @@ const ReplyPost = ({ nickname }) => {
             <CkEditor form={form} setForm={setForm} placeholder="" />
             <div className={s.btnRgn}>
               <div className={s.secret} onClick={toggleSecret}>
-                {form.secret ? <BsLock size={20}/> : <BsUnlock size={20}/>}시크릿 댓글
+                {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+                시크릿 댓글
               </div>
               <div className={s.cancel} onClick={handleClick}>
                 취소
@@ -88,9 +99,19 @@ const ReplyPost = ({ nickname }) => {
             {nickname}님, 댓글을 작성해보세요.
           </div>
         )}
-        {replyList ? <div>ggggg</div> : <div>등록된 답변이 없습니다.</div>}
-        <div></div>
-        <ul className={s.replies}>{/* <BoardReply type={type} /> */}</ul>
+        {replyList ? (
+          replyList.map((reply) => (
+            <ReplyItem
+              key={reply.id}
+              id={reply.id}
+              content={reply.content}
+              nickname={reply.nickname}
+              secret={reply.secret}
+            />
+          ))
+        ) : (
+          <div>등록된 답변이 없습니다.</div>
+        )}
       </div>
     </>
   );

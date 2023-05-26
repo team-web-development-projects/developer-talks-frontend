@@ -54,20 +54,6 @@ const BoardDetail = ({ type }) => {
     }
   }, []);
 
-  // TODO: 백엔드 통신: 답변 가져오기
-  const editPost = () => {
-    // axios
-    //   .put(`${ROOT_API}/${type}/${postId}`, {
-    //     body: {},
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "X-AUTH-TOKEN": auth.accessToken,
-    //     },
-    //   })
-    //   .then((res) => setPost(res.data))
-    //   .catch((error) => console.log(error));
-  };
-
   const deletePost = () => {
     axios
       .delete(`${ROOT_API}/${type}/${postId}`, {
@@ -256,7 +242,6 @@ const BoardDetail = ({ type }) => {
           </BoardCount> */}
         </div>
         <ReplyPost nickname={nickname}/>
-        <BoardReply type={type} />
       </div>
     </>
   );
