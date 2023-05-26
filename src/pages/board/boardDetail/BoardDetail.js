@@ -194,6 +194,7 @@ const BoardDetail = ({ type }) => {
             <span>{post.createDate} •</span>
             <span>조회수 {post.viewCount}</span>
           </div>
+          <p className={s.title}>{post.title}</p>
           {nickname === post.nickname && (
             <div>
               <button onClick={clickUpdate}>수정</button>
@@ -202,7 +203,6 @@ const BoardDetail = ({ type }) => {
           )}
         </header>
         <main>
-          <span className={s.title}>{post.title}</span>
           {/* TODO: content 내용 이슈 */}
           <div
             className={s.content}
