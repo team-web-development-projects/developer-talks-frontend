@@ -10,12 +10,12 @@ import { SET_TOKEN } from 'store/Auth';
 
 import './Regist.scss';
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
-  const notify = () => toast("Wow so easy !");
+  // const notify = () => toast("Wow so easy !");
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const useridRef = useRef(null);
@@ -197,20 +197,20 @@ const Regist = () => {
     console.log('dd', selectedTags.tags, typeof (selectedTags.tags))
   };
 
-  toast('🦄 Wow so easy!', {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-  });
+  // toast('🦄 Wow so easy!', {
+  //   position: "top-right",
+  //   autoClose: 5000,
+  //   hideProgressBar: false,
+  //   closeOnClick: true,
+  //   pauseOnHover: true,
+  //   draggable: true,
+  //   progress: undefined,
+  //   theme: "light",
+  // });
   return (
 
     <div className="regist-page page">
-      <button onClick={notify}>Notify !</button>
+      {/* <button onClick={notify}>Notify !</button>
       <ToastContainer
         position="top-left"
         autoClose={5000}
@@ -222,7 +222,7 @@ const Regist = () => {
         draggable
         pauseOnHover
         theme="light"
-      />
+      /> */}
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />

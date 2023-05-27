@@ -55,7 +55,7 @@ function App() {
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
       console.log('토큰있음');
-      navigate('/agreement', { replace: true });
+      navigate('/', { replace: true });
       console.log("구글 로그인 시 리다이렉션")
     }
   }, [dispatch, navigate, location]);
