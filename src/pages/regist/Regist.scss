@@ -20,6 +20,21 @@
   }
 }
 
+.description {
+
+  input {
+    width: 97%;
+    height: 50px;
+    padding: 10px;
+
+  }
+}
+
+.typechange {
+  display: inline-block;
+  cursor: pointer;
+}
+
 /*NOTE 테이블스타일*/
 .userinfoTable {
   width: 100%;
