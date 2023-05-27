@@ -7,21 +7,43 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
-import Footer from '../../components/footer/Footer';
+
 import './Regist.scss';
+import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
+import { ToastContainer, toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
+  const notify = () => toast("Wow so easy !");
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const useridRef = useRef(null);
   const usernicknameRef = useRef(null);
-
+  const [selectedTags, setSelectedTags] = useState({
+    tags: [],
+    authJoin: true,
+    joinableCount: 1,
+  });
   const [modal, setModal] = useState(false);
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [duplicateId, setDuplicateId] = useState('');
   const [duplicateNickName, setDuplicateNickName] = useState('');
+  let [inputEmail, setInputEmail] = useState('');
+  const [verityEmailcheck, setVerityEmailcheck] = useState(false);
+  const [compareEmailcheck, setCompareEmailcheck] = useState(false);
 
+  const [code, setCode] = useState("")
+  const tags = [
+    "DJANGO",
+    "SPRING",
+    "JAVASCRIPT",
+    "JAVA",
+    "PYTHON",
+    "CPP",
+    "REACT",
+    "AWS",
+  ];
   const {
     register,
     handleSubmit,
@@ -31,59 +53,64 @@ const Regist = () => {
   } = useForm({ mode: 'onChange' });
 
   const onSubmit = async (data) => {
+
     await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/sign-up`,
-        {
-          email: data.userEmail,
-          nickname: data.userNickname,
-          userid: data.userId,
-          password: data.password,
-          skills: "DJANGO",
-          "description": "string",
-          "registrationId": "string"
-        },
-        {
-          headers: {
-            API_HEADER,
+    if (verityEmailcheck && compareEmailcheck && duplicateId && duplicateNickName) {
+      axios
+        .post(
+          `${ROOT_API}/sign-up`,
+          {
+            email: data.userEmail,
+            nickname: data.userNickname,
+            userid: data.userId,
+            password: data.password,
+            skills: "DJANGO",
+            "description": "string",
+            "registrationId": "string"
           },
-        }
-      )
-      .then(function (response) {
-        console.log('회원가입 성공:', response);
-        axios
-          .post(
-            `${ROOT_API}/sign-in`,
-            {
-              userid: data.userId,
-              password: data.password,
+          {
+            headers: {
+              API_HEADER,
             },
-            {
-              headers: {
-                API_HEADER,
+          }
+        )
+        .then(function (response) {
+          console.log('회원가입 성공:', response);
+          axios
+            .post(
+              `${ROOT_API}/sign-in`,
+              {
+                userid: data.userId,
+                password: data.password,
               },
-            }
-          )
-          .then(function (response) {
-            console.log('로그인 성공:', response);
-            dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-            localStorage.setItem('token', response.data.accessToken);
-            setModal(true);
-            reset();
-          })
-          .catch(function (error) {
-            console.log('로그인 실패: ', error.response.data);
-          });
-      })
-      .catch(function (error) {
-        console.log('회원가입 실패:', error.response.data);
-      });
-    // NOTE: 이곳에서 통신
+              {
+                headers: {
+                  API_HEADER,
+                },
+              }
+            )
+            .then(function (response) {
+              console.log('로그인 성공:', response);
+              dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+              localStorage.setItem('token', response.data.accessToken);
+              setModal(true);
+              reset();
+            })
+            .catch(function (error) {
+              console.log('로그인 실패: ', error.response.data);
+            });
+        })
+        .catch(function (error) {
+          console.log('회원가입 실패:', error.response.data);
+        });
+      // NOTE: 이곳에서 통신
+    } else {
+      alert("중복체크나 인증을 안했어요")
+    }
   };
 
   let textTemp = '';
-
+  const authlogins = 'D-Talks'; //TODO auth 구글,네이버, 카카오
   const validateDuplicate = (data) => {
     const type = data;
     const value = watch(data);
@@ -103,8 +130,36 @@ const Regist = () => {
       }
     });
   };
+  const uploadImage = (imageFile) => {//NOTE 프로필 이미지
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    console.log(imageFile, "ddddddd")
 
-  const verityEmail = (e) => {
+    return axios.post(`${ROOT_API}/users/profile/image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    console.log(file, "dkfjdkjf")
+    console.log(file.name, "dkfjdkjf")
+    if (file.name) {
+      uploadImage(file.name)
+        .then((response) => {
+          // 업로드 성공 시 수행할 작업
+          console.log('Upload success:', response.data); //TODO 콘솔창에 정보까지는 나오는데 500에러
+          return setImageFile(file.name);
+        })
+        .catch((error) => {
+          // 업로드 실패 시 수행할 작업
+          console.error('Upload error:', error);
+        });
+    }
+
+  };
+  const verityEmail = (e) => { //NOTE 이메일 인증
     e.preventDefault();
     console.log('dc', watch().userEmail);
     axios
@@ -112,13 +167,62 @@ const Regist = () => {
         params: { email: watch().userEmail },
       })
       .then(function (response) {
+        setVerityEmailcheck(true);
         console.log('이메일 보내기:', response);
+        setCode(response.data.code)
         alert('이메일을 전송했습니다.');
       });
   };
+  const compareEmail = (e) => { //NOTE 확인
+    setCompareEmailcheck(true);
+    e.preventDefault();
+    inputEmail = code ? alert("인증완료") : alert("인증실패")
 
+  }
+  const handleInputChange = (e) => {
+    setInputEmail(e.target.value);
+  };
+  const clickTag = (tag) => { //NOTE 기술 테그
+    if (selectedTags.tags.includes(tag)) {
+      setSelectedTags({
+        ...selectedTags,
+        tags: selectedTags.tags.filter((selectedTag) => selectedTag !== tag),
+      });
+    } else {
+      setSelectedTags({
+        ...selectedTags,
+        tags: [...selectedTags.tags, tag],
+      });
+    }
+    console.log('dd', selectedTags.tags, typeof (selectedTags.tags))
+  };
+
+  toast('🦄 Wow so easy!', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
   return (
+
     <div className="regist-page page">
+      <button onClick={notify}>Notify !</button>
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
@@ -129,9 +233,58 @@ const Regist = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="form_1">
           <legend>정보입력</legend>
+
+          <div className='userregistpage'></div>
+          <div className="headername">
+            <p>{authlogins}계정 회원가입</p>
+            <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
+          </div>
+          <div className="prople">
+            <div className="imgwrap">
+              <img src={imageFile} alt="프로필이미지" />
+              <input
+                accept="image/*"
+                // ref={inputRef}
+                type="file"
+                name="프로필이미지"
+                id=""
+                onChange={handleFileChange}
+              />
+            </div>
+          </div>
+          <span>프로필 이미지 선택☝️</span>
+
+          <div className="gaider">
+            <span>🙏추가 안내</span>
+            <ul>
+              <li><span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.</li>
+              <li><span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.</li>
+            </ul>
+          </div>
+
+          <label>관심있는 태그입력</label>
+          <div className='tagalign'>
+            <div className={s.tags}>
+              {tags.map((item, index) => (
+                <span
+                  key={index}
+                  onClick={() => clickTag(item)}
+                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""
+                    }`}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="line-style">
+            <div className="jb-division-line"></div>
+            <span>회원가입에 필요한 기본정보를 입력해주세요(선택입니다)</span>
+            <div className="jb-division-line"></div>
+          </div>
           <h2>Developer-Talks 계정 만들기</h2>
           <p className="chk">*필수사항 입니다.</p>
-          <table>
+          <table className='userinfoTable'>
             <thead />
             <tbody>
               <tr>
@@ -174,8 +327,9 @@ const Regist = () => {
                     id="userEmails"
                     placeholder="입력해주세요"
                     tabIndex="1"
+                    {...register('username', { required: true })} onChange={handleInputChange}
                   />
-                  <button>확인</button>
+                  <button onClick={compareEmail}>확인</button>
                 </td>
               </tr>
               <tr>
@@ -352,16 +506,16 @@ const Regist = () => {
               </tr>
             </tbody>
           </table>
+
         </fieldset>
-        <div className="submit">
+        <div className="registSubmit">
           <button type="submit" tabIndex="7" disabled={isSubmitting}>
             {' '}
             가입하기
           </button>
         </div>
       </Form>
-      <Footer />
-    </div>
+    </div >
   );
 };
 
