@@ -1,13 +1,10 @@
-import React from "react";
-import s from "./boardCount.module.scss";
-import Button from "components/button/Button";
-import { useState } from "react";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Button from "components/button/Button";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { ROOT_API } from "constants/api";
-import { useMutation, useQuery } from "react-query";
-import { useEffect } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import s from "./boardCount.module.scss";
 
 const BoardCount = ({
   type,
@@ -17,9 +14,9 @@ const BoardCount = ({
   checkStatus,
   setCheckStatus,
   postId,
-  cnt,
+  setPost,
 }) => {
-  const navigate = useNavigate();
+  const isFavorite = type === "favorite";
   const [modalL, setModalL] = useState(false);
   const [modalS, setModalS] = useState(false);
   const [modalF, setModalF] = useState(false);
@@ -52,19 +49,16 @@ const BoardCount = ({
   //     console.log("error");
   //   },
   // });
-  useEffect(() => {}, []);
 
   const handleClick = async () => {
-    console.log(checkStatus);
+    console.log("isFavorite: ", isFavorite);
     if (token === null) {
       setModalL(true);
-    } else if (!isOwner) {
+    } else if (isOwner) {
       console.log("본인글 추천 및 즐겨찾기 불가");
       setModalS(true);
     } else {
-      if (
-        type === "favorite" ? !checkStatus.favorite : !checkStatus.recommend
-      ) {
+      if (isFavorite ? !checkStatus.favorite : !checkStatus.recommend) {
         await new Promise((r) => setTimeout(r, 1000));
         axios
           .post(
@@ -78,18 +72,25 @@ const BoardCount = ({
               },
             }
           )
-          .then(() => {
+          .then(({ data }) => {
             setCheckStatus({ ...checkStatus, [type]: true });
+            isFavorite
+              ? setPost((prev) => {
+                  return { ...prev, favoriteCount: data };
+                })
+              : setPost((prev) => {
+                  return { ...prev, recommendCount: data };
+                });
           })
           .catch((error) => console.log(error));
         // console.log(handleCount);
         // handleCount.mutate();
       } else {
-        type === "favorite" ? setModalF(true) : setModalR(true);
+        isFavorite ? setModalF(true) : setModalR(true);
       }
     }
   };
-  const handleClickCancle = async (type) => {
+  const handleClickCancle = async () => {
     await new Promise((r) => setTimeout(r, 1000));
     axios
       .delete(`${ROOT_API}/post/${type}/${postId}`, {
@@ -97,9 +98,19 @@ const BoardCount = ({
           "X-AUTH-TOKEN": token,
         },
       })
-      .then(() => {
+      .then(({ data }) => {
         setCheckStatus({ ...checkStatus, [type]: false });
-        navigate(-1);
+        if (isFavorite) {
+          setPost((prev) => {
+            return { ...prev, favoriteCount: data };
+          });
+          setModalF(false);
+        } else {
+          setPost((prev) => {
+            return { ...prev, recommendCount: data };
+          });
+          setModalR(false);
+        }
       })
       .catch((error) => console.log(error));
   };
@@ -123,7 +134,7 @@ const BoardCount = ({
         <BasicModal setOnModal={() => setModalF()}>
           즐겨찾기를 취소하시겠습니까?
           <br />
-          <button onClick={() => handleClickCancle("favorite")}>확인</button>
+          <button onClick={handleClickCancle}>확인</button>
           <br />
         </BasicModal>
       )}
@@ -131,13 +142,12 @@ const BoardCount = ({
         <BasicModal setOnModal={() => setModalR()}>
           추천을 취소하시겠습니까?
           <br />
-          <button onClick={() => handleClickCancle("recommend")}>확인</button>
+          <button onClick={handleClickCancle}>확인</button>
           <br />
         </BasicModal>
       )}
       <Button classname={s.btn} onClick={() => handleClick(type)}>
         {children}
-        <p>{cnt}</p>
       </Button>
     </>
   );

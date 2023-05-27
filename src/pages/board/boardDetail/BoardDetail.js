@@ -1,18 +1,15 @@
 import axios from "axios";
+import BoardCount from "components/boardCount/BoardCount";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import ReplyPost from "components/replyPost/ReplyPost";
 import { ROOT_API } from "constants/api";
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import s from "./boardDetail.module.scss";
-import BoardReply from "components/boardReply/BoardReply";
-import { useSelector } from "react-redux";
-import Editor from "components/editor/Editor";
 import { parseJwt } from "hooks/useParseJwt";
-import Button from "components/button/Button";
+import { useEffect, useState } from "react";
 import { AiOutlineStar } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import BoardCount from "components/boardCount/BoardCount";
-import ReplyPost from 'components/replyPost/ReplyPost';
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import s from "./boardDetail.module.scss";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -21,11 +18,7 @@ const BoardDetail = ({ type }) => {
   const [post, setPost] = useState([]);
   const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
-  const [modalL, setModalL] = useState(false);
   const [modalD, setModalD] = useState(false);
-  const [modalF, setModalF] = useState(false);
-  const [modalR, setModalR] = useState(false);
-  const [modalS, setModalS] = useState(false);
 
   useEffect(() => {
     axios
@@ -69,121 +62,13 @@ const BoardDetail = ({ type }) => {
       state: { title: post.title, content: post.content },
     });
   };
-  const handleClickFavorite = async () => {
-    if (auth.accessToken === null) {
-      setModalL(true);
-    } else if (nickname === post.nickname) {
-      console.log("본인글 즐겨찾기 불가");
-      setModalS(true);
-    } else {
-      if (!checkStatus.favorite) {
-        await new Promise((r) => setTimeout(r, 1000));
-        axios
-          .post(
-            `${ROOT_API}/post/favorite/${post.id}`,
-            {
-              //요청데이터
-            },
-            {
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
-          .then(() => {
-            setCheckStatus({ ...checkStatus, ["favorite"]: true });
-            setPost({ ...post, ["favorite"]: post.favorite + 1 });
-          })
-          .catch((error) => console.log(error));
-      } else {
-        console.log("즐겨찾기는 한 번만 누를 수 있어");
-        setModalF(true);
-      }
-    }
-  };
-  const handleClickRecommend = async () => {
-    if (auth.accessToken === null) {
-      setModalL(true);
-    } else if (nickname === post.nickname) {
-      console.log("본인글 추천 불가");
-      setModalS(true);
-    } else {
-      if (!checkStatus.recommend) {
-        await new Promise((r) => setTimeout(r, 1000));
-        axios
-          .post(
-            `${ROOT_API}/post/recommend/${post.id}`,
-            {
-              //요청데이터
-            },
-            {
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
-          .then(() => {
-            setCheckStatus({ ...checkStatus, ["recommend"]: true });
-          })
-          .catch((error) => console.log(error));
-      } else {
-        console.log("추천은 한 번만 누를 수 있어");
-        setModalR(true);
-      }
-    }
-  };
-  const handleClickCancle = async (type) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .delete(`${ROOT_API}/post/${type}/${post.id}`, {
-        headers: {
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        setCheckStatus({ ...checkStatus, [type]: false });
-        navigate(-1);
-      })
-      .catch((error) => console.log(error));
-  };
   return (
     <>
-      {modalL && (
-        <BasicModal setOnModal={() => setModalL()}>
-          로그인한 사용자만 이용할 수 있어요☺️
-          <br />
-          <Link to="/login">[로그인 하러 가기]</Link>
-          <br />
-        </BasicModal>
-      )}
       {modalD && (
         <BasicModal setOnModal={() => setModalD()}>
           게시글이 삭제되었습니다.
           <br />
           <button onClick={() => navigate(-1)}>확인</button>
-          <br />
-        </BasicModal>
-      )}
-      {modalF && (
-        <BasicModal setOnModal={() => setModalF()}>
-          즐겨찾기를 취소하시겠습니까?
-          <br />
-          <button onClick={() => handleClickCancle("favorite")}>확인</button>
-          <br />
-        </BasicModal>
-      )}
-      {modalR && (
-        <BasicModal setOnModal={() => setModalR()}>
-          추천을 취소하시겠습니까?
-          <br />
-          <button onClick={() => handleClickCancle("recommend")}>확인</button>
-          <br />
-        </BasicModal>
-      )}
-      {modalS && (
-        <BasicModal setOnModal={() => setModalS()}>
-          본인이 작성한 글은 즐겨찾기 및 추천을 할 수 없어요🥲
           <br />
         </BasicModal>
       )}
@@ -210,24 +95,17 @@ const BoardDetail = ({ type }) => {
           ></div>
         </main>
         <div className={s.countContainer}>
-          <Button classname={s.btn} onClick={handleClickFavorite}>
-            <AiOutlineStar />
-            <p>{post.favoriteCount}</p>
-          </Button>
-          <Button classname={s.btn} onClick={handleClickRecommend}>
-            <FiThumbsUp />
-            <p>{post.recommendCount}</p>
-          </Button>
-          {/* <BoardCount
+          <BoardCount
             type={"favorite"}
             token={auth.accessToken}
             isOwner={nickname === post.nickname}
             checkStatus={checkStatus}
             setCheckStatus={setCheckStatus}
             postId={post.id}
-            cnt={post.favoriteCount}
+            setPost={setPost}
           >
             <AiOutlineStar />
+            <p>{post.favoriteCount}</p>
           </BoardCount>
           <BoardCount
             type={"recommend"}
@@ -236,12 +114,13 @@ const BoardDetail = ({ type }) => {
             checkStatus={checkStatus}
             setCheckStatus={setCheckStatus}
             postId={post.id}
-            cnt={post.recommendCount}
+            setPost={setPost}
           >
             <FiThumbsUp />
-          </BoardCount> */}
+            <p>{post.recommendCount}</p>
+          </BoardCount>
         </div>
-        <ReplyPost nickname={nickname}/>
+        <ReplyPost nickname={nickname} />
       </div>
     </>
   );
