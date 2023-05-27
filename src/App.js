@@ -14,7 +14,7 @@ import Account from "pages/mypage/Account";
 import Introduction from "pages/mypage/Introduction";
 import Mypage from "pages/mypage/Mypage";
 import Regist from "pages/regist/Regist";
-import StudyRoomDetqil from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
+import StudyRoomDetail from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
 import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
 import { useEffect } from "react";
@@ -28,8 +28,8 @@ import {
 } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
 import { getCookieToken, setRefreshToken } from 'store/Cookie';
-import { isDev } from 'util/Util';
 import './assets/style/index.scss';
+import StudyRoomInfo from "pages/studyRoom/studyRoomInfo/StudyRoomInfo";
 
 function App() {
   const navigate = useNavigate();
@@ -38,12 +38,6 @@ function App() {
   const auth = useSelector((state) => state.authToken);
 
   useEffect(() => {
-    if (isDev) {
-      console.log('dev');
-    } else {
-      console.log('prod');
-    }
-
     if (window.location.href.includes('accessToken')) {
       const accessToken = window.location.href.split('accessToken=')[1];
       const refreshToken = window.location.href
@@ -98,8 +92,12 @@ function App() {
           />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
           <Route
+            path="/studyroom/info/:postId"
+            element={<StudyRoomInfo type="post" />}
+          />
+          <Route
             path="/studyroom/:postId"
-            element={<StudyRoomDetqil type="post" />}
+            element={<StudyRoomDetail type="post" />}
           />
 
           <Route path="qna" element={<BoardList type="questions" />} />

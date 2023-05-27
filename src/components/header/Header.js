@@ -20,7 +20,6 @@ const Header = () => {
   };
   const location = useLocation(); //url 정보 들어 있음.
 
-  console.log("auth", auth);
   if (auth.accessToken !== null) {
     nickname = parseJwt(auth.accessToken).nickname;
   }
@@ -79,8 +78,6 @@ const Header = () => {
   if (isLoading) return <div>Loading...</div>;
   if (status === "loading") return <div>Loading...</div>;
 
-  console.log("data", data);
-
   // const UserList = users.map((user) => <User />);
 
   // [읽기, 쓰기] = useState('초기값') // 초기값 타입 : string, number ,array, json, boolean(true, false)
@@ -125,13 +122,7 @@ const Header = () => {
           </li>
           <li className="header-user">
             <Link to="/mypage">
-              {userhi ? (
-                <>
-                  <BsFillPersonFill size={24} />
-                </>
-              ) : (
-                <span>{"로그인"}</span>
-              )}
+              <BsFillPersonFill size={24} />
             </Link>
             {nickname && <span>{`${nickname}님`}</span>}
           </li>

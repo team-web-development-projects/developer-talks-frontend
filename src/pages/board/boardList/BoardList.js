@@ -62,7 +62,6 @@ const BoardList = ({ type }) => {
     refetchQuery.current();
   }, [keyword, type]);
 
-
   if (isLoading) return <div>Loading...</div>;
 
   return (

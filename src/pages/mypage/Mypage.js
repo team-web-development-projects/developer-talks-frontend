@@ -19,9 +19,7 @@ const Mypage = ({ type }) => {
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
   }
-  if (auth.accessToken === null) {
-    navigate("/login", { replace: true });
-  }
+  
 
   const onSelect = (type) => {
     setSelect(type);
@@ -99,7 +97,9 @@ const Mypage = ({ type }) => {
         break;
       default:
     }
-    console.log("dd");
+    if (auth.accessToken === null) {
+      navigate("/login", { replace: true });
+    }
   }, [auth.accessToken, navigate, select, userId]);
 
   return (

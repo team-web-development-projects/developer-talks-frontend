@@ -2,24 +2,24 @@ import React from "react";
 import { BiSearch } from "react-icons/bi";
 import s from "./searchInput.module.scss";
 import { useState } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
-const SearchInput = ({type}) => {
-  const t=type==='post'?"board":"qna";
-  const {keyword}=useParams();
-  const navigate=useNavigate();
+const SearchInput = ({ type }) => {
+  const t = type === "post" ? "board" : "qna";
+  const { keyword } = useParams();
+  const navigate = useNavigate();
   const [text, setText] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(text===""){
-      navigate(`/${t}`)
-    }
-    else{
-      navigate(`/${t}/search/${text}`)
+    if (text === "") {
+      navigate(`/${t}`);
+    } else {
+      navigate(`/${t}/search/${text}`);
     }
   };
-  useEffect(()=>setText(keyword||''),[keyword]);
+  useEffect(() => setText(keyword || ""), [keyword]);
   return (
     <form className={s.search} onSubmit={handleSubmit}>
       <input
@@ -29,7 +29,7 @@ const SearchInput = ({type}) => {
         onChange={(e) => setText(e.target.value)}
       />
       <button>
-        <BiSearch size={30}/>
+        <BiSearch size={30} />
       </button>
     </form>
   );

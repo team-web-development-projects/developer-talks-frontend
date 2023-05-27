@@ -219,7 +219,6 @@ const BoardDetail = ({ type }) => {
           )}
         </header>
         <main>
-          <span className={s.title}>{post.title}</span>
           {/* TODO: content 내용 이슈 */}
           <div
             className={s.content}

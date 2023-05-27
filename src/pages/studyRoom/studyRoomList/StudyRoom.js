@@ -21,12 +21,8 @@ const BoardList = ({ type }) => {
   const [secretModal, setecretModal] = useState(false);
   const navigate = useNavigate();
   const refetchQuery = useRef();
-  const [roomId, setRoomId] = useState(-1);
 
-  const [currentPage, setCurrentPage] = useState(
-    pageRouter.state ? pageRouter.state : 1
-  );
-  const postPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearch = () => {
     console.log("search");
@@ -36,42 +32,15 @@ const BoardList = ({ type }) => {
     auth && auth.accessToken ? navigate(`/studyroom/post`) : setModal(true);
   };
 
-  const joinRoomClick = (autoJoin, id, leaderNickname) => {
-    setRoomId(id);
+  const joinRoomClick = (id) => {
     if (auth && auth.accessToken) {
-      autoJoin === true ||
-      leaderNickname === parseJwt(auth.accessToken).nickname
-        ? navigate(`/studyroom/${id}`)
-        : setecretModal(true);
+      navigate(`/studyroom/info/${id}`);
     }
-  };
-
-  const requestRoom = () => {
-    axios
-      .post(
-        `${ROOT_API}/study-room/join/${roomId}`,
-        {
-          id: roomId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("로그인 성공:", response);
-        setecretModal(false);
-      })
-      .catch(function (error) {
-        console.log("로그인 실패: ", error.response);
-      });
   };
 
   async function fetchProjects() {
     const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
-      params: { page: currentPage - 1, size: 10 },
+      params: { page: currentPage - 1, size: 12 },
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,
@@ -80,21 +49,14 @@ const BoardList = ({ type }) => {
     return data;
   }
 
-  const {
-    status,
-    data,
-    error,
-    isFetching,
-    isPreviousData,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
     queryFn: fetchProjects,
   });
   refetchQuery.current = refetch;
 
   useEffect(() => {
+    setCurrentPage(1);
     refetchQuery.current();
   }, []);
 
@@ -110,15 +72,6 @@ const BoardList = ({ type }) => {
           <br />
           <Link to="/login">[로그인 하러 가기]</Link>
           <br />
-        </BasicModal>
-      )}
-      {secretModal && (
-        <BasicModal setOnModal={() => setecretModal()}>
-          생성자의 승인 후 입장할 수 있는 스터디룸입니다.
-          <br />
-          승인 요청 하시겠나요?
-          <button onClick={requestRoom}>요청하기</button>
-          <button onClick={() => setecretModal(false)}>돌아가기</button>
         </BasicModal>
       )}
       <div className={s.banner}>
@@ -141,17 +94,8 @@ const BoardList = ({ type }) => {
             <li
               key={index}
               className={s.card_list}
-              onClick={() =>
-                joinRoomClick(
-                  item.autoJoin,
-                  item.id,
-                  item.studyRoomUsers[0].nickname
-                )
-              }
+              onClick={() => joinRoomClick(item.id)}
             >
-              <div className={s.autojoin}>
-                {item.autoJoin ? <BsUnlock size={24} /> : <BsLock size={24} />}
-              </div>
               <div className={s.title}>{item.title}</div>
               <div className={s.tag}>
                 {item.skills.map((items, indexs) => (
@@ -175,8 +119,8 @@ const BoardList = ({ type }) => {
 
       <div className={s.pageContainer}>
         <Pagination
-          postPerPage={postPerPage}
-          totalPost={data && data.totalElements}
+          currentPage={data.pageable.pageNumber + 1}
+          totalPage={data.totalPages}
           paginate={setCurrentPage}
         />
       </div>
