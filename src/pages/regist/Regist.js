@@ -2,7 +2,7 @@ import axios from 'axios';
 import Form from 'components/form/Form';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
 import { API_HEADER, ROOT_API } from 'constants/api';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -18,8 +18,11 @@ const Regist = () => {
   // const notify = () => toast("Wow so easy !");
   let navigate = useNavigate();
   const dispatch = useDispatch();
+  const authlogins = 'D-Talks';
   const useridRef = useRef(null);
-  const usernicknameRef = useRef(null);
+  const nicknameRef = useRef(null);
+  const discriptionref = useRef(null);
+  const propileRef = useRef(null);
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -27,12 +30,12 @@ const Regist = () => {
   });
   const [modal, setModal] = useState(false);
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
-  const [duplicateId, setDuplicateId] = useState('');
-  const [duplicateNickName, setDuplicateNickName] = useState('');
+  const [duplicateId, setDuplicateId] = useState(false);
+  const [duplicateNickName, setDuplicateNickName] = useState(false);
   let [inputEmail, setInputEmail] = useState('');
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
-
+  const [typetoggle, setTypetoggle] = useState('password')
   const [code, setCode] = useState("")
   const tags = [
     "DJANGO",
@@ -52,21 +55,22 @@ const Regist = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: 'onChange' });
 
-  const onSubmit = async (data) => {
 
+  const onSubmit = async (data) => {
+    console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName)
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && duplicateId && duplicateNickName) {
+    if (verityEmailcheck && compareEmailcheck && duplicateId && duplicateNickName) {//NOTE 버튼 다 클릭하면 실행
       axios
         .post(
           `${ROOT_API}/sign-up`,
           {
             email: data.userEmail,
-            nickname: data.userNickname,
-            userid: data.userId,
+            nickname: data.nickname,
+            userid: data.userid,
             password: data.password,
-            skills: "DJANGO",
-            "description": "string",
-            "registrationId": "string"
+            skills: selectedTags.tags,
+            description: data.description,
+            profileImageId: data.propile
           },
           {
             headers: {
@@ -80,7 +84,7 @@ const Regist = () => {
             .post(
               `${ROOT_API}/sign-in`,
               {
-                userid: data.userId,
+                userid: data.userid,
                 password: data.password,
               },
               {
@@ -94,6 +98,7 @@ const Regist = () => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
               localStorage.setItem('token', response.data.accessToken);
               setModal(true);
+              navigate('/')
               reset();
             })
             .catch(function (error) {
@@ -103,63 +108,62 @@ const Regist = () => {
         .catch(function (error) {
           console.log('회원가입 실패:', error.response.data);
         });
-      // NOTE: 이곳에서 통신
     } else {
       alert("중복체크나 인증을 안했어요")
     }
   };
 
+
+
   let textTemp = '';
-  const authlogins = 'D-Talks'; //TODO auth 구글,네이버, 카카오
-  const validateDuplicate = (data) => {
+  const validateDuplicate = (data) => { //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
     console.log('넣은 데이터', watch(data));
-    // setTextTemp(watch(data));
     textTemp = watch(data);
-    axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {
-      if (type === 'userId') {
+    axios.get(`${ROOT_API}/users/check/${type}/${value}`).then(function (response) {
+      if (type === 'userid') {
         response.data.duplicated === true
-          ? setDuplicateId('true')
-          : setDuplicateId('false');
+          ? setDuplicateId(true)
+          : setDuplicateId(false);
       }
-      if (type === 'userNickname') {
+      if (type === 'nickname') {
         response.data.duplicated === true
-          ? setDuplicateNickName('true')
-          : setDuplicateNickName('false');
+          ? setDuplicateNickName(true)
+          : setDuplicateNickName(false); // TODO 이건 체크 안해도 로그인 되는지 체크해봐야함
       }
     });
   };
-  const uploadImage = (imageFile) => {//NOTE 프로필 이미지
-    const formData = new FormData();
-    formData.append('image', imageFile);
-    console.log(imageFile, "ddddddd")
+  // const uploadImage = (imageFile) => {//NOTE 프로필 이미지
+  //   const formData = new FormData();
+  //   formData.append('image', imageFile);
+  //   console.log(imageFile, "ddddddd")
 
-    return axios.post(`${ROOT_API}/users/profile/image`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-  };
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    console.log(file, "dkfjdkjf")
-    console.log(file.name, "dkfjdkjf")
-    if (file.name) {
-      uploadImage(file.name)
-        .then((response) => {
-          // 업로드 성공 시 수행할 작업
-          console.log('Upload success:', response.data); //TODO 콘솔창에 정보까지는 나오는데 500에러
-          return setImageFile(file.name);
-        })
-        .catch((error) => {
-          // 업로드 실패 시 수행할 작업
-          console.error('Upload error:', error);
-        });
-    }
+  //   return axios.post(`${ROOT_API}/users/profile/image`, formData, {
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data',
+  //     },
+  //   });
+  // };
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   console.log(file, "dkfjdkjf")
+  //   console.log(file.name, "dkfjdkjf")
+  //   if (file.name) {
+  //     uploadImage(file.name)
+  //       .then((response) => {
+  //         // 업로드 성공 시 수행할 작업
+  //         console.log('Upload success:', response.data); //TODO 콘솔창에 정보까지는 나오는데 500에러
+  //         return setImageFile(file.name);
+  //       })
+  //       .catch((error) => {
+  //         // 업로드 실패 시 수행할 작업
+  //         console.error('Upload error:', error);
+  //       });
+  //   }
 
-  };
-  const verityEmail = (e) => { //NOTE 이메일 인증
+  // };
+  const verityEmail = (e) => { //NOTE 이메일 인증//ok
     e.preventDefault();
     console.log('dc', watch().userEmail);
     axios
@@ -173,15 +177,21 @@ const Regist = () => {
         alert('이메일을 전송했습니다.');
       });
   };
-  const compareEmail = (e) => { //NOTE 확인
-    setCompareEmailcheck(true);
+  const compareEmail = (e) => { //NOTE 인증확인//ok
     e.preventDefault();
-    inputEmail = code ? alert("인증완료") : alert("인증실패")
+    if (code === inputEmail) {
+      console.log(inputEmail)
+      alert("인증완료")
+      setCompareEmailcheck(true);
+    } else {
+      alert("인증실패");
+    }
 
   }
   const handleInputChange = (e) => {
     setInputEmail(e.target.value);
-  };
+  }
+
   const clickTag = (tag) => { //NOTE 기술 테그
     if (selectedTags.tags.includes(tag)) {
       setSelectedTags({
@@ -194,7 +204,14 @@ const Regist = () => {
         tags: [...selectedTags.tags, tag],
       });
     }
-    console.log('dd', selectedTags.tags, typeof (selectedTags.tags))
+    console.log('dd', selectedTags.tags, typeof (selectedTags.tags)) //TODO 테그 배열 하나 빠짐
+  };
+  const typechange = () => { //NOTE 비밀번호 토글//ok
+    setTypetoggle("text");
+
+    setTimeout(() => {
+      setTypetoggle("password");
+    }, 1000);
   };
 
   // toast('🦄 Wow so easy!', {
@@ -244,11 +261,11 @@ const Regist = () => {
               <img src={imageFile} alt="프로필이미지" />
               <input
                 accept="image/*"
-                // ref={inputRef}
+                ref={propileRef}
                 type="file"
                 name="프로필이미지"
-                id=""
-                onChange={handleFileChange}
+                id="propile"
+              // onChange={handleFileChange}
               />
             </div>
           </div>
@@ -277,9 +294,19 @@ const Regist = () => {
               ))}
             </div>
           </div>
+          <div className='description'>
+            <label>한 줄 내소개</label>
+            <input
+              type='description'
+              id='description'
+              ref={discriptionref}
+              placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
+              maxLength={80}
+            />
+          </div>
           <div className="line-style">
             <div className="jb-division-line"></div>
-            <span>회원가입에 필요한 기본정보를 입력해주세요(선택입니다)</span>
+            <span>회원가입에 필요한 기본정보를 입력해주세요(필수입니다)</span>
             <div className="jb-division-line"></div>
           </div>
           <h2>Developer-Talks 계정 만들기</h2>
@@ -334,7 +361,7 @@ const Regist = () => {
               </tr>
               <tr>
                 <th>
-                  <label htmlFor="userNickname">닉네임</label>
+                  <label htmlFor="nickname">닉네임</label>
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -342,40 +369,37 @@ const Regist = () => {
                 <td>
                   <input
                     type="text"
-                    id="userNickname"
+                    id="nickname"
                     placeholder="닉네임을 입력해주세요"
                     tabIndex="2"
-                    ref={usernicknameRef}
+                    ref={nicknameRef}
                     maxLength={15}
-                    {...register('userNickname', {
+                    {...register('nickname', {
                       required: '닉네임은 필수 입력입니다.',
                       minLength: {
                         value: 5,
                         message: '5자리 이상 입력해주세요.',
                       },
-                      // pattern: {
-                      //   value:
-                      //     /^[가-힣a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
-                      //   message:
-                      //     "닉네임에 특수문자가 포함되면 안되고 숫자로 시작하면 안됩니다!",
-                      // },
                     })}
                   />
                   <button
                     title="중복체크"
-                    onClick={() => validateDuplicate('userNickname')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      validateDuplicate('nickname');
+                    }}
                   >
                     중복체크
                   </button>
-                  {errors.userNickname && (
-                    <small role="alert">{errors.userNickname.message}</small>
+                  {errors.nickname && (
+                    <small role="alert">{errors.nickname.message}</small>
                   )}
-                  {!errors.userNickname &&
+                  {!errors.nickname &&
                     duplicateNickName !== '' &&
                     duplicateNickName === 'true' && (
                       <small className="alert">중복된 닉네임입니다.</small>
                     )}
-                  {!errors.userNickname &&
+                  {!errors.nickname &&
                     duplicateNickName !== '' &&
                     duplicateNickName === 'false' && (
                       <small className="true">
@@ -386,7 +410,7 @@ const Regist = () => {
               </tr>
               <tr>
                 <th>
-                  <label htmlFor="userId">아이디</label>
+                  <label htmlFor="userid">아이디</label>
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -394,12 +418,12 @@ const Regist = () => {
                 <td>
                   <input
                     type="text"
-                    id="userId"
+                    id="userid"
                     placeholder="아이디를 입력해주세요"
                     maxLength={15}
                     ref={useridRef}
                     tabIndex="3"
-                    {...register('userId', {
+                    {...register('userid', {
                       required: '아이디는 필수 입력입니다.',
                       minLength: {
                         value: 5,
@@ -413,12 +437,15 @@ const Regist = () => {
                   />
                   <button
                     title="중복체크"
-                    onClick={() => validateDuplicate('userId')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      validateDuplicate('userid');
+                    }}
                   >
                     중복체크
                   </button>
-                  {errors.userId && (
-                    <small role="alert">{errors.userId.message}</small>
+                  {errors.userid && (
+                    <small role="alert">{errors.userid.message}</small>
                   )}
                   {duplicateId !== '' && duplicateId === 'true' && (
                     <small className="alert">중복된 아이디입니다.</small>
@@ -438,7 +465,7 @@ const Regist = () => {
                 </th>
                 <td>
                   <input
-                    type="password"
+                    type={typetoggle}
                     id="password"
                     placeholder="최소 1개의 특수문자를 포함해주세요"
                     maxLength={15}
@@ -473,7 +500,7 @@ const Regist = () => {
                 </th>
                 <td>
                   <input
-                    type="password"
+                    type={typetoggle}
                     id="passwordChk"
                     placeholder="비밀번호를 한 번 더 입력해주세요"
                     tabIndex="5"
@@ -499,6 +526,7 @@ const Regist = () => {
                       },
                     })}
                   />
+                  <div className='typechange' type="typechange" onClick={typechange}>d</div>
                   {errors.passwordChk && (
                     <small role="alert">{errors.passwordChk.message}</small>
                   )}
