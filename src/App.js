@@ -7,7 +7,6 @@ import BoardDetail from "pages/board/boardDetail/BoardDetail";
 import BoardList from "pages/board/boardList/BoardList";
 import BoardPost from "pages/board/boardPost/BoardPost";
 import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
-import Authlogin from "pages/login/Authlogin";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Account from "pages/mypage/Account";
@@ -45,7 +44,7 @@ function App() {
     } else {
       console.log('prod');
     }
-
+    // https://team-web-development-projects.github.io/developer-talks-frontend/userregist?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiaWF0IjoxNjg1MjgxNDc5LCJleHAiOjE2ODUyOTIyNzl9.FDTQ6_0RWsBBb4ExIIxD_8_xufTm_GgeXCZSc5q11Wg
     //NOTE 토큰 재갱신
     if (window.location.href.includes('accessToken')) {
       const accessToken = window.location.href.split('accessToken=')[1];
@@ -135,7 +134,6 @@ function App() {
           />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/authlogin" element={<Authlogin />} />
           <Route path="/agreement" element={<Agreement />} />
           <Route path="/userregist" element={<Userregist />} />
         </Route>

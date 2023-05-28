@@ -30,21 +30,21 @@ const Mypage = ({ type }) => {
   useEffect(() => {
     switch (select) {
       case 0:
-        // axios
-        //   .get(
-        //     // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함
-        //     `${ROOT_API}/post/list/user/${userId}`,
-        //     {
-        //       params: { page: 0, size: 10 }, //NOTE 파람스??
-        //       headers: {
-        //         "X-AUTH-TOKEN": auth.accessToken,
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     setFavorite(res.data.content);
-        //     console.log("1", res.data.content);
-        //   });
+        axios
+          .get(
+            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함
+            `${ROOT_API}/users/recent/activity`,
+            {
+              params: { page: 0, size: 10 }, //TODO 활동 시간 적기
+              headers: {
+                "X-AUTH-TOKEN": auth.accessToken,
+              },
+            }
+          )
+          .then((res) => {
+            setFavorite(res.data.content);
+            console.log("1", res.data.content);
+          });
         break;
       case 1:
         axios

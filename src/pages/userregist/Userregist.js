@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Button from 'components/button/Button';
 import { API_HEADER, ROOT_API } from 'constants/api';
-// import { parseJwt } from "hooks/useParseJwt"; //TODO 배포후 정보 가져오기
+import { parseJwt } from "hooks/useParseJwt"; //TODO 배포후 정보 가져오기
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +13,6 @@ import './Userregist.scss';
 
 
 const Userregist = () => {
-
   const auth = useSelector((state) => state.authToken);
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
@@ -28,6 +27,20 @@ const Userregist = () => {
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
   };
+
+  // https://team-web-development-projects.github.io/developer-talks-frontend/userregist?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiaWF0IjoxNjg1MjgxNDc5LCJleHAiOjE2ODUyOTIyNzl9.FDTQ6_0RWsBBb4ExIIxD_8_xufTm_GgeXCZSc5q11Wg
+  //NOTE 토큰 재갱신
+  if (window.location.href.includes('accessToken')) {
+    const accessToken = window.location.href.split('accessToken=')[1];
+    dispatch(SET_TOKEN({ accessToken: accessToken }));
+    console.log('토큰있음');
+    // navigate('/', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
+    console.log(accessToken)
+  }
+
+  if (auth.accessToken !== null) {
+    console.log(parseJwt(auth.accessToken))
+  }
   const {
     register,
     handleSubmit,
@@ -55,6 +68,9 @@ const Userregist = () => {
         {
           nickname: data.userNickname,
           skills: [],
+          skills: [],
+          "description": "string",
+          "profileImageId": 0
         },
         {
           headers: {
@@ -63,8 +79,8 @@ const Userregist = () => {
         }
       )
       .then(function (response) {
-        console.log('회원가입 성공:', response); //NOTE 자동로그인
-        if (autoLogin) {
+        console.log('회원가입 성공:', response);
+        if (autoLogin) {//NOTE 자동로그인
           setRefreshToken({ refreshToken: response.data.refreshToken });
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
           alert('토큰저장');
