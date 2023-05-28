@@ -54,7 +54,7 @@ function App() {
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
       console.log('토큰있음');
-      // navigate('/', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
+      navigate('/', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
       console.log("구글 로그인 시 리다이렉션")
     }
   }, [dispatch, navigate, location]);

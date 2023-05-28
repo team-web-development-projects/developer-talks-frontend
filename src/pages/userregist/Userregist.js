@@ -14,6 +14,7 @@ import './Userregist.scss';
 
 const Userregist = () => {
   const auth = useSelector((state) => state.authToken);
+  const userEmail = ' parseJwt(auth.accessToken).sub';
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [selectedTags, setSelectedTags] = useState({
@@ -38,9 +39,8 @@ const Userregist = () => {
     console.log(accessToken)
   }
 
-  if (auth.accessToken !== null) {
-    console.log(parseJwt(auth.accessToken))
-  }
+
+
   const {
     register,
     handleSubmit,
@@ -215,7 +215,7 @@ const Userregist = () => {
       </div>
       <form className='registIDform' onSubmit={handleSubmit(onSubmit)}>
         <label>이메일</label>
-        <input type="text" />
+        <input className='disable' type="text" value={userEmail} readonly />
         <label>닉네임</label>
         <span className="star" title="필수사항">
           *
@@ -282,7 +282,7 @@ const Userregist = () => {
           checked={autoLogin}
           onChange={handleCheckboxChange}
         />
-        <Button type='submt' disabled={isSubmitting} >저장하기</Button>
+        <Button type='submt' disabled={isSubmitting} >간편 로그인</Button>
       </form>
 
 

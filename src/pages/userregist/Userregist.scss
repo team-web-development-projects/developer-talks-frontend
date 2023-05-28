@@ -80,6 +80,16 @@
   padding: 10px;
   margin: 0 auto;
 
+  .disable {
+
+    background-color: #f1f1f1;
+    /* 회색 배경색 */
+    color: #777777;
+    /* 회색 글자색 */
+    cursor: not-allowed;
+    /* 커서 스타일 변경 */
+  }
+
   label {
     display: block;
     width: 100%;
