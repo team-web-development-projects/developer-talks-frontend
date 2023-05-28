@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
 import { parseJwt } from "hooks/useParseJwt";
+import classNames from "classnames";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -66,7 +67,7 @@ const BoardList = ({ type }) => {
 
   return (
     <>
-      {auth.accessToken !== null ? 
+      {auth.accessToken !== null ? (
         <div className={s.studyroom}>
           {modal && (
             <BasicModal setOnModal={() => setModal()}>
@@ -90,8 +91,12 @@ const BoardList = ({ type }) => {
               <Button onClick={handleClick}>✏️룸 만들기</Button>
             </div>
           </div>
-          <ul className={s.list}>
-            {data ? (
+          <ul
+            className={classNames(s.list, {
+              [s.is_not_list]: data && data.content.length === 0,
+            })}
+          >
+            {data && data.content.length !== 0 ? (
               data.content.map((item, index) => (
                 <li
                   key={index}
@@ -117,10 +122,10 @@ const BoardList = ({ type }) => {
                 </li>
               ))
             ) : (
-              <li>등록된 게시글이 없습니다.</li>
+              <li className="tac">등록된 게시글이 없습니다.</li>
             )}
           </ul>
-  
+
           <div className={s.pageContainer}>
             <Pagination
               currentPage={data.pageable.pageNumber + 1}
@@ -129,9 +134,10 @@ const BoardList = ({ type }) => {
             />
           </div>
           <Scrolltop />
-        </div> : 
-        <div>asdf</div>
-      }
+        </div>
+      ) : (
+        <div>로그인 후 이용하실 수 있습니다.</div>
+      )}
     </>
   );
 };

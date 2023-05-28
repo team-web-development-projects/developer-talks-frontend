@@ -112,7 +112,7 @@ const StudyRoomPost = ({ type }) => {
       {modal && (
         <BasicModal
           setOnModal={() => setModal()}
-          // dimClick={() => navigate(`/studyroom`)}
+          dimClick={() => navigate(`/studyroom`)}
         >
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.
@@ -179,7 +179,7 @@ const StudyRoomPost = ({ type }) => {
               />
             </div>
             <div className={s.btnRgn}>
-              <Link to="/board/list" className={s.cancel}>
+              <Link to="/studyroom" className={s.cancel}>
                 취소
               </Link>
               <Button>저장</Button>

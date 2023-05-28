@@ -16,77 +16,28 @@ const StudyRoomSettingModal = ({ setOnModal, id }) => {
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
 
-  const deleteroom = async (studyroom) => {
-    const data = axios.delete(`${ROOT_API}/study-room/${id}`, {
+  useEffect(() => {
+    axios.get(`${ROOT_API}/study-room/${id}`, {
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,
       },
-    });
-    return data;
-  };
-
-  // const deleteStudyroom = useMutation(
-  //   (studyroom) => axios.delete(`${ROOT_API}/study-room/${id}`, studyroom),
-  //   {
-  //     onSuccess: (data, variables, context) => {
-  //       queryClient.invalidateQueries("studyroom");
-  //       queryClient.setQueryData("studyroom-delete", data.data);
-  //     },
-  //   }
-  // );
-
-  const deleteStudyroom = useMutation((studyroom) => deleteroom(studyroom), {
-    // 다른 구성 옵션들...
-    onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries("studyroom");
-      queryClient.setQueryData("studyroom-delete", data.data);
-      setModal(true);
-    },
-  });
-
-  const deleteRoom = () => {
-    // if (window.confirm("Are you sure you want to proceed?")) {
-    //   deleteStudyroom.mutate();
-    // } else {
-    //   setConfirmState(false);
-    // }
-    setModal(true);
-  };
-
-  useEffect(() => {
-    deleteStudyroom.mutate();
-  }, [confirmState, deleteStudyroom]);
-
-  // useEffect(() => {
-  //   if (confirmState) {
-  //     axios
-  //       .delete(`${ROOT_API}/study-room/${id}`, {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "X-AUTH-TOKEN": auth.accessToken,
-  //         },
-  //       })
-  //       .then(function (response) {
-  //         console.log("스터디 룸 정보 성공:", response);
-  //         Navigate("/studyroom");
-  //       })
-  //       .catch(function (error) {
-  //         console.log("스터디 룸 정보:실패 ", error.response);
-  //       });
-  //   }
-  // }, [confirmState, auth.accessToken, id]);
+    }).then(res => {
+      console.log('rr', res);
+    })
+  })
 
   return (
     <>
       {modal && (
-        <BasicModal setOnModal={() => setModal()}>
-          삭제할래?
-          <br />
-          <button onClick={() => setConfirmState(true)}>네</button>
-          <br />
-          <button>아니오</button>
-        </BasicModal>
+        // <BasicModal setOnModal={() => setModal()}>
+        //   삭제할래?
+        //   <br />
+        //   <button onClick={() => setConfirmState(true)}>네</button>
+        //   <br />
+        //   <button>아니오</button>
+        // </BasicModal>
+        <div>11</div>
       )}
       <ModalFrame
         setOnModal={setOnModal}
@@ -95,7 +46,10 @@ const StudyRoomSettingModal = ({ setOnModal, id }) => {
         isDim
       >
         <div>수정</div>
-        <div onClick={deleteRoom}>삭제</div>
+        <div>
+
+        </div>
+        <div>삭제</div>
       </ModalFrame>
     </>
   );

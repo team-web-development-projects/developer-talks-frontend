@@ -20,6 +20,7 @@ const StudyRoomInfo = () => {
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
 
+  // 스터디룸 가입요청
   const requestRoom = () => {
     // setecretModal(true);
     axios
@@ -59,10 +60,6 @@ const StudyRoomInfo = () => {
     queryFn: getInfo,
   });
 
-  console.log("auth", parseJwt(auth.accessToken).nickname);
-  // console.log("dta", data.studyRoomUsers[0].nickname);
-  console.log("dta", data);
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -97,7 +94,7 @@ const StudyRoomInfo = () => {
         <>
           {parseJwt(auth.accessToken).nickname ===
             data.studyRoomUsers[0].nickname && (
-            <div className="setting" onClick={() => console.log('zz')}>
+            <div className="setting" onClick={() => setSettingModal(true)}>
               <BsGearFill size={22} />
             </div>
           )}

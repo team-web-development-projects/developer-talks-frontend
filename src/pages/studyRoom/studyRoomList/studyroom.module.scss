@@ -64,6 +64,9 @@
     margin-top: 20px;
     grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
     gap: 20px;
+    &.is_not_list {
+      display: block;
+    }
   }
   .card_list {
     position: relative;
