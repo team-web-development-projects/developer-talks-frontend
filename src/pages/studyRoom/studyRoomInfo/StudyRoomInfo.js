@@ -7,7 +7,7 @@ import { useState } from "react";
 import { BsGearFill, BsLock, BsUnlock } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./studyroominfo.scss";
 import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
 import { useEffect } from "react";
@@ -15,10 +15,13 @@ import { useRef } from "react";
 
 const StudyRoomInfo = () => {
   const { postId } = useParams();
+  const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-  const [secretModal, setecretModal] = useState(false);
+  const [secretModal, setSecretModal] = useState(false);
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
+
+  
 
   // 스터디룸 가입요청
   const requestRoom = () => {
@@ -38,14 +41,25 @@ const StudyRoomInfo = () => {
       )
       .then(function (response) {
         console.log("스터디 룸 정보 성공:", response);
+        if(!data.autoJoin) {
+          setSecretModal(false);
+          alert('요청이 완료되었습니다.');
+        }
       })
       .catch(function (error) {
         console.log("스터디 룸 정보:실패 ", error.response);
       });
   };
 
+  const InRoom = () => {
+    if(data.autoJoin) {
+      setInModal(true);
+    } else {
+      setSecretModal(true);
+    }
+  }
+
   async function getInfo() {
-    console.log("d11d", postId);
     const { data } = await axios.get(`${ROOT_API}/study-room/${postId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -62,15 +76,17 @@ const StudyRoomInfo = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
+  console.log("data", data);
+
   return (
     <div className="study-room-info">
       {secretModal && (
-        <BasicModal setOnModal={() => setecretModal()}>
+        <BasicModal setOnModal={() => setSecretModal()}>
           생성자의 승인 후 입장할 수 있는 스터디룸입니다.
           <br />
           승인 요청 하시겠나요?
           <button onClick={requestRoom}>요청하기</button>
-          <button onClick={() => setecretModal(false)}>돌아가기</button>
+          <button onClick={() => setSecretModal(false)}>돌아가기</button>
         </BasicModal>
       )}
       {inModal && (
@@ -78,7 +94,12 @@ const StudyRoomInfo = () => {
           생성자의 승인 없이 입장할 수 있는 스터디룸입니다.
           <br />
           바로 입장 하시겠나요?
-          <button onClick={() => Navigate(`/studyroom/${postId}`)}>
+          <button
+            onClick={() => {
+              requestRoom();
+              navigate(`/studyroom/${postId}`);
+            }}
+          >
             입장하기
           </button>
           <button onClick={() => setInModal(false)}>돌아가기</button>
@@ -87,7 +108,9 @@ const StudyRoomInfo = () => {
       {settingModal && (
         <StudyRoomSettingModal
           setOnModal={() => setSettingModal()}
+          data={data && data}
           id={postId}
+          dimClick={() => setSettingModal()}
         />
       )}
       {data && (
@@ -102,7 +125,7 @@ const StudyRoomInfo = () => {
             {data.title}
             <div className="autojoin">
               {data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}
-              <span onClick={requestRoom}>참여하기</span>
+              <span onClick={InRoom}>참여하기</span>
             </div>
           </div>
           <div className="maker">{data.studyRoomUsers[0].nickname}</div>

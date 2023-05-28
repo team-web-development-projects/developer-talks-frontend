@@ -61,9 +61,13 @@ const BoardList = ({ type }) => {
     refetchQuery.current();
   }, []);
 
-  console.log("dd", data);
-
   if (isLoading) return <div>Loading...</div>;
+
+  console.log("data", data);
+  console.log(
+    "filter",
+    data.content[0].studyRoomUsers.filter((item) => item.status)
+  );
 
   return (
     <>

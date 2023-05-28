@@ -20,7 +20,7 @@ const StudyRoomPost = ({ type }) => {
   });
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
-    authJoin: true,
+    autoJoin: true,
     joinableCount: 1,
   });
 
@@ -42,7 +42,7 @@ const StudyRoomPost = ({ type }) => {
       `title: ${form.title}
         content: ${form.content}
         skills: ${selectedTags.tags}
-        autoJoin: ${selectedTags.authJoin}
+        autoJoin: ${selectedTags.autoJoin}
         joinableCount: ${selectedTags.joinableCount}
       `
     );
@@ -53,7 +53,7 @@ const StudyRoomPost = ({ type }) => {
           title: form.title,
           content: form.content,
           skills: selectedTags.tags,
-          autoJoin: selectedTags.authJoin,
+          autoJoin: selectedTags.autoJoin,
           joinableCount: selectedTags.joinableCount,
         },
         {
@@ -82,13 +82,13 @@ const StudyRoomPost = ({ type }) => {
         tags: [...selectedTags.tags, tag],
       });
     }
-    console.log('dd', selectedTags.tags, typeof(selectedTags.tags))
+    console.log("dd", selectedTags.tags, typeof selectedTags.tags);
   };
 
-  const clickauthJoin = () => {
+  const clickautoJoin = () => {
     setSelectedTags({
       ...selectedTags,
-      authJoin: !selectedTags.authJoin,
+      autoJoin: !selectedTags.autoJoin,
     });
   };
 
@@ -138,7 +138,7 @@ const StudyRoomPost = ({ type }) => {
                     type="checkbox"
                     name="chk"
                     id="chk"
-                    onChange={clickauthJoin}
+                    onChange={clickautoJoin}
                   />
                 </label>
               </div>
@@ -171,7 +171,6 @@ const StudyRoomPost = ({ type }) => {
               ))}
             </div>
             <div className={s.editor}>
-              {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
               <CkEditor
                 form={form}
                 setForm={setForm}

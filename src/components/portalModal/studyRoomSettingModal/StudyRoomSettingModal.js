@@ -6,38 +6,121 @@ import { ROOT_API } from "constants/api";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import BasicModal from "../basicmodal/BasicModal";
+import CkEditor from "components/ckeditor/CkEditor";
+import classnames from "classnames";
 
-const StudyRoomSettingModal = ({ setOnModal, id }) => {
+const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
   const auth = useSelector((state) => state.authToken);
-  const [confirmState, setConfirmState] = useState();
-  const queryClient = useQueryClient();
-  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
+  const [modals, setModals] = useState(false);
+  const [indata, setIndata] = useState(data);
 
-  useEffect(() => {
-    axios.get(`${ROOT_API}/study-room/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    }).then(res => {
-      console.log('rr', res);
-    })
-  })
+  const tags = [
+    "DJANGO",
+    "SPRING",
+    "JAVASCRIPT",
+    "JAVA",
+    "PYTHON",
+    "CPP",
+    "REACT",
+    "AWS",
+  ];
+
+  const deleteRoom = () => {
+    axios
+      .delete(`${ROOT_API}/study-room/${data.id}`, {
+        headers: {
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(() => {
+        setModals(false);
+      });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await new Promise((r) => setTimeout(r, 1000));
+    
+    axios
+      .put(
+        `${ROOT_API}/study-room/${id}`,
+        {
+          title: indata.title,
+          content: indata.content,
+          skills: [...indata.skills],
+          autoJoin: indata.autoJoin,
+          joinableCount: indata.joinableCount,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const clickTag = (tag) => {
+    if (indata.skills.includes(tag)) {
+      setIndata({
+        ...indata,
+        skills: indata.skills.filter((indata) => indata !== tag),
+      });
+    } else {
+      setIndata({
+        ...indata,
+        skills: [...indata.skills, tag],
+      });
+    }
+  };
+
+  const handleTitle = (e) => {
+    const title = e.target.value;
+    setIndata({ ...indata, title: title });
+  };
+
+  const clickautoJoin = (value) => {
+    setIndata({
+      ...indata,
+      autoJoin: !value,
+    });
+  };
+
+  const chnageJoinableCount = (e) => {
+    const newValue = e.target.value;
+    if (newValue <= 100) {
+      setIndata({
+        ...indata,
+        joinableCount: newValue,
+      });
+    }
+  };
 
   return (
     <>
-      {modal && (
-        // <BasicModal setOnModal={() => setModal()}>
-        //   삭제할래?
-        //   <br />
-        //   <button onClick={() => setConfirmState(true)}>네</button>
-        //   <br />
-        //   <button>아니오</button>
-        // </BasicModal>
-        <div>11</div>
+      {modals && (
+        <BasicModal setOnModal={() => setModals()} isDim={false}>
+          삭제 ㄱ?
+          <br />
+          <button
+            onClick={() => {
+              deleteRoom();
+              navigate("/studyroom/");
+            }}
+          >
+            네
+          </button>
+          <br />
+          <button onClick={() => setModals(false)}>아니오</button>
+        </BasicModal>
       )}
       <ModalFrame
         setOnModal={setOnModal}
@@ -46,10 +129,64 @@ const StudyRoomSettingModal = ({ setOnModal, id }) => {
         isDim
       >
         <div>수정</div>
-        <div>
-
-        </div>
-        <div>삭제</div>
+        <form onSubmit={handleSubmit}>
+          <div className="title">
+            제목
+            <input
+              type="text"
+              name="title"
+              value={indata.title}
+              onChange={handleTitle}
+            />
+          </div>
+          <div>
+            <label htmlFor="chk">
+              <span>참여 제한</span>
+              <input
+                type="checkbox"
+                name="chk"
+                id="chk"
+                checked={!indata.autoJoin}
+                onChange={() => clickautoJoin(indata.autoJoin)}
+              />
+            </label>
+          </div>
+          <div className="joinableCount">
+            참여인원 수
+            <input
+              type="number"
+              name=""
+              id=""
+              min="0"
+              max="100"
+              value={indata.joinableCount}
+              onChange={chnageJoinableCount}
+              placeholder="100명까지 가능합니다"
+            />
+          </div>
+          <div className="tags">
+            {tags.map((item, index) => (
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={classnames("tag", {
+                  "is-select": tags.includes(indata.skills[index]),
+                })}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+          <div className="content">
+            <CkEditor
+              form={indata}
+              setForm={setIndata}
+              placeholder={"내용을 입력해주세요."}
+            />
+          </div>
+          <button>저장</button>
+        </form>
+        <button onClick={() => setModals(true)}>삭제</button>
       </ModalFrame>
     </>
   );
