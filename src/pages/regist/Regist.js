@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import Form from 'components/form/Form';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
@@ -22,7 +23,7 @@ const Regist = () => {
   const useridRef = useRef(null);
   const nicknameRef = useRef(null);
   const discriptionref = useRef(null);
-  const propileRef = useRef(null);
+  const profileRef = useRef(null);
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -54,12 +55,40 @@ const Regist = () => {
     watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: 'onChange' });
-
+  const [profileImageId, setProfileImageId] = useState('')
+  const propileSubmit = async (data) => {
+    try {
+      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
+        const formData = new FormData();//NOTE 프로필 이미지
+        formData.append("file", profileRef.current.files[0]);
+        const response = await axios.post(
+          `${ROOT_API}/users/profile/image`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              accept: "application/json",
+            },
+            file: 'file=@22.JPG;type=image/jpeg'
+          })
+        console.log(response.data, "dfdfd");
+        console.log(formData, "dfdfd");
+        setProfileImageId(response.data.id);
+      } else {
+        console.log("파일을 선택해주세요.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onSubmit = async (data) => {
+
     console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName)
     await new Promise((r) => setTimeout(r, 1000));
     if (verityEmailcheck && compareEmailcheck && duplicateId && duplicateNickName) {//NOTE 버튼 다 클릭하면 실행
+
+
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -70,7 +99,7 @@ const Regist = () => {
             password: data.password,
             skills: selectedTags.tags,
             description: data.description,
-            profileImageId: data.propile
+            profileImageId: profileImageId
           },
           {
             headers: {
@@ -134,17 +163,7 @@ const Regist = () => {
       }
     });
   };
-  // const uploadImage = (imageFile) => {//NOTE 프로필 이미지
-  //   const formData = new FormData();
-  //   formData.append('image', imageFile);
-  //   console.log(imageFile, "ddddddd")
 
-  //   return axios.post(`${ROOT_API}/users/profile/image`, formData, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data',
-  //     },
-  //   });
-  // };
   // const handleFileChange = (e) => {
   //   const file = e.target.files[0];
   //   console.log(file, "dkfjdkjf")
@@ -183,6 +202,7 @@ const Regist = () => {
       console.log(inputEmail)
       alert("인증완료")
       setCompareEmailcheck(true);
+
     } else {
       alert("인증실패");
     }
@@ -258,17 +278,24 @@ const Regist = () => {
           </div>
           <div className="prople">
             <div className="imgwrap">
-              <img src={imageFile} alt="프로필이미지" />
+              {imageFile && (
+                <img src={imageFile} alt="프로필이미지" />
+              )}
               <input
                 accept="image/*"
-                ref={propileRef}
+                ref={profileRef}
                 type="file"
                 name="프로필이미지"
-                id="propile"
-              // onChange={handleFileChange}
+                id="profile"
               />
             </div>
           </div>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              propileSubmit();
+            }}
+          >버튼</button >
           <span>프로필 이미지 선택☝️</span>
 
           <div className="gaider">
@@ -354,7 +381,8 @@ const Regist = () => {
                     id="userEmails"
                     placeholder="입력해주세요"
                     tabIndex="1"
-                    {...register('username', { required: true })} onChange={handleInputChange}
+                    {...register('username', { required: true })}
+                    onChange={handleInputChange}
                   />
                   <button onClick={compareEmail}>확인</button>
                 </td>
@@ -526,10 +554,10 @@ const Regist = () => {
                       },
                     })}
                   />
-                  <div className='typechange' type="typechange" onClick={typechange}>d</div>
                   {errors.passwordChk && (
                     <small role="alert">{errors.passwordChk.message}</small>
                   )}
+                  <div className='typechange' type="typechange" onClick={typechange}>👀</div>
                 </td>
               </tr>
             </tbody>

@@ -19,6 +19,7 @@ const Login = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
+  const [typetoggle, setTypetoggle] = useState('password')
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -46,7 +47,13 @@ const Login = () => {
         console.log("로그인 실패: ", error.response);
       });
   };
+  const typechange = () => { //NOTE 비밀번호 토글//ok
+    setTypetoggle("text");
 
+    setTimeout(() => {
+      setTypetoggle("password");
+    }, 1000);
+  };
   const {
     register,
     // setValue,
@@ -108,7 +115,7 @@ const Login = () => {
                   비밀번호
                 </label>
                 <input
-                  type="password"
+                  type={typetoggle}
                   id="password"
                   placeholder="********"
                   tabIndex="2"
@@ -128,6 +135,8 @@ const Login = () => {
                 {errors.password && (
                   <small role="alert">{errors.password.message}</small>
                 )}
+                <div className='typechange' type="typechange" onClick={typechange}>👀</div>
+
               </li>
             </ul>
             <div className="button">
