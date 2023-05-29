@@ -45,7 +45,7 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            // console.log("1", res.data.content);
+            // console.log("1", res.data.content);/.
           });
         break;
       case 1:
