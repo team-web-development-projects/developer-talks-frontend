@@ -34,7 +34,7 @@ const Mypage = ({ type }) => {
       case 0:
         axios
           .get(
-            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
+            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1..
             `${ROOT_API}/users/recent/activity`,
             {
               params: { page: 0, size: 10 }, //NOTE 가람님이 활동 시간명 변경
