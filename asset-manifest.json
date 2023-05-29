@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/developer-talks-frontend/static/css/main.ac6c0555.css",
-    "main.js": "/developer-talks-frontend/static/js/main.a44f221b.js",
+    "main.css": "/developer-talks-frontend/static/css/main.7f1c419a.css",
+    "main.js": "/developer-talks-frontend/static/js/main.d591c0c6.js",
     "static/js/787.7716a02c.chunk.js": "/developer-talks-frontend/static/js/787.7716a02c.chunk.js",
     "index.html": "/developer-talks-frontend/index.html",
-    "main.ac6c0555.css.map": "/developer-talks-frontend/static/css/main.ac6c0555.css.map",
-    "main.a44f221b.js.map": "/developer-talks-frontend/static/js/main.a44f221b.js.map",
+    "main.7f1c419a.css.map": "/developer-talks-frontend/static/css/main.7f1c419a.css.map",
+    "main.d591c0c6.js.map": "/developer-talks-frontend/static/js/main.d591c0c6.js.map",
     "787.7716a02c.chunk.js.map": "/developer-talks-frontend/static/js/787.7716a02c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ac6c0555.css",
-    "static/js/main.a44f221b.js"
+    "static/css/main.7f1c419a.css",
+    "static/js/main.d591c0c6.js"
   ]
 }
