@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Mypage.scss";
 import { ROOT_API } from "constants/api";
-import MypageContent from "./MyPageContent";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -15,17 +14,36 @@ const Mypage = ({ type }) => {
   const [favorite, setFavorite] = useState([]);
   const dispatch = useDispatch();
 
-  const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
-
   let userId = "";
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
+  }
+  if (auth.accessToken === null) {
+    navigate("/login", { replace: true });
   }
 
   const onSelect = (type) => {
     setSelect(type);
   };
 
+  const contacts = [
+    {
+      userId: 0,
+      type: '최근활동'
+    },
+    {
+      userId: 1,
+      type: '내가 쓴 글'
+    },
+    {
+      userId: 2,
+      type: '댓글'
+    },
+    {
+      userId: 3,
+      type: '스크랩'
+    },
+  ]
   useEffect(() => {
     switch (select) {
       case 0:
@@ -42,7 +60,7 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log("1", res.data.content);
+            // console.log("1", res.data.content);
           });
         break;
       case 1:
@@ -59,7 +77,7 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log("1", res.data.content);
+            // console.log("1", res.data.content);
           });
         break;
       case 2:
@@ -76,7 +94,7 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log("2", res.data.content);
+            // console.log("2", res.data.content);
           });
         break;
       case 3:
@@ -93,20 +111,21 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            console.log("3", res.data.content);
+            // console.log("3", res.data.content);
           });
         break;
       default:
     }
-    if (auth.accessToken === null) {
-      navigate("/login", { replace: true });
-    }
+    // console.log("dd", favorite);
   }, [auth.accessToken, navigate, select, userId, favorite]);
+  // console.log("dd", favorite);
 
   return (
     <>
       {auth.accessToken !== null ? (
-        <MypageContent>
+        <main className="mypage">
+          <Userside />
+
           <section className="notes">
             <ul>
               {contacts.map((contact, index) => (
@@ -115,7 +134,7 @@ const Mypage = ({ type }) => {
                     onClick={() => onSelect(index)}
                     className={`${select === index ? "select" : ""}`}
                   >
-                    {contact}
+                    {contact.type}
                   </button>
                 </li>
               ))}
@@ -138,7 +157,7 @@ const Mypage = ({ type }) => {
               )}
             </div>
           </section>
-        </MypageContent>
+        </main>
       ) : null}
     </>
   );

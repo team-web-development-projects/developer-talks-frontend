@@ -1,37 +1,41 @@
+.main {
+  display: flex;
+}
+
 .notes {
   margin: 0 auto;
   height: 100vh;
   width: 60%;
 
-  ul {
+  .notetitle {
     display: flex;
     justify-content: space-between;
     margin-top: 5%;
     margin-bottom: 5%;
     border-radius: 10px;
     border: 1px solid #ccc;
-  }
 
-  li {
-    width: 150px;
-    text-align: center;
-    font-size: 17px;
+    li {
+      width: 150px;
+      text-align: center;
+      font-size: 17px;
 
-    button {
-      width: 85%;
-      background-color: white;
-      padding: 20px;
-      font-weight: 700;
+      button {
+        width: 85%;
+        background-color: white;
+        padding: 20px;
+        font-weight: 700;
 
-      &:hover {
+        &:hover {
+          color: #ff0000;
+          border-bottom: 3px solid #ff0000;
+        }
+      }
+
+      .select {
         color: #ff0000;
         border-bottom: 3px solid #ff0000;
       }
-    }
-
-    .select {
-      color: #ff0000;
-      border-bottom: 3px solid #ff0000;
     }
   }
 

@@ -29,27 +29,19 @@ const Userregist = () => {
   const profileRef = useRef(null);
   const discriptionref = useRef(null);
   const [userEmail, setUserEmail] = useState('')
-  const [duplicateNickName, setDuplicateNickName] = useState(false);
+  const [duplicateNickName, setDuplicateNickName] = useState('');
   const [autoLogin, setAutoLogin] = useState(false);
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
   };
-  if (auth.accessToken !== null) {
-    setUserEmail(parseJwt(auth.accessToken).sub, "ㅇㅇㅇ");
-    console.log(parseJwt(auth.accessToken).sub, "ㅇㅇ")
-    // }else{
-    // console.log(parseJwt(auth.accessToken).sub)
 
-  }
-  // https://team-web-development-projects.github.io/developer-talks-frontend/userregist?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiaWF0IjoxNjg1MjgxNDc5LCJleHAiOjE2ODUyOTIyNzl9.FDTQ6_0RWsBBb4ExIIxD_8_xufTm_GgeXCZSc5q11Wg
-  //NOTE 토큰 재갱신
-  if (window.location.href.includes('accessToken')) {
-    const accessToken = window.location.href.split('accessToken=')[1];
-    dispatch(SET_TOKEN({ accessToken: accessToken }));
-    console.log('토큰있음');
-    // navigate('/', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
-    console.log(accessToken)
-  }
+  useEffect(() => {
+    if (auth.accessToken) {
+      setUserEmail(parseJwt(auth.accessToken).sub); //NOTE 이메일 토큰으로 넣기 //ok
+      console.log(parseJwt(auth.accessToken), "ㅇㅇ")
+      console.log(userEmail, "dfdf")
+    }
+  }, [auth.accessToken, userEmail])
 
   const tags = [
     "DJANGO",
@@ -85,7 +77,7 @@ const Userregist = () => {
             },
             file: 'file=@22.JPG;type=image/jpeg'
           })
-        console.log(response.data, "dfdfd");
+        console.log(response.data, "dfd,,,fd");
         console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
       } else {
@@ -99,7 +91,7 @@ const Userregist = () => {
 
     console.log(duplicateNickName)
     await new Promise((r) => setTimeout(r, 1000));
-    if (duplicateNickName) {//NOTE 버튼 다 클릭하면 실행 //TODO duplicateId 유저 아이디 중복 체크???
+    if (duplicateNickName) {//TODO 버튼 다 클릭하면 실행 // 항상 false 
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -129,21 +121,20 @@ const Userregist = () => {
           console.log('로그인 실패: ', error.response.data);
         });
     } else {
-      alert("중복체크나 인증을 안했어요")
+      alert("인증을 확인해주세요")
     }
   };
 
 
   // const inputRef = useRef(null);
 
-  let textTemp = ''; //NOTE 중복체크
-  const validateDuplicate = (data) => {
+  let textTemp = '';
+  const validateDuplicate = (data) => { //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
     console.log('넣은 데이터', watch(data));
-    // setTextTemp(watch(data));
     textTemp = watch(data);
-    axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {
+    axios.get(`${ROOT_API}/users/check/${type}/${value}`).then(function (response) {
       if (type === 'nickname') {
         response.data.duplicated === true
           ? setDuplicateNickName(true)
@@ -168,38 +159,40 @@ const Userregist = () => {
   };
   return (
     <div className='userregistname'>
-      <div className="headername">
-        <p>{authlogins}계정을이용한 회원가입</p>
-        <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
-      </div>
-      <div className="prople">
-        <div className="imgwrap">
-          {imageFile && (
-            <img src={imageFile} alt="프로필이미지" />
-          )}
-          <input
-            accept="image/*"
-            ref={profileRef}
-            type="file"
-            name="프로필이미지"
-            id="profile"
-          />
+      <div className="center">
+        <div className="headername">
+          <p>{authlogins}계정을이용한 회원가입</p>
+          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-      </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          propileSubmit();
-        }}
-      >버튼</button >
-      <span>프로필 이미지 선택☝️</span>
+        <div className="prople">
+          <div className="imgwrap">
+            {imageFile && (
+              <img src={imageFile} alt="프로필이미지" />
+            )}
+            <input
+              accept="image/*"
+              ref={profileRef}
+              type="file"
+              name="프로필이미지"
+              id="profile"
+            />
+          </div>
+        </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            propileSubmit();
+          }}
+        >버튼</button >
+        <span>프로필 이미지 선택☝️</span>
 
-      <div className="gaider">
-        <span>🙏추가 안내</span>
-        <ul>
-          <li><span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.</li>
-          <li><span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.</li>
-        </ul>
+        <div className="gaider">
+          <span>🙏추가 안내</span>
+          <ul>
+            <li><span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.</li>
+            <li><span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.</li>
+          </ul>
+        </div>
       </div>
       <div className="line-style">
         <div className="jb-division-line"></div>
@@ -207,66 +200,73 @@ const Userregist = () => {
         <div className="jb-division-line"></div>
       </div>
       <form className='registIDform' onSubmit={handleSubmit(onSubmit)}>
-        <label>이메일</label>
-        <input className='disable' type="text" value={userEmail} readOnly />
-        <label>닉네임</label>
-        <span className="star" title="필수사항">
-          *
-        </span>
-        <input
-          type="text"
-          id="nickname"
-          placeholder="닉네임을 입력해주세요"
-          tabIndex="2"
-          ref={nicknameRef}
-          maxLength={15}
-          {...register('nickname', {
-            required: '닉네임은 필수 입력입니다.',
-            minLength: {
-              value: 5,
-              message: '5자리 이상 입력해주세요.',
-            },
-            // pattern: {
-            //   value:
-            //     /^[가-힣a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
-            //   message:
-            //     "닉네임에 특수문자가 포함되면 안되고 숫자로 시작하면 안됩니다!",
-            // },
-          })}
-        />
-        <Button
-          title="중복체크"
-          onClick={() => validateDuplicate('nickname')}
-        >
-          중복체크</Button>
-        {errors.nickname && (
-          <small role="alert">{errors.nickname.message}</small>
-        )}
-        {!errors.nickname &&
-          duplicateNickName !== '' &&
-          duplicateNickName === 'true' && (
-            <small className="alert">중복된 닉네임입니다.</small>
+        <div className='emailmodule'>
+          <label>이메일</label>
+          <input className='disable' type="text" placeholder={userEmail} readOnly />
+        </div>
+        <div className='labelmodule'>
+          <div className='labeltitle'>
+            <label>닉네임</label>
+            <span className="star" title="필수사항">
+              *
+            </span>
+          </div>
+          <div className='inputcont'>
+            <input
+              type="text"
+              id="nickname"
+              placeholder="닉네임을 입력해주세요"
+              tabIndex="2"
+              ref={nicknameRef}
+              maxLength={15}
+              {...register('nickname', {
+                required: '닉네임은 필수 입력입니다.',
+                minLength: {
+                  value: 5,
+                  message: '5자리 이상 입력해주세요.',
+                },
+              })}
+            />
+            <Button
+              title="중복체크"
+              onClick={(e) => {
+                e.preventDefault();
+                validateDuplicate('nickname')
+              }}
+            >
+              중복체크</Button>
+          </div>
+          {errors.nickname && (
+            <small role="alert">{errors.nickname.message}</small>
           )}
-        {!errors.nickname &&
-          duplicateNickName !== '' &&
-          duplicateNickName === 'false' && (
-            <small className="true">
-              사용할 수 있는 닉네임입니다.
-            </small>
-          )}
-        <label>관심있는 태그입력</label>
-        <div className='tagalign'>
-          <div className={s.tags}>
-            {tags.map((item, index) => (
-              <span
-                key={index}
-                onClick={() => clickTag(item)}
-                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""
-                  }`}
-              >
-                {item}
-              </span>
-            ))}
+          {!errors.nickname &&
+            duplicateNickName !== '' &&
+            duplicateNickName === true && (
+              <small className="alert">중복된 닉네임입니다.</small>
+            )}
+          {!errors.nickname &&
+            duplicateNickName !== '' &&
+            duplicateNickName === false && (
+              <small className="true">
+                사용할 수 있는 닉네임입니다.
+              </small>
+            )}
+        </div>
+        <div className='tagmodule'>
+          <label>관심있는 태그입력</label>
+          <div className='tagalign'>
+            <div className={s.tags}>
+              {tags.map((item, index) => (
+                <span
+                  key={index}
+                  onClick={() => clickTag(item)}
+                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""
+                    }`}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
         <div className='description'>
@@ -279,13 +279,15 @@ const Userregist = () => {
             maxLength={80}
           />
         </div>
-        <label>자동로그인</label>
-        <input
-          type="checkbox"
-          checked={autoLogin}
-          onChange={handleCheckboxChange}
-        />
-        <Button type='submt' disabled={isSubmitting} >간편 로그인</Button>
+        <div className='loginbutton'>
+          <label>자동로그인</label>
+          <input
+            type="checkbox"
+            checked={autoLogin}
+            onChange={handleCheckboxChange}
+          />
+          <Button type='submit' disabled={isSubmitting} >간편 회원가입</Button>
+        </div>
       </form>
 
 

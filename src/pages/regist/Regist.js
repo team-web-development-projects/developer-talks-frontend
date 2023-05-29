@@ -182,6 +182,7 @@ const Regist = () => {
   //   }
 
   // };
+
   const verityEmail = (e) => { //NOTE 이메일 인증//ok
     e.preventDefault();
     console.log('dc', watch().userEmail);
