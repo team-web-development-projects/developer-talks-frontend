@@ -1,4 +1,3 @@
-import Userside from 'components/userside/Userside';
 import { useState } from 'react';
 import './Introduction.scss';
 import Button from 'components/button/Button';

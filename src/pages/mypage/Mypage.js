@@ -1,11 +1,12 @@
 import axios from "axios";
-import Userside from "components/userside/Userside";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Mypage.scss";
 import { ROOT_API } from "constants/api";
+import MypageContent from './MyPageContent';
+
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -123,9 +124,7 @@ const Mypage = ({ type }) => {
   return (
     <>
       {auth.accessToken !== null ? (
-        <main className="mypage">
-          <Userside />
-
+        <MypageContent>
           <section className="notes">
             <ul>
               {contacts.map((contact, index) => (
@@ -157,7 +156,7 @@ const Mypage = ({ type }) => {
               )}
             </div>
           </section>
-        </main>
+        </MypageContent>
       ) : null}
     </>
   );
