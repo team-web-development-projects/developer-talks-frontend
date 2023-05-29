@@ -31,8 +31,8 @@ const Regist = () => {
   });
   const [modal, setModal] = useState(false);
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
-  const [duplicateId, setDuplicateId] = useState(false);
-  const [duplicateNickName, setDuplicateNickName] = useState(false);
+  const [duplicateId, setDuplicateId] = useState('');
+  const [duplicateNickName, setDuplicateNickName] = useState('');
   let [inputEmail, setInputEmail] = useState('');
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
@@ -425,12 +425,12 @@ const Regist = () => {
                   )}
                   {!errors.nickname &&
                     duplicateNickName !== '' &&
-                    duplicateNickName === 'true' && (
+                    duplicateNickName === true && (
                       <small className="alert">중복된 닉네임입니다.</small>
                     )}
                   {!errors.nickname &&
                     duplicateNickName !== '' &&
-                    duplicateNickName === 'false' && (
+                    duplicateNickName === false && (
                       <small className="true">
                         사용할 수 있는 닉네임입니다.
                       </small>
@@ -476,11 +476,11 @@ const Regist = () => {
                   {errors.userid && (
                     <small role="alert">{errors.userid.message}</small>
                   )}
-                  {duplicateId !== '' && duplicateId === 'true' && (
+                  {duplicateId !== '' && duplicateId === true && (
                     <small className="alert">중복된 아이디입니다.</small>
                   )}
-                  {duplicateId !== '' && duplicateId === 'false' && (
-                    <small className="true">사용할 수 있는 아이디입니다.</small>
+                  {duplicateId !== '' && duplicateId === false && (
+                    <small className="true">사용할 수 있는 아이디입니다.</small> // TODO 중복체크 후 다시 입력 시 다시 체크할 수 있게
                   )}
                 </td>
               </tr>

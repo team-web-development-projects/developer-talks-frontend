@@ -5,6 +5,7 @@ import { useState } from 'react';
 // import { parseJwt } from 'hooks/useParseJwt';
 import Form from 'components/form/Form';
 import Button from 'components/button/Button';
+import MypageContent from "./MyPageContent";
 // import { useNavigate } from 'react-router-dom';
 
 function Account() {
@@ -51,8 +52,7 @@ function Account() {
   };
 
   return (
-    <main className="main">
-      <Userside />
+    <MypageContent>
       <section className="notes">
         <ul className='notetitle'>
           {tabTitle.map((item, index) => (
@@ -189,7 +189,7 @@ function Account() {
           </form>
         }
       </section>
-    </main>
+    </MypageContent>
   );
 }
 
