@@ -9,12 +9,15 @@ import { SET_TOKEN } from 'store/Auth';
 import { setRefreshToken } from 'store/Cookie';
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
 import './Userregist.scss';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const Userregist = () => {
+  const authlogins = 'naver'; //TODO auth 구글,네이버, 카카오
+  let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-  const userEmail = ' parseJwt(auth.accessToken).sub';
+
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [selectedTags, setSelectedTags] = useState({
@@ -22,13 +25,22 @@ const Userregist = () => {
     authJoin: true,
     joinableCount: 1,
   });
-  const usernicknameRef = useRef(null);
-  const [duplicateNickName, setDuplicateNickName] = useState('');
+  const nicknameRef = useRef(null);
+  const profileRef = useRef(null);
+  const discriptionref = useRef(null);
+  const [userEmail, setUserEmail] = useState('')
+  const [duplicateNickName, setDuplicateNickName] = useState(false);
   const [autoLogin, setAutoLogin] = useState(false);
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
   };
+  if (auth.accessToken !== null) {
+    setUserEmail(parseJwt(auth.accessToken).sub, "ㅇㅇㅇ");
+    console.log(parseJwt(auth.accessToken).sub, "ㅇㅇ")
+    // }else{
+    // console.log(parseJwt(auth.accessToken).sub)
 
+  }
   // https://team-web-development-projects.github.io/developer-talks-frontend/userregist?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiaWF0IjoxNjg1MjgxNDc5LCJleHAiOjE2ODUyOTIyNzl9.FDTQ6_0RWsBBb4ExIIxD_8_xufTm_GgeXCZSc5q11Wg
   //NOTE 토큰 재갱신
   if (window.location.href.includes('accessToken')) {
@@ -38,16 +50,6 @@ const Userregist = () => {
     // navigate('/', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
     console.log(accessToken)
   }
-
-
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { isSubmitting, isDirty, errors },
-  } = useForm({ mode: 'onChange' });
 
   const tags = [
     "DJANGO",
@@ -59,93 +61,78 @@ const Userregist = () => {
     "REACT",
     "AWS",
   ];
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isSubmitting, isDirty, errors },
+  } = useForm({ mode: 'onChange' });
 
-  const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000)); //TODO 유저정보입력
-    axios
-      .post(
-        `${ROOT_API}/sign-up`,
-        {
-          nickname: data.userNickname,
-          skills: [],
-          skills: [],
-          "description": "string",
-          "profileImageId": 0
-        },
-        {
-          headers: {
-            API_HEADER,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log('회원가입 성공:', response);
-        if (autoLogin) {//NOTE 자동로그인
-          setRefreshToken({ refreshToken: response.data.refreshToken });
-          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-          alert('토큰저장');
-        }
-      })
-  };
-  // axios
-  //   .get(
-  //     // 유저정보
-  //     `${ROOT_API}/users/info`,
-  //     {
-  //       userid: "11111",
-  //       email: "1@naver.com",
-  //       skills: [],
-  //       nickname: userNickname,
-  //     },
-  //     {
-  //       headers: {
-  //         "X-AUTH-TOKEN": auth.accessToken,
-  //       },
-  //     }
-  //   )
-  //   .then((res) => {
-  //     // setFavorite(res.data.content);
-  //     // console.log("2", res.data.content);
-  //   });
-
-  useEffect(() => {
-    console.log(imageFile, "dkfdlfkldkf")
-  }, [imageFile])
-  // const fropileupload = async (e) => {
-  // e.preventDefault();
-  // await new Promise((r) => setTimeout(r, 1000));
-
-  const uploadImage = (imageFile) => {//NOTE 프로필 이미지
-    const formData = new FormData();
-    formData.append('image', imageFile);
-    console.log(imageFile, "ddddddd")
-
-    return axios.post(`${ROOT_API}/users/profile/image`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-  };
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    console.log(file, "dkfjdkjf")
-    console.log(file.name, "dkfjdkjf")
-    if (file.name) {
-      uploadImage(file.name)
-        .then((response) => {
-          // 업로드 성공 시 수행할 작업
-          console.log('Upload success:', response.data); //TODO 콘솔창에 정보까지는 나오는데 500에러
-          return setImageFile(file.name);
-        })
-        .catch((error) => {
-          // 업로드 실패 시 수행할 작업
-          console.error('Upload error:', error);
-        });
+  const [profileImageId, setProfileImageId] = useState('')
+  const propileSubmit = async (data) => {
+    try {
+      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
+        const formData = new FormData();//NOTE 프로필 이미지
+        formData.append("file", profileRef.current.files[0]);
+        const response = await axios.post(
+          `${ROOT_API}/users/profile/image`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              accept: "application/json",
+            },
+            file: 'file=@22.JPG;type=image/jpeg'
+          })
+        console.log(response.data, "dfdfd");
+        console.log(formData, "dfdfd");
+        setProfileImageId(response.data.id);
+      } else {
+        console.log("파일을 선택해주세요.");
+      }
+    } catch (error) {
+      console.error(error);
     }
+  };
+  const onSubmit = async (data) => {
 
+    console.log(duplicateNickName)
+    await new Promise((r) => setTimeout(r, 1000));
+    if (duplicateNickName) {//NOTE 버튼 다 클릭하면 실행 //TODO duplicateId 유저 아이디 중복 체크???
+      axios
+        .post(
+          `${ROOT_API}/sign-up`,
+          {
+            nickname: data.nickname,
+            skills: selectedTags.tags,
+            description: data.description,
+            profileImageId: profileImageId
+          },
+          {
+            headers: {
+              API_HEADER,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log('회원가입 성공:', response);
+          if (autoLogin) {//NOTE 자동로그인
+            setRefreshToken({ refreshToken: response.data.refreshToken });
+            dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+            alert('토큰저장');
+            navigate('/')
+            reset();
+          }
+        })
+        .catch(function (error) {
+          console.log('로그인 실패: ', error.response.data);
+        });
+    } else {
+      alert("중복체크나 인증을 안했어요")
+    }
   };
 
-  const authlogins = 'naver'; //TODO auth 구글,네이버, 카카오
 
   // const inputRef = useRef(null);
 
@@ -157,10 +144,10 @@ const Userregist = () => {
     // setTextTemp(watch(data));
     textTemp = watch(data);
     axios.get(`${ROOT_API}/user/check/${value}`).then(function (response) {
-      if (type === 'userNickname') {
+      if (type === 'nickname') {
         response.data.duplicated === true
-          ? setDuplicateNickName('true')
-          : setDuplicateNickName('false');
+          ? setDuplicateNickName(true)
+          : setDuplicateNickName(false);
       }
     });
   };
@@ -187,17 +174,24 @@ const Userregist = () => {
       </div>
       <div className="prople">
         <div className="imgwrap">
-          <img src={imageFile} alt="프로필이미지" />
+          {imageFile && (
+            <img src={imageFile} alt="프로필이미지" />
+          )}
           <input
             accept="image/*"
-            // ref={inputRef}
+            ref={profileRef}
             type="file"
             name="프로필이미지"
-            id=""
-            onChange={handleFileChange}
+            id="profile"
           />
         </div>
       </div>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          propileSubmit();
+        }}
+      >버튼</button >
       <span>프로필 이미지 선택☝️</span>
 
       <div className="gaider">
@@ -207,7 +201,6 @@ const Userregist = () => {
           <li><span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.</li>
         </ul>
       </div>
-      {/* <Button onClick={fropileupload}>저장하기</Button> */}
       <div className="line-style">
         <div className="jb-division-line"></div>
         <span>회원가입에 필요한 기본정보를 입력해주세요</span>
@@ -215,19 +208,19 @@ const Userregist = () => {
       </div>
       <form className='registIDform' onSubmit={handleSubmit(onSubmit)}>
         <label>이메일</label>
-        <input className='disable' type="text" value={userEmail} readonly />
+        <input className='disable' type="text" value={userEmail} readOnly />
         <label>닉네임</label>
         <span className="star" title="필수사항">
           *
         </span>
         <input
           type="text"
-          id="userNickname"
+          id="nickname"
           placeholder="닉네임을 입력해주세요"
           tabIndex="2"
-          ref={usernicknameRef}
+          ref={nicknameRef}
           maxLength={15}
-          {...register('userNickname', {
+          {...register('nickname', {
             required: '닉네임은 필수 입력입니다.',
             minLength: {
               value: 5,
@@ -243,18 +236,18 @@ const Userregist = () => {
         />
         <Button
           title="중복체크"
-          onClick={() => validateDuplicate('userNickname')}
+          onClick={() => validateDuplicate('nickname')}
         >
           중복체크</Button>
-        {errors.userNickname && (
-          <small role="alert">{errors.userNickname.message}</small>
+        {errors.nickname && (
+          <small role="alert">{errors.nickname.message}</small>
         )}
-        {!errors.userNickname &&
+        {!errors.nickname &&
           duplicateNickName !== '' &&
           duplicateNickName === 'true' && (
             <small className="alert">중복된 닉네임입니다.</small>
           )}
-        {!errors.userNickname &&
+        {!errors.nickname &&
           duplicateNickName !== '' &&
           duplicateNickName === 'false' && (
             <small className="true">
@@ -275,6 +268,16 @@ const Userregist = () => {
               </span>
             ))}
           </div>
+        </div>
+        <div className='description'>
+          <label>한 줄 내소개</label>
+          <input
+            type='description'
+            id='description'
+            ref={discriptionref}
+            placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
+            maxLength={80}
+          />
         </div>
         <label>자동로그인</label>
         <input

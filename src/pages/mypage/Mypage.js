@@ -32,10 +32,10 @@ const Mypage = ({ type }) => {
       case 0:
         axios
           .get(
-            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함
+            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
             `${ROOT_API}/users/recent/activity`,
             {
-              params: { page: 0, size: 10 }, //TODO 활동 시간 적기
+              params: { page: 0, size: 10 }, //NOTE 가람님이 활동 시간명 변경
               headers: {
                 "X-AUTH-TOKEN": auth.accessToken,
               },
@@ -49,7 +49,7 @@ const Mypage = ({ type }) => {
       case 1:
         axios
           .get(
-            // 작성글
+            // 작성글//2
             `${ROOT_API}/post/list/user/${userId}`,
             {
               params: { page: 0, size: 10 },
@@ -66,7 +66,7 @@ const Mypage = ({ type }) => {
       case 2:
         axios
           .get(
-            // 댓글
+            // 댓글//NOTE 정상//3
             `${ROOT_API}/comment/list/user/${userId}`,
             {
               params: { page: 0, size: 10 },
@@ -83,7 +83,7 @@ const Mypage = ({ type }) => {
       case 3:
         axios
           .get(
-            // 즐겨찾기 & 스크랩
+            // 즐겨찾기 & 스크랩//4
             `${ROOT_API}/post/list/favorite/${userId}`, //1번
             {
               params: { page: 0, size: 10 },
@@ -99,8 +99,9 @@ const Mypage = ({ type }) => {
         break;
       default:
     }
-    console.log("dd");
-  }, [auth.accessToken, navigate, select, userId]);
+    console.log("dd", favorite);
+  }, [auth.accessToken, navigate, select, userId, favorite]);
+  console.log("dd", favorite);
 
   return (
     <>
@@ -122,7 +123,9 @@ const Mypage = ({ type }) => {
               ))}
             </ul>
             <div className="">
-              {favorite ? (
+              {favorite === undefined || favorite.length === 0 ? (
+                <>내용이 없습니다</> //NOTE 내용없음 버그 수정//ok
+              ) : (
                 favorite.map((item, index) => (
                   <div key={index} className="user-data">
                     <div className="create-time">{item.createDate}</div>
@@ -134,8 +137,6 @@ const Mypage = ({ type }) => {
                     </span>
                   </div>
                 ))
-              ) : (
-                <>내용이 없습니다.</>
               )}
             </div>
           </section>
