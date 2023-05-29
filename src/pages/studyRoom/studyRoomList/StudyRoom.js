@@ -66,7 +66,7 @@ const BoardList = ({ type }) => {
   console.log("data", data);
   console.log(
     "filter",
-    data.content[0].studyRoomUsers.filter((item) => item.status)
+    data.content[0].studyRoomUsers.filter((item) => item.status).length
   );
 
   return (
@@ -119,7 +119,7 @@ const BoardList = ({ type }) => {
                     </div>
                     <div className={s.icon}>
                       <BsFillPeopleFill size={16} />
-                      <span>{item.studyRoomUsers.length}</span>/
+                      <span>{item.studyRoomUsers.filter((item) => item.status).length}</span>/
                       <span>{item.joinableCount}</span>
                     </div>
                   </div>
