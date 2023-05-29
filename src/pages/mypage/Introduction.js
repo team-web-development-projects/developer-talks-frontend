@@ -1,7 +1,8 @@
-import Left from 'components/left/Left';
+import Userside from 'components/userside/Userside';
 import { useState } from 'react';
 import './Introduction.scss';
 import Button from 'components/button/Button';
+import MypageContent from './MyPageContent';
 
 const Introduction = () => {
   const [inputValue, setInputValue] = useState(
@@ -22,8 +23,7 @@ const Introduction = () => {
   };
   return (
     <>
-      <main>
-        <Left />
+      <MypageContent>
         <div className="notewrap">
           <div className="note">
             <p dangerouslySetInnerHTML={{ __html: submittedValue }}></p>
@@ -42,7 +42,7 @@ const Introduction = () => {
             </div>
           </div>
         </div>
-      </main>
+      </MypageContent>
     </>
   );
 };

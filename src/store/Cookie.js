@@ -8,7 +8,7 @@ export const setRefreshToken = (refreshToken) => {
 
   return cookies.set('refresh_token', refreshToken, {
     sameSite: 'strict',
-    path: '/',
+    path: '/Agreement',
     expires: new Date(expireDate),
   });
 };
