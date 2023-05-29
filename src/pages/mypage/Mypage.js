@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Mypage.scss";
 import { ROOT_API } from "constants/api";
+import MypageContent from "./MyPageContent";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -13,6 +14,8 @@ const Mypage = ({ type }) => {
   const [select, setSelect] = useState(-1);
   const [favorite, setFavorite] = useState([]);
   const dispatch = useDispatch();
+
+  const contacts = ['최근활동', '내가 쓴 글', '댓글', '스크랩'];
 
   let userId = "";
   if (auth.accessToken !== null) {
@@ -26,24 +29,6 @@ const Mypage = ({ type }) => {
     setSelect(type);
   };
 
-  const contacts = [
-    {
-      userId: 0,
-      type: '최근활동'
-    },
-    {
-      userId: 1,
-      type: '내가 쓴 글'
-    },
-    {
-      userId: 2,
-      type: '댓글'
-    },
-    {
-      userId: 3,
-      type: '스크랩'
-    },
-  ]
   useEffect(() => {
     switch (select) {
       case 0:
@@ -123,9 +108,7 @@ const Mypage = ({ type }) => {
   return (
     <>
       {auth.accessToken !== null ? (
-        <main className="mypage">
-          <Userside />
-
+        <MypageContent>
           <section className="notes">
             <ul>
               {contacts.map((contact, index) => (
@@ -134,7 +117,7 @@ const Mypage = ({ type }) => {
                     onClick={() => onSelect(index)}
                     className={`${select === index ? "select" : ""}`}
                   >
-                    {contact.type}
+                    {contact}
                   </button>
                 </li>
               ))}
@@ -157,7 +140,7 @@ const Mypage = ({ type }) => {
               )}
             </div>
           </section>
-        </main>
+        </MypageContent>
       ) : null}
     </>
   );
