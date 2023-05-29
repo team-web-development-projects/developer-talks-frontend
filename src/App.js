@@ -24,13 +24,14 @@ import {
   Routes,
   useLocation,
   useNavigate,
-} from 'react-router-dom';
-import { SET_TOKEN } from 'store/Auth';
-import { getCookieToken, setRefreshToken } from 'store/Cookie';
-import { isDev } from 'util/Util';
-import './assets/style/index.scss';
+} from "react-router-dom";
+import { SET_TOKEN } from "store/Auth";
+import { getCookieToken, setRefreshToken } from "store/Cookie";
+import { isDev } from "util/Util";
+import "./assets/style/index.scss";
 import Agreement from "pages/agreement/Agreement";
 import Userregist from "pages/userregist/Userregist";
+import MyStudyRoom from "pages/mypage/MyStudyRoom";
 
 function App() {
   const navigate = useNavigate();
@@ -40,22 +41,22 @@ function App() {
 
   useEffect(() => {
     if (isDev) {
-      console.log('dev');
+      console.log("dev");
     } else {
-      console.log('prod');
+      console.log("prod");
     }
     // https://team-web-development-projects.github.io/developer-talks-frontend/userregist?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiaWF0IjoxNjg1MjgxNDc5LCJleHAiOjE2ODUyOTIyNzl9.FDTQ6_0RWsBBb4ExIIxD_8_xufTm_GgeXCZSc5q11Wg
     //NOTE 토큰 재갱신
-    if (window.location.href.includes('accessToken')) {
-      const accessToken = window.location.href.split('accessToken=')[1];
+    if (window.location.href.includes("accessToken")) {
+      const accessToken = window.location.href.split("accessToken=")[1];
       const refreshToken = window.location.href
-        .split('accessToken=')[1]
-        .split('&refreshToken=')[0];
+        .split("accessToken=")[1]
+        .split("&refreshToken=")[0];
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       setRefreshToken({ refreshToken: refreshToken });
-      console.log('토큰있음');
-      navigate('/', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
-      console.log("구글 로그인 시 리다이렉션")
+      console.log("토큰있음");
+      navigate("/", { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
+      console.log("구글 로그인 시 리다이렉션");
     }
   }, [dispatch, navigate, location]);
 
@@ -65,16 +66,16 @@ function App() {
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: getCookieToken().refreshToken,
           headers: {
-            accept: '*/*',
-            'Content-Type': 'application/json',
+            accept: "*/*",
+            "Content-Type": "application/json",
           },
         })
         .then(function (response) {
-          console.log('재갱신 성공:', response);
+          console.log("재갱신 성공:", response);
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
         })
         .catch(function (error) {
-          console.log('재갱신 실패: ', error.response.data);
+          console.log("재갱신 실패: ", error.response.data);
         });
     }
   }, [auth.accessToken, dispatch, location]);
@@ -87,11 +88,14 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="mypage" element={<Mypage />} />
+          {/*
           <Route
             path="list/favorite/:userId"
             element={<Mypage type="post" />}
           />
+         */}
           <Route path="account" element={<Account />} />
+          <Route path="my-studyroom" element={<MyStudyRoom />} />
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
           <Route path="introduction" element={<Introduction />} />
