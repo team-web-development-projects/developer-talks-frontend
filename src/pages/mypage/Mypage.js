@@ -1,16 +1,12 @@
 import axios from "axios";
+import Userside from "components/userside/Userside";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Mypage.scss";
 import { ROOT_API } from "constants/api";
-<<<<<<< HEAD
 import MypageContent from "./MyPageContent";
-=======
-import MypageContent from './MyPageContent';
-
->>>>>>> d6ae9d41723a00656a959fbec0b6c15286d985e6
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
