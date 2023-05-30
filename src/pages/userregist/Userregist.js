@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Button from 'components/button/Button';
 import { API_HEADER, ROOT_API } from 'constants/api';
-import { parseJwt } from "hooks/useParseJwt"; //TODO 배포후 정보 가져오기
+import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Userregist = () => {
-  const authlogins = 'naver'; //TODO auth 구글,네이버, 카카오
+  const [authlogins, setAutologins] = useState('')
   let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
 
@@ -28,6 +28,8 @@ const Userregist = () => {
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
   const discriptionref = useRef(null);
+  const useridRef = useRef(null);
+  const [duplicateId, setDuplicateId] = useState('');
   const [userEmail, setUserEmail] = useState('')
   const [duplicateNickName, setDuplicateNickName] = useState('');
   const [autoLogin, setAutoLogin] = useState(false);
@@ -38,6 +40,7 @@ const Userregist = () => {
   useEffect(() => {
     if (auth.accessToken) {
       setUserEmail(parseJwt(auth.accessToken).sub); //NOTE 이메일 토큰으로 넣기 //ok
+      setAutologins(parseJwt(auth.accessToken).provider)
       console.log(parseJwt(auth.accessToken), "ㅇㅇ")
       console.log(userEmail, "dfdf")
     }
@@ -89,9 +92,14 @@ const Userregist = () => {
   };
   const onSubmit = async (data) => {
 
-    console.log(duplicateNickName)
     await new Promise((r) => setTimeout(r, 1000));
-    if (duplicateNickName) {//TODO 버튼 다 클릭하면 실행 // 항상 false 
+    if (!duplicateId && !duplicateNickName) {
+      console.log(`
+      nickname: ${data.nickname},
+      skills: ${selectedTags.tags},
+      description: ${data.description},
+      profileImageId: ${profileImageId}`
+      )
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -128,13 +136,16 @@ const Userregist = () => {
 
   // const inputRef = useRef(null);
 
-  let textTemp = '';
   const validateDuplicate = (data) => { //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
     console.log('넣은 데이터', watch(data));
-    textTemp = watch(data);
     axios.get(`${ROOT_API}/users/check/${type}/${value}`).then(function (response) {
+      if (type === 'userid') {
+        response.data.duplicated === true
+          ? setDuplicateId(true)
+          : setDuplicateId(false);
+      }
       if (type === 'nickname') {
         response.data.duplicated === true
           ? setDuplicateNickName(true)
@@ -252,6 +263,54 @@ const Userregist = () => {
               </small>
             )}
         </div>
+        <div className='labelmodule'>
+          <div className='labeltitle'>
+            <label>아이디</label>
+            <span className="star" title="필수사항">
+              *
+            </span>
+          </div>
+          <div className='inputcont'>
+            <input
+              type="text"
+              id="userid"
+              placeholder="아이디를 입력해주세요"
+              maxLength={15}
+              ref={useridRef}
+              tabIndex="3"
+              {...register('userid', {
+                required: '아이디는 필수 입력입니다.',
+                minLength: {
+                  value: 5,
+                  message: '5자리 이상 아이디를 사용해주세요.',
+                },
+                maxLength: {
+                  value: 15,
+                  message: '15자리 이하 아이디를 사용해주세요.',
+                },
+              })}
+            />
+            <Button
+              title="중복체크"
+              onClick={(e) => {
+                e.preventDefault();
+                validateDuplicate('userid');
+              }}
+            >
+              중복체크</Button>
+          </div>
+          {errors.userid && (
+            <small role="alert">{errors.userid.message}</small>
+          )}
+          {duplicateId !== '' && duplicateId === true && (
+            <small className="alert">중복된 아이디입니다.</small>
+          )}
+          {duplicateId !== '' && duplicateId === false && (
+            <small className="true">사용할 수 있는 아이디입니다.</small>
+          )}
+        </div>
+
+
         <div className='tagmodule'>
           <label>관심있는 태그입력</label>
           <div className='tagalign'>
@@ -277,6 +336,7 @@ const Userregist = () => {
             ref={discriptionref}
             placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
             maxLength={80}
+            {...register('description', { required: true })}
           />
         </div>
         <div className='loginbutton'>

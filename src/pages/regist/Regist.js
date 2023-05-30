@@ -3,14 +3,14 @@ import axios from 'axios';
 import Form from 'components/form/Form';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
 import { API_HEADER, ROOT_API } from 'constants/api';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
 
-import './Regist.scss';
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
+import './Regist.scss';
 // import { ToastContainer, toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
@@ -71,8 +71,6 @@ const Regist = () => {
             },
             file: 'file=@22.JPG;type=image/jpeg'
           })
-        console.log(response.data, "dfdfd");
-        console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
       } else {
         console.log("파일을 선택해주세요.");
@@ -84,11 +82,17 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
 
-    console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName)
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && duplicateId && duplicateNickName) {//NOTE 버튼 다 클릭하면 실행
-
-
+    if (verityEmailcheck && compareEmailcheck && !duplicateId && !duplicateNickName) {//NOTE 버튼 다 클릭하면 실행
+      console.log(`
+  email: ${data.userEmail},
+  nickname: ${data.nickname},
+  userid: ${data.userid},
+  password: ${data.password},
+  skills: ${selectedTags.tags},
+  description: ${data.description},
+  profileImageId: ${profileImageId}`
+      )
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -98,7 +102,7 @@ const Regist = () => {
             userid: data.userid,
             password: data.password,
             skills: selectedTags.tags,
-            description: data.description,
+            description: data.discription,
             profileImageId: profileImageId
           },
           {
@@ -143,13 +147,10 @@ const Regist = () => {
   };
 
 
-
-  let textTemp = '';
   const validateDuplicate = (data) => { //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
     console.log('넣은 데이터', watch(data));
-    textTemp = watch(data);
     axios.get(`${ROOT_API}/users/check/${type}/${value}`).then(function (response) {
       if (type === 'userid') {
         response.data.duplicated === true
@@ -159,29 +160,10 @@ const Regist = () => {
       if (type === 'nickname') {
         response.data.duplicated === true
           ? setDuplicateNickName(true)
-          : setDuplicateNickName(false); // TODO 이건 체크 안해도 로그인 되는지 체크해봐야함
+          : setDuplicateNickName(false);
       }
     });
   };
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   console.log(file, "dkfjdkjf")
-  //   console.log(file.name, "dkfjdkjf")
-  //   if (file.name) {
-  //     uploadImage(file.name)
-  //       .then((response) => {
-  //         // 업로드 성공 시 수행할 작업
-  //         console.log('Upload success:', response.data); //TODO 콘솔창에 정보까지는 나오는데 500에러
-  //         return setImageFile(file.name);
-  //       })
-  //       .catch((error) => {
-  //         // 업로드 실패 시 수행할 작업
-  //         console.error('Upload error:', error);
-  //       });
-  //   }
-
-  // };
 
   const verityEmail = (e) => { //NOTE 이메일 인증//ok
     e.preventDefault();
@@ -192,7 +174,6 @@ const Regist = () => {
       })
       .then(function (response) {
         setVerityEmailcheck(true);
-        console.log('이메일 보내기:', response);
         setCode(response.data.code)
         alert('이메일을 전송했습니다.');
       });
@@ -200,7 +181,6 @@ const Regist = () => {
   const compareEmail = (e) => { //NOTE 인증확인//ok
     e.preventDefault();
     if (code === inputEmail) {
-      console.log(inputEmail)
       alert("인증완료")
       setCompareEmailcheck(true);
 
@@ -225,7 +205,6 @@ const Regist = () => {
         tags: [...selectedTags.tags, tag],
       });
     }
-    console.log('dd', selectedTags.tags, typeof (selectedTags.tags)) //TODO 테그 배열 하나 빠짐
   };
   const typechange = () => { //NOTE 비밀번호 토글//ok
     setTypetoggle("text");
@@ -330,6 +309,7 @@ const Regist = () => {
               ref={discriptionref}
               placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
               maxLength={80}
+              {...register('description', { required: true })}
             />
           </div>
           <div className="line-style">
@@ -344,7 +324,7 @@ const Regist = () => {
             <tbody>
               <tr>
                 <th>
-                  <label htmlFor="userEmail">이메일</label>
+                  <label htmlFor="userEmail">이메일</label> {/* TODO 쓴 이메일은 다시 못씀 */}
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -435,6 +415,7 @@ const Regist = () => {
                         사용할 수 있는 닉네임입니다.
                       </small>
                     )}
+
                 </td>
               </tr>
               <tr>
@@ -480,7 +461,7 @@ const Regist = () => {
                     <small className="alert">중복된 아이디입니다.</small>
                   )}
                   {duplicateId !== '' && duplicateId === false && (
-                    <small className="true">사용할 수 있는 아이디입니다.</small> // TODO 중복체크 후 다시 입력 시 다시 체크할 수 있게
+                    <small className="true">사용할 수 있는 아이디입니다.</small>
                   )}
                 </td>
               </tr>

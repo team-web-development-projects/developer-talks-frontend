@@ -1,12 +1,11 @@
 import axios from "axios";
-import Userside from "components/userside/Userside";
+import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import "./Mypage.scss";
-import { ROOT_API } from "constants/api";
+import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
+import "./Mypage.scss";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -35,7 +34,7 @@ const Mypage = ({ type }) => {
             // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1..
             `${ROOT_API}/users/recent/activity`,
             {
-              params: { page: 0, size: 10 }, //NOTE 가람님이 활동 시간명 변경
+              params: { page: 0, size: 10 },
               headers: {
                 "X-AUTH-TOKEN": auth.accessToken,
               },
@@ -66,7 +65,7 @@ const Mypage = ({ type }) => {
       case 2:
         axios
           .get(
-            // 댓글//NOTE 정상//3
+            // 댓글//3
             `${ROOT_API}/comment/list/user/${userId}`,
             {
               params: { page: 0, size: 10 },
