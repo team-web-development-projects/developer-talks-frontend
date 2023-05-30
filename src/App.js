@@ -31,6 +31,7 @@ import { isDev } from 'util/Util';
 import './assets/style/index.scss';
 import Agreement from "pages/agreement/Agreement";
 import Userregist from "pages/userregist/Userregist";
+import { NavigateMain, NavigatePost } from './Outlet';
 
 function App() {
   const navigate = useNavigate();
@@ -39,12 +40,6 @@ function App() {
   const auth = useSelector((state) => state.authToken);
 
   useEffect(() => {
-    if (isDev) {
-      console.log('dev');
-    } else {
-      console.log('prod');
-    }
-    // https://team-web-development-projects.github.io/developer-talks-frontend/userregist?accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJ1c2VyaWQiOiJkamFnbWx3bm4xMkBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iuq5gOyLnOyXsCIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiaWF0IjoxNjg1MjgxNDc5LCJleHAiOjE2ODUyOTIyNzl9.FDTQ6_0RWsBBb4ExIIxD_8_xufTm_GgeXCZSc5q11Wg
     // NOTE 토큰 재갱신
     if (window.location.href.includes('accessToken')) { // NOTE 토큰 있으면 메인 없으면 회원가입페이지
       const accessToken = window.location.href.split('accessToken=')[1];
@@ -139,28 +134,28 @@ function App() {
 }
 
 // 헤더 포함
-function NavigateMain() {
-  return (
-    <>
-      <Header />
-      <div className="page">
-        <Outlet />
-      </div>
-      <Footer />
-    </>
-  );
-}
+// function NavigateMain() {
+//   return (
+//     <>
+//       <Header />
+//       <div className="page">
+//         <Outlet />
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// }
 
 // 헤더 미포함
-function NavigatePost() {
-  return (
-    <>
-      <div className="page">
-        <Outlet />
-      </div>
-      <Footer />
-    </>
-  );
-}
+// function NavigatePost() {
+//   return (
+//     <>
+//       <div className="page">
+//         <Outlet />
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// }
 
 export default App;

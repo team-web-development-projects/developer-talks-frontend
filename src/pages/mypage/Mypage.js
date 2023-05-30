@@ -21,9 +21,7 @@ const Mypage = ({ type }) => {
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
   }
-  if (auth.accessToken === null) {
-    navigate("/login", { replace: true });
-  }
+
 
   const onSelect = (type) => {
     setSelect(type);
@@ -62,7 +60,7 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            // console.log("1", res.data.content);
+            console.log("작성글", res.data.content);
           });
         break;
       case 2:
@@ -78,8 +76,8 @@ const Mypage = ({ type }) => {
             }
           )
           .then((res) => {
-            setFavorite(res.data.content);
-            // console.log("2", res.data.content);
+            setFavorite(res.data);
+            console.log("댓글", res.data);
           });
         break;
       case 3:
@@ -96,14 +94,22 @@ const Mypage = ({ type }) => {
           )
           .then((res) => {
             setFavorite(res.data.content);
-            // console.log("3", res.data.content);
+            console.log("즐겨찾기", res.data.content);
           });
         break;
       default:
     }
-    // console.log("dd", favorite);
-  }, [auth.accessToken, navigate, select, userId, favorite]);
-  // console.log("dd", favorite);
+    if (auth.accessToken === null) {
+      navigate("/login", { replace: true });
+    }
+  }, [auth.accessToken, navigate, select, userId]);
+
+
+  useEffect(() => {
+    console.log('ff', favorite, favorite.length);
+
+  }, [favorite])
+
 
   return (
     <>
@@ -123,21 +129,32 @@ const Mypage = ({ type }) => {
               ))}
             </ul>
             <div className="">
-              {favorite === undefined || favorite.length === 0 ? (
-                <>내용이 없습니다</> //NOTE 내용없음 버그 수정//ok
-              ) : (
-                favorite.map((item, index) => (
-                  <div key={index} className="user-data">
-                    <div className="create-time">{item.createDate}</div>
-                    <span
-                      className="title"
-                      onClick={() => navigate(`/board/${item.id}`)}
-                    >
-                      {item.title}{" "}
-                    </span>
-                  </div>
-                ))
-              )}
+              {favorite && favorite.length === 0 && <div>내용이없습니다.</div>}
+              {
+                favorite && favorite.length === 0 ? <div>내용이없습니다.</div> ? select !== 1 :
+                  favorite.map((item, index) => (
+                    <div key={index} className="user-data">
+                      <div className="create-time">{item.createDate}</div>
+                      <span
+                        className="title"
+                        onClick={() => navigate(`/board/${item.id}`)}
+                      >
+                        {item.title}{" "}
+                      </span>
+                    </div>
+                  )) :
+                  favorite.map((item, index) => (
+                    <div key={index} className="user-data">
+                      <div className="create-time">{item.postId}</div>
+                      <span
+                        className="title"
+                        onClick={() => navigate(`/board/${item.id}`)}
+                        dangerouslySetInnerHTML={{ __html: item.content }}
+                      >
+                      </span>
+                    </div>
+                  ))
+              }
             </div>
           </section>
         </MypageContent>
