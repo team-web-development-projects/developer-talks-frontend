@@ -1,6 +1,6 @@
 import React from "react";
 import "./mypagecontent.scss";
-import Userside from "./userside_com/Userside";
+import Userside from "./_com/userside/Userside";
 
 const MypageContent = ({ children }) => {
   return (
