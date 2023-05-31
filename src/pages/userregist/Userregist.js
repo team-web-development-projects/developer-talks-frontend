@@ -1,26 +1,27 @@
-import axios from 'axios';
-import Button from 'components/button/Button';
-import { API_HEADER, ROOT_API } from 'constants/api';
+import axios from "axios";
+import Button from "components/button/Button";
+import { API_HEADER, ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { SET_TOKEN } from 'store/Auth';
-import { setRefreshToken } from 'store/Cookie';
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { SET_TOKEN } from "store/Auth";
+import { setRefreshToken } from "store/Cookie";
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
-import './Userregist.scss';
-
+import "./Userregist.scss";
 
 const Userregist = () => {
-  const [authlogins, setAutologins] = useState('')
+  const [authlogins, setAutologins] = useState("");
   let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
 
   const dispatch = useDispatch();
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [imageFile, setImageFile] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+  );
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -29,10 +30,10 @@ const Userregist = () => {
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
   const discriptionref = useRef(null);
-  const useridRef = useRef((auth.accessToken).userid);
-  const [duplicateId, setDuplicateId] = useState('');
-  const [userEmail, setUserEmail] = useState('')
-  const [duplicateNickName, setDuplicateNickName] = useState('');
+  const useridRef = useRef(auth.accessToken.userid);
+  const [duplicateId, setDuplicateId] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [duplicateNickName, setDuplicateNickName] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
@@ -41,9 +42,9 @@ const Userregist = () => {
   useEffect(() => {
     if (auth.accessToken) {
       setUserEmail(parseJwt(auth.accessToken).sub); //NOTE 이메일 토큰으로 넣기 //ok
-      setAutologins(parseJwt(auth.accessToken).provider)
+      setAutologins(parseJwt(auth.accessToken).provider);
     }
-  }, [auth.accessToken, userEmail])
+  }, [auth.accessToken, userEmail]);
 
   const tags = [
     "DJANGO",
@@ -61,13 +62,17 @@ const Userregist = () => {
     reset,
     watch,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({ mode: "onChange" });
 
-  const [profileImageId, setProfileImageId] = useState('')
+  const [profileImageId, setProfileImageId] = useState("");
   const propileSubmit = async (data) => {
     try {
-      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
-        const formData = new FormData();//NOTE 프로필 이미지
+      if (
+        profileRef.current &&
+        profileRef.current.files &&
+        profileRef.current.files.length > 0
+      ) {
+        const formData = new FormData(); //NOTE 프로필 이미지
         formData.append("file", profileRef.current.files[0]);
         const response = await axios.post(
           `${ROOT_API}/users/profile/image`,
@@ -77,8 +82,9 @@ const Userregist = () => {
               "Content-Type": "multipart/form-data",
               accept: "application/json",
             },
-            file: 'file=@22.JPG;type=image/jpeg'
-          })
+            file: "file=@22.JPG;type=image/jpeg",
+          }
+        );
         console.log(response.data, "dfd,,,fd");
         console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
@@ -90,15 +96,13 @@ const Userregist = () => {
     }
   };
   const onSubmit = async (data) => {
-
     await new Promise((r) => setTimeout(r, 1000));
     if (!duplicateId && !duplicateNickName) {
       console.log(`
       nickname: ${data.nickname},
       skills: ${selectedTags.tags},
       description: ${data.description},
-      profileImageId: ${profileImageId}`
-      )
+      profileImageId: ${profileImageId}`);
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -109,7 +113,7 @@ const Userregist = () => {
             nickname: data.nickname,
             skills: selectedTags.tags,
             description: data.description,
-            profileImageId: profileImageId
+            profileImageId: profileImageId,
           },
           {
             headers: {
@@ -118,20 +122,21 @@ const Userregist = () => {
           }
         )
         .then(function (response) {
-          console.log('회원가입 성공:', response);
-          if (autoLogin) {//NOTE 자동로그인
+          console.log("회원가입 성공:", response);
+          if (autoLogin) {
+            //NOTE 자동로그인
             setRefreshToken({ refreshToken: response.data.refreshToken });
             dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-            alert('토큰저장');
-            navigate('/')
+            alert("토큰저장");
+            navigate("/");
             reset();
           }
         })
         .catch(function (error) {
-          console.log('로그인 실패: ', error.response.data);
+          console.log("로그인 실패: ", error.response.data);
         });
     } else {
-      toast.success('😎 인증을 확인해주세요', {
+      toast.success("😎 인증을 확인해주세요", {
         position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
@@ -144,28 +149,31 @@ const Userregist = () => {
     }
   };
 
-
   // const inputRef = useRef(null);
 
-  const validateDuplicate = (data) => { //NOTE 중복체크 통신//ok
+  const validateDuplicate = (data) => {
+    //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
-    console.log('넣은 데이터', watch(data));
-    axios.get(`${ROOT_API}/users/check/${type}/${value}`).then(function (response) {
-      if (type === 'userid') {
-        response.data.duplicated === true
-          ? setDuplicateId(true)
-          : setDuplicateId(false);
-      }
-      if (type === 'nickname') {
-        response.data.duplicated === true
-          ? setDuplicateNickName(true)
-          : setDuplicateNickName(false);
-      }
-    });
+    console.log("넣은 데이터", watch(data));
+    axios
+      .get(`${ROOT_API}/users/check/${type}/${value}`)
+      .then(function (response) {
+        if (type === "userid") {
+          response.data.duplicated === true
+            ? setDuplicateId(true)
+            : setDuplicateId(false);
+        }
+        if (type === "nickname") {
+          response.data.duplicated === true
+            ? setDuplicateNickName(true)
+            : setDuplicateNickName(false);
+        }
+      });
   };
 
-  const clickTag = (tag) => { //NOTE 기술 테그
+  const clickTag = (tag) => {
+    //NOTE 기술 테그
     if (selectedTags.tags.includes(tag)) {
       setSelectedTags({
         ...selectedTags,
@@ -177,10 +185,10 @@ const Userregist = () => {
         tags: [...selectedTags.tags, tag],
       });
     }
-    console.log('dd', selectedTags.tags, typeof (selectedTags.tags))
+    console.log("dd", selectedTags.tags, typeof selectedTags.tags);
   };
   return (
-    <div className='userregistname'>
+    <div className="userregistname">
       <ToastContainer
         position="top-left"
         autoClose={2000}
@@ -196,13 +204,13 @@ const Userregist = () => {
       <div className="center">
         <div className="headername">
           <p>{authlogins}계정을이용한 회원가입</p>
-          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
+          <span>
+            Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.
+          </span>
         </div>
         <div className="prople">
           <div className="imgwrap">
-            {imageFile && (
-              <img src={imageFile} alt="프로필이미지" />
-            )}
+            {imageFile && <img src={imageFile} alt="프로필이미지" />}
             <input
               accept="image/*"
               ref={profileRef}
@@ -217,14 +225,20 @@ const Userregist = () => {
             e.preventDefault();
             propileSubmit();
           }}
-        >버튼</button >
+        >
+          버튼
+        </button>
         <span>프로필 이미지 선택☝️</span>
 
         <div className="gaider">
           <span>🙏추가 안내</span>
           <ul>
-            <li><span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.</li>
-            <li><span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.</li>
+            <li>
+              <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
+            </li>
+            <li>
+              <span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.
+            </li>
           </ul>
         </div>
       </div>
@@ -233,19 +247,24 @@ const Userregist = () => {
         <span>회원가입에 필요한 기본정보를 입력해주세요</span>
         <div className="jb-division-line"></div>
       </div>
-      <form className='registIDform' onSubmit={handleSubmit(onSubmit)}>
-        <div className='emailmodule'>
+      <form className="registIDform" onSubmit={handleSubmit(onSubmit)}>
+        <div className="emailmodule">
           <label>이메일</label>
-          <input className='disable' type="text" placeholder={userEmail} readOnly />
+          <input
+            className="disable"
+            type="text"
+            placeholder={userEmail}
+            readOnly
+          />
         </div>
-        <div className='labelmodule'>
-          <div className='labeltitle'>
+        <div className="labelmodule">
+          <div className="labeltitle">
             <label>닉네임</label>
             <span className="star" title="필수사항">
               *
             </span>
           </div>
-          <div className='inputcont'>
+          <div className="inputcont">
             <input
               type="text"
               id="nickname"
@@ -253,11 +272,11 @@ const Userregist = () => {
               tabIndex="2"
               ref={nicknameRef}
               maxLength={15}
-              {...register('nickname', {
-                required: '닉네임은 필수 입력입니다.',
+              {...register("nickname", {
+                required: "닉네임은 필수 입력입니다.",
                 minLength: {
                   value: 5,
-                  message: '5자리 이상 입력해주세요.',
+                  message: "5자리 이상 입력해주세요.",
                 },
               })}
             />
@@ -265,35 +284,34 @@ const Userregist = () => {
               title="중복체크"
               onClick={(e) => {
                 e.preventDefault();
-                validateDuplicate('nickname')
+                validateDuplicate("nickname");
               }}
             >
-              중복체크</Button>
+              중복체크
+            </Button>
           </div>
           {errors.nickname && (
             <small role="alert">{errors.nickname.message}</small>
           )}
           {!errors.nickname &&
-            duplicateNickName !== '' &&
+            duplicateNickName !== "" &&
             duplicateNickName === true && (
               <small className="alert">중복된 닉네임입니다.</small>
             )}
           {!errors.nickname &&
-            duplicateNickName !== '' &&
+            duplicateNickName !== "" &&
             duplicateNickName === false && (
-              <small className="true">
-                사용할 수 있는 닉네임입니다.
-              </small>
+              <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
         </div>
-        <div className='labelmodule'>
-          <div className='labeltitle'>
+        <div className="labelmodule">
+          <div className="labeltitle">
             <label>아이디</label>
             <span className="star" title="필수사항">
               *
             </span>
           </div>
-          <div className='inputcont'>
+          <div className="inputcont">
             <input
               type="text"
               id="userid"
@@ -301,15 +319,15 @@ const Userregist = () => {
               maxLength={15}
               ref={useridRef}
               tabIndex="3"
-              {...register('userid', {
-                required: '아이디는 필수 입력입니다.',
+              {...register("userid", {
+                required: "아이디는 필수 입력입니다.",
                 minLength: {
                   value: 5,
-                  message: '5자리 이상 아이디를 사용해주세요.',
+                  message: "5자리 이상 아이디를 사용해주세요.",
                 },
                 maxLength: {
                   value: 15,
-                  message: '15자리 이하 아이디를 사용해주세요.',
+                  message: "15자리 이하 아이디를 사용해주세요.",
                 },
               })}
             />
@@ -317,36 +335,42 @@ const Userregist = () => {
               title="중복체크"
               onClick={(e) => {
                 e.preventDefault();
-                validateDuplicate('userid');
+                validateDuplicate("userid");
               }}
             >
-              중복체크</Button>
+              중복체크
+            </Button>
           </div>
-          {errors.userid && (
-            <small role="alert">{errors.userid.message}</small>
-          )}
-          {duplicateId !== '' && duplicateId === true && (
+          {errors.userid && <small role="alert">{errors.userid.message}</small>}
+          {duplicateId !== "" && duplicateId === true && (
             <small className="alert">중복된 아이디입니다.</small>
           )}
-          {duplicateId !== '' && duplicateId === false && (
+          {duplicateId !== "" && duplicateId === false && (
             <small className="true">사용할 수 있는 아이디입니다.</small>
           )}
         </div>
 
-        <div className='emailmodule'>{/* TODO 비밀번호 넣을 지 말지 */}
+        <div className="emailmodule">
+          {/* TODO 비밀번호 넣을 지 말지 */}
           <label>비밀번호</label>
-          <input className='disable' type="text" placeholder={userEmail} readOnly />
+          <input
+            className="disable"
+            type="text"
+            placeholder={userEmail}
+            readOnly
+          />
         </div>
-        <div className='tagmodule'>
+        <div className="tagmodule">
           <label>관심있는 태그입력</label>
-          <div className='tagalign'>
+          <div className="tagalign">
             <div className={s.tags}>
               {tags.map((item, index) => (
                 <span
                   key={index}
                   onClick={() => clickTag(item)}
-                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""
-                    }`}
+                  className={`tag ${
+                    selectedTags.tags.includes(item) ? [s.is_select] : ""
+                  }`}
                 >
                   {item}
                 </span>
@@ -354,29 +378,29 @@ const Userregist = () => {
             </div>
           </div>
         </div>
-        <div className='description'>
+        <div className="description">
           <label>한 줄 내소개</label>
           <input
-            type='description'
-            id='description'
+            type="description"
+            id="description"
             ref={discriptionref}
-            placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
+            placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
             maxLength={80}
-            {...register('description', { required: true })}
+            {...register("description", { required: true })}
           />
         </div>
-        <div className='loginbutton'>
+        <div className="loginbutton">
           <label>자동로그인</label>
           <input
             type="checkbox"
             checked={autoLogin}
             onChange={handleCheckboxChange}
           />
-          <Button type='submit' disabled={isSubmitting} >간편 회원가입</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            간편 회원가입
+          </Button>
         </div>
       </form>
-
-
     </div>
   );
 };

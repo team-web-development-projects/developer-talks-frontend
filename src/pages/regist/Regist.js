@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import Form from 'components/form/Form';
 import BasicModal from 'components/portalModal/basicmodal/BasicModal';
@@ -11,13 +10,13 @@ import { SET_TOKEN } from 'store/Auth';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
+import s from '../studyRoom/studyRoomPost/studyRoom.module.scss';
 import './Regist.scss';
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
-  const notify = () => toast("Wow so easy !");
+  const notify = () => toast('Wow so easy !');
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const authlogins = 'D-Talks';
@@ -31,23 +30,25 @@ const Regist = () => {
     joinableCount: 1,
   });
   const [modal, setModal] = useState(false);
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [imageFile, setImageFile] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
   const [duplicateId, setDuplicateId] = useState('');
   const [duplicateNickName, setDuplicateNickName] = useState('');
   let [inputEmail, setInputEmail] = useState('');
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
-  const [typetoggle, setTypetoggle] = useState('password')
-  const [code, setCode] = useState("")
+  const [typetoggle, setTypetoggle] = useState('password');
+  const [code, setCode] = useState('');
   const tags = [
-    "DJANGO",
-    "SPRING",
-    "JAVASCRIPT",
-    "JAVA",
-    "PYTHON",
-    "CPP",
-    "REACT",
-    "AWS",
+    'DJANGO',
+    'SPRING',
+    'JAVASCRIPT',
+    'JAVA',
+    'PYTHON',
+    'CPP',
+    'REACT',
+    'AWS',
   ];
   const {
     register,
@@ -56,27 +57,32 @@ const Regist = () => {
     watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: 'onChange' });
-  const [profileImageId, setProfileImageId] = useState('')
+  const [profileImageId, setProfileImageId] = useState('');
   const propileSubmit = async (data) => {
     try {
-      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
-        const formData = new FormData();//NOTE 프로필 이미지
-        formData.append("file", profileRef.current.files[0]);
+      if (
+        profileRef.current &&
+        profileRef.current.files &&
+        profileRef.current.files.length > 0
+      ) {
+        const formData = new FormData(); //NOTE 프로필 이미지
+        formData.append('file', profileRef.current.files[0]);
         const response = await axios.post(
           `${ROOT_API}/users/profile/image`,
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
-              accept: "application/json",
+              'Content-Type': 'multipart/form-data',
+              accept: 'application/json',
             },
-            file: 'file=@22.JPG;type=image/jpeg'
-          })
-        console.log(response.data, "dfd,,,fd");
-        console.log(formData, "dfdfd");
+            file: 'file=@22.JPG;type=image/jpeg',
+          }
+        );
+        console.log(response.data, 'dfd,,,fd');
+        console.log(formData, 'dfdfd');
         setProfileImageId(response.data.id);
       } else {
-        console.log("파일을 선택해주세요.");
+        console.log('파일을 선택해주세요.');
       }
     } catch (error) {
       console.error(error);
@@ -84,9 +90,14 @@ const Regist = () => {
   };
 
   const onSubmit = async (data) => {
-
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && !duplicateId && !duplicateNickName) {//NOTE 버튼 다 클릭하면 실행
+    if (
+      verityEmailcheck &&
+      compareEmailcheck &&
+      !duplicateId &&
+      !duplicateNickName
+    ) {
+      //NOTE 버튼 다 클릭하면 실행
       console.log(`
   email: ${data.userEmail},
   nickname: ${data.nickname},
@@ -94,8 +105,7 @@ const Regist = () => {
   password: ${data.password},
   skills: ${selectedTags.tags},
   description: ${data.description},
-  profileImageId: ${profileImageId}`
-      )
+  profileImageId: ${profileImageId}`);
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -106,7 +116,7 @@ const Regist = () => {
             password: data.password,
             skills: selectedTags.tags,
             description: data.discription,
-            profileImageId: profileImageId
+            profileImageId: profileImageId,
           },
           {
             headers: {
@@ -134,7 +144,7 @@ const Regist = () => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
               localStorage.setItem('token', response.data.accessToken);
               setModal(true);
-              navigate('/')
+              navigate('/');
               reset();
             })
             .catch(function (error) {
@@ -145,30 +155,33 @@ const Regist = () => {
           console.log('회원가입 실패:', error.response.data);
         });
     } else {
-      alert("중복체크나 인증을 안했어요")
+      alert('중복체크나 인증을 안했어요');
     }
   };
 
-
-  const validateDuplicate = (data) => { //NOTE 중복체크 통신//ok
+  const validateDuplicate = (data) => {
+    //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
     console.log('넣은 데이터', watch(data));
-    axios.get(`${ROOT_API}/users/check/${type}/${value}`).then(function (response) {
-      if (type === 'userid') {
-        response.data.duplicated === true
-          ? setDuplicateId(true)
-          : setDuplicateId(false);
-      }
-      if (type === 'nickname') {
-        response.data.duplicated === true
-          ? setDuplicateNickName(true)
-          : setDuplicateNickName(false);
-      }
-    });
+    axios
+      .get(`${ROOT_API}/users/check/${type}/${value}`)
+      .then(function (response) {
+        if (type === 'userid') {
+          response.data.duplicated === true
+            ? setDuplicateId(true)
+            : setDuplicateId(false);
+        }
+        if (type === 'nickname') {
+          response.data.duplicated === true
+            ? setDuplicateNickName(true)
+            : setDuplicateNickName(false);
+        }
+      });
   };
 
-  const verityEmail = (e) => { //NOTE 이메일 인증//ok
+  const verityEmail = (e) => {
+    //NOTE 이메일 인증//ok
     e.preventDefault();
     console.log('dc', watch().userEmail);
     axios
@@ -177,35 +190,35 @@ const Regist = () => {
       })
       .then(function (response) {
         setVerityEmailcheck(true);
-        setCode(response.data.code)
+        setCode(response.data.code);
         toast.success('😎 인증문자가 발송되었습니다', {
-          position: "top-left",
+          position: 'top-left',
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          theme: 'dark',
         });
       });
   };
-  const compareEmail = (e) => { //NOTE 인증확인//ok
+  const compareEmail = (e) => {
+    //NOTE 인증확인//ok
     e.preventDefault();
     if (code === inputEmail) {
-      alert("인증완료")
+      alert('인증완료');
       setCompareEmailcheck(true);
-
     } else {
-      alert("인증실패");
+      alert('인증실패');
     }
-
-  }
+  };
   const handleInputChange = (e) => {
     setInputEmail(e.target.value);
-  }
+  };
 
-  const clickTag = (tag) => { //NOTE 기술 테그
+  const clickTag = (tag) => {
+    //NOTE 기술 테그
     if (selectedTags.tags.includes(tag)) {
       setSelectedTags({
         ...selectedTags,
@@ -218,17 +231,16 @@ const Regist = () => {
       });
     }
   };
-  const typechange = () => { //NOTE 비밀번호 토글//ok
-    setTypetoggle("text");
+  const typechange = () => {
+    //NOTE 비밀번호 토글//ok
+    setTypetoggle('text');
 
     setTimeout(() => {
-      setTypetoggle("password");
+      setTypetoggle('password');
     }, 1000);
   };
 
-
   return (
-
     <div className="regist-page page">
       {/* 경고창  */}
       <ToastContainer
@@ -254,16 +266,16 @@ const Regist = () => {
         <fieldset className="form_1">
           <legend>정보입력</legend>
 
-          <div className='userregistpage'></div>
+          <div className="userregistpage"></div>
           <div className="headername">
             <p>{authlogins}계정 회원가입</p>
-            <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
+            <span>
+              Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.
+            </span>
           </div>
           <div className="prople">
             <div className="imgwrap">
-              {imageFile && (
-                <img src={imageFile} alt="프로필이미지" />
-              )}
+              {imageFile && <img src={imageFile} alt="프로필이미지" />}
               <input
                 accept="image/*"
                 ref={profileRef}
@@ -278,25 +290,32 @@ const Regist = () => {
               e.preventDefault();
               propileSubmit();
             }}
-          >버튼</button >
+          >
+            버튼
+          </button>
           <span>프로필 이미지 선택☝️</span>
 
           <div className="gaider">
             <span>🙏추가 안내</span>
             <ul>
-              <li><span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.</li>
-              <li><span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.</li>
+              <li>
+                <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
+              </li>
+              <li>
+                <span>Gravartar</span>를 이용한 프로필 변경은 여기를
+                참고해주세요.
+              </li>
             </ul>
           </div>
 
           <label>관심있는 태그입력</label>
-          <div className='tagalign'>
+          <div className="tagalign">
             <div className={s.tags}>
               {tags.map((item, index) => (
                 <span
                   key={index}
                   onClick={() => clickTag(item)}
-                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""
+                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ''
                     }`}
                 >
                   {item}
@@ -304,13 +323,13 @@ const Regist = () => {
               ))}
             </div>
           </div>
-          <div className='description'>
+          <div className="description">
             <label>한 줄 내소개</label>
             <input
-              type='description'
-              id='description'
+              type="description"
+              id="description"
               ref={discriptionref}
-              placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
+              placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
               maxLength={80}
             // {...register('description', { required: true })} //NOTE 필수에서 선택으로 변경
             />
@@ -322,12 +341,13 @@ const Regist = () => {
           </div>
           <h2>Developer-Talks 계정 만들기</h2>
           <p className="chk">*필수사항 입니다.</p>
-          <table className='userinfoTable'>
+          <table className="userinfoTable">
             <thead />
             <tbody>
               <tr>
                 <th>
-                  <label htmlFor="userEmail">이메일</label> {/* TODO 쓴 이메일은 다시 못씀 */}
+                  <label htmlFor="userEmail">이메일</label>{' '}
+                  {/* TODO 쓴 이메일은 다시 못씀 */}
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -419,7 +439,6 @@ const Regist = () => {
                         사용할 수 있는 닉네임입니다.
                       </small>
                     )}
-
                 </td>
               </tr>
               <tr>
@@ -543,12 +562,17 @@ const Regist = () => {
                   {errors.passwordChk && (
                     <small role="alert">{errors.passwordChk.message}</small>
                   )}
-                  <div className='typechange' type="typechange" onClick={typechange}>👀</div>
+                  <div
+                    className="typechange"
+                    type="typechange"
+                    onClick={typechange}
+                  >
+                    👀
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
-
         </fieldset>
         <div className="registSubmit">
           <button type="submit" tabIndex="7" disabled={isSubmitting}>
@@ -557,7 +581,7 @@ const Regist = () => {
           </button>
         </div>
       </Form>
-    </div >
+    </div>
   );
 };
 
