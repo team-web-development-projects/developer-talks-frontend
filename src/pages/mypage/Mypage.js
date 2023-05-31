@@ -14,13 +14,12 @@ const Mypage = ({ type }) => {
   const [favorite, setFavorite] = useState([]);
   const dispatch = useDispatch();
 
-  const contacts = ['최근활동', '내가 쓴 글', '댓글', '스크랩'];
+  const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
   let userId = "";
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
   }
-
 
   const onSelect = (type) => {
     setSelect(type);
@@ -103,12 +102,9 @@ const Mypage = ({ type }) => {
     }
   }, [auth.accessToken, navigate, select, userId]);
 
-
   useEffect(() => {
-    console.log('ff', favorite, favorite.length);
-
-  }, [favorite])
-
+    console.log("ff", favorite, favorite.length);
+  }, [favorite]);
 
   return (
     <>
@@ -129,8 +125,10 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite && favorite.length === 0 && <div>내용이없습니다.</div>}
-              {
-                favorite && favorite.length === 0 ? <div>내용이없습니다.</div> ? select !== 1 :
+              {favorite && favorite.length === 0 ? (
+                <div>내용이없습니다.</div> ? (
+                  select !== 1
+                ) : (
                   favorite.map((item, index) => (
                     <div key={index} className="user-data">
                       <div className="create-time">{item.createDate}</div>
@@ -141,19 +139,20 @@ const Mypage = ({ type }) => {
                         {item.title}{" "}
                       </span>
                     </div>
-                  )) :
-                  favorite.map((item, index) => (
-                    <div key={index} className="user-data">
-                      <div className="create-time">{item.postId}</div>
-                      <span
-                        className="title"
-                        onClick={() => navigate(`/board/${item.id}`)}
-                        dangerouslySetInnerHTML={{ __html: item.content }}
-                      >
-                      </span>
-                    </div>
                   ))
-              }
+                )
+              ) : (
+                favorite.map((item, index) => (
+                  <div key={index} className="user-data">
+                    <div className="create-time">{item.postId}</div>
+                    <span
+                      className="title"
+                      onClick={() => navigate(`/board/${item.id}`)}
+                      dangerouslySetInnerHTML={{ __html: item.content }}
+                    ></span>
+                  </div>
+                ))
+              )}
             </div>
           </section>
         </MypageContent>

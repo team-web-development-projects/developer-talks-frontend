@@ -30,7 +30,7 @@ const Userregist = () => {
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
   const discriptionref = useRef(null);
-  const useridRef = useRef(auth.accessToken.userid);
+  const useridRef = useRef("");
   const [duplicateId, setDuplicateId] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
