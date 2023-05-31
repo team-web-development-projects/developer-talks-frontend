@@ -5,12 +5,13 @@ import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { SET_TOKEN } from 'store/Auth';
 import { setRefreshToken } from 'store/Cookie';
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
 import './Userregist.scss';
-import { useNavigate } from 'react-router-dom';
-
 
 
 const Userregist = () => {
@@ -28,7 +29,7 @@ const Userregist = () => {
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
   const discriptionref = useRef(null);
-  const useridRef = useRef(null);
+  const useridRef = useRef((auth.accessToken).userid);
   const [duplicateId, setDuplicateId] = useState('');
   const [userEmail, setUserEmail] = useState('')
   const [duplicateNickName, setDuplicateNickName] = useState('');
@@ -41,8 +42,6 @@ const Userregist = () => {
     if (auth.accessToken) {
       setUserEmail(parseJwt(auth.accessToken).sub); //NOTE 이메일 토큰으로 넣기 //ok
       setAutologins(parseJwt(auth.accessToken).provider)
-      console.log(parseJwt(auth.accessToken), "ㅇㅇ")
-      console.log(userEmail, "dfdf")
     }
   }, [auth.accessToken, userEmail])
 
@@ -104,6 +103,9 @@ const Userregist = () => {
         .post(
           `${ROOT_API}/sign-up`,
           {
+            email: parseJwt(auth.accessToken).sub,
+            userid: parseJwt(auth.accessToken).userid,
+            password: parseJwt(auth.accessToken).sub,
             nickname: data.nickname,
             skills: selectedTags.tags,
             description: data.description,
@@ -129,7 +131,16 @@ const Userregist = () => {
           console.log('로그인 실패: ', error.response.data);
         });
     } else {
-      alert("인증을 확인해주세요")
+      toast.success('😎 인증을 확인해주세요', {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -170,6 +181,18 @@ const Userregist = () => {
   };
   return (
     <div className='userregistname'>
+      <ToastContainer
+        position="top-left"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="center">
         <div className="headername">
           <p>{authlogins}계정을이용한 회원가입</p>
@@ -310,7 +333,10 @@ const Userregist = () => {
           )}
         </div>
 
-
+        <div className='emailmodule'>{/* TODO 비밀번호 넣을 지 말지 */}
+          <label>비밀번호</label>
+          <input className='disable' type="text" placeholder={userEmail} readOnly />
+        </div>
         <div className='tagmodule'>
           <label>관심있는 태그입력</label>
           <div className='tagalign'>

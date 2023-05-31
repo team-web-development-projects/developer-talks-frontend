@@ -9,14 +9,15 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SET_TOKEN } from 'store/Auth';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
 import './Regist.scss';
-// import { ToastContainer, toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
-  // const notify = () => toast("Wow so easy !");
+  const notify = () => toast("Wow so easy !");
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const authlogins = 'D-Talks';
@@ -71,6 +72,8 @@ const Regist = () => {
             },
             file: 'file=@22.JPG;type=image/jpeg'
           })
+        console.log(response.data, "dfd,,,fd");
+        console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
       } else {
         console.log("파일을 선택해주세요.");
@@ -175,7 +178,16 @@ const Regist = () => {
       .then(function (response) {
         setVerityEmailcheck(true);
         setCode(response.data.code)
-        alert('이메일을 전송했습니다.');
+        toast.success('😎 인증문자가 발송되었습니다', {
+          position: "top-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
   };
   const compareEmail = (e) => { //NOTE 인증확인//ok
@@ -214,23 +226,14 @@ const Regist = () => {
     }, 1000);
   };
 
-  // toast('🦄 Wow so easy!', {
-  //   position: "top-right",
-  //   autoClose: 5000,
-  //   hideProgressBar: false,
-  //   closeOnClick: true,
-  //   pauseOnHover: true,
-  //   draggable: true,
-  //   progress: undefined,
-  //   theme: "light",
-  // });
+
   return (
 
     <div className="regist-page page">
-      {/* <button onClick={notify}>Notify !</button>
+      {/* 경고창  */}
       <ToastContainer
         position="top-left"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -238,8 +241,8 @@ const Regist = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
-      /> */}
+        theme="dark"
+      />
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
@@ -309,7 +312,7 @@ const Regist = () => {
               ref={discriptionref}
               placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
               maxLength={80}
-              {...register('description', { required: true })}
+            // {...register('description', { required: true })} //NOTE 필수에서 선택으로 변경
             />
           </div>
           <div className="line-style">
@@ -343,6 +346,7 @@ const Regist = () => {
                       },
                     })}
                   />
+
                   <button onClick={verityEmail}>이메일인증</button>
                   {errors.userEmail && (
                     <small role="alert">{errors.userEmail.message}</small>
