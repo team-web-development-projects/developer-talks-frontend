@@ -172,7 +172,7 @@ const Regist = () => {
       .get(`${ROOT_API}/users/check/${type}/${value}`)
       .then(function (response) {
         if (type === "userid") {
-          response.data.duplicated === true
+          response.data.duplicated === true //NOTE 중복체크 안하면 페이지 이동안함 했는데, 확인해주세요
             ? setDuplicateId(true)
             : setDuplicateId(false);
         }

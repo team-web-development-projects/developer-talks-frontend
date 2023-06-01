@@ -85,7 +85,6 @@ const Userregist = () => {
               "Content-Type": "multipart/form-data",
               accept: "application/json",
             },
-            file: "file=@22.JPG;type=image/jpeg",
           }
         );
         console.log(response.data, "dfd,,,fd");
@@ -117,7 +116,8 @@ const Userregist = () => {
           },
           {
             headers: {
-              API_HEADER,
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": auth.accessToken,
             },
           }
         )
