@@ -29,9 +29,7 @@ const Userregist = () => {
   });
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
-  const discriptionref = useRef(null);
-  const useridRef = useRef("");
-  const [duplicateId, setDuplicateId] = useState("");
+  const [description, setDescription] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
@@ -56,6 +54,10 @@ const Userregist = () => {
     "REACT",
     "AWS",
   ];
+  const savedescription = (e) => {
+    //NOTE 자기소개
+    setDescription(e.target.value);
+  };
   const {
     register,
     handleSubmit,
@@ -97,23 +99,20 @@ const Userregist = () => {
   };
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    if (!duplicateId && !duplicateNickName) {
+    if (!duplicateNickName) {
       console.log(`
       nickname: ${data.nickname},
       skills: ${selectedTags.tags},
-      description: ${data.description},
+      description: ${description},
       profileImageId: ${profileImageId}`);
       axios
         .post(
-          `${ROOT_API}/sign-up`,
+          `${ROOT_API}/oauth/sign-up`,
           {
-            email: parseJwt(auth.accessToken).sub,
-            userid: parseJwt(auth.accessToken).userid,
-            password: parseJwt(auth.accessToken).sub,
             nickname: data.nickname,
             skills: selectedTags.tags,
-            description: data.description,
-            profileImageId: profileImageId,
+            description: description,
+            profileImageId: profileImageId, //NOTE 용후님이 선택으로 수정
           },
           {
             headers: {
@@ -134,9 +133,19 @@ const Userregist = () => {
         })
         .catch(function (error) {
           console.log("로그인 실패: ", error.response.data);
+          toast.error("😎 로그인 절차를 확인해주세요", {
+            position: "top-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
         });
     } else {
-      toast.success("😎 인증을 확인해주세요", {
+      toast.error("😎 인증을 확인해주세요", {
         position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
@@ -159,21 +168,29 @@ const Userregist = () => {
     axios
       .get(`${ROOT_API}/users/check/${type}/${value}`)
       .then(function (response) {
-        if (type === "userid") {
-          response.data.duplicated === true
-            ? setDuplicateId(true)
-            : setDuplicateId(false);
-        }
         if (type === "nickname") {
           response.data.duplicated === true
             ? setDuplicateNickName(true)
             : setDuplicateNickName(false);
         }
+      })
+      .catch(function (error) {
+        console.log("확인 실패:", error.response.data);
+        toast.error("😎 중복체크를 제대로 확인해주세요", {
+          position: "top-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
   };
 
   const clickTag = (tag) => {
-    //NOTE 기술 테그
+    //NOTE 기술 테그/ok
     if (selectedTags.tags.includes(tag)) {
       setSelectedTags({
         ...selectedTags,
@@ -187,6 +204,7 @@ const Userregist = () => {
     }
     console.log("dd", selectedTags.tags, typeof selectedTags.tags);
   };
+
   return (
     <div className="userregistname">
       <ToastContainer
@@ -304,62 +322,6 @@ const Userregist = () => {
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
         </div>
-        <div className="labelmodule">
-          <div className="labeltitle">
-            <label>아이디</label>
-            <span className="star" title="필수사항">
-              *
-            </span>
-          </div>
-          <div className="inputcont">
-            <input
-              type="text"
-              id="userid"
-              placeholder="아이디를 입력해주세요"
-              maxLength={15}
-              ref={useridRef}
-              tabIndex="3"
-              {...register("userid", {
-                required: "아이디는 필수 입력입니다.",
-                minLength: {
-                  value: 5,
-                  message: "5자리 이상 아이디를 사용해주세요.",
-                },
-                maxLength: {
-                  value: 15,
-                  message: "15자리 이하 아이디를 사용해주세요.",
-                },
-              })}
-            />
-            <Button
-              title="중복체크"
-              onClick={(e) => {
-                e.preventDefault();
-                validateDuplicate("userid");
-              }}
-            >
-              중복체크
-            </Button>
-          </div>
-          {errors.userid && <small role="alert">{errors.userid.message}</small>}
-          {duplicateId !== "" && duplicateId === true && (
-            <small className="alert">중복된 아이디입니다.</small>
-          )}
-          {duplicateId !== "" && duplicateId === false && (
-            <small className="true">사용할 수 있는 아이디입니다.</small>
-          )}
-        </div>
-
-        <div className="emailmodule">
-          {/* TODO 비밀번호 넣을 지 말지 */}
-          <label>비밀번호</label>
-          <input
-            className="disable"
-            type="text"
-            placeholder={userEmail}
-            readOnly
-          />
-        </div>
         <div className="tagmodule">
           <label>관심있는 태그입력</label>
           <div className="tagalign">
@@ -383,10 +345,10 @@ const Userregist = () => {
           <input
             type="description"
             id="description"
-            ref={discriptionref}
+            value={description}
+            onChange={savedescription}
             placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
             maxLength={80}
-            {...register("description", { required: true })}
           />
         </div>
         <div className="loginbutton">
