@@ -13,7 +13,7 @@ import Account from "pages/mypage/Account";
 import Introduction from "pages/mypage/Introduction";
 import Mypage from "pages/mypage/Mypage";
 import Regist from "pages/regist/Regist";
-import StudyRoomDetqil from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
+import StudyRoomDetail from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
 import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
 import { useEffect } from "react";
@@ -32,6 +32,8 @@ import './assets/style/index.scss';
 import Agreement from "pages/agreement/Agreement";
 import Userregist from "pages/userregist/Userregist";
 import { NavigateMain, NavigatePost } from './Outlet';
+import StudyRoomInfo from "pages/studyRoom/studyRoomInfo/StudyRoomInfo";
+import MyStudyRoom from "pages/mypage/MyStudyRoom";
 
 function App() {
   const navigate = useNavigate();
@@ -40,13 +42,13 @@ function App() {
   const auth = useSelector((state) => state.authToken);
 
   useEffect(() => {
-    // NOTE 토큰 재갱신
-    if (window.location.href.includes('accessToken')) { // NOTE 토큰 있으면 메인 없으면 회원가입페이지
-      const accessToken = window.location.href.split('accessToken=')[1];
+    //NOTE 구글 로그인 시 메인으로 가게 만드는
+    if (window.location.href.includes("accessToken")) {
+      const accessToken = window.location.href.split("accessToken=")[1];
       dispatch(SET_TOKEN({ accessToken: accessToken }));
-      console.log('토큰있음');
-      navigate('/userregist', { replace: true }); //NOTE 구글 로그인 시 메인으로 가게 만드는
-      console.log(accessToken)
+      console.log("토큰있음");
+      navigate("/userregist", { replace: true });
+      console.log(accessToken);
     }
   }, [dispatch, navigate, location]);
 
@@ -84,6 +86,7 @@ function App() {
           />
           <Route path="account" element={<Account />} />
           <Route path="studyroom" element={<StudyRoom />} />
+          <Route path="my-studyroom" element={<MyStudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
           <Route path="introduction" element={<Introduction />} />
           <Route
@@ -92,8 +95,8 @@ function App() {
           />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
           <Route
-            path="/studyroom/:postId"
-            element={<StudyRoomDetqil type="post" />}
+            path="/studyroom/info/:postId"
+            element={<StudyRoomInfo type="post" />}
           />
 
           <Route path="qna" element={<BoardList type="questions" />} />

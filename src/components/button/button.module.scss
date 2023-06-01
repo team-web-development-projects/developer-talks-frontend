@@ -1,23 +1,30 @@
 .button {
-  padding: 20px 0;
-  width: 120px;
-  height: 60px;
-  text-align: center;
-  border-radius: 10px;
-  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 20px;
+  color: white;
   background-color: black;
   border: 0;
+  border-radius: 10px;
+  text-align: center;
+  &.is_small {
+    height: 32px;
+    font-size: 12px;
+  }
+  &.is_medium {
+    height: 48px;
+    font-size: 14px;
+  }
+  &.is_big {
+    height: 60px;
+    font-size: 16px;
+    min-width: 120px;
+  }
   &:hover {
     background-color: #585858;
   }
   &:active {
     background-color: #000000;
-  }
-
-  .child {
-    color:white;
-    display:flex;
-    align-items: center;
-    justify-content: center;
   }
 }
