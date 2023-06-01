@@ -22,7 +22,7 @@ const Regist = () => {
   const authlogins = "D-Talks";
   const useridRef = useRef(null);
   const nicknameRef = useRef(null);
-  const discriptionref = useRef(null);
+  const [description, setDescription] = useState("");
   const profileRef = useRef(null);
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
@@ -50,6 +50,10 @@ const Regist = () => {
     "REACT",
     "AWS",
   ];
+  const savedescription = (e) => {
+    //NOTE 자기소개
+    setDescription(e.target.value);
+  };
   const {
     register,
     handleSubmit,
@@ -104,7 +108,7 @@ const Regist = () => {
   userid: ${data.userid},
   password: ${data.password},
   skills: ${selectedTags.tags},
-  description: ${data.description},
+  description: ${description},
   profileImageId: ${profileImageId}`);
       axios
         .post(
@@ -115,7 +119,7 @@ const Regist = () => {
             userid: data.userid,
             password: data.password,
             skills: selectedTags.tags,
-            description: data.discription,
+            description: description,
             profileImageId: profileImageId,
           },
           {
@@ -152,7 +156,7 @@ const Regist = () => {
             });
         })
         .catch(function (error) {
-          console.log("회원가입 실패:", error.response.data);
+          console.log("회원가입 실패:", error.response);
         });
     } else {
       alert("중복체크나 인증을 안했어요");
@@ -275,6 +279,7 @@ const Regist = () => {
       });
     }
   };
+
   const typechange = () => {
     //NOTE 비밀번호 토글//ok
     setTypetoggle("text");
@@ -374,10 +379,10 @@ const Regist = () => {
               tabIndex="1"
               type="description"
               id="description"
-              ref={discriptionref}
+              value={description}
+              onChange={savedescription}
               placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
               maxLength={80}
-              // {...register('description', { required: true })} //NOTE 필수에서 선택으로 변경
             />
           </div>
           <div className="line-style">
