@@ -45,6 +45,7 @@ const Userregist = () => {
   }, [auth.accessToken, userEmail]);
 
   const tags = [
+    //스킬오류
     "DJANGO",
     "SPRING",
     "JAVASCRIPT",
@@ -132,7 +133,7 @@ const Userregist = () => {
           }
         })
         .catch(function (error) {
-          console.log("로그인 실패: ", error.response.data);
+          console.log("로그인 실패: ", error.response);
           toast.error("😎 로그인 절차를 확인해주세요", {
             position: "top-left",
             autoClose: 2000,

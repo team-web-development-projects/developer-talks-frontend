@@ -156,7 +156,7 @@ const Regist = () => {
             });
         })
         .catch(function (error) {
-          console.log("회원가입 실패:", error.response.data);
+          console.log("회원가입 실패:", error.response);
         });
     } else {
       alert("중복체크나 인증을 안했어요");

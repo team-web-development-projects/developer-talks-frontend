@@ -130,9 +130,19 @@ const Mypage = ({ type }) => {
                     <span
                       className="title"
                       onClick={() => navigate(`/board/${item.id}`)}
-                    >
-                      {item.title}{" "}
-                    </span>
+                    ></span>
+                    {item.title && <span>타이틀: {item.title} </span>}
+                    {item.content && (
+                      <>
+                        <br />
+                        <span>내용: </span>
+                        <span
+                          className="title"
+                          onClick={() => navigate(`/board/${item.id}`)}
+                          dangerouslySetInnerHTML={{ __html: item.content }}
+                        ></span>
+                      </>
+                    )}
                   </div>
                 ))
               )}
