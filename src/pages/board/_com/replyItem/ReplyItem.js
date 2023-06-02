@@ -11,6 +11,7 @@ import CkEditor from "components/ckeditor/CkEditor";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useSelector } from "react-redux";
+import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
   const auth = useSelector((state) => state.authToken);
   const [ispostToggle, setIsPostToggle] = useState(false);
@@ -55,8 +56,10 @@ const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
   };
   return (
     <li className={s.container}>
-      <p>{nickname}</p>
-      {secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+      <div className={s.info}>
+        <p>{nickname}</p>
+        {secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+      </div>
       <div
         className={s.content}
         dangerouslySetInnerHTML={{ __html: content }}
@@ -65,7 +68,7 @@ const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
         {rereplyList.length ? (
           <button className={s.replyBtn} onClick={handleClickReRe}>
             {isgetToggle ? (
-              <div className={s.content}>
+              <div>
                 <AiFillCaretUp className={s.icon} />
                 숨기기
               </div>
@@ -106,9 +109,7 @@ const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
           )}
           {isgetToggle &&
             childrenList.map((rereply) => (
-              <li>
-                <p>닉네임: {rereply.nickname}</p>
-              </li>
+              <RereplyItem key={rereply.id} rr={rereply} />
             ))}
         </div>
       </div>

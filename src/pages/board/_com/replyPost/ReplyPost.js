@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import CkEditor from "components/ckeditor/CkEditor";
 import Button from "components/button/Button";
 import { BsLock, BsUnlock } from "react-icons/bs";
-import ReplyItem from "components/replyItem/ReplyItem";
+import ReplyItem from "pages/board/_com/replyItem/ReplyItem";
 
 const ReplyPost = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
