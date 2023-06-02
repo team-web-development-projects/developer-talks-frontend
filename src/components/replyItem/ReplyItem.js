@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import s from "./replyItem.module.scss";
 import { BsLock, BsUnlock } from "react-icons/bs";
+import {
+  AiFillCaretDown,
+  AiFillCaretUp,
+  AiOutlineMessage,
+} from "react-icons/ai";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import axios from "axios";
@@ -24,6 +29,9 @@ const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
       return { ...prevForm, secret: !prevForm.secret };
     });
     console.log(form.secret);
+  };
+  const handleClickReRe = () => {
+    setIsGetToggle((prev) => !prev);
   };
   const handlePost = () => {
     axios
@@ -53,32 +61,57 @@ const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
         className={s.content}
         dangerouslySetInnerHTML={{ __html: content }}
       ></div>
-      <Button onClick={handleToggle}>대댓글 달기</Button>
-      {ispostToggle && (
-        <div className={s.rereplyContainer}>
-          <CkEditor form={form} setForm={setForm} />
-          <div className={s.btnRgn}>
-            <div className={s.secret} onClick={toggleSecret}>
-              {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
-              시크릿 댓글
+      <div className={s.replyBtnContainer}>
+        {rereplyList.length ? (
+          <button className={s.replyBtn} onClick={handleClickReRe}>
+            {isgetToggle ? (
+              <div className={s.content}>
+                <AiFillCaretUp className={s.icon} />
+                숨기기
+              </div>
+            ) : (
+              <div>
+                <AiFillCaretDown className={s.icon} />
+                {rereplyList.length}개 대댓글
+              </div>
+            )}
+          </button>
+        ) : (
+          <div></div>
+        )}
+        <button onClick={handleToggle} className={s.replyBtn}>
+          <AiOutlineMessage size={20} className={s.icon} />
+          대댓글 달기
+        </button>
+      </div>
+      <div className={s.rereplyContainer}>
+        <div className={s.box}></div>
+        <div>
+          {ispostToggle && (
+            <div>
+              <CkEditor form={form} setForm={setForm} />
+              <div className={s.btnRgn}>
+                <div className={s.secret} onClick={toggleSecret}>
+                  {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+                  시크릿 댓글
+                </div>
+                <div className={s.cancel} onClick={handleToggle}>
+                  취소
+                </div>
+                <Button classname={s.post} onClick={handlePost}>
+                  등록
+                </Button>
+              </div>
             </div>
-            <div className={s.cancel} onClick={handleToggle}>
-              취소
-            </div>
-            <Button classname={s.post} onClick={handlePost}>
-              등록
-            </Button>
-          </div>
+          )}
+          {isgetToggle &&
+            childrenList.map((rereply) => (
+              <li>
+                <p>닉네임: {rereply.nickname}</p>
+              </li>
+            ))}
         </div>
-      )}
-      <p>대댓글리스트</p>
-      {childrenList &&
-        childrenList.map((rereply) => (
-          <li>
-            <p>닉네임: {rereply.nickname}</p>
-            <p>대댓글 내용: {rereply.content}</p>
-          </li>
-        ))}
+      </div>
     </li>
   );
 };

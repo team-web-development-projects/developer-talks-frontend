@@ -17,7 +17,7 @@ const ReplyPost = ({ nickname }) => {
   const [isToggle, setIsToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
-    secret: false,
+    secret: true,
   });
   const scrollDown = () => {
     window.scrollTo({
@@ -31,12 +31,14 @@ const ReplyPost = ({ nickname }) => {
   };
   //TODO: 시크릿 에러 잡기
   const toggleSecret = () => {
-    setForm((prevForm) => {
-      return { ...prevForm, secret: !prevForm.secret };
-    });
-    console.log(form.secret);
+  //   setForm((prevForm) => {
+  //     return { ...prevForm, secret: !prevForm.secret };
+  //   });
+  //   console.log(form.secret);
+  setForm({...form,['secret']:!form.secret})
   };
   const handlePost = () => {
+    console.log('secret: ',form.secret);
     axios
       .post(
         `${ROOT_API}/comment/${postId}`,
@@ -102,7 +104,7 @@ const ReplyPost = ({ nickname }) => {
         {replyList ? (
           replyList.map((reply) => (
             <ReplyItem
-              key={reply.id}
+              key={reply.id} 
               id={reply.id}
               postId={postId}
               content={reply.content}
