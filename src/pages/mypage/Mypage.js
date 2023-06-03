@@ -107,8 +107,8 @@ const Mypage = ({ type }) => {
     <>
       {auth.accessToken !== null ? (
         <MypageContent>
-          <section className="notes">
-            <ul>
+          <section className="content-wrap">
+            <ul className="nav">
               {contacts.map((contact, index) => (
                 <li key={index}>
                   <button

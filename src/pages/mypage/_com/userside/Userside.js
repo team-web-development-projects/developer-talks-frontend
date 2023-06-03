@@ -8,14 +8,14 @@ import "./Userside.scss";
 import { useState } from "react";
 
 const Userside = () => {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState("");
   const [imageFile, setImageFile] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
   };
-  const handleClick = () => {
-    setIsActive(!isActive);
+  const handleClick = (value) => {
+    setIsActive(value);
   };
 
   const auth = useSelector((state) => state.authToken).accessToken;
@@ -49,16 +49,15 @@ const Userside = () => {
           <img src={imageFile} alt="" />
           <input type="file" name="" id="" onChange={changeProfileImg} />
         </div>
-        <p>{userinfo.nickname} 님 </p>
-        <ul>
+        <ul className="nav">
           {/* <li>
             <Link to="/introduction" className={isActive ? 'active' : ''} onClick={handleClick}>🎆 내소개</Link>
           </li> */}
           <li>
             <Link
               to="/mypage"
-              className={isActive ? "active" : ""}
-              onClick={handleClick}
+              className={isActive === "mypage" ? "is-active" : ""}
+              onClick={() => handleClick("mypage")}
             >
               🧥 활동내역
             </Link>
@@ -66,8 +65,8 @@ const Userside = () => {
           <li>
             <Link
               to="/my-studyroom"
-              className={isActive ? "active" : ""}
-              onClick={handleClick}
+              className={isActive === "my-studyroom" ? "is-active" : ""}
+              onClick={() => handleClick("my-studyroom")}
             >
               스터디룸
             </Link>
@@ -75,16 +74,15 @@ const Userside = () => {
           <li>
             <Link
               to="/account"
-              className={isActive ? "active" : ""}
-              onClick={handleClick}
+              className={isActive === "account" ? "is-active" : ""}
+              onClick={() => handleClick("account")}
             >
               🐹 회원정보수정 및 탈퇴
             </Link>
           </li>
-          <li>
-            <Logout />
-          </li>
+          <li></li>
         </ul>
+        <Logout />
       </section>
     </>
   );
