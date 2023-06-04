@@ -1,6 +1,7 @@
 import axios from "axios";
 import Form from "components/form/Form";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { useRef, useState } from "react";
@@ -10,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
 import "./Regist.scss";
-import { ToastCont } from "components/toast/ToastCont";
 
 axios.defaults.withCredentials = true;
 
