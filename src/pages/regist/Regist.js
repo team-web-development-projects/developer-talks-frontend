@@ -75,7 +75,7 @@ const Regist = () => {
   const onSubmit = async (data) => {
     console.log(verityEmailcheck , compareEmailcheck , duplicateId , duplicateNickName);
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && duplicateId && duplicateNickName) {
+    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName ===false) {
       //NOTE 버튼 다 클릭하면 실행
       console.log(`
   email: ${data.userEmail},
@@ -137,7 +137,7 @@ const Regist = () => {
           showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
         });
     } else {
-      showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
+      showToast("error", "😎 모든 버튼에 확인되지 않았어요");
     }
   };
 
@@ -321,7 +321,6 @@ const Regist = () => {
               <tr>
                 <th>
                   <label htmlFor="userEmail">이메일</label>{" "}
-                  {/* TODO 쓴 이메일은 다시 못씀, //TODO 이메일 인증완료 후 다른 이메일 작업할 시 로그인 가능.. */}
                   <span className="star" title="필수사항">
                     *
                   </span>
