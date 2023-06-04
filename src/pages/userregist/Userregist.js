@@ -77,16 +77,13 @@ const Userregist = () => {
       ) {
         const formData = new FormData(); //NOTE 프로필 이미지
         formData.append("file", profileRef.current.files[0]);
-        const response = await axios.post(
-          `${ROOT_API}/users/profile/image`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              accept: "application/json",
-            },
-          }
-        );
+        const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
+          headers: {
+            "X-AUTH-TOKEN": auth.accessToken,
+            "Content-Type": "multipart/form-data",
+            accept: "application/json",
+          },
+        });
         console.log(response.data, "dfd,,,fd");
         console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
