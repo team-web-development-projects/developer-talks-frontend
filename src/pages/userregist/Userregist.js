@@ -1,5 +1,8 @@
 import axios from "axios";
 import Button from "components/button/Button";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import { ToastCont } from "components/toast/ToastCont";
+import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useRef, useState } from "react";
@@ -10,14 +13,12 @@ import { SET_TOKEN } from "store/Auth";
 import { setRefreshToken } from "store/Cookie";
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
 import "./Userregist.scss";
-import { ToastCont } from "components/toast/ToastCont";
-import { showToast } from "components/toast/showToast";
 
 const Userregist = () => {
   const [authlogins, setAutologins] = useState("");
   let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-
+  
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [selectedTags, setSelectedTags] = useState({
@@ -27,6 +28,7 @@ const Userregist = () => {
   });
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
+  const [modal, setModal] = useState(false);
   const [description, setDescription] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
@@ -115,6 +117,7 @@ const Userregist = () => {
         )
         .then(function (response) {
           console.log("회원가입 성공:", response);
+          setModal(true);
           if (autoLogin) {
             //NOTE 자동로그인
             setRefreshToken({ refreshToken: response.data.refreshToken });
@@ -178,6 +181,13 @@ const Userregist = () => {
   return (
     <div className="userregistname">
       <ToastCont />
+      {modal && (
+        <BasicModal setOnModal={() => setModal()}>
+          회원가입이 완료되었습니다. <br />
+          확인을 누르시면 메인으로 이동합니다.
+          <button onClick={() => navigate("/")}>확인</button>
+        </BasicModal>
+      )}
       <div className="center">
         <div className="headername">
           <p>{authlogins}계정을이용한 회원가입</p>
