@@ -96,7 +96,11 @@ function App() {
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
           <Route
             path="/studyroom/info/:postId"
-            element={<StudyRoomInfo type="post" />}
+            element={<StudyRoomInfo  />}
+          />
+          <Route
+            path="/studyroom/:postId"
+            element={<StudyRoomDetail  />}
           />
 
           <Route path="qna" element={<BoardList type="questions" />} />
