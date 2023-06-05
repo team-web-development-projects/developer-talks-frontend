@@ -1,13 +1,14 @@
 import axios from "axios";
 import Button from "components/button/Button";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import { ToastCont } from "components/toast/ToastCont";
+import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { SET_TOKEN } from "store/Auth";
 import { setRefreshToken } from "store/Cookie";
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
@@ -17,11 +18,9 @@ const Userregist = () => {
   const [authlogins, setAutologins] = useState("");
   let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-
+  
   const dispatch = useDispatch();
-  const [imageFile, setImageFile] = useState(
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-  );
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -29,6 +28,7 @@ const Userregist = () => {
   });
   const nicknameRef = useRef(null);
   const profileRef = useRef(null);
+  const [modal, setModal] = useState(false);
   const [description, setDescription] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
@@ -70,24 +70,16 @@ const Userregist = () => {
   const [profileImageId, setProfileImageId] = useState("");
   const propileSubmit = async (data) => {
     try {
-      if (
-        profileRef.current &&
-        profileRef.current.files &&
-        profileRef.current.files.length > 0
-      ) {
+      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
         const formData = new FormData(); //NOTE 프로필 이미지
         formData.append("file", profileRef.current.files[0]);
-        const response = await axios.post(
-          `${ROOT_API}/users/profile/image`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              accept: "application/json",
-            },
-            file: "file=@22.JPG;type=image/jpeg",
-          }
-        );
+        const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
+          headers: {
+            "X-AUTH-TOKEN": auth.accessToken,
+            "Content-Type": "multipart/form-data",
+            accept: "application/json",
+          },
+        });
         console.log(response.data, "dfd,,,fd");
         console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
@@ -100,7 +92,7 @@ const Userregist = () => {
   };
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    if (!duplicateNickName) {
+    if (duplicateNickName ===false) {
       console.log(`
       nickname: ${data.nickname},
       skills: ${selectedTags.tags},
@@ -113,16 +105,19 @@ const Userregist = () => {
             nickname: data.nickname,
             skills: selectedTags.tags,
             description: description,
-            profileImageId: profileImageId, //NOTE 용후님이 선택으로 수정
+            profileImageId: profileImageId,
           },
           {
             headers: {
+              // "Content-Type": "application/json",//NOTE 이건 안됌
+              // "X-AUTH-TOKEN": auth.accessToken,
               API_HEADER,
             },
           }
         )
         .then(function (response) {
           console.log("회원가입 성공:", response);
+          setModal(true);
           if (autoLogin) {
             //NOTE 자동로그인
             setRefreshToken({ refreshToken: response.data.refreshToken });
@@ -134,28 +129,10 @@ const Userregist = () => {
         })
         .catch(function (error) {
           console.log("로그인 실패: ", error.response);
-          toast.error("😎 로그인 절차를 확인해주세요", {
-            position: "top-left",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          showToast("error", "😎 로그인 실패되었어요");
         });
     } else {
-      toast.error("😎 인증을 확인해주세요", {
-        position: "top-left",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
     }
   };
 
@@ -170,23 +147,18 @@ const Userregist = () => {
       .get(`${ROOT_API}/users/check/${type}/${value}`)
       .then(function (response) {
         if (type === "nickname") {
-          response.data.duplicated === true
-            ? setDuplicateNickName(true)
-            : setDuplicateNickName(false);
+          if (response.data.duplicated === true) {
+            setDuplicateNickName(true);
+            showToast("error", "😎 닉네임이 중복되었습니다.");
+          } else {
+            setDuplicateNickName(false);
+            console.log(response.data);
+          }
         }
       })
       .catch(function (error) {
         console.log("확인 실패:", error.response.data);
-        toast.error("😎 중복체크를 제대로 확인해주세요", {
-          position: "top-left",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        showToast("error", "😎 중복체크를 제대로 확인해주세요");
       });
   };
 
@@ -208,35 +180,23 @@ const Userregist = () => {
 
   return (
     <div className="userregistname">
-      <ToastContainer
-        position="top-left"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+      <ToastCont />
+      {modal && (
+        <BasicModal setOnModal={() => setModal()}>
+          회원가입이 완료되었습니다. <br />
+          확인을 누르시면 메인으로 이동합니다.
+          <button onClick={() => navigate("/")}>확인</button>
+        </BasicModal>
+      )}
       <div className="center">
         <div className="headername">
           <p>{authlogins}계정을이용한 회원가입</p>
-          <span>
-            Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.
-          </span>
+          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
         <div className="prople">
           <div className="imgwrap">
             {imageFile && <img src={imageFile} alt="프로필이미지" />}
-            <input
-              accept="image/*"
-              ref={profileRef}
-              type="file"
-              name="프로필이미지"
-              id="profile"
-            />
+            <input accept="image/*" ref={profileRef} type="file" name="프로필이미지" id="profile" />
           </div>
         </div>
         <button
@@ -269,12 +229,7 @@ const Userregist = () => {
       <form className="registIDform" onSubmit={handleSubmit(onSubmit)}>
         <div className="emailmodule">
           <label>이메일</label>
-          <input
-            className="disable"
-            type="text"
-            placeholder={userEmail}
-            readOnly
-          />
+          <input className="disable" type="text" placeholder={userEmail} readOnly />
         </div>
         <div className="labelmodule">
           <div className="labeltitle">
@@ -309,32 +264,18 @@ const Userregist = () => {
               중복체크
             </Button>
           </div>
-          {errors.nickname && (
-            <small role="alert">{errors.nickname.message}</small>
+          {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+            <small className="true">사용할 수 있는 닉네임입니다.</small>
           )}
-          {!errors.nickname &&
-            duplicateNickName !== "" &&
-            duplicateNickName === true && (
-              <small className="alert">중복된 닉네임입니다.</small>
-            )}
-          {!errors.nickname &&
-            duplicateNickName !== "" &&
-            duplicateNickName === false && (
-              <small className="true">사용할 수 있는 닉네임입니다.</small>
-            )}
         </div>
         <div className="tagmodule">
           <label>관심있는 태그입력</label>
           <div className="tagalign">
             <div className={s.tags}>
               {tags.map((item, index) => (
-                <span
-                  key={index}
-                  onClick={() => clickTag(item)}
-                  className={`tag ${
-                    selectedTags.tags.includes(item) ? [s.is_select] : ""
-                  }`}
-                >
+                <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
                   {item}
                 </span>
               ))}
@@ -354,11 +295,7 @@ const Userregist = () => {
         </div>
         <div className="loginbutton">
           <label>자동로그인</label>
-          <input
-            type="checkbox"
-            checked={autoLogin}
-            onChange={handleCheckboxChange}
-          />
+          <input type="checkbox" checked={autoLogin} onChange={handleCheckboxChange} />
           <Button type="submit" disabled={isSubmitting}>
             간편 회원가입
           </Button>

@@ -1,22 +1,20 @@
 import axios from "axios";
 import Form from "components/form/Form";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import { ToastCont } from "components/toast/ToastCont";
+import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
 import "./Regist.scss";
 
 axios.defaults.withCredentials = true;
 
 const Regist = () => {
-  const notify = () => toast("Wow so easy !");
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const authlogins = "D-Talks";
@@ -30,9 +28,7 @@ const Regist = () => {
     joinableCount: 1,
   });
   const [modal, setModal] = useState(false);
-  const [imageFile, setImageFile] = useState(
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-  );
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [duplicateId, setDuplicateId] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   let [inputEmail, setInputEmail] = useState("");
@@ -40,16 +36,7 @@ const Regist = () => {
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
-  const tags = [
-    "DJANGO",
-    "SPRING",
-    "JAVASCRIPT",
-    "JAVA",
-    "PYTHON",
-    "CPP",
-    "REACT",
-    "AWS",
-  ];
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
@@ -64,24 +51,16 @@ const Regist = () => {
   const [profileImageId, setProfileImageId] = useState("");
   const propileSubmit = async (data) => {
     try {
-      if (
-        profileRef.current &&
-        profileRef.current.files &&
-        profileRef.current.files.length > 0
-      ) {
+      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
         const formData = new FormData(); //NOTE 프로필 이미지
         formData.append("file", profileRef.current.files[0]);
-        const response = await axios.post(
-          `${ROOT_API}/users/profile/image`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              accept: "application/json",
-            },
-            file: "file=@22.JPG;type=image/jpeg",
-          }
-        );
+        const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            accept: "application/json",
+          },
+          file: "file=@22.JPG;type=image/jpeg",
+        });
         console.log(response.data, "dfd,,,fd");
         console.log(formData, "dfdfd");
         setProfileImageId(response.data.id);
@@ -94,13 +73,9 @@ const Regist = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log(verityEmailcheck , compareEmailcheck , duplicateId , duplicateNickName);
     await new Promise((r) => setTimeout(r, 1000));
-    if (
-      verityEmailcheck &&
-      compareEmailcheck &&
-      !duplicateId &&
-      !duplicateNickName
-    ) {
+    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName ===false) {
       //NOTE 버튼 다 클릭하면 실행
       console.log(`
   email: ${data.userEmail},
@@ -153,13 +128,16 @@ const Regist = () => {
             })
             .catch(function (error) {
               console.log("로그인 실패: ", error.response.data);
+          showToast("error", "😎 로그인 실패되었어요");
+
             });
         })
         .catch(function (error) {
           console.log("회원가입 실패:", error.response);
+          showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
         });
     } else {
-      alert("중복체크나 인증을 안했어요");
+      showToast("error", "😎 모든 버튼에 확인되지 않았어요");
     }
   };
 
@@ -172,28 +150,28 @@ const Regist = () => {
       .get(`${ROOT_API}/users/check/${type}/${value}`)
       .then(function (response) {
         if (type === "userid") {
-          response.data.duplicated === true
-            ? setDuplicateId(true)
-            : setDuplicateId(false);
+          if(response.data.duplicated === true){ //NOTE 중복체크 수정
+           setDuplicateId(true);
+            showToast("error", "😎 아이디가 중복되었습니다.");
+          }else{
+            setDuplicateId(false);
+            console.log(response.data)
+          }
         }
         if (type === "nickname") {
-          response.data.duplicated === true
-            ? setDuplicateNickName(true)
-            : setDuplicateNickName(false);
+          if(response.data.duplicated === true){
+            setDuplicateNickName(true);
+            showToast("error", "😎 닉네임이 중복되었습니다.");
+          }else{
+            setDuplicateNickName(false);
+            console.log(response.data);
+
+          }
         }
       })
       .catch(function (error) {
         console.log("확인 실패:", error.response.data);
-        toast.error("😎 중복체크를 제대로 확인해주세요", {
-          position: "top-left",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        showToast("error", "😎 중복체크를 제대로 확인해주세요");
       });
   };
 
@@ -202,63 +180,35 @@ const Regist = () => {
     e.preventDefault();
     console.log("dc", watch().userEmail);
     axios
-      .get(`${ROOT_API}/email/verify`, {
-        params: { email: watch().userEmail },
-      })
-      .then(function (response) {
-        setVerityEmailcheck(true);
-        setCode(response.data.code);
-        toast.success("😎 인증문자가 발송되었습니다", {
-          position: "top-left",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      })
-      .catch(function (error) {
-        console.log("인증 실패: ", error.response.data);
-        toast.error("😎 이메일을 제대로 입력해주세요", {
-          position: "top-left",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      });
+    .get(`${ROOT_API}/users/check/email/${watch().userEmail}`) //NOTE 이메일 중복 확인//ok
+    .then(function(response){
+      if(response.data.duplicated === false){
+        axios
+        .get(`${ROOT_API}/email/verify`, {
+          params: { email: watch().userEmail },
+        })
+        .then(function (response) {
+          setVerityEmailcheck(true);
+          setCode(response.data.code);
+          showToast("success", "😎 인증문자가 발송되었습니다");
+        })
+        .catch(function (error) {
+          console.log("인증 실패: ", error.response.data);
+          showToast("error", "😎 이메일을 제대로 입력해주세요");
+        });}else{
+          showToast("error", "😎 중복된 이메일입니다.");
+          console.log(response.data);
+        }
+    })
   };
   const compareEmail = (e) => {
     //NOTE 인증확인//ok
     e.preventDefault();
     if (code === inputEmail && code) {
-      toast.success("😎 인증이 확인되었습니다", {
-        position: "top-left",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      showToast("success", "😎 인증이 확인되었습니다");
       setCompareEmailcheck(true);
     } else {
-      toast.error("😎 인증을 제대로 확인해주세요", {
-        position: "top-left",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+       showToast("error", "😎 인증을 제대로 확인해주세요");
     }
   };
   const handleInputChange = (e) => {
@@ -291,19 +241,7 @@ const Regist = () => {
 
   return (
     <div className="regist-page page">
-      {/* 경고창  */}
-      <ToastContainer
-        position="top-left"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+      <ToastCont />
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
@@ -318,20 +256,12 @@ const Regist = () => {
           <div className="userregistpage"></div>
           <div className="headername">
             <p>{authlogins}계정 회원가입</p>
-            <span>
-              Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.
-            </span>
+            <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
           </div>
           <div className="prople">
             <div className="imgwrap">
               {imageFile && <img src={imageFile} alt="프로필이미지" />}
-              <input
-                accept="image/*"
-                ref={profileRef}
-                type="file"
-                name="프로필이미지"
-                id="profile"
-              />
+              <input accept="image/*" ref={profileRef} type="file" name="프로필이미지" id="profile" />
             </div>
           </div>
           <button
@@ -351,8 +281,7 @@ const Regist = () => {
                 <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
               </li>
               <li>
-                <span>Gravartar</span>를 이용한 프로필 변경은 여기를
-                참고해주세요.
+                <span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.
               </li>
             </ul>
           </div>
@@ -361,13 +290,7 @@ const Regist = () => {
           <div className="tagalign">
             <div className={s.tags}>
               {tags.map((item, index) => (
-                <span
-                  key={index}
-                  onClick={() => clickTag(item)}
-                  className={`tag ${
-                    selectedTags.tags.includes(item) ? [s.is_select] : ""
-                  }`}
-                >
+                <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
                   {item}
                 </span>
               ))}
@@ -398,7 +321,6 @@ const Regist = () => {
               <tr>
                 <th>
                   <label htmlFor="userEmail">이메일</label>{" "}
-                  {/* TODO 쓴 이메일은 다시 못씀, //TODO 이메일 인증완료 후 다른 이메일 작업할 시 로그인 가능.. */}
                   <span className="star" title="필수사항">
                     *
                   </span>
@@ -421,9 +343,7 @@ const Regist = () => {
                   <button onClick={verityEmail} tabIndex="3">
                     이메일인증
                   </button>
-                  {errors.userEmail && (
-                    <small role="alert">{errors.userEmail.message}</small>
-                  )}
+                  {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
                 </td>
               </tr>
               <tr>
@@ -480,21 +400,13 @@ const Regist = () => {
                   >
                     중복체크
                   </button>
-                  {errors.nickname && (
-                    <small role="alert">{errors.nickname.message}</small>
+                  {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+                  {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+                    <small className="alert">중복된 닉네임입니다.</small>
                   )}
-                  {!errors.nickname &&
-                    duplicateNickName !== "" &&
-                    duplicateNickName === true && (
-                      <small className="alert">중복된 닉네임입니다.</small>
-                    )}
-                  {!errors.nickname &&
-                    duplicateNickName !== "" &&
-                    duplicateNickName === false && (
-                      <small className="true">
-                        사용할 수 있는 닉네임입니다.
-                      </small>
-                    )}
+                  {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+                    <small className="true">사용할 수 있는 닉네임입니다.</small>
+                  )}
                 </td>
               </tr>
               <tr>
@@ -534,15 +446,9 @@ const Regist = () => {
                   >
                     중복체크
                   </button>
-                  {errors.userid && (
-                    <small role="alert">{errors.userid.message}</small>
-                  )}
-                  {duplicateId !== "" && duplicateId === true && (
-                    <small className="alert">중복된 아이디입니다.</small>
-                  )}
-                  {duplicateId !== "" && duplicateId === false && (
-                    <small className="true">사용할 수 있는 아이디입니다.</small>
-                  )}
+                  {errors.userid && <small role="alert">{errors.userid.message}</small>}
+                  {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
+                  {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
                 </td>
               </tr>
 
@@ -576,9 +482,7 @@ const Regist = () => {
                       },
                     })}
                   />
-                  {errors.password && (
-                    <small role="alert">{errors.password.message}</small>
-                  )}
+                  {errors.password && <small role="alert">{errors.password.message}</small>}
                 </td>
               </tr>
               <tr>
@@ -616,14 +520,8 @@ const Regist = () => {
                       },
                     })}
                   />
-                  {errors.passwordChk && (
-                    <small role="alert">{errors.passwordChk.message}</small>
-                  )}
-                  <div
-                    className="typechange"
-                    type="typechange"
-                    onClick={typechange}
-                  >
+                  {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
+                  <div className="typechange" type="typechange" onClick={typechange}>
                     👀
                   </div>
                 </td>
