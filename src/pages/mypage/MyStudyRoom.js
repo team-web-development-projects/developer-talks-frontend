@@ -1,18 +1,16 @@
 import axios from "axios";
 import classNames from "classnames";
 import DropDown from "components/dropdown/DropDown";
+import Pagination from "components/pagination/Pagination";
+import StudyRoomPersonModal from "components/portalModal/studyRoomPersonModal/StudyRoomPersonModal";
 import { ROOT_API } from "constants/api";
+import { getUer } from "hooks/useAuth";
 import { useEffect, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
 import s from "./mystudyroom.module.scss";
-import Pagination from "components/pagination/Pagination";
-import StudyRoomPersonModal from "components/portalModal/studyRoomPersonModal/StudyRoomPersonModal";
-import { getUer } from "hooks/useAuth";
-import { Fragment } from "react";
 
 const MyStudyRoom = () => {
   const navigate = useNavigate();

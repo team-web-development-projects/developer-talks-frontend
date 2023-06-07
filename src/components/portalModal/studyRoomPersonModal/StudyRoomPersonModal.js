@@ -1,20 +1,16 @@
-import React from "react";
-import ModalFrame from "../ModalFrame";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
+import classNames from "classnames";
+import Button from "components/button/Button";
 import { ROOT_API } from "constants/api";
 import { getUer } from "hooks/useAuth";
-import classNames from "classnames";
-import "./studyroompersonmodal.scss";
 import { Fragment } from "react";
-import Button from "components/button/Button";
+import { useSelector } from "react-redux";
+import ModalFrame from "../ModalFrame";
+import "./studyroompersonmodal.scss";
 
 const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
   const auth = useSelector((state) => state.authToken);
   const { getNickname } = getUer(auth.accessToken);
-
-  console.log('id', roomId);
 
   // 내보내기
   const getOut = (nickname) => {
@@ -51,7 +47,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
         alert("방을 나갔습니다.");
       })
       .catch((error) => console.log(error));
-  }
+  };
 
   const buttonType = (data, index) => {
     const result = data.filter((item) => item.nickname === getNickname && item.studyRoomLevel === "LEADER");
