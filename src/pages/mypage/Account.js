@@ -104,9 +104,9 @@ function Account() {
       .catch((error) => console.log(error));
   };
 
-  if (userData.description.includes("description")) {
-    JSON.parse(setUserData({ ...userData, description: userData.description }));
-  }
+  // if (userData.description.includes("description")) {
+  //   JSON.parse(setUserData({ ...userData, description: userData.description }));
+  // }
 
   return (
     <MypageContent>

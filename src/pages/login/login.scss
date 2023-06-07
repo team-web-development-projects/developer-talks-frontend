@@ -19,24 +19,25 @@
       }
 
       label {
+        width: 15%;
         background-color: #ffffff;
 
         &.Id {
-          padding: 15px 25px;
+          // padding: 15px 25px;
         }
 
         &.Pw {
-          padding: 15px 17px;
+          // padding: 15px 17px;
         }
 
         &.nickname {
-          padding: 15px 17px;
+          // padding: 15px 17px;
         }
       }
 
       input {
         padding: 15px 0;
-        width: 270px;
+        width: 80%;
         font-size: 16px;
         border: 1px solid #cfcfcf;
       }

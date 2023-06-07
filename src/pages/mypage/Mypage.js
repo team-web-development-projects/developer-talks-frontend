@@ -1,23 +1,23 @@
 import axios from "axios";
+import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import "./Mypage.scss";
-import { ROOT_API } from "constants/api";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
+import "./Mypage.scss";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
   const navigate = useNavigate();
   const [select, setSelect] = useState(-1);
   const [favorite, setFavorite] = useState([]);
-  const dispatch = useDispatch();
-
   let userId = "";
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
   }
+
+
 
   const onSelect = (type) => {
     setSelect(type);
@@ -45,15 +45,12 @@ const Mypage = ({ type }) => {
         break;
       case 1:
         axios
-          .get(
-            `${ROOT_API}/post/list/user/${userId}`,
-            {
-              params: { page: 0, size: 10 },
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
+          .get(`${ROOT_API}/post/list/user/${userId}`, {
+            params: { page: 0, size: 10 },
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          })
           .then((res) => {
             setFavorite(res.data.content);
             console.log("1", res.data.content);
@@ -61,15 +58,12 @@ const Mypage = ({ type }) => {
         break;
       case 2:
         axios
-          .get(
-            `${ROOT_API}/comment/list/user/${userId}`,
-            {
-              params: { page: 0, size: 10 },
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
+          .get(`${ROOT_API}/comment/list/user/${userId}`, {
+            params: { page: 0, size: 10 },
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          })
           .then((res) => {
             setFavorite(res.data);
             console.log("2", res.data);
@@ -91,15 +85,11 @@ const Mypage = ({ type }) => {
             setFavorite(res.data.content);
             console.log("3", res.data.content);
           });
+
         break;
       default:
     }
-    if (auth.accessToken === null) {
-      navigate("/login", { replace: true });
-    }
-    // console.log("dd", favorite);
   }, [auth.accessToken, navigate, select, userId]);
-  // console.log("dd", favorite);
 
   return (
     <>
@@ -140,7 +130,7 @@ const Mypage = ({ type }) => {
             </div>
           </section>
         </MypageContent>
-      ) : null}
+      ) : null }
     </>
   );
 };

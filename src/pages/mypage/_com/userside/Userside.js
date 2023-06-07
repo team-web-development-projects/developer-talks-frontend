@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Logout from "components/logout/Logout";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import "./Userside.scss";
-import { useState } from "react";
 
 const Userside = () => {
   const [isActive, setIsActive] = useState("");
@@ -17,6 +17,22 @@ const Userside = () => {
   const handleClick = (value) => {
     setIsActive(value);
   };
+  useEffect(() => {
+    axios
+      .get(`${ROOT_API}/users/profile/image`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(function (response) {
+        console.log("정보 성공:", response);
+        // setImageFile(response.data);
+      })
+      .catch(function (error) {
+        console.log("정보:실패 ", error.response);
+      });
+  }, []);
 
   const auth = useSelector((state) => state.authToken).accessToken;
   const userinfo = parseJwt(auth);
@@ -54,29 +70,17 @@ const Userside = () => {
             <Link to="/introduction" className={isActive ? 'active' : ''} onClick={handleClick}>🎆 내소개</Link>
           </li> */}
           <li>
-            <Link
-              to="/mypage"
-              className={isActive === "mypage" ? "is-active" : ""}
-              onClick={() => handleClick("mypage")}
-            >
+            <Link to="/mypage" className={isActive === "mypage" ? "is-active" : ""} onClick={() => handleClick("mypage")}>
               🧥 활동내역
             </Link>
           </li>
           <li>
-            <Link
-              to="/my-studyroom"
-              className={isActive === "my-studyroom" ? "is-active" : ""}
-              onClick={() => handleClick("my-studyroom")}
-            >
+            <Link to="/my-studyroom" className={isActive === "my-studyroom" ? "is-active" : ""} onClick={() => handleClick("my-studyroom")}>
               스터디룸
             </Link>
           </li>
           <li>
-            <Link
-              to="/account"
-              className={isActive === "account" ? "is-active" : ""}
-              onClick={() => handleClick("account")}
-            >
+            <Link to="/account" className={isActive === "account" ? "is-active" : ""} onClick={() => handleClick("account")}>
               🐹 회원정보수정 및 탈퇴
             </Link>
           </li>
