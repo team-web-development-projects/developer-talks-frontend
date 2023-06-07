@@ -73,9 +73,9 @@ const Regist = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(verityEmailcheck , compareEmailcheck , duplicateId , duplicateNickName);
+    console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName);
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName ===false) {
+    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
       //NOTE 버튼 다 클릭하면 실행
       console.log(`
   email: ${data.userEmail},
@@ -128,8 +128,7 @@ const Regist = () => {
             })
             .catch(function (error) {
               console.log("로그인 실패: ", error.response.data);
-          showToast("error", "😎 로그인 실패되었어요");
-
+              showToast("error", "😎 로그인 실패되었어요");
             });
         })
         .catch(function (error) {
@@ -150,22 +149,22 @@ const Regist = () => {
       .get(`${ROOT_API}/users/check/${type}/${value}`)
       .then(function (response) {
         if (type === "userid") {
-          if(response.data.duplicated === true){ //NOTE 중복체크 수정
-           setDuplicateId(true);
+          if (response.data.duplicated === true) {
+            //NOTE 중복체크 수정
+            setDuplicateId(true);
             showToast("error", "😎 아이디가 중복되었습니다.");
-          }else{
+          } else {
             setDuplicateId(false);
-            console.log(response.data)
+            console.log(response.data);
           }
         }
         if (type === "nickname") {
-          if(response.data.duplicated === true){
+          if (response.data.duplicated === true) {
             setDuplicateNickName(true);
             showToast("error", "😎 닉네임이 중복되었습니다.");
-          }else{
+          } else {
             setDuplicateNickName(false);
             console.log(response.data);
-
           }
         }
       })
@@ -180,26 +179,27 @@ const Regist = () => {
     e.preventDefault();
     console.log("dc", watch().userEmail);
     axios
-    .get(`${ROOT_API}/users/check/email/${watch().userEmail}`) //NOTE 이메일 중복 확인//ok
-    .then(function(response){
-      if(response.data.duplicated === false){
-        axios
-        .get(`${ROOT_API}/email/verify`, {
-          params: { email: watch().userEmail },
-        })
-        .then(function (response) {
-          setVerityEmailcheck(true);
-          setCode(response.data.code);
-          showToast("success", "😎 인증문자가 발송되었습니다");
-        })
-        .catch(function (error) {
-          console.log("인증 실패: ", error.response.data);
-          showToast("error", "😎 이메일을 제대로 입력해주세요");
-        });}else{
+      .get(`${ROOT_API}/users/check/email/${watch().userEmail}`) //NOTE 이메일 중복 확인//ok
+      .then(function (response) {
+        if (response.data.duplicated === false) {
+          axios
+            .get(`${ROOT_API}/email/verify`, {
+              params: { email: watch().userEmail },
+            })
+            .then(function (response) {
+              setVerityEmailcheck(true);
+              setCode(response.data.code);
+              showToast("success", "😎 인증문자가 발송되었습니다");
+            })
+            .catch(function (error) {
+              console.log("인증 실패: ", error.response.data);
+              showToast("error", "😎 이메일을 제대로 입력해주세요");
+            });
+        } else {
           showToast("error", "😎 중복된 이메일입니다.");
           console.log(response.data);
         }
-    })
+      });
   };
   const compareEmail = (e) => {
     //NOTE 인증확인//ok
@@ -208,7 +208,7 @@ const Regist = () => {
       showToast("success", "😎 인증이 확인되었습니다");
       setCompareEmailcheck(true);
     } else {
-       showToast("error", "😎 인증을 제대로 확인해주세요");
+      showToast("error", "😎 인증을 제대로 확인해주세요");
     }
   };
   const handleInputChange = (e) => {
@@ -466,6 +466,7 @@ const Regist = () => {
                     placeholder="최소 1개의 특수문자를 포함해주세요"
                     maxLength={15}
                     tabIndex="10"
+                    autoComplete="password"
                     {...register("password", {
                       required: "비밀번호는 필수 입력입니다.",
                       minLength: {
@@ -499,6 +500,7 @@ const Regist = () => {
                     placeholder="비밀번호를 한 번 더 입력해주세요"
                     tabIndex="11"
                     maxLength={15}
+                    autoComplete="password"
                     {...register("passwordChk", {
                       required: "비밀번호는 필수 입력입니다.",
                       minLength: {

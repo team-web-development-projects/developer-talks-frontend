@@ -20,7 +20,7 @@ const Login = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
-  const [typetoggle, setTypetoggle] = useState('password')
+  const [typetoggle, setTypetoggle] = useState("password");
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -45,10 +45,11 @@ const Login = () => {
         reset();
       })
       .catch(function (error) {
-       showToast("error", "😎 정보를 다시 입력해주세요");
+        showToast("error", "😎 정보를 다시 입력해주세요");
       });
   };
-  const typechange = () => { //NOTE 비밀번호 토글//ok
+  const typechange = () => {
+    //NOTE 비밀번호 토글//ok
     setTypetoggle("text");
 
     setTimeout(() => {
@@ -91,9 +92,11 @@ const Login = () => {
                 <input
                   type="text"
                   id="userId"
+                  name="usderId"
                   placeholder="Developer-Talk Guest"
                   tabIndex="1"
                   maxLength="15"
+                  autoComplete="useId"
                   aria-invalid={!isDirty ? undefined : errors.userId ? "true" : "false"}
                   {...register("userId", {
                     required: "아이디는 필수 입력입니다.",
@@ -115,6 +118,8 @@ const Login = () => {
                   placeholder="********"
                   tabIndex="2"
                   maxLength="15"
+                  name="password"
+                  autoComplete="current-password"
                   aria-invalid={!isDirty ? undefined : errors.password ? "true" : "false"}
                   {...register("password", {
                     required: "비밀번호는 필수 입력입니다.",

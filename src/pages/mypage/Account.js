@@ -1,54 +1,73 @@
-import Button from 'components/button/Button';
-import Form from 'components/form/Form';
-import { parseJwt } from 'hooks/useParseJwt';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import './Account.scss';
+import Button from "components/button/Button";
+import Form from "components/form/Form";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import "./Account.scss";
 import MypageContent from "./MyPageContent";
+import { ROOT_API } from "constants/api";
+import axios from "axios";
+import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
+
 // import { useNavigate } from 'react-router-dom';
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
-  // useEffect(() => {
-  //   if (auth.accessToken) {
-  //     console.log(parseJwt(auth.accessToken), "gggg"); //NOTE 이메일 토큰으로 넣기 //ok
-  //   }
-  //   console.log(`
-  //   nickname: ${parseJwt(auth.accessToken).nickname},
-  //   email: ${parseJwt(auth.accessToken).email},
-  //   userid: ${parseJwt(auth.accessToken).userid},
-  //   password: ${parseJwt(auth.accessToken).password},`
-  //   )
-  // }, [auth.accessToken])
+  const [selectedTags, setSelectedTags] = useState({
+    tags: [],
+    authJoin: true,
+    joinableCount: 1,
+  });
 
+  const clickTag = (tag) => {
+    //NOTE 기술 테그
+    if (selectedTags.tags.includes(tag)) {
+      setSelectedTags({
+        ...selectedTags,
+        tags: selectedTags.tags.filter((selectedTag) => selectedTag !== tag),
+      });
+    } else {
+      setSelectedTags({
+        ...selectedTags,
+        tags: [...selectedTags.tags, tag],
+      });
+    }
+  };
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
 
-
-  // console.log('auth:', auth.accessToken);
-  // const userData = parseJwt(localStorage.getItem('token')); //NOTE - 토큰
-
-  const tabTitle = ['회원정보 수정', '회원 탈퇴'];
+  const tabTitle = ["회원정보 수정", "회원 탈퇴"];
   const [select, setSelect] = useState(null);
   const onSelect = (type) => {
     setSelect(type);
   };
 
-  // const initialFormState = parseJwt(auth.accessToken)
+  const [userData, setUserData] = useState("");
+  useEffect(() => {
+    axios
+      .get(`${ROOT_API}/users/info`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(({ data }) => {
+        console.log("cc정보 성공:", data);
+        setUserData(data);
+      })
+      .catch(function (error) {
+        console.log("cc정보:실패 ", error.response);
+      });
+  }, []);
 
-  const initialFormState = {
-    username: '김모양',
-    nickname: parseJwt(auth.accessToken).nickname,
-    email: parseJwt(auth.accessToken).sub,
-    userid: parseJwt(auth.accessToken).userid,
-    password: parseJwt(auth.accessToken).password,
+  const reset = () => {
+    //TODO 리셋
+    setUserData("");
   };
-
-  const [userData, setUserData] = useState(initialFormState);
 
   const userEdit = (e) => {
     //NOTE 수정
     e.preventDefault();
     console.log(`
-      이름: ${userData.username}
+    아이디: ${userData.description}
       닉네임: ${userData.nickname}
       이메일: ${userData.email}
       아이디: ${userData.userid}
@@ -56,15 +75,38 @@ function Account() {
     `);
   };
 
-  const reset = () => {
-    //NOTE 리셋
-    setUserData(initialFormState);
-  };
-
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
+    console.log(userData.description);
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
+
+  const saveUser = async (e) => {
+    e.preventDefault();
+    await new Promise((r) => setTimeout(r, 1000));
+
+    axios
+      .put(
+        `${ROOT_API}/users/profile/description`,
+        {
+          description: userData.description,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      )
+      .then(function (data) {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  if (userData.description.includes("description")) {
+    JSON.parse(setUserData({ ...userData, description: userData.description }));
+  }
 
   return (
     <MypageContent>
@@ -84,7 +126,26 @@ function Account() {
               {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
               <div className="description">
                 <label>한 줄 내소개</label>
-                <input type="description" id="description" placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다." maxLength={80} />
+                <input
+                  type="description"
+                  id="description"
+                  name="description"
+                  value={userData.description}
+                  placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
+                  maxLength={80}
+                  onChange={handleChange}
+                />
+                <Button onClick={saveUser}>저장</Button>
+              </div>
+              <label>관심있는 태그입력</label>
+              <div className="tagalign">
+                <div className={s.tags}>
+                  {tags.map((item, index) => (
+                    <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div className="line-style">
                 <div className="jb-division-line"></div>
@@ -103,6 +164,7 @@ function Account() {
                         </th>
                         <td>
                           <input name="email" value={userData.email} onChange={handleChange} type="text" />
+                          <Button>저장</Button>
                         </td>
                       </tr>
                       <tr>
@@ -111,6 +173,7 @@ function Account() {
                         </th>
                         <td>
                           <input name="userid" value={userData.userid} onChange={handleChange} type="text" />
+                          <Button>저장</Button>
                         </td>
                       </tr>
                       <tr>
@@ -119,6 +182,7 @@ function Account() {
                         </th>
                         <td>
                           <input name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
+                          <Button>저장</Button>
                         </td>
                       </tr>
                       <tr>
@@ -126,7 +190,7 @@ function Account() {
                           <label>비밀번호 : {""}</label>
                         </th>
                         <td>
-                          <input name="password" value={userData.password} onChange={handleChange} type="password" />
+                          <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                         </td>
                       </tr>
                       <tr>
@@ -134,12 +198,12 @@ function Account() {
                           <label>비밀번호확인 : {""}</label>
                         </th>
                         <td>
-                          <input name="password" value={userData.password} onChange={handleChange} type="password" />
+                          <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
+                          <Button>저장</Button>
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <Button>저장</Button>
                   <Button onClick={reset}>리셋</Button>
                 </div>
               </fieldset>
