@@ -69,13 +69,10 @@ function Account() {
   return (
     <MypageContent>
       <section className="notes">
-        <ul className='notetitle'>
+        <ul className="notetitle">
           {tabTitle.map((item, index) => (
             <li key={index}>
-              <button
-                onClick={() => onSelect(index)}
-                className={`${select === index && 'select'}`}
-              >
+              <button onClick={() => onSelect(index)} className={`${select === index && "select"}`}>
                 {item}
               </button>
             </li>
@@ -85,99 +82,59 @@ function Account() {
           <div>
             <Form onSubmit={userEdit}>
               {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
-              <div className='description'>
+              <div className="description">
                 <label>한 줄 내소개</label>
-                <input
-                  type='description'
-                  id='description'
-                  placeholder='내 소개를 자유롭게 해보세요 80자까지 가능합니다.'
-                  maxLength={80}
-                />
+                <input type="description" id="description" placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다." maxLength={80} />
               </div>
               <div className="line-style">
                 <div className="jb-division-line"></div>
                 <span>회원가입에 필요한 기본정보를 입력해주세요(필수입니다)</span>
                 <div className="jb-division-line"></div>
               </div>
-              <fieldset className='useraccount'>
+              <fieldset className="useraccount">
                 <legend>정보수정</legend>
                 <div className="">
-                  <table className='userinfoTable'>
+                  <table className="userinfoTable">
                     <thead />
                     <tbody>
                       <tr>
                         <th>
-                          <label>
-                            이름 : {''}
-                          </label>
+                          <label>이메일 : {""}</label>
                         </th>
                         <td>
-                          <input
-                            name="username"
-                            value={userData.username}
-                            onChange={handleChange}
-                            type="text"
-                          />
+                          <input name="email" value={userData.email} onChange={handleChange} type="text" />
                         </td>
                       </tr>
                       <tr>
                         <th>
-                          <label>
-                            이메일 : {''}
-                          </label>
+                          <label>아이디 : {""}</label>
                         </th>
                         <td>
-                          <input
-                            name="email"
-                            value={userData.email}
-                            onChange={handleChange}
-                            type="text"
-                          />
+                          <input name="userid" value={userData.userid} onChange={handleChange} type="text" />
                         </td>
                       </tr>
                       <tr>
                         <th>
-                          <label>
-                            아이디 : {''}
-                          </label>
+                          <label>닉네임 : {""}</label>
                         </th>
                         <td>
-                          <input
-                            name="userid"
-                            value={userData.userid}
-                            onChange={handleChange}
-                            type="text"
-                          />
+                          <input name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
                         </td>
                       </tr>
                       <tr>
                         <th>
-                          <label>
-                            닉네임 : {''}
-                          </label>
+                          <label>비밀번호 : {""}</label>
                         </th>
                         <td>
-                          <input
-                            name="nickname"
-                            value={userData.nickname}
-                            onChange={handleChange}
-                            type="text"
-                          />
+                          <input name="password" value={userData.password} onChange={handleChange} type="password" />
                         </td>
                       </tr>
                       <tr>
                         <th>
-                          <label>
-                            비밀번호 : {''}
-                          </label>
+                          <label>비밀번호확인 : {""}</label>
                         </th>
                         <td>
-                          <input
-                            name="password"
-                            value={userData.password}
-                            onChange={handleChange}
-                            type="password"
-                          />
+                          <input name="password" value={userData.password} onChange={handleChange} type="password" />
                         </td>
                       </tr>
                     </tbody>
@@ -189,20 +146,19 @@ function Account() {
             </Form>
           </div>
         )}
-        {select === 1 &&
-          <form className='delete'>
-            <div className='deletgaider'>
-              회원 탈퇴일로부터 계정과 닉네임을 포함한 계정 정보(아이디/이메일/닉네임)는
-              개인정보 보호방침에 따라 60일간 보관(잠김)되며, 60일 경과된 후에는 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다.
-
-              작성된 게시물은 삭제되지 않으며, 익명처리 후 OKKY 로 소유권이 귀속됩니다.
+        {select === 1 && (
+          <form className="delete">
+            <div className="deletgaider">
+              회원 탈퇴일로부터 계정과 닉네임을 포함한 계정 정보(아이디/이메일/닉네임)는 개인정보 보호방침에 따라 60일간 보관(잠김)되며, 60일 경과된
+              후에는 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된 게시물은 삭제되지 않으며, 익명처리 후 디톡스로 소유권이
+              귀속됩니다.
             </div>
-            <input type='checkbox' />
+            <input type="checkbox" />
             <label>계정 삭제에 관한 정책을 읽고 이에 동의합니다</label>
             <br />
             <Button>회원탈퇴 버튼</Button>
           </form>
-        }
+        )}
       </section>
     </MypageContent>
   );
