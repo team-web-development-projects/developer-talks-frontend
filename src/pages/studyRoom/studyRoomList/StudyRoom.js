@@ -63,8 +63,6 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("data", data);
-
   return (
     <>
       {auth.accessToken !== null ? (
@@ -98,11 +96,7 @@ const BoardList = ({ type }) => {
           >
             {data && data.content.length !== 0 ? (
               data.content.map((item, index) => (
-                <li
-                  key={index}
-                  className={s.card_list}
-                  onClick={() => joinRoomClick(item.id)}
-                >
+                <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <div className={s.tag}>
                     {item.skills.map((items, indexs) => (
@@ -110,9 +104,7 @@ const BoardList = ({ type }) => {
                     ))}
                   </div>
                   <div className={s.info}>
-                    <div className={s.maker}>
-                      {item.studyRoomUsers[0].nickname}
-                    </div>
+                    <div className={s.maker}>{item.studyRoomUsers[0].nickname}</div>
                     <div className={s.icon}>
                       <BsFillPeopleFill size={16} />
                       <span>{item.studyRoomUsers.filter((item) => item.status).length}</span>/
@@ -126,13 +118,15 @@ const BoardList = ({ type }) => {
             )}
           </ul>
 
-          <div className={s.pageContainer}>
-            <Pagination
-              currentPage={data.pageable.pageNumber + 1}
-              totalPage={data.totalPages}
-              paginate={setCurrentPage}
-            />
-          </div>
+          {data && (
+            <div className={s.pageContainer}>
+              <Pagination
+                currentPage={data.pageable.pageNumber + 1}
+                totalPage={data.totalPages}
+                paginate={setCurrentPage}
+              />
+            </div>
+          )}
           <Scrolltop />
         </div>
       ) : (

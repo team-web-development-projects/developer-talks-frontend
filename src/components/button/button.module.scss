@@ -2,15 +2,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 20px;
+  padding: 0px 20px;
   color: white;
-  background-color: black;
+  background: black;
   border: 0;
   border-radius: 10px;
   text-align: center;
   &.is_small {
-    height: 32px;
-    font-size: 12px;
+    height: 34px;
+    font-size: 14px;
+    background: #0d6efd
   }
   &.is_medium {
     height: 48px;
@@ -25,9 +26,9 @@
     
   }
   &:hover {
-    background-color: #585858;
+    background: #585858;
   }
   &:active {
-    background-color: #000000;
+    background: #000000;
   }
 }

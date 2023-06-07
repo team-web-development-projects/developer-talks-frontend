@@ -4,7 +4,7 @@
   }
   .content-wrap {
     margin: 0 auto;
-    height: 100vh;
+    min-height: 100vh;
     width: 60%;
     .nav {
       display: flex;

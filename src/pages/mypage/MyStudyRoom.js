@@ -11,46 +11,52 @@ import MypageContent from "./MyPageContent";
 import s from "./mystudyroom.module.scss";
 import Pagination from "components/pagination/Pagination";
 import StudyRoomPersonModal from "components/portalModal/studyRoomPersonModal/StudyRoomPersonModal";
+import { getUer } from "hooks/useAuth";
+import { Fragment } from "react";
 
 const MyStudyRoom = () => {
-  const [myList, setMyList] = useState([]);
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
+  const auth = useSelector((state) => state.authToken);
+  const { getNickname } = getUer(auth.accessToken);
+  const [personModal, setPerseonModal] = useState(false);
+  const [modalUserData, setModalUserData] = useState();
+  const [roomid, setRoomid] = useState();
   const [drop, setDrop] = useState({
     index: -1,
     state: false,
   });
-  const auth = useSelector((state) => state.authToken);
-  const [personModal, setPerseonModal] = useState(false);
+  const [asignList, setAsignList] = useState();
+  const [myList, setMyList] = useState([]);
+  const [currentMyListPage, setCurrentMyListPage] = useState(1);
+  const [currentAsignPage, setCurrentAsignPage] = useState(1);
 
   useEffect(() => {
+    // 참여요청 리스트
     axios
-      // 참여중인 스터디룸 리스트
-      .get(`${ROOT_API}/study-rooms/user`, {
-        params: { page: currentPage - 1, size: 6 },
+      .get(`${ROOT_API}/study-rooms/requests`, {
+        params: { page: currentAsignPage - 1, size: 6 },
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
       .then(function (response) {
-        console.log("가입중인 스터디 룸 정보 성공:", response.data.content);
-        setMyList(response.data.content);
-      })
-      .catch(function (error) {
-        console.log("스터디 룸 정보:실패 ", error.response);
+        setAsignList(response.data);
       });
-  }, []);
 
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/study-rooms/requests`, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
-  }
+    // 참여중인 스터디룸 리스트
+    axios
+      .get(`${ROOT_API}/study-rooms/user`, {
+        params: { page: currentMyListPage - 1, size: 6 },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(function (response) {
+        setMyList(response.data);
+      });
+  }, [currentAsignPage, currentMyListPage]);
 
   const asignJoin = () => {
     console.log("가입승인");
@@ -65,6 +71,7 @@ const MyStudyRoom = () => {
     }
   };
 
+  // 가입승인
   const asignUser = (studyRoomId, studyRoomUserId) => {
     console.log(`${studyRoomId}, ${studyRoomUserId}`);
     axios
@@ -82,11 +89,18 @@ const MyStudyRoom = () => {
         }
       )
       .then(function (response) {
-        console.log("스터디 룸 승인완료:", response);
         alert("승인 되었습니다.");
-      })
-      .catch(function (error) {
-        console.log("스터디 룸 정보:실패 ", error.response);
+        axios
+          .get(`${ROOT_API}/study-rooms/requests`, {
+            params: { page: currentAsignPage - 1, size: 6 },
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          })
+          .then(function (response) {
+            setAsignList(response.data);
+          });
       });
   };
 
@@ -94,23 +108,34 @@ const MyStudyRoom = () => {
     console.log("유저정보보기");
   };
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["studyroom-request"],
-    queryFn: fetchProjects,
-  });
-
   useEffect(() => {
-    setCurrentPage(1);
+    setCurrentMyListPage(1);
+    setCurrentAsignPage(1);
   }, []);
+
+  const roomUserInfo = (data) => {
+    const asigning = data.studyRoomUsers.filter((item) => item.status === false && item.nickname === getNickname);
+    const isRoomLeader = data.studyRoomUsers.filter(
+      (item) => item.studyRoomLevel === "LEADER" && item.nickname === getNickname
+    );
+    if (asigning.length === 1) {
+      return <span className={s.room_list_tag}>승인요청중</span>;
+    }
+    if (isRoomLeader.length === 1) {
+      return <span className={s.room_list_tag}>방장</span>;
+    }
+  };
 
   return (
     <MypageContent>
-      {personModal && <StudyRoomPersonModal setOnModal={() => setPerseonModal()} />}
+      {personModal && (
+        <StudyRoomPersonModal setOnModal={() => setPerseonModal()} modalUserData={modalUserData} roomId={roomid} />
+      )}
       <div className={classNames("content-wrap", [s.mystudyroom])}>
         <h3>스터디룸 신청 리스트</h3>
         <ul className={s.list}>
-          {data && data.content.length !== 0 ? (
-            data.content.map((item, index) => (
+          {asignList && asignList.content.length !== 0 ? (
+            asignList.content.map((item, index) => (
               <li onClick={asignJoin} key={index} className={s.list_item}>
                 <div className={s.room_title}>{item.title}</div>
                 <span className={s.user} onClick={(e) => clickUser(e, index)}>
@@ -128,18 +153,46 @@ const MyStudyRoom = () => {
             <>리스트가 없습니다.</>
           )}
         </ul>
+        {asignList && asignList.length !== 0 && (
+          <div className={s.pageContainer}>
+            <Pagination
+              currentPage={asignList.pageable.pageNumber + 1}
+              totalPage={asignList.totalPages}
+              paginate={setCurrentMyListPage}
+            />
+          </div>
+        )}
+
         <h3>참여중 스터디룸</h3>
         <ul className={s.list}>
           {myList && myList.length !== 0 ? (
-            myList.map((item, index) => (
-              <li key={index} className={s.list_item} onClick={() => navigate(`/studyroom/${item.id}`)}>
-                <div className={s.list_title}>{item.title}</div>
+            myList.content.map((item, index) => (
+              <li
+                key={index}
+                className={s.list_item}
+                onClick={() => {
+                  if (
+                    item.studyRoomUsers.filter((item) => item.nickname === getNickname && item.status === true)
+                      .length === 1
+                  ) {
+                    navigate(`/studyroom/${item.id}`);
+                  } else {
+                    alert("승인요청중입니다");
+                  }
+                }}
+              >
+                <div className={s.list_title}>
+                  {item.title}
+                  {roomUserInfo(item)}
+                </div>
                 <div className={s.count_wrap}>
                   <div
                     className={s.count}
                     onClick={(e) => {
                       e.stopPropagation();
                       setPerseonModal(true);
+                      setModalUserData(myList.content[index].studyRoomUsers);
+                      setRoomid(item.id);
                     }}
                   >
                     <BsFillPeopleFill size={16} />
@@ -154,14 +207,15 @@ const MyStudyRoom = () => {
             <>리스트가 없습니다.</>
           )}
         </ul>
-
-        <div className={s.pageContainer}>
-          <Pagination
-            currentPage={data.pageable.pageNumber + 1}
-            totalPage={data.totalPages}
-            paginate={setCurrentPage}
-          />
-        </div>
+        {myList && myList.length !== 0 && (
+          <div className={s.pageContainer}>
+            <Pagination
+              currentPage={myList.pageable.pageNumber + 1}
+              totalPage={myList.totalPages}
+              paginate={setCurrentMyListPage}
+            />
+          </div>
+        )}
       </div>
     </MypageContent>
   );
