@@ -18,22 +18,17 @@ import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
-import { SET_TOKEN } from 'store/Auth';
-import { getCookieToken, setRefreshToken } from 'store/Cookie';
-import { isDev } from 'util/Util';
-import './assets/style/index.scss';
+import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { SET_TOKEN } from "store/Auth";
+import { getCookieToken, setRefreshToken } from "store/Cookie";
+import { isDev } from "util/Util";
+import "./assets/style/index.scss";
 import Agreement from "pages/agreement/Agreement";
 import Userregist from "pages/userregist/Userregist";
-import { NavigateMain, NavigatePost } from './Outlet';
+import { NavigateMain, NavigatePost } from "./Outlet";
 import StudyRoomInfo from "pages/studyRoom/studyRoomInfo/StudyRoomInfo";
 import MyStudyRoom from "pages/mypage/MyStudyRoom";
+import "./axiosInterceptor.js";
 
 function App() {
   const navigate = useNavigate();
@@ -58,19 +53,40 @@ function App() {
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: getCookieToken().refreshToken,
           headers: {
-            accept: '*/*',
-            'Content-Type': 'application/json',
+            accept: "*/*",
+            "Content-Type": "application/json",
           },
         })
         .then(function (response) {
-          console.log('재갱신 성공:', response);
-          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+          console.log("재갱신 성공:", response);
+          // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
         })
         .catch(function (error) {
-          console.log('재갱신 실패: ', error.response.data);
+          console.log("재갱신 실패: ", error.response);
         });
     }
   }, [auth.accessToken, dispatch, location]);
+
+  const Api = axios.create({
+    baseURL: `${ROOT_API}/token/refresh`,
+  });
+
+  Api.interceptors.response.use(
+    (response) => {
+      if (response.status === 200) {
+        console.log("Request succeeded!11");
+        console.log("res", response);
+        // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+      }
+      if (response.status !== 200) {
+        console.log("dd");
+      }
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   return (
     <div className="App">
@@ -80,56 +96,29 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="mypage" element={<Mypage />} />
-          <Route
-            path="list/favorite/:userId"
-            element={<Mypage type="post" />}
-          />
+          <Route path="list/favorite/:userId" element={<Mypage type="post" />} />
           <Route path="account" element={<Account />} />
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="my-studyroom" element={<MyStudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
           <Route path="introduction" element={<Introduction />} />
-          <Route
-            path="board/search/:keyword"
-            element={<BoardList type="post" />}
-          />
+          <Route path="board/search/:keyword" element={<BoardList type="post" />} />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
-          <Route
-            path="/studyroom/info/:postId"
-            element={<StudyRoomInfo  />}
-          />
-          <Route
-            path="/studyroom/:postId"
-            element={<StudyRoomDetail  />}
-          />
+          <Route path="/studyroom/info/:postId" element={<StudyRoomInfo />} />
+          <Route path="/studyroom/:postId" element={<StudyRoomDetail />} />
 
           <Route path="qna" element={<BoardList type="questions" />} />
-          <Route
-            path="qna/search/:keyword"
-            element={<BoardList type="questions" />}
-          />
-          <Route
-            path="/qna/:postId"
-            element={<BoardDetail type="questions" />}
-          />
+          <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />
+          <Route path="/qna/:postId" element={<BoardDetail type="questions" />} />
           <Route path="*" element={<NotPage />} />
         </Route>
 
         <Route element={<NavigatePost />}>
-          <Route
-            path="studyroom/post"
-            element={<StudyRoomPost type="studyroom" />}
-          />
+          <Route path="studyroom/post" element={<StudyRoomPost type="studyroom" />} />
           <Route path="/board/post" element={<BoardPost type="post" />} />
           <Route path="/qna/post" element={<BoardPost type="questions" />} />
-          <Route
-            path="/board/update/:postId"
-            element={<BoardUpdate type="post" />}
-          />
-          <Route
-            path="/qna/update/:postId"
-            element={<BoardUpdate type="questions" />}
-          />
+          <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
+          <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
           <Route path="/agreement" element={<Agreement />} />

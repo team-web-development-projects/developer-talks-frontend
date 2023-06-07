@@ -21,12 +21,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { isDev } from "util/Util";
 
 const queryClient = new QueryClient({
-  onError: (error, query) => {
-    console.log("onError", error);
-  },
-  onSuccess: (data) => {
-    console.log("전역이 업데이트됨?", data);
-  },
   defaultOptions: {
     queries: {
       retry: 0,

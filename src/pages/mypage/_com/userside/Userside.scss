@@ -1,17 +1,17 @@
 .sidebackground {
-  z-index: -1;
-  position: fixed;
-  background-color: #f3f3f3;
-  max-width: 300px;
-  width: 35%;
-  height: 100%;
-  top: 0;
+  // z-index: -1;
+  // position: fixed;
+  // background-color: #f3f3f3;
+  // max-width: 300px;
+  // width: 35%;
+  // height: 100%;
+  // top: 0;
 }
 
 .side {
   max-width: 300px;
   width: 35%;
-
+  background-color: #f3f3f3;
   .imgwrap {
     position: relative;
     margin: 20px;

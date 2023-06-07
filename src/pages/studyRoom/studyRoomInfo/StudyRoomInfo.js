@@ -5,13 +5,13 @@ import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useState } from "react";
 import { BsGearFill, BsLock, BsUnlock } from "react-icons/bs";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./studyroominfo.scss";
 import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
 import { useEffect } from "react";
-import { useRef } from "react";
+import { getUer } from "hooks/useAuth";
 
 const StudyRoomInfo = () => {
   const { postId } = useParams();
@@ -20,12 +20,12 @@ const StudyRoomInfo = () => {
   const [secretModal, setSecretModal] = useState(false);
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
-
-  
+  const { getNickname } = getUer(auth.accessToken);
+  const queryClient = useQueryClient();
+  const [getDeta, setGetData] = useState();
 
   // 스터디룸 가입요청
   const requestRoom = () => {
-    // setecretModal(true);
     axios
       .post(
         `${ROOT_API}/study-room/join/${postId}`,
@@ -41,9 +41,9 @@ const StudyRoomInfo = () => {
       )
       .then(function (response) {
         console.log("스터디 룸 정보 성공:", response);
-        if(!data.autoJoin) {
+        if (!data.autoJoin) {
           setSecretModal(false);
-          alert('요청이 완료되었습니다.');
+          alert("요청이 완료되었습니다.");
         }
       })
       .catch(function (error) {
@@ -52,12 +52,20 @@ const StudyRoomInfo = () => {
   };
 
   const InRoom = () => {
-    if(data.autoJoin) {
+    // 자동참여일때,
+    if (data.autoJoin) {
       setInModal(true);
-    } else {
-      setSecretModal(true);
     }
-  }
+    if (!data.autoJoin) {
+      if (getNickname === data.studyRoomUsers[0].nickname) {
+        // setInModal(true);
+        requestRoom();
+        navigate(`/studyroom/${postId}`);
+      } else {
+        setSecretModal(true);
+      }
+    }
+  };
 
   async function getInfo() {
     const { data } = await axios.get(`${ROOT_API}/study-room/${postId}`, {
@@ -70,13 +78,20 @@ const StudyRoomInfo = () => {
   }
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [],
+    queryKey: [""],
     queryFn: getInfo,
   });
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("data", data);
+  const lockIcon = () => {
+    if (getDeta) {
+      return getDeta.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
+    }
+    if (data) {
+      return data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
+    }
+  };
 
   return (
     <div className="study-room-info">
@@ -110,35 +125,41 @@ const StudyRoomInfo = () => {
           setOnModal={() => setSettingModal()}
           data={data && data}
           id={postId}
+          setGetData={setGetData}
           dimClick={() => setSettingModal()}
         />
       )}
       {data && (
         <>
-          {parseJwt(auth.accessToken).nickname ===
-            data.studyRoomUsers[0].nickname && (
+          {parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname && (
             <div className="setting" onClick={() => setSettingModal(true)}>
               <BsGearFill size={22} />
             </div>
           )}
           <div className="title">
-            {data.title}
+            {getDeta ? getDeta.title : data.title}
             <div className="autojoin">
-              {data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}
+              {lockIcon()}
               <span onClick={InRoom}>참여하기</span>
             </div>
           </div>
-          <div className="maker">{data.studyRoomUsers[0].nickname}</div>
+          <div className="maker">{getDeta ? getDeta.studyRoomUsers[0].nickname : data.studyRoomUsers[0].nickname}</div>
           <div className="tag">
-            {data.skills.map((item, index) => (
-              <Tag className="tags" key={index}>
-                {item}
-              </Tag>
-            ))}
+            {getDeta
+              ? getDeta.skills.map((item, index) => (
+                  <Tag className="tags" key={index}>
+                    {item}
+                  </Tag>
+                ))
+              : data.skills.map((item, index) => (
+                  <Tag className="tags" key={index}>
+                    {item}
+                  </Tag>
+                ))}
           </div>
           <div className="content">
             <div className="desc">스터디 소개</div>
-            <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
+            <div dangerouslySetInnerHTML={{ __html: getDeta ? getDeta.title : data.content }}></div>
           </div>
         </>
       )}

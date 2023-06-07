@@ -43,7 +43,6 @@ const Userside = () => {
 
   return (
     <>
-      <section className="sidebackground"></section>
       <section className="side">
         <div className="imgwrap">
           <img src={imageFile} alt="" />

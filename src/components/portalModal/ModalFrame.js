@@ -3,6 +3,7 @@
 import React from "react";
 import PortalModal from "./PortalModal";
 import classnames from "classnames";
+import { IoCloseOutline } from "react-icons/io5";
 import "./portalmodal.scss";
 
 const ModalFrame = ({
@@ -21,18 +22,13 @@ const ModalFrame = ({
           <div className="">
             {children}
             {onClose && (
-              <button className="close" onClick={() => setOnModal(false)}>
-                X
-              </button>
+              <div className="close" onClick={() => setOnModal(false)}>
+                <IoCloseOutline size={30} />
+              </div>
             )}
           </div>
         </div>
-        {isDim && (
-          <div
-            className="dim"
-            onClick={() => (!dimClick ? setOnModal(false) : dimClick())}
-          ></div>
-        )}
+        {isDim && <div className="dim" onClick={() => (!dimClick ? setOnModal(false) : dimClick())}></div>}
       </div>
     </PortalModal>
   );

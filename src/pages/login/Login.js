@@ -24,6 +24,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
+    console.log('dd', data.userId, data.password);
     axios
       .post(
         `${ROOT_API}/sign-in`,
@@ -46,6 +47,7 @@ const Login = () => {
       })
       .catch(function (error) {
        showToast("error", "😎 정보를 다시 입력해주세요");
+        console.log('error', error);
       });
   };
   const typechange = () => { //NOTE 비밀번호 토글//ok

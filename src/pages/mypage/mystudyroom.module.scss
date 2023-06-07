@@ -1,15 +1,19 @@
 .mystudyroom {
   padding-top: 20px;
+
   h3 {
     padding-bottom: 20px;
     border-bottom: 1px solid #000;
   }
+
   .list {
     margin-top: 20px;
     margin-bottom: 40px;
     .list_item {
-      padding: 20px 0 20px 8px;
+      min-height: 90px;
+      padding: 20px 8px 20px 8px;
       border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
       cursor: pointer;
       &:hover {
         background: #eee;
@@ -29,9 +33,24 @@
         border-radius: 16px;
         border: 1px solid #2f92ff;
         color: #2f92ff;
+
         &:hover {
           background: #2f92ff;
           color: #fff;
+        }
+      }
+      .count_wrap {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        &:hover {
+          background: #ccc;
+          border-radius: 16px;
         }
       }
     }

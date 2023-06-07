@@ -1,9 +1,9 @@
-import Button from 'components/button/Button';
-import Form from 'components/form/Form';
-import { parseJwt } from 'hooks/useParseJwt';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import './Account.scss';
+import Button from "components/button/Button";
+import Form from "components/form/Form";
+import { parseJwt } from "hooks/useParseJwt";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import "./Account.scss";
 import MypageContent from "./MyPageContent";
 // import { useNavigate } from 'react-router-dom';
 
@@ -21,12 +21,10 @@ function Account() {
   //   )
   // }, [auth.accessToken])
 
-
-
   // console.log('auth:', auth.accessToken);
   // const userData = parseJwt(localStorage.getItem('token')); //NOTE - 토큰
 
-  const tabTitle = ['회원정보 수정', '회원 탈퇴'];
+  const tabTitle = ["회원정보 수정", "회원 탈퇴"];
   const [select, setSelect] = useState(null);
   const onSelect = (type) => {
     setSelect(type);
@@ -35,7 +33,7 @@ function Account() {
   // const initialFormState = parseJwt(auth.accessToken)
 
   const initialFormState = {
-    username: '김모양',
+    username: "김모양",
     nickname: parseJwt(auth.accessToken).nickname,
     email: parseJwt(auth.accessToken).sub,
     userid: parseJwt(auth.accessToken).userid,
@@ -139,7 +137,7 @@ function Account() {
                       </tr>
                     </tbody>
                   </table>
-                  <Button>저장</Button>
+                  <Button type="submit">저장</Button>
                   <Button onClick={reset}>리셋</Button>
                 </div>
               </fieldset>
