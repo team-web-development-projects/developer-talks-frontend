@@ -104,7 +104,7 @@ const BoardDetail = ({ type }) => {
             postId={post.id}
             setPost={setPost}
           >
-            <AiOutlineStar />
+            <AiOutlineStar/>
             <p>{post.favoriteCount}</p>
           </BoardCount>
           <BoardCount

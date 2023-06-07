@@ -6,16 +6,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import s from "./boardCount.module.scss";
 
-const BoardCount = ({
-  type,
-  children,
-  token,
-  isOwner,
-  checkStatus,
-  setCheckStatus,
-  postId,
-  setPost,
-}) => {
+const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatus, postId, setPost }) => {
   const isFavorite = type === "favorite";
   const [modalL, setModalL] = useState(false);
   const [modalS, setModalS] = useState(false);
@@ -146,7 +137,7 @@ const BoardCount = ({
           <br />
         </BasicModal>
       )}
-      <Button classname={s.btn} onClick={() => handleClick(type)}>
+      <Button classname={s.btnTrue} onClick={() => handleClick(type)}>
         {children}
       </Button>
     </>

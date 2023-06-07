@@ -1,7 +1,12 @@
 import React from "react";
 import s from "./button.module.scss";
 import classnames from "classnames";
-
+/**
+ *
+ * @param {size} 크기
+ * @param {type} 타입
+ * @returns
+ */
 const Button = ({ children, onClick, classname, type, size = "big" }) => {
   return (
     <button

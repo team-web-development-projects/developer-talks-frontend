@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import s from "./replyItem.module.scss";
 import { BsLock, BsUnlock } from "react-icons/bs";
-import {
-  AiFillCaretDown,
-  AiFillCaretUp,
-  AiOutlineMessage,
-} from "react-icons/ai";
+import { AiFillCaretDown, AiFillCaretUp, AiOutlineMessage } from "react-icons/ai";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useSelector } from "react-redux";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
-const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList, setControlRender }) => {
   const auth = useSelector((state) => state.authToken);
   const [ispostToggle, setIsPostToggle] = useState(false);
   const [isgetToggle, setIsGetToggle] = useState(false);
@@ -54,66 +52,105 @@ const ReplyItem = ({ id, postId, content, nickname, secret, childrenList }) => {
       })
       .catch((error) => console.log(error));
   };
+  const handleUpdate = () => {
+    //TODO: Ckeditor 에디터로 바꾸기
+    // axios
+    // .put(
+    //   `${ROOT_API}/comment/${postId}/${id}`,
+    //   {
+    //     content: form.content,
+    //     secret: form.secret,
+    //   },
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "X-AUTH-TOKEN": auth.accessToken,
+    //     },
+    //   }
+    // )
+    // .then((response) => {
+    //   console.log(response);
+    // })
+    // .catch((error) => console.log(error));
+  };
+  const handleDelete = () => {
+    axios.delete(`${ROOT_API}/comment/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    })
+    .then(() => {
+      toast.success("댓글이 정상적으로 삭제되었습니다.", { position: "top-center", autoClose: 1000, hideProgressBar: true })
+      setControlRender((prev) => !prev);
+    })
+      .catch((error) => console.log(error));
+  };
   return (
-    <li className={s.container}>
-      <div className={s.info}>
-        <p>{nickname}</p>
-        {secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
-      </div>
-      <div
-        className={s.content}
-        dangerouslySetInnerHTML={{ __html: content }}
-      ></div>
-      <div className={s.replyBtnContainer}>
-        {rereplyList.length ? (
-          <button className={s.replyBtn} onClick={handleClickReRe}>
-            {isgetToggle ? (
+    <>
+      <ToastContainer />
+      <li className={s.container}>
+        <div className={s.info}>
+          <p>{nickname}</p>
+          {secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+          {isSelf ? (
+            <div>
+              <button onClick={handleUpdate}>수정</button>
+              <button onClick={handleDelete}>삭제</button>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
+        <div className={s.content} dangerouslySetInnerHTML={{ __html: content }}></div>
+        <div className={s.replyBtnContainer}>
+          {rereplyList.length ? (
+            <button className={s.replyBtn} onClick={handleClickReRe}>
+              {isgetToggle ? (
+                <div>
+                  <AiFillCaretUp className={s.icon} />
+                  숨기기
+                </div>
+              ) : (
+                <div>
+                  <AiFillCaretDown className={s.icon} />
+                  {rereplyList.length}개 대댓글
+                </div>
+              )}
+            </button>
+          ) : (
+            <div></div>
+          )}
+          <button onClick={handleToggle} className={s.replyBtn}>
+            <AiOutlineMessage size={20} className={s.icon} />
+            대댓글 달기
+          </button>
+        </div>
+        <div className={s.rereplyContainer}>
+          <div className={s.box}></div>
+          <div>
+            {ispostToggle && (
               <div>
-                <AiFillCaretUp className={s.icon} />
-                숨기기
-              </div>
-            ) : (
-              <div>
-                <AiFillCaretDown className={s.icon} />
-                {rereplyList.length}개 대댓글
+                <CkEditor form={form} setForm={setForm} />
+                <div className={s.btnRgn}>
+                  <div className={s.secret} onClick={toggleSecret}>
+                    {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+                    시크릿 댓글
+                  </div>
+                  <div className={s.cancel} onClick={handleToggle}>
+                    취소
+                  </div>
+                  <Button classname={s.post} onClick={handlePost}>
+                    등록
+                  </Button>
+                </div>
               </div>
             )}
-          </button>
-        ) : (
-          <div></div>
-        )}
-        <button onClick={handleToggle} className={s.replyBtn}>
-          <AiOutlineMessage size={20} className={s.icon} />
-          대댓글 달기
-        </button>
-      </div>
-      <div className={s.rereplyContainer}>
-        <div className={s.box}></div>
-        <div>
-          {ispostToggle && (
-            <div>
-              <CkEditor form={form} setForm={setForm} />
-              <div className={s.btnRgn}>
-                <div className={s.secret} onClick={toggleSecret}>
-                  {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
-                  시크릿 댓글
-                </div>
-                <div className={s.cancel} onClick={handleToggle}>
-                  취소
-                </div>
-                <Button classname={s.post} onClick={handlePost}>
-                  등록
-                </Button>
-              </div>
-            </div>
-          )}
-          {isgetToggle &&
-            childrenList.map((rereply) => (
-              <RereplyItem key={rereply.id} rr={rereply} />
-            ))}
+            {isgetToggle && childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 };
 

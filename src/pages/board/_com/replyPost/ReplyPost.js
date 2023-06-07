@@ -13,7 +13,7 @@ const ReplyPost = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
   const { postId } = useParams();
   const [replyList, setReplyList] = useState([]);
-  const [replyLength, setReplyLength] = useState(0);
+  const [controlRender, setControlRender] = useState(false);
   const [isToggle, setIsToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
@@ -22,23 +22,22 @@ const ReplyPost = ({ nickname }) => {
   const scrollDown = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
   const handleClick = () => {
     setIsToggle((prev) => !prev);
-    console.log("toggle값: ", isToggle);
   };
   //TODO: 시크릿 에러 잡기
   const toggleSecret = () => {
-  //   setForm((prevForm) => {
-  //     return { ...prevForm, secret: !prevForm.secret };
-  //   });
-  //   console.log(form.secret);
-  setForm({...form,['secret']:!form.secret})
+    //   setForm((prevForm) => {
+    //     return { ...prevForm, secret: !prevForm.secret };
+    //   });
+    //   console.log(form.secret);
+    setForm({ ...form, ["secret"]: !form.secret });
   };
   const handlePost = () => {
-    console.log('secret: ',form.secret);
+    console.log("secret: ", form.secret);
     axios
       .post(
         `${ROOT_API}/comment/${postId}`,
@@ -54,9 +53,8 @@ const ReplyPost = ({ nickname }) => {
         }
       )
       .then((response) => {
-        setReplyLength((prev) => prev + 1);
+        setControlRender((prev) => !prev);
         scrollDown();
-        console.log(response);
       })
       .catch((error) => console.log(error));
   };
@@ -71,15 +69,14 @@ const ReplyPost = ({ nickname }) => {
       })
       .then(({ data }) => {
         setReplyList(data);
-        setReplyLength(data.length);
         console.log("답변 get결과: ", data);
       })
       .catch((error) => console.log(error));
-  }, [replyLength]);
+  }, [controlRender]);
   return (
     <>
       <div className={s.notice_reply}>
-        <div className={s.title}>댓글 {replyLength}</div>
+        <div className={s.title}>댓글 {replyList.length}</div>
         {isToggle ? (
           <div className={s.inputTrue}>
             <CkEditor form={form} setForm={setForm} placeholder="" />
@@ -96,21 +93,25 @@ const ReplyPost = ({ nickname }) => {
               </Button>
             </div>
           </div>
-        ) : (
+        ) : auth.accessToken ? (
           <div className={s.inputFalse} onClick={handleClick}>
             {nickname}님, 댓글을 작성해보세요.
           </div>
+        ) : (
+          <div className={s.inputFalse}>로그인 후, 댓글을 달아주세요.</div>
         )}
         {replyList ? (
           replyList.map((reply) => (
             <ReplyItem
-              key={reply.id} 
+              key={reply.id}
               id={reply.id}
               postId={postId}
               content={reply.content}
+              isSelf={reply.nickname===nickname}
               nickname={reply.nickname}
               secret={reply.secret}
               childrenList={reply.childrenList}
+              setControlRender={setControlRender}
             />
           ))
         ) : (
