@@ -10,8 +10,6 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
   const isFavorite = type === "favorite";
   const [modalL, setModalL] = useState(false);
   const [modalS, setModalS] = useState(false);
-  const [modalF, setModalF] = useState(false);
-  const [modalR, setModalR] = useState(false);
   // async function postCount() {
   //   await axios.post(
   //     `${ROOT_API}/post/${type}/${postId}`,
@@ -77,7 +75,7 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
         // console.log(handleCount);
         // handleCount.mutate();
       } else {
-        isFavorite ? setModalF(true) : setModalR(true);
+        handleClickCancle();
       }
     }
   };
@@ -95,12 +93,10 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
           setPost((prev) => {
             return { ...prev, favoriteCount: data };
           });
-          setModalF(false);
         } else {
           setPost((prev) => {
             return { ...prev, recommendCount: data };
           });
-          setModalR(false);
         }
       })
       .catch((error) => console.log(error));
@@ -118,22 +114,6 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
       {modalS && (
         <BasicModal setOnModal={() => setModalS()}>
           본인이 작성한 글은 즐겨찾기 및 추천을 할 수 없어요🥲
-          <br />
-        </BasicModal>
-      )}
-      {modalF && (
-        <BasicModal setOnModal={() => setModalF()}>
-          즐겨찾기를 취소하시겠습니까?
-          <br />
-          <button onClick={handleClickCancle}>확인</button>
-          <br />
-        </BasicModal>
-      )}
-      {modalR && (
-        <BasicModal setOnModal={() => setModalR()}>
-          추천을 취소하시겠습니까?
-          <br />
-          <button onClick={handleClickCancle}>확인</button>
           <br />
         </BasicModal>
       )}
