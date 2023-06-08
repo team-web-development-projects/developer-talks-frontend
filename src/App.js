@@ -36,6 +36,8 @@ function App() {
   const location = useLocation();
   const auth = useSelector((state) => state.authToken);
 
+  console.log('auth', auth);
+
   useEffect(() => {
     //NOTE 구글 로그인 시 메인으로 가게 만드는
     if (window.location.href.includes("accessToken")) {

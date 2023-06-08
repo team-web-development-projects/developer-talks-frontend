@@ -3,6 +3,7 @@ import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { getUer } from "hooks/useAuth";
 import "./Mypage.scss";
 import { ROOT_API } from "constants/api";
 import MypageContent from "./MyPageContent";
@@ -13,6 +14,8 @@ const Mypage = ({ type }) => {
   const [select, setSelect] = useState(-1);
   const [favorite, setFavorite] = useState([]);
   const dispatch = useDispatch();
+  console.log("auth", auth.accessToken);
+  // const { getNickname } = getUer(auth !== null && auth.accessToken);
 
   let userId = "";
   if (auth.accessToken !== null) {
@@ -27,33 +30,31 @@ const Mypage = ({ type }) => {
   useEffect(() => {
     switch (select) {
       case 0:
-        axios
-          .get(
-            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
-            `${ROOT_API}/users/recent/activity/${userId}`,
-            {
-              params: { page: 0, size: 10 }, //NOTE 가람님이 활동 시간명 변경
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
-          .then((res) => {
-            setFavorite(res.data.content);
-            console.log("1", res.data.content);
-          });
+        console.log("0클릭", select);
+        // axios
+        //   .get(
+        //     // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
+        //     `${ROOT_API}/users/recent/activity/${getNickname}`,
+        //     {
+        //       params: { page: 0, size: 10 },
+        //       headers: {
+        //         "X-AUTH-TOKEN": auth.accessToken,
+        //       },
+        //     }
+        //   )
+        //   .then((res) => {
+        //     console.log("1", res.data.content);
+        //     setFavorite(res.data.content);
+        //   });
         break;
       case 1:
         axios
-          .get(
-            `${ROOT_API}/post/list/user/${userId}`,
-            {
-              params: { page: 0, size: 10 },
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
+          .get(`${ROOT_API}/post/list/user/${userId}`, {
+            params: { page: 0, size: 10 },
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          })
           .then((res) => {
             setFavorite(res.data.content);
             console.log("1", res.data.content);
@@ -61,15 +62,12 @@ const Mypage = ({ type }) => {
         break;
       case 2:
         axios
-          .get(
-            `${ROOT_API}/comment/list/user/${userId}`,
-            {
-              params: { page: 0, size: 10 },
-              headers: {
-                "X-AUTH-TOKEN": auth.accessToken,
-              },
-            }
-          )
+          .get(`${ROOT_API}/comment/list/user/${userId}`, {
+            params: { page: 0, size: 10 },
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          })
           .then((res) => {
             setFavorite(res.data);
             console.log("2", res.data);
