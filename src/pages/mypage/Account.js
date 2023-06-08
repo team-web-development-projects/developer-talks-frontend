@@ -124,8 +124,8 @@ function Account() {
           <div>
             <Form onSubmit={userEdit}>
               {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
-              <div className="description">
                 <label>한 줄 내소개</label>
+              <div className="description">
                 <input
                   type="description"
                   id="description"
@@ -162,7 +162,7 @@ function Account() {
                         <th>
                           <label>이메일 : {""}</label>
                         </th>
-                        <td>
+                        <td className="td">
                           <input name="email" value={userData.email} onChange={handleChange} type="text" />
                           <Button>저장</Button>
                         </td>
@@ -171,7 +171,7 @@ function Account() {
                         <th>
                           <label>아이디 : {""}</label>
                         </th>
-                        <td>
+                        <td className="td">
                           <input name="userid" value={userData.userid} onChange={handleChange} type="text" />
                           <Button>저장</Button>
                         </td>
@@ -180,7 +180,7 @@ function Account() {
                         <th>
                           <label>닉네임 : {""}</label>
                         </th>
-                        <td>
+                        <td className="td">
                           <input name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
                           <Button>저장</Button>
                         </td>
@@ -189,7 +189,7 @@ function Account() {
                         <th>
                           <label>비밀번호 : {""}</label>
                         </th>
-                        <td>
+                        <td className="td">
                           <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                         </td>
                       </tr>
@@ -197,7 +197,7 @@ function Account() {
                         <th>
                           <label>비밀번호확인 : {""}</label>
                         </th>
-                        <td>
+                        <td className="td">
                           <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                           <Button>저장</Button>
                         </td>

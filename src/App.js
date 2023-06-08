@@ -25,6 +25,8 @@ import { SET_TOKEN } from "store/Auth";
 import { getCookieToken } from "store/Cookie";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
+import { setRefreshToken } from "store/Cookie";
+
 function App() {
   const auth = useSelector((state) => state.authToken);
   const navigate = useNavigate();
@@ -34,12 +36,20 @@ function App() {
 
   useEffect(() => {
     //NOTE 구글 로그인 시 메인으로 가게 만드는
-    if (window.location.href.includes("accessToken")) {
+    if (window.location.href.includes("accessToken") && !window.location.href.includes("refreshToken")) {
       const accessToken = window.location.href.split("accessToken=")[1];
-      dispatch(SET_TOKEN({ accessToken: accessToken }));
       console.log("토큰있음");
       navigate("/userregist", { replace: true });
+      dispatch(SET_TOKEN({ accessToken: accessToken }));
       console.log(accessToken);
+    }
+    if (window.location.href.includes("accessToken") && window.location.href.includes("refreshToken")) {
+      const accessToken = window.location.href.split("accessToken=")[1];
+      dispatch(SET_TOKEN({ accessToken: accessToken }));
+      setRefreshToken(window.location.href.split("refreshToken=")[1].split("&")[0]);
+      navigate("/", { replace: true });
+      console.log(accessToken);
+      console.log(window.location.href,"dddd");
     }
   }, [dispatch, navigate, location]);
 

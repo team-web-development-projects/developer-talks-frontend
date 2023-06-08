@@ -37,6 +37,52 @@ const Userregist = () => {
     setAutoLogin(event.target.checked);
   };
 
+  
+  const onSubmit = async (data) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    if (duplicateNickName === false) {
+      console.log(`
+      nickname: ${data.nickname},
+      skills: ${selectedTags.tags},
+      description: ${description},
+      profileImageId: ${profileImageId}`);
+      axios
+        .put(
+          `${ROOT_API}/oauth/sign-up`,
+          {
+            nickname: data.nickname,
+            skills: selectedTags.tags,
+            description: description,
+            profileImageId: profileImageId,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json", //NOTE 이건 안됌
+              "X-AUTH-TOKEN": auth.accessToken,
+              ...API_HEADER,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log("회원가입 성공:", response);
+          setModal(true);
+          // if (autoLogin) {
+          //NOTE 자동로그인
+          setRefreshToken({ refreshToken: response.data.refreshToken });
+          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+          alert("토큰저장");
+          navigate("/");
+          reset();
+          // }
+        })
+        .catch(function (error) {
+          console.log("로그인 실패: ", error.response);
+          showToast("error", "😎 로그인 실패되었어요");
+        });
+    } else {
+      showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
+    }
+  };
   useEffect(() => {
     if (auth.accessToken) {
       setUserEmail(parseJwt(auth.accessToken).sub); //NOTE 이메일 토큰으로 넣기 //ok
@@ -90,51 +136,7 @@ const Userregist = () => {
       console.error(error);
     }
   };
-  const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    if (duplicateNickName ===false) {
-      console.log(`
-      nickname: ${data.nickname},
-      skills: ${selectedTags.tags},
-      description: ${description},
-      profileImageId: ${profileImageId}`);
-      axios
-        .post(
-          `${ROOT_API}/oauth/sign-up`,
-          {
-            nickname: data.nickname,
-            skills: selectedTags.tags,
-            description: description,
-            profileImageId: profileImageId,
-          },
-          {
-            headers: {
-              // "Content-Type": "application/json",//NOTE 이건 안됌
-              // "X-AUTH-TOKEN": auth.accessToken,
-              API_HEADER,
-            },
-          }
-        )
-        .then(function (response) {
-          console.log("회원가입 성공:", response);
-          setModal(true);
-          if (autoLogin) {
-            //NOTE 자동로그인
-            setRefreshToken({ refreshToken: response.data.refreshToken });
-            dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-            alert("토큰저장");
-            navigate("/");
-            reset();
-          }
-        })
-        .catch(function (error) {
-          console.log("로그인 실패: ", error.response);
-          showToast("error", "😎 로그인 실패되었어요");
-        });
-    } else {
-      showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
-    }
-  };
+
 
   // const inputRef = useRef(null);
 
@@ -163,6 +165,8 @@ const Userregist = () => {
   };
 
   const clickTag = (tag) => {
+      console.log(auth.accessToken, "토큰");
+
     //NOTE 기술 테그/ok
     if (selectedTags.tags.includes(tag)) {
       setSelectedTags({

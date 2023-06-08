@@ -111,26 +111,26 @@ const Mypage = ({ type }) => {
               ) : (
                 favorite.map((item, index) => (
                   <div key={index} className="user-data">
+                    {item.writer || item.nickname}
                     <div className="create-time">{item.createDate}</div>
-                    {item.title && (
+                    {(item.title || item.postTitle) && (
                       <p className="title" onClick={() => navigate(`/board/${item.id}`)}>
-                        타이틀: {item.title}{" "}
+                        타이틀: {item.title || item.postTitle}{" "}
                       </p>
                     )}
+                    {item.viewCount && <span>조회수 {item.viewCount}</span>}
                     {item.content && (
                       <>
-                        <span>내용: </span>
                         <span dangerouslySetInnerHTML={{ __html: item.content }}></span>
                       </>
                     )}
-                    {item.writer || item.nickname}
                   </div>
                 ))
               )}
             </div>
           </section>
         </MypageContent>
-      ) : null }
+      ) : null}
     </>
   );
 };
