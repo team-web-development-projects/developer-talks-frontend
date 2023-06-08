@@ -17,7 +17,7 @@ const ReplyPost = ({ nickname }) => {
   const [isToggle, setIsToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
-    secret: true,
+    secret: false,
   });
   const scrollDown = () => {
     window.scrollTo({
@@ -54,6 +54,7 @@ const ReplyPost = ({ nickname }) => {
       )
       .then((response) => {
         setControlRender((prev) => !prev);
+        setForm({["content"]: "", secret: false });
         scrollDown();
       })
       .catch((error) => console.log(error));
