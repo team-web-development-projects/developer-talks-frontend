@@ -17,8 +17,6 @@ const Mypage = ({ type }) => {
     userId = parseJwt(auth.accessToken).userid;
   }
 
-
-
   const onSelect = (type) => {
     setSelect(type);
   };

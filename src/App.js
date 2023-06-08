@@ -26,6 +26,7 @@ import { getCookieToken } from "store/Cookie";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import { setRefreshToken } from "store/Cookie";
+import { parseJwt } from "hooks/useParseJwt";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
@@ -36,24 +37,44 @@ function App() {
 
   useEffect(() => {
     //NOTE 구글 로그인 시 메인으로 가게 만드는
-    if (window.location.href.includes("accessToken") && !window.location.href.includes("refreshToken")) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const accessToken = searchParams.get("accessToken");
-      navigate("/userregist", { replace: true });
+    // if (window.location.href.includes("accessToken") && !window.location.href.includes("refreshToken")) {
+    //   const searchParams = new URLSearchParams(window.location.search);
+    //   const accessToken = searchParams.get("accessToken");
+    //   navigate("/userregist", { replace: true });
+    //   dispatch(SET_TOKEN({ accessToken: accessToken }));
+    //   console.log(accessToken);
+    // }
+    if (window.location.href.includes("accessToken")) {
+      const accessToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[0];
+      const refreshToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[1];
+      if (parseJwt(accessToken).nickname) {
+        navigate("/", { replace: true });
+      } else {
+        navigate("/userregist", { replace: true });
+      }
       dispatch(SET_TOKEN({ accessToken: accessToken }));
-      console.log(accessToken);
+        setRefreshToken({ refreshToken: refreshToken });
+      // console.log("atk: ", accessToken);
+      // console.log("rtk: ", refreshToken);
+      // console.log("auth: ", auth);
     }
 
-    if (window.location.href.includes("accessToken") && window.location.href.includes("refreshToken")) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const accessToken = searchParams.get("accessToken");
-      const refreshToken = searchParams.get("refreshToken");
-      navigate("/", { replace: true });
-      dispatch(SET_TOKEN({ accessToken: accessToken }));
-      setRefreshToken(refreshToken);
-      console.log(accessToken);
-      console.log(refreshToken);
-    }
+    // if (window.location.href.includes("accessToken")) {
+    //   const accessToken = window.location.href.split("accessToken=")[1];
+    //   const refreshToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[0];
+    //   dispatch(SET_TOKEN({ accessToken: accessToken }));
+    //   console.log("토큰있음");
+    //   navigate("/", { replace: true });
+    // }
+
+    // if (window.location.href.includes("accessToken") && window.location.href.includes("refreshToken")) {
+    //   const searchParams = new URLSearchParams(window.location.search);
+    //   const accessToken = searchParams.get("accessToken");
+    //   const refreshToken = searchParams.get("refreshToken");
+    //   navigate("/", { replace: true });
+    //   dispatch(SET_TOKEN({ accessToken: accessToken }));
+    //   setRefreshToken(refreshToken);
+    // }
   }, [dispatch, navigate, location]);
 
   // useEffect(() => {
@@ -100,7 +121,7 @@ function App() {
           console.log("재갱신 실패: ", error.response.data);
         });
     }
-  }, []);
+  }, [auth.accessToken, dispatch, location]);
 
   return (
     <div className="App">
