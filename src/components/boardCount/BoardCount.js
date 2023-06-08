@@ -8,6 +8,7 @@ import s from "./boardCount.module.scss";
 
 const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatus, postId, setPost }) => {
   const isFavorite = type === "favorite";
+  const checkButton= isFavorite ? checkStatus.favorite : checkStatus.recommend;
   const [modalL, setModalL] = useState(false);
   const [modalS, setModalS] = useState(false);
   // async function postCount() {
@@ -117,7 +118,7 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
           <br />
         </BasicModal>
       )}
-      <Button classname={s.btnTrue} onClick={() => handleClick(type)}>
+      <Button classname={checkButton? s.btnTrue: s.btnFalse} onClick={() => handleClick(type)}>
         {children}
       </Button>
     </>
