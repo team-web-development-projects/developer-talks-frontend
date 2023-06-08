@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import s from "./replyPost.module.scss";
+import s from "./replyList.module.scss";
 import { ROOT_API } from "constants/api";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import Button from "components/button/Button";
 import { BsLock, BsUnlock } from "react-icons/bs";
 import ReplyItem from "pages/board/_com/replyItem/ReplyItem";
 
-const ReplyPost = ({ nickname }) => {
+const ReplyList = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
   const { postId } = useParams();
   const [replyList, setReplyList] = useState([]);
@@ -123,4 +123,4 @@ const ReplyPost = ({ nickname }) => {
   );
 };
 
-export default ReplyPost;
+export default ReplyList;
