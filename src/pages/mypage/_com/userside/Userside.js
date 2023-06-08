@@ -49,9 +49,9 @@ const Userside = () => {
           <input type="file" name="" id="" onChange={changeProfileImg} />
         </div>
         <ul className="nav">
-          {/* <li>
+          <li>
             <Link to="/introduction" className={isActive ? 'active' : ''} onClick={handleClick}>🎆 내소개</Link>
-          </li> */}
+          </li>
           <li>
             <Link
               to="/mypage"

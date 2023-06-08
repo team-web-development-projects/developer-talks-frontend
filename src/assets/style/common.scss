@@ -22,6 +22,7 @@
 
 .page {
   max-width: $content-max-width;
+  min-height: calc(100vh - 80px - 95px); 
   margin: 0 auto;
 }
 
