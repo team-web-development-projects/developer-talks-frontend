@@ -36,10 +36,15 @@ const Regist = () => {
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
+  };
+  const changeprofileImageId = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
   };
   const {
     register,
@@ -49,29 +54,30 @@ const Regist = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
   const [profileImageId, setProfileImageId] = useState("");
-  const propileSubmit = async (data) => {
-    try {
-      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
-        const formData = new FormData(); //NOTE 프로필 이미지
-        formData.append("file", profileRef.current.files[0]);
-        const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
+  const formData = new FormData();
+  formData.append("image", selectedImage);
+  // const propileSubmit = () => {
+  const propileSubmit = async () => {
+    await new Promise((r) => setTimeout(r, 1000));
+
+    axios
+      .post(
+        `${ROOT_API}/users/profile/image`, formData, 
+        {
+          id: selectedImage,
+        },
+        {
           headers: {
             "Content-Type": "multipart/form-data",
             accept: "application/json",
           },
-          file: "file=@22.JPG;type=image/jpeg",
-        });
-        console.log(response.data, "dfd,,,fd");
-        console.log(formData, "dfdfd");
-        setProfileImageId(response.data.id);
-      } else {
-        console.log("파일을 선택해주세요.");
-      }
-    } catch (error) {
-      console.error(error);
-    }
+        }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
   };
-
   const onSubmit = async (data) => {
     console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName);
     await new Promise((r) => setTimeout(r, 1000));
@@ -261,7 +267,14 @@ const Regist = () => {
           <div className="prople">
             <div className="imgwrap">
               {imageFile && <img src={imageFile} alt="프로필이미지" />}
-              <input accept="image/*" ref={profileRef} type="file" name="프로필이미지" id="profile" />
+              <input
+                type="file"
+                accept="image/*"
+                // ref={profileRef}
+                onChange={changeprofileImageId}
+                name="프로필이미지"
+                id="profile"
+              />
             </div>
           </div>
           <button
