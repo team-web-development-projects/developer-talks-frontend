@@ -99,7 +99,7 @@ const Userregist = () => {
       description: ${description},
       profileImageId: ${profileImageId}`);
       axios
-        .post(
+        .put(
           `${ROOT_API}/oauth/sign-up`,
           {
             nickname: data.nickname,
@@ -110,7 +110,7 @@ const Userregist = () => {
           {
             headers: {
               // "Content-Type": "application/json",//NOTE 이건 안됌
-              // "X-AUTH-TOKEN": auth.accessToken,
+              "X-AUTH-TOKEN": auth.accessToken,
               API_HEADER,
             },
           }
