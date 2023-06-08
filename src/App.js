@@ -37,46 +37,49 @@ function App() {
   useEffect(() => {
     //NOTE 구글 로그인 시 메인으로 가게 만드는
     if (window.location.href.includes("accessToken") && !window.location.href.includes("refreshToken")) {
-      const accessToken = window.location.href.split("accessToken=")[1];
-      console.log("토큰있음");
+      const searchParams = new URLSearchParams(window.location.search);
+      const accessToken = searchParams.get("accessToken");
       navigate("/userregist", { replace: true });
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       console.log(accessToken);
     }
+
     if (window.location.href.includes("accessToken") && window.location.href.includes("refreshToken")) {
-      const accessToken = window.location.href.split("accessToken=")[1];
-      dispatch(SET_TOKEN({ accessToken: accessToken }));
-      setRefreshToken(window.location.href.split("refreshToken=")[1].split("&")[0]);
+      const searchParams = new URLSearchParams(window.location.search);
+      const accessToken = searchParams.get("accessToken");
+      const refreshToken = searchParams.get("refreshToken");
       navigate("/", { replace: true });
+      dispatch(SET_TOKEN({ accessToken: accessToken }));
+      setRefreshToken(refreshToken);
       console.log(accessToken);
-      console.log(window.location.href,"dddd");
+      console.log(refreshToken);
     }
   }, [dispatch, navigate, location]);
 
-  useEffect(() => {
-    let timer;
+  // useEffect(() => {
+  //   let timer;
 
-    const startTimer = () => {
-      timer = setTimeout(performAction, 1500);
-    };
+  //   const startTimer = () => {
+  //     timer = setTimeout(performAction, 1500);
+  //   };
 
-    const stopTimer = () => {
-      clearTimeout(timer);
-    };
+  //   const stopTimer = () => {
+  //     clearTimeout(timer);
+  //   };
 
-    if (auth.accessToken === null) {
-      startTimer();
-    } else {
-      stopTimer();
-    }
+  //   if (auth.accessToken === null) {
+  //     startTimer();
+  //   } else {
+  //     stopTimer();
+  //   }
 
-    return stopTimer;
-  }, [auth.accessToken]);
+  //   return stopTimer;
+  // }, [auth.accessToken]);
 
-  const performAction = () => {
-    return setLoading(true);
-    // 실행시 로딩중일때
-  };
+  // const performAction = () => {
+  //   return setLoading(true);
+  //   // 실행시 로딩중일때
+  // };
 
   useEffect(() => {
     if (auth.accessToken === null && getCookieToken() !== undefined) {
@@ -106,7 +109,8 @@ function App() {
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
-          <Route path="/mypage" element={!auth.accessToken && loading ? <Login /> : <Mypage />} />
+          <Route path="mypage" element={<Mypage />} />
+
           <Route path="list/favorite/:userId" element={<Mypage type="post" />} />
           <Route path="account" element={<Account />} />
           <Route path="studyroom" element={<StudyRoom />} />
@@ -128,6 +132,8 @@ function App() {
           <Route path="/board/post" element={<BoardPost type="post" />} />
           <Route path="/qna/post" element={<BoardPost type="questions" />} />
           <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
+          <Route path="/login" element={<Login />} />
+
           <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />

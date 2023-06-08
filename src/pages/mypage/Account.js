@@ -40,7 +40,7 @@ function Account() {
     setSelect(type);
   };
 
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState(""); //유저데이터 가져오기
   useEffect(() => {
     axios
       .get(`${ROOT_API}/users/info`, {
@@ -56,7 +56,7 @@ function Account() {
       .catch(function (error) {
         console.log("cc정보:실패 ", error.response);
       });
-  }, []);
+  }, [auth.accessToken]);
 
   const reset = () => {
     //TODO 리셋
@@ -86,23 +86,32 @@ function Account() {
     await new Promise((r) => setTimeout(r, 1000));
 
     axios
-      .put(
-        `${ROOT_API}/users/profile/description`,
-        {
-          description: userData.description,
+      .put(`${ROOT_API}/users/profile/description`, userData.description, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      })
       .then(function (data) {
         console.log(data);
       })
       .catch((error) => console.log(error));
   };
+
+  axios
+    .put(`${ROOT_API}/users/profile/skill`, userData.skills, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    })
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
+  // };
+
+  // "{skills: [DJANGO, AWS]}";
 
   // if (userData.description.includes("description")) {
   //   JSON.parse(setUserData({ ...userData, description: userData.description }));
@@ -124,7 +133,7 @@ function Account() {
           <div>
             <Form onSubmit={userEdit}>
               {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
-                <label>한 줄 내소개</label>
+              <label>한 줄 내소개</label>
               <div className="description">
                 <input
                   type="description"
