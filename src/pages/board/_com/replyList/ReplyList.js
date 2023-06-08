@@ -28,16 +28,14 @@ const ReplyList = ({ nickname }) => {
   const handleClick = () => {
     setIsToggle((prev) => !prev);
   };
-  //TODO: 시크릿 에러 잡기
-  const toggleSecret = () => {
-    //   setForm((prevForm) => {
-    //     return { ...prevForm, secret: !prevForm.secret };
-    //   });
-    //   console.log(form.secret);
-    setForm({ ...form, ["secret"]: !form.secret });
-  };
-  const handlePost = () => {
+
+  const handlePost = (e) => {
+    e.preventDefault();
     console.log("secret: ", form.secret);
+    if (!form.content) {
+      alert("댓글을 입력해주세요.");
+      return;
+    }
     axios
       .post(
         `${ROOT_API}/comment/${postId}`,
@@ -54,7 +52,7 @@ const ReplyList = ({ nickname }) => {
       )
       .then((response) => {
         setControlRender((prev) => !prev);
-        setForm({["content"]: "", secret: false });
+        setForm({ ["content"]: "", ["secret"]: "false" });
         scrollDown();
       })
       .catch((error) => console.log(error));
@@ -79,21 +77,27 @@ const ReplyList = ({ nickname }) => {
       <div className={s.notice_reply}>
         <div className={s.title}>댓글 {replyList.length}</div>
         {isToggle ? (
-          <div className={s.inputTrue}>
-            <CkEditor form={form} setForm={setForm} placeholder="" />
-            <div className={s.btnRgn}>
-              <div className={s.secret} onClick={toggleSecret}>
-                {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
-                시크릿 댓글
+          <form onSubmit={handlePost}>
+            <div className={s.inputTrue}>
+              <CkEditor form={form} setForm={setForm} placeholder="" />
+              <div className={s.btnRgn}>
+                <label className={s.secret}>
+                  <input
+                    type="checkbox"
+                    name="secret"
+                    onChange={() => {
+                      setForm({ ...form, ["secret"]: !form.secret });
+                    }}
+                  />{" "}
+                  시크릿 댓글
+                </label>
+                <div className={s.cancel} onClick={handleClick}>
+                  취소
+                </div>
+                <Button classname={s.post}>등록</Button>
               </div>
-              <div className={s.cancel} onClick={handleClick}>
-                취소
-              </div>
-              <Button classname={s.post} onClick={handlePost}>
-                등록
-              </Button>
             </div>
-          </div>
+          </form>
         ) : auth.accessToken ? (
           <div className={s.inputFalse} onClick={handleClick}>
             {nickname}님, 댓글을 작성해보세요.
@@ -108,7 +112,7 @@ const ReplyList = ({ nickname }) => {
               id={reply.id}
               postId={postId}
               content={reply.content}
-              isSelf={reply.nickname===nickname}
+              isSelf={reply.nickname === nickname}
               nickname={reply.nickname}
               secret={reply.secret}
               childrenList={reply.childrenList}
