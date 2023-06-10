@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 import NotPage from "pages/NotPage";
-import Agreement from "pages/agreement/Agreement";
 import BoardDetail from "pages/board/boardDetail/BoardDetail";
 import BoardList from "pages/board/boardList/BoardList";
 import BoardPost from "pages/board/boardPost/BoardPost";
@@ -9,15 +8,14 @@ import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Account from "pages/mypage/Account";
-import Introduction from "pages/mypage/Introduction";
 import MyStudyRoom from "pages/mypage/MyStudyRoom";
 import Mypage from "pages/mypage/Mypage";
-import Regist from "pages/regist/Regist";
+import Regist from "pages/regist/regist/Regist";
 import StudyRoomDetail from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
 import StudyRoomInfo from "pages/studyRoom/studyRoomInfo/StudyRoomInfo";
 import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
-import Userregist from "pages/userregist/Userregist";
+import Userregist from "pages/regist/userregist/Userregist";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
@@ -137,7 +135,6 @@ function App() {
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="my-studyroom" element={<MyStudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
-          <Route path="introduction" element={<Introduction />} />
           <Route path="board/search/:keyword" element={<BoardList type="post" />} />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
           <Route path="/studyroom/info/:postId" element={<StudyRoomInfo />} />
@@ -158,7 +155,6 @@ function App() {
           <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/agreement" element={<Agreement />} />
           <Route path="/userregist" element={<Userregist />} />
         </Route>
       </Routes>

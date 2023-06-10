@@ -10,6 +10,7 @@ const Button = ({ children, onClick, classname, type, size = "big" }) => {
         [s.is_cancle]: type === "cancle",
         [s.is_small]: size === "small",
         [s.is_medium]: size === "medium",
+        [s.is_Xlarge]: size === "large",
         [s.is_big]: size === "big",
       })}
       onClick={onClick}

@@ -1,6 +1,11 @@
 import axios from "axios";
 import Button from "components/button/Button";
+import Form from "components/form/Form";
+import { Label } from "components/label/Label";
+import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import Table from "components/table/Table";
+import { AuthTitle, GaiderTitle } from "components/title/Title";
 import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
@@ -11,14 +16,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import { setRefreshToken } from "store/Cookie";
-import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
-import "./Userregist.scss";
+import s from "../regist.module.scss";
 
 const Userregist = () => {
   const [authlogins, setAutologins] = useState("");
   let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-  
+
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [selectedTags, setSelectedTags] = useState({
@@ -37,7 +41,6 @@ const Userregist = () => {
     setAutoLogin(event.target.checked);
   };
 
-  
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
     if (duplicateNickName === false) {
@@ -114,28 +117,28 @@ const Userregist = () => {
   } = useForm({ mode: "onChange" });
 
   const [profileImageId, setProfileImageId] = useState("");
-  const propileSubmit = async (data) => {
-    try {
-      if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
-        const formData = new FormData(); //NOTE 프로필 이미지
-        formData.append("file", profileRef.current.files[0]);
-        const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
-          headers: {
-            "X-AUTH-TOKEN": auth.accessToken,
-            "Content-Type": "multipart/form-data",
-            accept: "application/json",
-          },
-        });
-        console.log(response.data, "dfd,,,fd");
-        console.log(formData, "dfdfd");
-        setProfileImageId(response.data.id);
-      } else {
-        console.log("파일을 선택해주세요.");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const propileSubmit = async (data) => {
+  //   try {
+  //     if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
+  //       const formData = new FormData(); //NOTE 프로필 이미지
+  //       formData.append("file", profileRef.current.files[0]);
+  //       const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
+  //         headers: {
+  //           "X-AUTH-TOKEN": auth.accessToken,
+  //           "Content-Type": "multipart/form-data",
+  //           accept: "application/json",
+  //         },
+  //       });
+  //       console.log(response.data, "dfd,,,fd");
+  //       console.log(formData, "dfdfd");
+  //       setProfileImageId(response.data.id);
+  //     } else {
+  //       console.log("파일을 선택해주세요.");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   // const inputRef = useRef(null);
 
@@ -164,7 +167,7 @@ const Userregist = () => {
   };
 
   const clickTag = (tag) => {
-      console.log(auth.accessToken, "토큰");
+    console.log(auth.accessToken, "토큰");
 
     //NOTE 기술 테그/ok
     if (selectedTags.tags.includes(tag)) {
@@ -191,13 +194,10 @@ const Userregist = () => {
           <button onClick={() => navigate("/")}>확인</button>
         </BasicModal>
       )}
-      <div className="center">
-        <div className="headername">
-          <p>{authlogins}계정을이용한 회원가입</p>
-          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
-        </div>
-        <div className="prople">
-          <div className="imgwrap">
+      <Form White className="registIDform" onSubmit={handleSubmit(onSubmit)}>
+        <AuthTitle authlogins={authlogins} />
+        <div className={s.prople}>
+          <div className={s.imgwrap}>
             {imageFile && <img src={imageFile} alt="프로필이미지" />}
             <input accept="image/*" ref={profileRef} type="file" name="프로필이미지" id="profile" />
           </div>
@@ -205,87 +205,24 @@ const Userregist = () => {
         <button
           onClick={(e) => {
             e.preventDefault();
-            propileSubmit();
+            // propileSubmit();
           }}
         >
           버튼
         </button>
         <span>프로필 이미지 선택☝️</span>
-
-        <div className="gaider">
-          <span>🙏추가 안내</span>
-          <ul>
-            <li>
-              <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
-            </li>
-            <li>
-              <span>Gravartar</span>를 이용한 프로필 변경은 여기를 참고해주세요.
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="line-style">
-        <div className="jb-division-line"></div>
-        <span>회원가입에 필요한 기본정보를 입력해주세요</span>
-        <div className="jb-division-line"></div>
-      </div>
-      <form className="registIDform" onSubmit={handleSubmit(onSubmit)}>
-        <div className="emailmodule">
-          <label>이메일</label>
-          <input className="disable" type="text" placeholder={userEmail} readOnly />
-        </div>
-        <div className="labelmodule">
-          <div className="labeltitle">
-            <label>닉네임</label>
-            <span className="star" title="필수사항">
-              *
-            </span>
-          </div>
-          <div className="inputcont">
-            <input
-              type="text"
-              id="nickname"
-              placeholder="닉네임을 입력해주세요"
-              tabIndex="2"
-              ref={nicknameRef}
-              maxLength={15}
-              {...register("nickname", {
-                required: "닉네임은 필수 입력입니다.",
-                minLength: {
-                  value: 5,
-                  message: "5자리 이상 입력해주세요.",
-                },
-              })}
-            />
-            <Button
-              title="중복체크"
-              onClick={(e) => {
-                e.preventDefault();
-                validateDuplicate("nickname");
-              }}
-            >
-              중복체크
-            </Button>
-          </div>
-          {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
-          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
-            <small className="true">사용할 수 있는 닉네임입니다.</small>
-          )}
-        </div>
-        <div className="tagmodule">
-          <label>관심있는 태그입력</label>
-          <div className="tagalign">
-            <div className={s.tags}>
-              {tags.map((item, index) => (
-                <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
-                  {item}
-                </span>
-              ))}
-            </div>
+        <GaiderTitle />
+        <label>관심있는 태그입력</label>
+        <div className={s.tagalign}>
+          <div className={s.tags}>
+            {tags.map((item, index) => (
+              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+                {item}
+              </span>
+            ))}
           </div>
         </div>
-        <div className="description">
+        <div className={s.description}>
           <label>한 줄 내소개</label>
           <input
             type="description"
@@ -296,14 +233,58 @@ const Userregist = () => {
             maxLength={80}
           />
         </div>
+        <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
+        <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
+          <li className={s.tableAlign}>
+            <div className={s.errorcheck}>
+              <Label text={"이메일"} htmlFor={"userEmail"} />
+              <input className="disable" type="text" placeholder={userEmail} readOnly />
+            </div>
+          </li>
+          <li className={s.tableAlign}>
+            <div className={s.errorcheck}>
+              <Label star text={"닉네임"} htmlFor={"nickname"} />
+              <input
+                type="text"
+                id="nickname"
+                placeholder="닉네임을 입력해주세요"
+                tabIndex="2"
+                ref={nicknameRef}
+                maxLength={15}
+                {...register("nickname", {
+                  required: "닉네임은 필수 입력입니다.",
+                  minLength: {
+                    value: 5,
+                    message: "5자리 이상 입력해주세요.",
+                  },
+                })}
+              />
+              <Button
+                title="중복체크"
+                onClick={(e) => {
+                  e.preventDefault();
+                  validateDuplicate("nickname");
+                }}
+              >
+                중복체크
+              </Button>
+            </div>
+            {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+              <small className="true">사용할 수 있는 닉네임입니다.</small>
+            )}
+          </li>
+        </Table>
+
         <div className="loginbutton">
           <label>자동로그인</label>
           <input type="checkbox" checked={autoLogin} onChange={handleCheckboxChange} />
-          <Button type="submit" disabled={isSubmitting}>
+          <Button size="large" type="submit" disabled={isSubmitting}>
             간편 회원가입
           </Button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

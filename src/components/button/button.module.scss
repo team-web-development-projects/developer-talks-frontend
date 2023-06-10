@@ -21,6 +21,14 @@
     font-size: 16px;
     min-width: 120px;
   }
+
+  &.is_Xlarge {
+    height: 60px;
+    font-size: 16px;
+    width: 100%;
+    min-width: 120px;
+  }
+
   &:hover {
     background-color: #585858;
   }

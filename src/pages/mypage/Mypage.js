@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
-import "./Mypage.scss";
+import s from "./mypage.module.scss";
+import Button from "components/button/Button";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -96,11 +97,11 @@ const Mypage = ({ type }) => {
     <>
       {auth.accessToken !== null ? (
         <MypageContent>
-          <section className="content-wrap">
-            <ul className="nav">
+          <section className={s.contentwrap}>
+            <ul className={s.nav}>
               {contacts.map((contact, index) => (
                 <li key={index}>
-                  <button onClick={() => onSelect(index)} className={`${select === index ? "select" : ""}`}>
+                  <button onClick={() => onSelect(index)} className={`${select === index ? `${s.select}` : ""}`}>
                     {contact}
                   </button>
                 </li>
@@ -111,20 +112,21 @@ const Mypage = ({ type }) => {
                 <>내용이 없습니다</> //NOTE 내용없음 버그 수정//ok
               ) : (
                 favorite.map((item, index) => (
-                  <div key={index} className="user-data">
+                  <div key={index} className={s.userdata}>
                     {item.writer || item.nickname}
-                    <div className="create-time">{item.createDate}</div>
+                    <div className={s.createtime}>{item.createDate}</div>
                     {(item.title || item.postTitle) && (
-                      <p className="title" onClick={() => navigate(`/board/${item.id}`)}>
+                      <p className={s.title} onClick={() => navigate(`/board/${item.id}`)}>
                         타이틀: {item.title || item.postTitle}{" "}
                       </p>
                     )}
-                    {item.viewCount && <span>조회수 {item.viewCount}</span>}
-                    {item.content && (
+                    {item.type && <span>포스트 종류 {item.type}</span>}
+                    {item.viewCount && <Button size="small">조회수 {item.viewCount}</Button>}
+                    {/* {item.content && (
                       <>
                         <span dangerouslySetInnerHTML={{ __html: item.content }}></span>
                       </>
-                    )}
+                    )} */}
                   </div>
                 ))
               )}

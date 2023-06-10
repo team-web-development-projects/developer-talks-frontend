@@ -2,11 +2,13 @@ import Button from "components/button/Button";
 import Form from "components/form/Form";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import "./Account.scss";
 import MypageContent from "./MyPageContent";
 import { ROOT_API } from "constants/api";
 import axios from "axios";
-import s from "../studyRoom/studyRoomPost/studyRoom.module.scss";
+import s from "./account.module.scss";
+import LineStyle from "components/lineStyle/LineStyle";
+import Table from "components/table/Table";
+import { Label } from "components/label/Label";
 
 // import { useNavigate } from 'react-router-dom';
 
@@ -119,109 +121,91 @@ function Account() {
 
   return (
     <MypageContent>
-      <section className="notes">
-        <ul className="notetitle">
+      <section className={s.contentwrap}>
+        <ul className={s.nav}>
           {tabTitle.map((item, index) => (
             <li key={index}>
-              <button onClick={() => onSelect(index)} className={`${select === index && "select"}`}>
+              <button onClick={() => onSelect(index)} className={`${select === index && `${select}`}`}>
                 {item}
               </button>
             </li>
           ))}
         </ul>
         {select === 0 && (
-          <div>
-            <Form onSubmit={userEdit}>
-              {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
-              <label>한 줄 내소개</label>
-              <div className="description">
-                <input
-                  type="description"
-                  id="description"
-                  name="description"
-                  value={userData.description}
-                  placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
-                  maxLength={80}
-                  onChange={handleChange}
-                />
-                <Button onClick={saveUser}>저장</Button>
+          <Form onSubmit={userEdit}>
+            {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
+            <label>한 줄 내소개</label>
+            <div className={s.description}>
+              <input
+                type="description"
+                id="description"
+                name="description"
+                value={userData.description}
+                placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
+                maxLength={80}
+                onChange={handleChange}
+              />
+              <Button onClick={saveUser}>저장</Button>
+            </div>
+            <label>관심있는 태그입력</label>
+            <div className={s.tagalign}>
+              <div className={s.tags}>
+                {tags.map((item, index) => (
+                  <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+                    {item}
+                  </span>
+                ))}
               </div>
-              <label>관심있는 태그입력</label>
-              <div className="tagalign">
-                <div className={s.tags}>
-                  {tags.map((item, index) => (
-                    <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
-                      {item}
-                    </span>
-                  ))}
+            </div>
+            <LineStyle text={" 기본정보를 입력해주세요"} />
+            <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
+              <li className={s.tableAlign}>
+                <div className={s.errorcheck}>
+                  <Label star text={"이메일"} htmlFor={"userEmail"} />
+                  <input name="email" value={userData.email} onChange={handleChange} type="text" />
+                  <Button>저장</Button>
                 </div>
-              </div>
-              <div className="line-style">
-                <div className="jb-division-line"></div>
-                <span>회원가입에 필요한 기본정보를 입력해주세요(필수입니다)</span>
-                <div className="jb-division-line"></div>
-              </div>
-              <fieldset className="useraccount">
-                <legend>정보수정</legend>
-                <div className="">
-                  <table className="userinfoTable">
-                    <thead />
-                    <tbody>
-                      <tr>
-                        <th>
-                          <label>이메일 : {""}</label>
-                        </th>
-                        <td className="td">
-                          <input name="email" value={userData.email} onChange={handleChange} type="text" />
-                          <Button>저장</Button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <label>아이디 : {""}</label>
-                        </th>
-                        <td className="td">
-                          <input name="userid" value={userData.userid} onChange={handleChange} type="text" />
-                          <Button>저장</Button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <label>닉네임 : {""}</label>
-                        </th>
-                        <td className="td">
-                          <input name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
-                          <Button>저장</Button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <label>비밀번호 : {""}</label>
-                        </th>
-                        <td className="td">
-                          <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <label>비밀번호확인 : {""}</label>
-                        </th>
-                        <td className="td">
-                          <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
-                          <Button>저장</Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <Button onClick={reset}>리셋</Button>
+              </li>
+              <li className={s.tableAlign}>
+                <div className={s.errorcheck}>
+                  <Label star text={"아이디"} htmlFor={"userid"} />
+                  <input name="userid" value={userData.userid} onChange={handleChange} type="text" />
+                  <Button>저장</Button>
                 </div>
-              </fieldset>
-            </Form>
-          </div>
+              </li>
+              <li className={s.tableAlign}>
+                <div className={s.errorcheck}>
+                  <Label star text={"닉네임"} htmlFor={"nickname"} />
+                  <input name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
+                  <Button>저장</Button>
+                </div>
+              </li>
+              <li className={s.tableAlign}>
+                <div className={s.errorcheck}>
+                  <Label star text={"비밀번호"} htmlFor={"password"} />
+                  <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
+                </div>
+              </li>
+              <li className={s.tableAlign}>
+                <div className={s.errorcheck}>
+                  <Label star text={"비밀번호 확인"} htmlFor={"passwordChk"} />
+                  <input name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
+                  {/* <div className={s.typechange} type="typechange" onClick={typechange}> */}
+                  {/* 👀 */}
+                  {/* </div> */}
+                </div>
+              </li>
+            </Table>
+            <Button size="large">저장</Button>
+            <br />
+            <Button size="large" onClick={reset}>
+              리셋
+            </Button>
+          </Form>
         )}
         {select === 1 && (
-          <form className="delete">
-            <div className="deletgaider">
+          <form className={s.delete}>
+            <div className={s.deletgaider}>
               회원 탈퇴일로부터 계정과 닉네임을 포함한 계정 정보(아이디/이메일/닉네임)는 개인정보 보호방침에 따라 60일간 보관(잠김)되며, 60일 경과된
               후에는 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된 게시물은 삭제되지 않으며, 익명처리 후 디톡스로 소유권이
               귀속됩니다.
