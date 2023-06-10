@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
-import { getCookieToken } from "store/Cookie";
+import { getCookieToken, removeCookieToken } from "store/Cookie";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import { setRefreshToken } from "store/Cookie";
@@ -46,12 +46,14 @@ function App() {
       const accessToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[0];
       const refreshToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[1];
       if (parseJwt(accessToken).nickname) {
+        dispatch(SET_TOKEN({ accessToken: accessToken }));
         navigate("/", { replace: true });
       } else {
+        localStorage.setItem("authAtk", accessToken);
         navigate("/userregist", { replace: true });
       }
       dispatch(SET_TOKEN({ accessToken: accessToken }));
-        setRefreshToken({ refreshToken: refreshToken });
+      setRefreshToken({ refreshToken: refreshToken });
       // console.log("atk: ", accessToken);
       // console.log("rtk: ", refreshToken);
       // console.log("auth: ", auth);
@@ -73,7 +75,7 @@ function App() {
     //   dispatch(SET_TOKEN({ accessToken: accessToken }));
     //   setRefreshToken(refreshToken);
     // }
-  }, [dispatch, navigate, location]);
+  }, [dispatch, navigate, location, auth.accessToken]);
 
   // useEffect(() => {
   //   let timer;
@@ -101,10 +103,11 @@ function App() {
   // };
 
   useEffect(() => {
-    if (auth.accessToken === null && getCookieToken() !== undefined) {
+    removeCookieToken();
+    if (auth.accessToken === null && localStorage.getItem("refreshToken") !== undefined) {
       axios
         .post(`${ROOT_API}/token/refresh`, {
-          refreshToken: getCookieToken().refreshToken,
+          refreshToken: localStorage.getItem("refreshToken"),
           headers: {
             accept: "*/*",
             "Content-Type": "application/json",

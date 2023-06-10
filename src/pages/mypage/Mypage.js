@@ -88,9 +88,9 @@ const Mypage = ({ type }) => {
         break;
       default:
     }
-        if (auth.accessToken === null) {
-          navigate("/login", { replace: true });
-        }
+    if (auth.accessToken === null && localStorage.getItem("refreshToken") === null) {
+      navigate("/login", { replace: true });
+    }
   }, [auth.accessToken, navigate, select, userId]);
 
   return (

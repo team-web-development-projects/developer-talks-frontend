@@ -43,16 +43,7 @@ const Regist = () => {
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const tags = [
-    "DJANGO",
-    "SPRING",
-    "JAVASCRIPT",
-    "JAVA",
-    "PYTHON",
-    "CPP",
-    "REACT",
-    "AWS",
-  ];
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
@@ -95,19 +86,9 @@ const Regist = () => {
       .catch((error) => console.log(error));
   };
   const onSubmit = async (data) => {
-    console.log(
-      verityEmailcheck,
-      compareEmailcheck,
-      duplicateId,
-      duplicateNickName
-    );
+    console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName);
     await new Promise((r) => setTimeout(r, 1000));
-    if (
-      verityEmailcheck &&
-      compareEmailcheck &&
-      duplicateId === false &&
-      duplicateNickName === false
-    ) {
+    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
       //NOTE 버튼 다 클릭하면 실행
       console.log(`
   email: ${data.userEmail},
@@ -153,7 +134,8 @@ const Regist = () => {
             .then(function (response) {
               console.log("로그인 성공:", response);
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              localStorage.setItem("token", response.data.accessToken);
+              // localStorage.setItem("token", response.data.accessToken);
+              localStorage.setItem("refreshToken", response.data.refreshToken);
               setModal(true);
               navigate("/");
               reset();
@@ -304,7 +286,11 @@ const Regist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+              >
                 {item}
               </span>
             ))}
@@ -392,7 +378,9 @@ const Regist = () => {
               </Button>
             </div>
             {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+              <small className="alert">중복된 닉네임입니다.</small>
+            )}
             {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
@@ -432,7 +420,9 @@ const Regist = () => {
             </div>
             {errors.userid && <small role="alert">{errors.userid.message}</small>}
             {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-            {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
+            {duplicateId !== "" && duplicateId === false && (
+              <small className="true">사용할 수 있는 아이디입니다.</small>
+            )}
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>

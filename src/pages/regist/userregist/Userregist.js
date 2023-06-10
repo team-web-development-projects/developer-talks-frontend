@@ -24,7 +24,9 @@ const Userregist = () => {
   const auth = useSelector((state) => state.authToken);
 
   const dispatch = useDispatch();
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [imageFile, setImageFile] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+  );
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -61,8 +63,8 @@ const Userregist = () => {
           {
             headers: {
               "Content-Type": "application/json", //NOTE 이건 안됌
-              "X-AUTH-TOKEN": auth.accessToken,
-              ...API_HEADER,
+              // "X-AUTH-TOKEN": auth.accessToken,
+              "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
             },
           }
         )
@@ -71,9 +73,9 @@ const Userregist = () => {
           setModal(true);
           // if (autoLogin) {
           //NOTE 자동로그인
-          setRefreshToken({ refreshToken: response.data.refreshToken });
+          localStorage.removeItem("authAtk");
+          localStorage.setItem("refreshToken", response.data.refreshToken);
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-          alert("토큰저장");
           navigate("/");
           reset();
           // }
@@ -216,7 +218,11 @@ const Userregist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+              >
                 {item}
               </span>
             ))}
@@ -270,7 +276,9 @@ const Userregist = () => {
               </Button>
             </div>
             {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+              <small className="alert">중복된 닉네임입니다.</small>
+            )}
             {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
