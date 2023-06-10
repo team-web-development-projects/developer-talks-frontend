@@ -1,10 +1,11 @@
 import axios from "axios";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
+import { Label } from "components/label/Label";
+import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import LoginGoogle from "components/snsLogin/LoginGoogle";
-import LoginKakao from "components/snsLogin/LoginKakao";
-import LoginNaver from "components/snsLogin/LoginNaver";
+import Snslogin from "components/snsLogin/Snslogin";
+import { Title } from "components/title/Title";
 import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
@@ -14,7 +15,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import { setRefreshToken } from "store/Cookie";
-import "./login.scss";
+import s from "./login.module.scss";
+import Button from "components/button/Button";
+import Table from "components/table/Table";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -58,7 +61,6 @@ const Login = () => {
   };
   const {
     register,
-    // setValue,
     handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, errors },
@@ -66,6 +68,7 @@ const Login = () => {
 
   return (
     <>
+      <ToastCont />
       {modal && (
         <BasicModal setOnModal={() => setModal(false)} dimClick={() => navigate("/")}>
           로그인이 완료되었습니다. <br />
@@ -73,23 +76,16 @@ const Login = () => {
           <button onClick={() => navigate("/")}>확인</button>
         </BasicModal>
       )}
-      <ToastCont />
-      <section className="login-page page">
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <fieldset>
-            <legend>로그인페이지</legend>
-            <p className="desc">
-              Developer-Talks 가입으로
-              <br />
-              다양한 사람들을 만나보세요!
-            </p>
-
-            <ul className="login_main">
-              <li>
-                <label className="Id" htmlFor="userId">
-                  아이디
-                </label>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <fieldset>
+          <legend>로그인페이지</legend>
+          <Title />
+          <Table tableTitle={"Developer-Talks"} tableText={"계정로그인"}>
+            <li className={s.tableAlign}>
+              <div className={s.errorcheck}>
+                <Label text={"아이디"} htmlFor={"userId"} />
                 <input
+                  className={s.input}
                   type="text"
                   id="userId"
                   name="usderId"
@@ -106,13 +102,18 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.userId && <small role="alert">{errors.userId.message}</small>}
-              </li>
-              <li>
-                <label className="Pw" htmlFor="password">
-                  비밀번호
-                </label>
+              </div>
+              {errors.userId && (
+                <small className="small" role="alert">
+                  {errors.userId.message}
+                </small>
+              )}
+            </li>
+            <li className={s.tableAlign}>
+              <div className={s.errorcheck}>
+                <Label text={"비밀번호"} htmlFor={"password"} />
                 <input
+                  className={s.input}
                   type={typetoggle}
                   id="password"
                   placeholder="********"
@@ -129,33 +130,27 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.password && <small role="alert">{errors.password.message}</small>}
                 <div className="typechange" type="typechange" onClick={typechange}>
                   👀
                 </div>
-              </li>
-            </ul>
-            <div className="button">
-              <button type="submit" tabIndex="3" disabled={isSubmitting}>
-                {" "}
-                로그인
-              </button>
-            </div>
-          </fieldset>
-          <br />
-          <div className="line-style">
-            <div className="jb-division-line"></div>
-            <span>SNS 로그인</span>
-            <div className="jb-division-line"></div>
-          </div>
-          <div className="snsbuttonwrap">
-            <LoginGoogle />
-            <LoginNaver />
-            <LoginKakao />
-          </div>
-        </Form>
-        <FormUserGuide />
-      </section>
+              </div>
+              {errors.password && (
+                <small className="small" role="alert">
+                  {errors.password.message}
+                </small>
+              )}
+            </li>
+          </Table>
+          <Button size="large" type="submit" tabIndex="3" disabled={isSubmitting}>
+            {" "}
+            로그인
+          </Button>
+        </fieldset>
+        <br />
+        <LineStyle text={"SNS 로그인"} />
+        <Snslogin />
+      </Form>
+      <FormUserGuide />
     </>
   );
 };
