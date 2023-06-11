@@ -17,7 +17,7 @@ const ModalFrame = ({
 }) => {
   return (
     <PortalModal>
-      <div className={classnames("modal")} style={{ zIndex: zindex }}>
+      <div className={classnames("modal")} style={{ zindex: zindex }}>
         <div className={classnames("", classname)}>
           <div className="">
             {children}

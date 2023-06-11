@@ -1,7 +1,7 @@
 import axios from "axios";
 import BoardCount from "components/boardCount/BoardCount";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import ReplyPost from "pages/board/_com/replyPost/ReplyPost";
+import ReplyList from "pages/board/_com/replyList/ReplyList";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
@@ -89,10 +89,7 @@ const BoardDetail = ({ type }) => {
         </header>
         <main>
           {/* TODO: content 내용 이슈 */}
-          <div
-            className={s.content}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          ></div>
+          <div className={s.content} dangerouslySetInnerHTML={{ __html: post.content }}></div>
         </main>
         <div className={s.countContainer}>
           <BoardCount
@@ -120,7 +117,7 @@ const BoardDetail = ({ type }) => {
             <p>{post.recommendCount}</p>
           </BoardCount>
         </div>
-        <ReplyPost nickname={nickname} />
+        <ReplyList nickname={nickname} />
       </div>
     </>
   );
