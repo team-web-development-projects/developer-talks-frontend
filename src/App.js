@@ -53,7 +53,7 @@ function App() {
         navigate("/userregist", { replace: true });
       }
       dispatch(SET_TOKEN({ accessToken: accessToken }));
-      setRefreshToken({ refreshToken: refreshToken });
+      localStorage.setItem("refreshToken", refreshToken);
       // console.log("atk: ", accessToken);
       // console.log("rtk: ", refreshToken);
       // console.log("auth: ", auth);
