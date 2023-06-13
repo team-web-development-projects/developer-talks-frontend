@@ -49,7 +49,7 @@ const Login = () => {
         reset();
       })
       .catch(function (error) {
-        showToast("error", "😎 정보를 다시 입력해주세요");
+        showToast("error", "😎 정보를 다시 입력해주세요(회원정보가 없는 것일 수 있습니다.)");
       });
   };
   const typechange = () => {
@@ -142,7 +142,7 @@ const Login = () => {
               )}
             </li>
           </Table>
-          <Button size="large" type="submit" tabIndex="3" disabled={isSubmitting}>
+          <Button FullWidth size="large" type="submit" tabIndex="3" disabled={isSubmitting}>
             {" "}
             로그인
           </Button>

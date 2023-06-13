@@ -125,7 +125,7 @@ function Account() {
         <ul className={s.nav}>
           {tabTitle.map((item, index) => (
             <li key={index}>
-              <button onClick={() => onSelect(index)} className={`${select === index ? `${s.select}`:""}`}>
+              <button onClick={() => onSelect(index)} className={`${select === index ? `${s.select}` : ""}`}>
                 {item}
               </button>
             </li>
@@ -194,9 +194,11 @@ function Account() {
                 </div>
               </li>
             </Table>
-            <Button size="large">저장</Button>
+            <Button FullWidth size="large">
+              저장
+            </Button>
             <br />
-            <Button size="large" onClick={reset}>
+            <Button FullWidth size="large" onClick={reset}>
               리셋
             </Button>
           </Form>

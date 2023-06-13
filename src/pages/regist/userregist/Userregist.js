@@ -218,11 +218,7 @@ const Userregist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span
-                key={index}
-                onClick={() => clickTag(item)}
-                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
-              >
+              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
                 {item}
               </span>
             ))}
@@ -276,9 +272,7 @@ const Userregist = () => {
               </Button>
             </div>
             {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
-              <small className="alert">중복된 닉네임입니다.</small>
-            )}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
             {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
@@ -288,7 +282,7 @@ const Userregist = () => {
         <div className="loginbutton">
           <label>자동로그인</label>
           <input type="checkbox" checked={autoLogin} onChange={handleCheckboxChange} />
-          <Button size="large" type="submit" disabled={isSubmitting}>
+          <Button FullWidth size="large" type="submit" disabled={isSubmitting}>
             간편 회원가입
           </Button>
         </div>

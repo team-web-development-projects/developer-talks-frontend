@@ -22,11 +22,14 @@
     min-width: 120px;
   }
 
-  &.is_Xlarge {
+  &.is_large {
     height: 60px;
     font-size: 16px;
-    width: 100%;
     min-width: 120px;
+  }
+  
+  &.is_fullWidth{
+    width: 100%;
   }
 
   &:hover {

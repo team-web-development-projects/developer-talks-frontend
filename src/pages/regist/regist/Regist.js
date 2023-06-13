@@ -286,11 +286,7 @@ const Regist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span
-                key={index}
-                onClick={() => clickTag(item)}
-                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
-              >
+              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
                 {item}
               </span>
             ))}
@@ -378,9 +374,7 @@ const Regist = () => {
               </Button>
             </div>
             {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
-              <small className="alert">중복된 닉네임입니다.</small>
-            )}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
             {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
@@ -420,9 +414,7 @@ const Regist = () => {
             </div>
             {errors.userid && <small role="alert">{errors.userid.message}</small>}
             {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-            {duplicateId !== "" && duplicateId === false && (
-              <small className="true">사용할 수 있는 아이디입니다.</small>
-            )}
+            {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
@@ -492,7 +484,7 @@ const Regist = () => {
           </li>
         </Table>
         <div className="registSubmit">
-          <Button size="large" type="submit" tabIndex="12" disabled={isSubmitting}>
+          <Button FullWidth size="large" type="submit" tabIndex="12" disabled={isSubmitting}>
             {" "}
             가입하기
           </Button>
