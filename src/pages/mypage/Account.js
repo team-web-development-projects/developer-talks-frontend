@@ -37,7 +37,7 @@ function Account() {
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
 
   const tabTitle = ["회원정보 수정", "회원 탈퇴"];
-  const [select, setSelect] = useState(null);
+  const [select, setSelect] = useState(0);
   const onSelect = (type) => {
     setSelect(type);
   };
@@ -125,7 +125,7 @@ function Account() {
         <ul className={s.nav}>
           {tabTitle.map((item, index) => (
             <li key={index}>
-              <button onClick={() => onSelect(index)} className={`${select === index && `${select}`}`}>
+              <button onClick={() => onSelect(index)} className={`${select === index ? `${s.select}`:""}`}>
                 {item}
               </button>
             </li>
@@ -163,21 +163,19 @@ function Account() {
                 <div className={s.errorcheck}>
                   <Label star text={"이메일"} htmlFor={"userEmail"} />
                   <input name="email" value={userData.email} onChange={handleChange} type="text" />
-                  <Button>저장</Button>
                 </div>
               </li>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
                   <Label star text={"아이디"} htmlFor={"userid"} />
                   <input name="userid" value={userData.userid} onChange={handleChange} type="text" />
-                  <Button>저장</Button>
                 </div>
               </li>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
                   <Label star text={"닉네임"} htmlFor={"nickname"} />
                   <input name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
-                  <Button>저장</Button>
+                  <Button>중복확인</Button>
                 </div>
               </li>
               <li className={s.tableAlign}>

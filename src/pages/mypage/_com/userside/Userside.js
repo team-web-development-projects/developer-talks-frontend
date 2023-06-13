@@ -4,16 +4,18 @@ import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Userside.scss";
 
 const Userside = () => {
-  const [isActive, setIsActive] = useState("");
+  const [isActive, setIsActive] = useState("mypage");
   const [imageFile, setImageFile] = useState("");
+  const location = useLocation();
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
   };
+
   const handleClick = (value) => {
     setIsActive(value);
   };
@@ -66,25 +68,15 @@ const Userside = () => {
           <input type="file" name="" id="" onChange={changeProfileImg} />
         </div>
         <ul className="nav">
-          {/* <li>
-            <Link to="/introduction" className={isActive ? 'active' : ''} onClick={handleClick}>🎆 내소개</Link>
-          </li> */}
-          <li>
-            <Link to="/mypage" className={isActive === "mypage" ? "is-active" : ""} onClick={() => handleClick("mypage")}>
-              🧥 활동내역
-            </Link>
+          <li className={location.pathname === "/mypage" && "is-active"} onClick={() => handleClick("mypage")}>
+            <Link to="/mypage">활동내역</Link>
           </li>
-          <li>
-            <Link to="/my-studyroom" className={isActive === "my-studyroom" ? "is-active" : ""} onClick={() => handleClick("my-studyroom")}>
-              스터디룸
-            </Link>
+          <li className={location.pathname === "/my-studyroom" && "is-active"} onClick={() => handleClick("my-studyroom")}>
+            <Link to="/my-studyroom">스터디룸</Link>
           </li>
-          <li>
-            <Link to="/account" className={isActive === "account" ? "is-active" : ""} onClick={() => handleClick("account")}>
-              🐹 회원정보수정 및 탈퇴
-            </Link>
+          <li className={location.pathname === "/account" && "is-active"} onClick={() => handleClick("account")}>
+            <Link to="/account">회원정보수정 및 탈퇴</Link>
           </li>
-          <li></li>
         </ul>
         <Logout />
       </section>

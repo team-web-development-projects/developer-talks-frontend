@@ -53,10 +53,10 @@
       a {
         display: block;
         padding: 20px;
-        &.is-active {
-          background-color: #ffffff;
-        }
       }
     }
   }
+}
+.is-active {
+  background-color: #ffffff;
 }
