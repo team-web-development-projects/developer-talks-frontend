@@ -161,32 +161,32 @@ function Account() {
             <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
-                  <Label star text={"이메일"} htmlFor="userEmail" />
+                  <Label isRequire text={"이메일"} htmlFor="userEmail" />
                   <input id="userEmail" name="email" value={userData.email} onChange={handleChange} type="text" />
                 </div>
               </li>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
-                  <Label star text={"아이디"} htmlFor="userid" />
+                  <Label isRequire text={"아이디"} htmlFor="userid" />
                   <input id="userid" name="userid" value={userData.userid} onChange={handleChange} type="text" />
                 </div>
               </li>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
-                  <Label star text={"닉네임"} htmlFor="nickname"/>
+                  <Label isRequire text={"닉네임"} htmlFor="nickname"/>
                   <input id="nickname" name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
                   <Button>중복확인</Button>
                 </div>
               </li>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
-                  <Label star text={"비밀번호"} htmlFor="password" />
+                  <Label isRequire text={"비밀번호"} htmlFor="password" />
                   <input id="password" name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                 </div>
               </li>
               <li className={s.tableAlign}>
                 <div className={s.errorcheck}>
-                  <Label star text={"비밀번호 확인"} htmlFor="passwordChk" />
+                  <Label isRequire text={"비밀번호 확인"} htmlFor="passwordChk" />
                   <input id="passwordChk" name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                   {/* <div className={s.typechange} type="typechange" onClick={typechange}> */}
                   {/* 👀 */}

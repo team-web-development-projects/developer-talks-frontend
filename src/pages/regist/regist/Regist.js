@@ -308,7 +308,7 @@ const Regist = () => {
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"이메일"} htmlFor="userEmail" />
+              <Label isRequire text={"이메일"} htmlFor="userEmail" />
               <input
                 type="email"
                 id="userEmail"
@@ -330,7 +330,7 @@ const Regist = () => {
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"이메일 인증"} htmlFor="userEmail" />
+              <Label isRequire text={"이메일 인증"} htmlFor="userEmail" />
               <input
                 tabIndex="4"
                 type="text"
@@ -346,7 +346,7 @@ const Regist = () => {
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"닉네임"} htmlFor="nickname" />
+              <Label isRequire text={"닉네임"} htmlFor="nickname" />
               <input
                 type="text"
                 id="nickname"
@@ -381,7 +381,7 @@ const Regist = () => {
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"아이디"} htmlFor="userid" />
+              <Label isRequire text={"아이디"} htmlFor="userid" />
               <input
                 type="text"
                 id="userid"
@@ -418,7 +418,7 @@ const Regist = () => {
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"비밀번호"} htmlFor="password" />
+              <Label isRequire text={"비밀번호"} htmlFor="password" />
               <input
                 type={typetoggle}
                 id="password"
@@ -447,7 +447,7 @@ const Regist = () => {
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"비밀번호 확인"} htmlFor="passwordChk" />
+              <Label isRequire text={"비밀번호 확인"} htmlFor="passwordChk" />
               <input
                 type={typetoggle}
                 id="passwordChk"

@@ -1,12 +1,15 @@
 import React from "react";
 import s from "./label.module.scss";
 
-const Label = ({ text, star }) => {
+const Label = ({ text, isRequire }) => {
   return (
-
     <label className={s.label}>
       {text}
-    {star &&  <span className={s.star} title="필수사항">*</span>}
+      {isRequire && (
+        <span className={s.isRequire} title="필수사항">
+          *
+        </span>
+      )}
     </label>
   );
 };

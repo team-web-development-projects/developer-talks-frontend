@@ -245,7 +245,7 @@ const Userregist = () => {
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label star text={"닉네임"} htmlFor="nickname" />
+              <Label isRequire text={"닉네임"} htmlFor="nickname" />
               <input
                 type="text"
                 id="nickname"
