@@ -6,12 +6,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
 import s from "./mypage.module.scss";
-import Button from "components/button/Button";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
   const navigate = useNavigate();
-  const [select, setSelect] = useState(-1);
+  const [select, setSelect] = useState(0);
   const [favorite, setFavorite] = useState([]);
   let userId = "";
   if (auth.accessToken !== null) {
@@ -109,24 +108,39 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite === undefined || favorite.length === 0 ? (
-                <>내용이 없습니다</> //NOTE 내용없음 버그 수정//ok
+                contacts.index == 0 
               ) : (
                 favorite.map((item, index) => (
                   <div key={index} className={s.userdata}>
-                    {item.writer || item.nickname}
+                    <div className={s.text}>
+                      <div className={s.type}>
+                        {item.type && item.type === "COMMENT" ? (
+                          <>
+                            <span>{item.writer || item.nickname}</span>
+                            <p>님의 질문에 달린 답변에</p>
+                            <span>댓글</span>
+                            <p>을 작성하였습니다</p>
+                          </>
+                        ) : (
+                          <>
+                            <p>카테고리에</p>
+                            <span>질문</span>
+                            <p>을 작성하였습니다.</p>
+                          </>
+                        )}
+                        {item.secret == false && "🔓"}
+                        {item.secret == true && "🔒"}
+                        {(item.viewCount || item.viewCount === 0) && <span className={s.viewCount}>조회수 {item.viewCount}</span>}
+                        {(item.recommendCount || item.recommendCount === 0) && <span className={s.viewCount}>추천수 {item.recommendCount}</span>}
+                        {(item.favoriteCount || item.favoriteCount === 0) && <span className={s.viewCount}>좋아요수 {item.favoriteCount}</span>}
+                      </div>
+                      {(item.title || item.postTitle) && (
+                        <p className={s.title} onClick={() => navigate(`/board/${item.id}`)}>
+                          {item.title || item.postTitle}{" "}
+                        </p>
+                      )}
+                    </div>
                     <div className={s.createtime}>{item.createDate}</div>
-                    {(item.title || item.postTitle) && (
-                      <p className={s.title} onClick={() => navigate(`/board/${item.id}`)}>
-                        타이틀: {item.title || item.postTitle}{" "}
-                      </p>
-                    )}
-                    {item.type && <span>포스트 종류 {item.type}</span>}
-                    {item.viewCount && <Button size="small">조회수 {item.viewCount}</Button>}
-                    {/* {item.content && (
-                      <>
-                        <span dangerouslySetInnerHTML={{ __html: item.content }}></span>
-                      </>
-                    )} */}
                   </div>
                 ))
               )}

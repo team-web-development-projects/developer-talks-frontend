@@ -51,8 +51,8 @@
 
   .title {
     margin-bottom: 10px;
-    font-size: 30px;
-    font-weight: 500;
+    font-size: 25px;
+    font-weight: 800;
     left: 0;
   }
 
@@ -69,4 +69,27 @@
     left: 0;
     color: #797979;
   }
+}
+
+.userdata{
+  display: flex;
+  justify-content: space-between;
+  .type{
+    display: flex;
+    align-items: center;
+    span{
+      color: #00a9dc;
+    }
+  }
+}
+
+.viewCount{
+        display: inline-block;
+          margin-right: 10px;
+          padding: 1px 10px 2px 10px;
+          border-radius: 10vw;
+          font-size: 14px;
+          color: #585858;
+          background: white;
+          border: 1px solid #585858;
 }
