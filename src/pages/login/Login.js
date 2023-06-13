@@ -84,7 +84,7 @@ const Login = () => {
           <Table tableTitle={"Developer-Talks"} tableText={"계정로그인"}>
             <li className={s.tableAlign}>
               <div className={s.errorcheck}>
-                <Label text={"아이디"} htmlFor={"userId"} />
+                <Label text={"아이디"} htmlFor="userId" />
                 <input
                   className={s.input}
                   type="text"
@@ -112,7 +112,7 @@ const Login = () => {
             </li>
             <li className={s.tableAlign}>
               <div className={s.errorcheck}>
-                <Label text={"비밀번호"} htmlFor={"password"} />
+                <Label text={"비밀번호"} htmlFor="password" />
                 <input
                   className={s.input}
                   type={typetoggle}

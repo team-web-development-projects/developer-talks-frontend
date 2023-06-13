@@ -1,10 +1,10 @@
 import React from "react";
 import s from "./label.module.scss";
 
-const Label = ({ text, htmlFor, star }) => {
+const Label = ({ text, star }) => {
   return (
 
-    <label className={s.label} htmlFor={htmlFor}>
+    <label className={s.label}>
       {text}
     {star &&  <span className={s.star} title="필수사항">*</span>}
     </label>
