@@ -239,13 +239,13 @@ const Userregist = () => {
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label text={"이메일"} htmlFor="userEmail" />
+              <Label children={"이메일"} htmlFor="userEmail" />
               <input id="userEmail" className="disable" type="text" placeholder={userEmail} readOnly />
             </div>
           </li>
           <li className={s.tableAlign}>
             <div className={s.errorcheck}>
-              <Label isRequire text={"닉네임"} htmlFor="nickname" />
+              <Label isRequire children={"닉네임"} htmlFor="nickname" />
               <input
                 type="text"
                 id="nickname"

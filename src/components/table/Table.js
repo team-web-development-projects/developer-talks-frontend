@@ -5,7 +5,7 @@ const Table = ({ children, tableTitle, tableText }) => {
   return (
     <div className={s.table}>
       <h2>{tableTitle}</h2>
-      <p className={s.chk}>{tableText}</p>
+      <p>{tableText}</p>
       <ul className={s.userinfoTable}>
       {children}
       </ul>
