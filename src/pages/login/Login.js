@@ -148,7 +148,7 @@ const Login = () => {
           </Button>
         </fieldset>
         <br />
-        <LineStyle text={"SNS 로그인"} />
+        <LineStyle gray text={"SNS 로그인"} />
         <Snslogin />
       </Form>
       <FormUserGuide />
