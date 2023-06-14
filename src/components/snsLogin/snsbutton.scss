@@ -1,0 +1,52 @@
+.your-custom-class {
+  width: 200px;
+  height: 80px;
+  background: #ffffff;
+
+  iframe {
+    opacity: 0.3;
+
+    :global(#container > div) {
+      height: 80px;
+      background: red;
+    }
+  }
+}
+
+.Button {
+  padding: 15px 0;
+  width: 100px;
+  vertical-align: middle;
+  font-size: 17px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid b;
+  background-color: #ffffff;
+  text-indent: 30px;
+
+  &:hover {
+    font-weight: bolder;
+  }
+}
+
+.google {
+  background: url("google.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+
+}
+
+.naver {
+  background: url("naver.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+
+}
+
+.kakao {
+  background: url("kakao.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+
+
+}
