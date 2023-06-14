@@ -1,0 +1,97 @@
+.login-page {
+  .login_main {
+    margin-top: 19px;
+    padding: 0px 0;
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid black;
+    border-collapse: collapse;
+
+    li {
+      display: inline-block;
+      padding: 8px 0;
+      width: 100%;
+      font-weight: bold;
+      background-color: #ffffff;
+
+      &:nth-child(1) {
+        border-bottom: 1px solid #000000;
+      }
+
+      label {
+        background-color: #ffffff;
+
+        &.Id {
+          padding: 15px 25px;
+        }
+
+        &.Pw {
+          padding: 15px 17px;
+        }
+
+        &.nickname {
+          padding: 15px 17px;
+        }
+      }
+
+      input {
+        padding: 15px 0;
+        width: 270px;
+        font-size: 16px;
+        border: 1px solid #cfcfcf;
+      }
+
+      small {
+        display: block;
+        text-align: left;
+        font-size: 12px;
+        padding-left: 20px;
+      }
+    }
+  }
+
+  .button {
+    padding: 20px 0 0;
+  }
+
+  .snsbuttonwrap {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+}
+
+@media(max-width:676px) {
+
+  li {
+    &.Id {
+      padding: 15px 3.69822485207%;
+    }
+
+    &.Pw {
+      padding: 15px 2.51479289941%;
+    }
+  }
+
+  input {
+    width: 39.94082840237%;
+  }
+
+  small {
+    padding-left: 2.95857988166%;
+  }
+}
+
+.line-style {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .jb-division-line {
+    border-top: 1px solid #a4a4a4;
+    width: 130px;
+    margin: 10px;
+  }
+}

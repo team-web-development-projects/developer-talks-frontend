@@ -1,22 +1,17 @@
 import React from "react";
 import s from "./button.module.scss";
-import classnames from "classnames";
+import classnames from 'classnames';
 
-const Button = ({FullWidth, children, onClick, classname, type, size = "big" }) => {
+const Button = ({ children, onClick, classname, type }) => {
   return (
     <button
       className={classnames(`${s.button} ${classname}`, {
-        [s.is_success]: type === "success",
-        [s.is_cancle]: type === "cancle",
-        [s.is_small]: size === "small",
-        [s.is_medium]: size === "medium",
-        [s.is_large]: size === "large",
-        [s.is_big]: size === "big",
-        [s.is_fullWidth]: FullWidth,
+        "is-success": type === "success",
+        "is-cancle": type === "cancle",
       })}
       onClick={onClick}
     >
-      {children}
+      <div className={s.child}>{children}</div>
     </button>
   );
 };

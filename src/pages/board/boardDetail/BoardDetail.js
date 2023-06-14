@@ -1,7 +1,7 @@
 import axios from "axios";
 import BoardCount from "components/boardCount/BoardCount";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import ReplyPost from "pages/board/_com/replyPost/ReplyPost";
+import ReplyPost from "components/replyPost/ReplyPost";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
