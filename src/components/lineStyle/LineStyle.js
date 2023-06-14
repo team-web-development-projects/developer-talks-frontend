@@ -1,10 +1,10 @@
 import React from "react";
 import s from "./lineStyle.module.scss";
 
-const LineStyle = ({ text }) => {
+const LineStyle = ({ text, gray }) => {
   return (
     <div className={s.lineStyle}>
-      <span className={s.gray}>{text}</span>
+      <span className={`${gray ? s.gray : ""}`}>{text}</span>
     </div>
   );
 };
