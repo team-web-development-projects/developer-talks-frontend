@@ -82,65 +82,57 @@ const Login = () => {
           <legend>로그인페이지</legend>
           <Title />
           <Table tableTitle={"Developer-Talks"} tableText={"계정로그인"}>
-            <li className={s.tableAlign}>
-              <div className={s.errorcheck}>
-                <Label children={"아이디"} htmlFor="userId" />
-                <input
-                  className={s.input}
-                  type="text"
-                  id="userId"
-                  name="usderId"
-                  placeholder="Developer-Talk Guest"
-                  tabIndex="1"
-                  maxLength="15"
-                  autoComplete="useId"
-                  aria-invalid={!isDirty ? undefined : errors.userId ? "true" : "false"}
-                  {...register("userId", {
-                    required: "아이디는 필수 입력입니다.",
-                    minLength: {
-                      value: 5,
-                      message: "5자리 이상 15자리 이하로 입력해주세요.",
-                    },
-                  })}
-                />
-              </div>
-              {errors.userId && (
-                <small className="small" role="alert">
-                  {errors.userId.message}
-                </small>
-              )}
-            </li>
-            <li className={s.tableAlign}>
-              <div className={s.errorcheck}>
-                <Label children={"비밀번호"} htmlFor="password" />
-                <input
-                  className={s.input}
-                  type={typetoggle}
-                  id="password"
-                  placeholder="********"
-                  tabIndex="2"
-                  maxLength="15"
-                  name="password"
-                  autoComplete="current-password"
-                  aria-invalid={!isDirty ? undefined : errors.password ? "true" : "false"}
-                  {...register("password", {
-                    required: "비밀번호는 필수 입력입니다.",
-                    minLength: {
-                      value: 8,
-                      message: "8자리 이상 15자리 이하로 비밀번호를 사용해주세요.",
-                    },
-                  })}
-                />
-                <div className="typechange" type="typechange" onClick={typechange}>
-                  👀
+            {[
+              <>
+                <div>
+                  <Label children={"아이디"} htmlFor="userId" />
+                  <input
+                    type="text"
+                    id="userId"
+                    name="usderId"
+                    placeholder="Developer-Talk Guest"
+                    tabIndex="1"
+                    maxLength="15"
+                    autoComplete="useId"
+                    aria-invalid={!isDirty ? undefined : errors.userId ? "true" : "false"}
+                    {...register("userId", {
+                      required: "아이디는 필수 입력입니다.",
+                      minLength: {
+                        value: 5,
+                        message: "5자리 이상 15자리 이하로 입력해주세요.",
+                      },
+                    })}
+                  />
                 </div>
-              </div>
-              {errors.password && (
-                <small className="small" role="alert">
-                  {errors.password.message}
-                </small>
-              )}
-            </li>
+                {errors.userId && <small role="alert">{errors.userId.message}</small>}
+              </>,
+              <>
+                <div>
+                  <Label children={"비밀번호"} htmlFor="password" />
+                  <input
+                    type={typetoggle}
+                    id="password"
+                    placeholder="********"
+                    tabIndex="2"
+                    maxLength="15"
+                    name="password"
+                    autoComplete="current-password"
+                    aria-invalid={!isDirty ? undefined : errors.password ? "true" : "false"}
+                    {...register("password", {
+                      required: "비밀번호는 필수 입력입니다.",
+                      minLength: {
+                        value: 8,
+                        message: "8자리 이상 15자리 이하로 비밀번호를 사용해주세요.",
+                      },
+                    })}
+                  />
+                  <div className="typechange" type="typechange" onClick={typechange}>
+                    👀
+                  </div>
+                </div>
+                {errors.password && <small role="alert">{errors.password.message}</small>}
+              </>,
+            ]}
           </Table>
           <Button FullWidth size="large" type="submit" tabIndex="3" disabled={isSubmitting}>
             {" "}

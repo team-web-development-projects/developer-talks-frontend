@@ -7,7 +7,11 @@ const Table = ({ children, tableTitle, tableText }) => {
       <h2>{tableTitle}</h2>
       <p>{tableText}</p>
       <ul className={s.userinfoTable}>
-      {children}
+        {children.map((child, index) => (
+          <li key={index}>
+            {child}
+          </li>
+        ))}
       </ul>
     </div>
   );

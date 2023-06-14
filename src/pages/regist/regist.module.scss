@@ -1,47 +1,15 @@
 //테이블 스타일
-.tableAlign {
-  border: 1px solid #000000;
-  border-bottom: 0;
-  border-collapse: collapse;
-  box-sizing: border-box;
 
-  &:nth-last-child(1) {
-    border-bottom: 1px solid black;
-  }
+  // small {
+  //   display: block;
+  //   font-size: 13px;
+  //   color: #f40b0b;
 
-  .errorcheck {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    gap: 10px;
+  //   &.true {
+  //     color: #7ac40c;
+  //   }
+  // }
 
-    input {
-      border-radius: 10px;
-      padding: 15px 5px;
-      width: 80%;
-      font-size: 16px;
-      border: 1px solid #dfdfdf;
-
-      &::placeholder {
-        font-size: 13px;
-      }
-
-      &:focus {
-      border: 1px solid #99a1ff;
-      }
-    }
-  }
-
-  small {
-    display: block;
-    font-size: 13px;
-    color: #f40b0b;
-
-    &.true {
-      color: #7ac40c;
-    }
-  }
-}
 
 .tagalign {
   margin: 20px 0;

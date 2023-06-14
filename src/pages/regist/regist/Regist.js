@@ -32,9 +32,7 @@ const Regist = () => {
     joinableCount: 1,
   });
   const [modal, setModal] = useState(false);
-  const [imageFile, setImageFile] = useState(
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-  );
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [duplicateId, setDuplicateId] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   let [inputEmail, setInputEmail] = useState("");
@@ -86,7 +84,6 @@ const Regist = () => {
       .catch((error) => console.log(error));
   };
   const onSubmit = async (data) => {
-    console.log(verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName);
     await new Promise((r) => setTimeout(r, 1000));
     if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
       //NOTE 버튼 다 클릭하면 실행
@@ -110,43 +107,23 @@ const Regist = () => {
             description: description,
             profileImageId: profileImageId,
           },
-          {
-            headers: {
-              API_HEADER,
-            },
-          }
+          { headers: { API_HEADER } }
         )
-        .then(function (response) {
-          console.log("회원가입 성공:", response);
+        .then(() => {
           axios
-            .post(
-              `${ROOT_API}/sign-in`,
-              {
-                userid: data.userid,
-                password: data.password,
-              },
-              {
-                headers: {
-                  API_HEADER,
-                },
-              }
-            )
-            .then(function (response) {
-              console.log("로그인 성공:", response);
+            .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
+            .then((response) => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              // localStorage.setItem("token", response.data.accessToken);
               localStorage.setItem("refreshToken", response.data.refreshToken);
               setModal(true);
               navigate("/");
               reset();
             })
-            .catch(function (error) {
-              console.log("로그인 실패: ", error.response.data);
+            .catch(() => {
               showToast("error", "😎 로그인 실패되었어요");
             });
         })
-        .catch(function (error) {
-          console.log("회원가입 실패:", error.response);
+        .catch(() => {
           showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
         });
     } else {
@@ -158,7 +135,6 @@ const Regist = () => {
     //NOTE 중복체크 통신//ok
     const type = data;
     const value = watch(data);
-    console.log("넣은 데이터", watch(data));
     axios
       .get(`${ROOT_API}/users/check/${type}/${value}`)
       .then(function (response) {
@@ -169,7 +145,6 @@ const Regist = () => {
             showToast("error", "😎 아이디가 중복되었습니다.");
           } else {
             setDuplicateId(false);
-            console.log(response.data);
           }
         }
         if (type === "nickname") {
@@ -178,12 +153,10 @@ const Regist = () => {
             showToast("error", "😎 닉네임이 중복되었습니다.");
           } else {
             setDuplicateNickName(false);
-            console.log(response.data);
           }
         }
       })
-      .catch(function (error) {
-        console.log("확인 실패:", error.response.data);
+      .catch( ()=> {
         showToast("error", "😎 중복체크를 제대로 확인해주세요");
       });
   };
@@ -191,27 +164,23 @@ const Regist = () => {
   const verityEmail = (e) => {
     //NOTE 이메일 인증//ok
     e.preventDefault();
-    console.log("dc", watch().userEmail);
     axios
       .get(`${ROOT_API}/users/check/email/${watch().userEmail}`) //NOTE 이메일 중복 확인//ok
-      .then(function (response) {
+      .then((response) => {
         if (response.data.duplicated === false) {
           axios
             .get(`${ROOT_API}/email/verify`, {
               params: { email: watch().userEmail },
             })
-            .then(function (response) {
+            .then(() => {
               setVerityEmailcheck(true);
-              setCode(response.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
             })
-            .catch(function (error) {
-              console.log("인증 실패: ", error.response.data);
+            .catch(() => {
               showToast("error", "😎 이메일을 제대로 입력해주세요");
             });
         } else {
           showToast("error", "😎 중복된 이메일입니다.");
-          console.log(response.data);
         }
       });
   };
@@ -306,182 +275,184 @@ const Regist = () => {
         </div>
         <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
-          <li className={s.tableAlign}>
-            <div className={s.errorcheck}>
-              <Label isRequire children={"이메일"} htmlFor="userEmail" />
-              <input
-                type="email"
-                id="userEmail"
-                placeholder="이메일을 입력해주세요"
-                tabIndex="2"
-                {...register("userEmail", {
-                  required: "이메일은 필수 입력입니다.",
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "이메일 형식에 맞지 않습니다.",
-                  },
-                })}
-              />
-              <Button onClick={verityEmail} tabIndex="3">
-                이메일인증
-              </Button>
-            </div>
-            {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
-          </li>
-          <li className={s.tableAlign}>
-            <div className={s.errorcheck}>
-              <Label isRequire children={"이메일 인증"} htmlFor="userEmail" />
-              <input
-                tabIndex="4"
-                type="text"
-                id="userEmail"
-                placeholder="입력해주세요"
-                {...register("username", { required: true })}
-                onChange={handleInputChange}
-              />
-              <Button onClick={compareEmail} tabIndex="5">
-                확인
-              </Button>
-            </div>
-          </li>
-          <li className={s.tableAlign}>
-            <div className={s.errorcheck}>
-              <Label isRequire children={"닉네임"} htmlFor="nickname" />
-              <input
-                type="text"
-                id="nickname"
-                placeholder="닉네임을 입력해주세요"
-                tabIndex="6"
-                ref={nicknameRef}
-                maxLength={15}
-                {...register("nickname", {
-                  required: "닉네임은 필수 입력입니다.",
-                  minLength: {
-                    value: 5,
-                    message: "5자리 이상 입력해주세요.",
-                  },
-                })}
-              />
-              <Button
-                tabIndex="7"
-                title="중복체크"
-                onClick={(e) => {
-                  e.preventDefault();
-                  validateDuplicate("nickname");
-                }}
-              >
-                중복체크
-              </Button>
-            </div>
-            {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
-              <small className="true">사용할 수 있는 닉네임입니다.</small>
-            )}
-          </li>
-          <li className={s.tableAlign}>
-            <div className={s.errorcheck}>
-              <Label isRequire children={"아이디"} htmlFor="userid" />
-              <input
-                type="text"
-                id="userid"
-                placeholder="아이디를 입력해주세요"
-                maxLength={15}
-                ref={useridRef}
-                tabIndex="8"
-                {...register("userid", {
-                  required: "아이디는 필수 입력입니다.",
-                  minLength: {
-                    value: 5,
-                    message: "5자리 이상 아이디를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이하 아이디를 사용해주세요.",
-                  },
-                })}
-              />
-              <Button
-                tabIndex="9"
-                title="중복체크"
-                onClick={(e) => {
-                  e.preventDefault();
-                  validateDuplicate("userid");
-                }}
-              >
-                중복체크
-              </Button>
-            </div>
-            {errors.userid && <small role="alert">{errors.userid.message}</small>}
-            {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-            {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
-          </li>
-          <li className={s.tableAlign}>
-            <div className={s.errorcheck}>
-              <Label isRequire children={"비밀번호"} htmlFor="password" />
-              <input
-                type={typetoggle}
-                id="password"
-                placeholder="최소 1개의 특수문자를 포함해주세요"
-                maxLength={15}
-                tabIndex="10"
-                autoComplete="password"
-                {...register("password", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  minLength: {
-                    value: 8,
-                    message: "8자리 이상 비밀번호를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이히 비밀번호를 사용해주세요.",
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: "특수문자를 포함해주세요",
-                  },
-                })}
-              />
-            </div>
-            {errors.password && <small role="alert">{errors.password.message}</small>}
-          </li>
-          <li className={s.tableAlign}>
-            <div className={s.errorcheck}>
-              <Label isRequire children={"비밀번호 확인"} htmlFor="passwordChk" />
-              <input
-                type={typetoggle}
-                id="passwordChk"
-                placeholder="비밀번호를 한 번 더 입력해주세요"
-                tabIndex="11"
-                maxLength={15}
-                autoComplete="password"
-                {...register("passwordChk", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  minLength: {
-                    value: 8,
-                    message: "8자리 이상 비밀번호를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이히 비밀번호를 사용해주세요.",
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: "특수문자를 포함해주세요",
-                  },
-                  validate: (val) => {
-                    if (watch("password") !== val) {
-                      return "비밀번호가 일치하지 않습니다.";
-                    }
-                  },
-                })}
-              />
-              <div className={s.typechange} type="typechange" onClick={typechange}>
-                👀
+          {[
+            <>
+              <div>
+                <Label isRequire children={"이메일"} htmlFor="userEmail" />
+                <input
+                  type="email"
+                  id="userEmail"
+                  placeholder="이메일을 입력해주세요"
+                  tabIndex="2"
+                  {...register("userEmail", {
+                    required: "이메일은 필수 입력입니다.",
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "이메일 형식에 맞지 않습니다.",
+                    },
+                  })}
+                />
+                <Button onClick={verityEmail} tabIndex="3">
+                  이메일인증
+                </Button>
               </div>
-            </div>
-            {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
-          </li>
+              {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
+            </>,
+            <>
+              <div>
+                <Label isRequire children={"이메일 인증"} htmlFor="userEmail" />
+                <input
+                  tabIndex="4"
+                  type="text"
+                  id="userEmail"
+                  placeholder="입력해주세요"
+                  {...register("username", { required: true })}
+                  onChange={handleInputChange}
+                />
+                <Button onClick={compareEmail} tabIndex="5">
+                  확인
+                </Button>
+              </div>
+            </>,
+            <>
+              <div>
+                <Label isRequire children={"닉네임"} htmlFor="nickname" />
+                <input
+                  type="text"
+                  id="nickname"
+                  placeholder="닉네임을 입력해주세요"
+                  tabIndex="6"
+                  ref={nicknameRef}
+                  maxLength={15}
+                  {...register("nickname", {
+                    required: "닉네임은 필수 입력입니다.",
+                    minLength: {
+                      value: 5,
+                      message: "5자리 이상 입력해주세요.",
+                    },
+                  })}
+                />
+                <Button
+                  tabIndex="7"
+                  title="중복체크"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    validateDuplicate("nickname");
+                  }}
+                >
+                  중복체크
+                </Button>
+              </div>
+              {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+                <small className="true">사용할 수 있는 닉네임입니다.</small>
+              )}
+            </>,
+            <>
+              <div>
+                <Label isRequire children={"아이디"} htmlFor="userid" />
+                <input
+                  type="text"
+                  id="userid"
+                  placeholder="아이디를 입력해주세요"
+                  maxLength={15}
+                  ref={useridRef}
+                  tabIndex="8"
+                  {...register("userid", {
+                    required: "아이디는 필수 입력입니다.",
+                    minLength: {
+                      value: 5,
+                      message: "5자리 이상 아이디를 사용해주세요.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: "15자리 이하 아이디를 사용해주세요.",
+                    },
+                  })}
+                />
+                <Button
+                  tabIndex="9"
+                  title="중복체크"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    validateDuplicate("userid");
+                  }}
+                >
+                  중복체크
+                </Button>
+              </div>
+              {errors.userid && <small role="alert">{errors.userid.message}</small>}
+              {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
+              {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
+            </>,
+            <>
+              <div>
+                <Label isRequire children={"비밀번호"} htmlFor="password" />
+                <input
+                  type={typetoggle}
+                  id="password"
+                  placeholder="최소 1개의 특수문자를 포함해주세요"
+                  maxLength={15}
+                  tabIndex="10"
+                  autoComplete="password"
+                  {...register("password", {
+                    required: "비밀번호는 필수 입력입니다.",
+                    minLength: {
+                      value: 8,
+                      message: "8자리 이상 비밀번호를 사용해주세요.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: "15자리 이히 비밀번호를 사용해주세요.",
+                    },
+                    pattern: {
+                      value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                      message: "특수문자를 포함해주세요",
+                    },
+                  })}
+                />
+              </div>
+              {errors.password && <small role="alert">{errors.password.message}</small>}
+            </>,
+            <>
+              <div>
+                <Label isRequire children={"비밀번호 확인"} htmlFor="passwordChk" />
+                <input
+                  type={typetoggle}
+                  id="passwordChk"
+                  placeholder="비밀번호를 한 번 더 입력해주세요"
+                  tabIndex="11"
+                  maxLength={15}
+                  autoComplete="password"
+                  {...register("passwordChk", {
+                    required: "비밀번호는 필수 입력입니다.",
+                    minLength: {
+                      value: 8,
+                      message: "8자리 이상 비밀번호를 사용해주세요.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: "15자리 이히 비밀번호를 사용해주세요.",
+                    },
+                    pattern: {
+                      value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                      message: "특수문자를 포함해주세요",
+                    },
+                    validate: (val) => {
+                      if (watch("password") !== val) {
+                        return "비밀번호가 일치하지 않습니다.";
+                      }
+                    },
+                  })}
+                />
+                <div className={s.typechange} type="typechange" onClick={typechange}>
+                  👀
+                </div>
+              </div>
+              {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
+            </>,
+          ]}
         </Table>
         <div className="registSubmit">
           <Button FullWidth size="large" type="submit" tabIndex="12" disabled={isSubmitting}>
