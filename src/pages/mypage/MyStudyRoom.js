@@ -44,7 +44,7 @@ const MyStudyRoom = () => {
 
     // 참여중인 스터디룸 리스트
     axios
-      .get(`${ROOT_API}/study-rooms/user`, {
+      .get(`${ROOT_API}/study-rooms/users`, {
         params: { page: currentMyListPage - 1, size: 6 },
         headers: {
           "Content-Type": "application/json",
