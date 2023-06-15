@@ -16,7 +16,7 @@ const CkEditor = ({ form, setForm, placeholder }) => {
         data={form.content}
         onChange={(e, editor) => {
           const data = editor.getData();
-          setForm({ ...form, ["content"]: data });
+          setForm({ ...form, content: data });
         }}
       />
     </>
