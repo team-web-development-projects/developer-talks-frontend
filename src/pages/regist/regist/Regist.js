@@ -32,7 +32,9 @@ const Regist = () => {
     joinableCount: 1,
   });
   const [modal, setModal] = useState(false);
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [imageFile, setImageFile] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+  );
   const [duplicateId, setDuplicateId] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   let [inputEmail, setInputEmail] = useState("");
@@ -255,7 +257,11 @@ const Regist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+              >
                 {item}
               </span>
             ))}
@@ -278,7 +284,9 @@ const Regist = () => {
           {[
             <>
               <div>
-                <Label isRequire children={"이메일"} htmlFor="userEmail" />
+                <Label isRequire htmlFor="userEmail">
+                  이메일
+                </Label>
                 <input
                   type="email"
                   id="userEmail"
@@ -344,7 +352,9 @@ const Regist = () => {
                 </Button>
               </div>
               {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+                <small className="alert">중복된 닉네임입니다.</small>
+              )}
               {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
                 <small className="true">사용할 수 있는 닉네임입니다.</small>
               )}
@@ -384,7 +394,9 @@ const Regist = () => {
               </div>
               {errors.userid && <small role="alert">{errors.userid.message}</small>}
               {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-              {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
+              {duplicateId !== "" && duplicateId === false && (
+                <small className="true">사용할 수 있는 아이디입니다.</small>
+              )}
             </>,
             <>
               <div>
