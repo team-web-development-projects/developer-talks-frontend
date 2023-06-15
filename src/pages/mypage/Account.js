@@ -54,9 +54,6 @@ function Account() {
       .then(({ data }) => {
         console.log("cc정보 성공:", data);
         setUserData(data);
-        setSelectedTags({ ...selectedTags, tags: data.skills });
-        console.log(data.skills);
-        console.log(selectedTags, "ssss");
       })
       .catch(function (error) {
         console.log("cc정보:실패 ", error.response);
@@ -90,30 +87,30 @@ function Account() {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
 
-    //   axios
-    //     .put(`${ROOT_API}/users/profile/description`, userData.description, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "X-AUTH-TOKEN": auth.accessToken,
-    //       },
-    //     })
-    //     .then(function (data) {
-    //       console.log(data);
-    //     })
-    //     .catch((error) => console.log(error));
+    axios
+      .put(`${ROOT_API}/users/profile/description`, userData.description, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(function (data) {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
   };
 
-  // axios
-  // .put(`${ROOT_API}/users/profile/skill`, userData.skills, {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "X-AUTH-TOKEN": auth.accessToken,
-  //   },
-  // })
-  // .then(function (data) {
-  //   console.log(data);
-  // })
-  // .catch((error) => console.log(error));
+  axios
+    .put(`${ROOT_API}/users/profile/skill`, userData.skills, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    })
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
   // };
 
   // "{skills: [DJANGO, AWS]}";

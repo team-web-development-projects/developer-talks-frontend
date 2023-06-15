@@ -64,7 +64,7 @@ const Userregist = () => {
             },
           }
         )
-        .then((response) => {
+        .then( (response)=> {
           setModal(true);
           // if (autoLogin) {
           //NOTE 자동로그인
@@ -75,7 +75,7 @@ const Userregist = () => {
           reset();
           // }
         })
-        .catch(() => {
+        .catch( ()=> {
           showToast("error", "😎 로그인 실패되었어요");
         });
     } else {
@@ -144,7 +144,7 @@ const Userregist = () => {
     const value = watch(data);
     axios
       .get(`${ROOT_API}/users/check/${type}/${value}`)
-      .then((response) => {
+      .then( (response)=> {
         if (type === "nickname") {
           if (response.data.duplicated === true) {
             setDuplicateNickName(true);
@@ -154,7 +154,7 @@ const Userregist = () => {
           }
         }
       })
-      .catch(() => {
+      .catch( ()=> {
         showToast("error", "😎 중복체크를 제대로 확인해주세요");
       });
   };

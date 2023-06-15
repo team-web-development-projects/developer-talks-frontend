@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
 import s from "./mypage.module.scss";
-import Pagination from "components/pagination/Pagination";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -109,7 +108,7 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite === undefined || favorite.length === 0 ? (
-                <>내용이 없습니다</>
+                contacts.index == 0 
               ) : (
                 favorite.map((item, index) => (
                   <div key={index} className={s.userdata}>
@@ -146,7 +145,6 @@ const Mypage = ({ type }) => {
                 ))
               )}
             </div>
-            {/* <Pagination currentPage={data.pageable.pageNumber + 1} totalPage={data.totalPages} paginate={setCurrentPage} /> */}
           </section>
         </MypageContent>
       ) : null}
