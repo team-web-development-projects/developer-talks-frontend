@@ -8,9 +8,7 @@ const Table = ({ children, tableTitle, tableText }) => {
       <p>{tableText}</p>
       <ul className={s.userinfoTable}>
         {children.map((child, index) => (
-          <li key={index}>
-            {child}
-          </li>
+          <li key={index}>{child}</li>
         ))}
       </ul>
     </div>
