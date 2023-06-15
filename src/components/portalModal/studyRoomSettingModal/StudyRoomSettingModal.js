@@ -23,7 +23,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
 
   const deleteRoom = () => {
     axios
-      .delete(`${ROOT_API}/study-room/${data.id}`, {
+      .delete(`${ROOT_API}/study-rooms/${data.id}`, {
         headers: {
           "X-AUTH-TOKEN": auth.accessToken,
         },
@@ -39,7 +39,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
 
     axios
       .put(
-        `${ROOT_API}/study-room/${id}`,
+        `${ROOT_API}/study-rooms/${id}`,
         {
           title: indata.title,
           content: indata.content,

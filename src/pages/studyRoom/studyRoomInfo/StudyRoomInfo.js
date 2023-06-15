@@ -28,7 +28,7 @@ const StudyRoomInfo = () => {
   const requestRoom = () => {
     axios
       .post(
-        `${ROOT_API}/study-room/join/${postId}`,
+        `${ROOT_API}/study-rooms/join/${postId}`,
         {
           id: postId,
         },
@@ -68,7 +68,7 @@ const StudyRoomInfo = () => {
   };
 
   async function getInfo() {
-    const { data } = await axios.get(`${ROOT_API}/study-room/${postId}`, {
+    const { data } = await axios.get(`${ROOT_API}/study-rooms/${postId}`, {
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,

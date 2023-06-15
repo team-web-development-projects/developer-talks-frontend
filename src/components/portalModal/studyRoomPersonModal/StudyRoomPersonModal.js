@@ -16,7 +16,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
   const getOut = (nickname) => {
     // 정말 내보낼지 확인하기
     axios
-      .delete(`${ROOT_API}/study-room/expel/${roomId}/${nickname}`, {
+      .delete(`${ROOT_API}/study-rooms/expel/${roomId}/${nickname}`, {
         params: {
           studyRoomId: roomId,
           nickname: nickname,
@@ -36,7 +36,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
   // 방나가기
   const selfOut = () => {
     axios
-      .delete(`${ROOT_API}/study-room/exit/${roomId}`, {
+      .delete(`${ROOT_API}/study-rooms/exit/${roomId}`, {
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,

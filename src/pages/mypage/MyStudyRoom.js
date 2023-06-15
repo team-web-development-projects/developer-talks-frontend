@@ -74,7 +74,7 @@ const MyStudyRoom = () => {
     console.log(`${studyRoomId}, ${studyRoomUserId}`);
     axios
       .post(
-        `${ROOT_API}/study-room/accept/${studyRoomId}/${studyRoomUserId}`,
+        `${ROOT_API}/study-rooms/accept/${studyRoomId}/${studyRoomUserId}`,
         {
           studyRoomId: studyRoomId,
           studyRoomUserId: studyRoomUserId,

@@ -33,7 +33,7 @@ const StudyRoomDetqil = () => {
   useEffect(() => {
     axios
       .get(
-        `${ROOT_API}/study-room/${postId}`,
+        `${ROOT_API}/study-rooms/${postId}`,
         {
           headers: {
             "Content-Type": "application/json",
