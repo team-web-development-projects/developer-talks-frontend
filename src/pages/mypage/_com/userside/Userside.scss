@@ -8,10 +8,6 @@
   top: 0;
 }
 
-.active {
-  background-color: #ffffff;
-}
-
 .side {
   max-width: 300px;
   width: 35%;
@@ -46,21 +42,21 @@
     // box-sizing: border-box;
   }
 
-  ul {
+  .nav {
     margin-left: 0;
     padding-left: 0;
 
     li {
-      padding: 20px;
-      list-style: none;
-
       &:hover {
         background-color: #ffffff;
       }
-
       a {
         display: block;
+        padding: 20px;
       }
     }
   }
+}
+.is-active {
+  background-color: #ffffff;
 }

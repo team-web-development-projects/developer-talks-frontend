@@ -55,16 +55,18 @@
           }
         }
       }
-      small { //NOTE 스타일 적용
+
+      small {
+        //NOTE 스타일 적용
         display: block;
         font-size: 13px;
         color: #f40b0b;
-    
+
         &.true {
           color: #7ac40c;
         }
       }
     }
-    
+
   }
 }

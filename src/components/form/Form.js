@@ -1,13 +1,11 @@
 import React from "react";
 import "./form.scss";
 
-const Form = ({ children, onSubmit }) => {
+const Form = ({ children, onSubmit, White }) => {
   return (
-    <div>
-      <form onSubmit={onSubmit} className="user-form">
+      <form onSubmit={onSubmit} className={`form ${White ? '' : 'gray'}`}>
         {children}
       </form>
-    </div>
   );
 };
 
