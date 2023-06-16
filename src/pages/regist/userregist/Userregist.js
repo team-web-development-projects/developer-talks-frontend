@@ -1,7 +1,7 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
-import { Label } from "components/label/Label";
+import  Label  from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Table from "components/table/Table";
@@ -228,12 +228,12 @@ const Userregist = () => {
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           {[
             <div>
-              <Label children={"이메일"} htmlFor="userEmail" />
+              <Label htmlFor="userEmail" >이메일</Label>
               <input id="userEmail" className="disable" type="text" placeholder={userEmail} readOnly />
             </div>,
             <>
               <div>
-                <Label isRequire children={"닉네임"} htmlFor="nickname" />
+                <Label isRequire htmlFor="nickname" >닉네임</Label>
                 <input
                   type="text"
                   id="nickname"

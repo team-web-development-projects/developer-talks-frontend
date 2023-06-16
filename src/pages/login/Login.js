@@ -1,7 +1,7 @@
 import axios from "axios";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
-import { Label } from "components/label/Label";
+import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Snslogin from "components/snsLogin/Snslogin";
@@ -85,7 +85,7 @@ const Login = () => {
             {[
               <>
                 <div>
-                  <Label children={"아이디"} htmlFor="userId" />
+                  <Label htmlFor="userId">아이디</Label>
                   <input
                     type="text"
                     id="userId"
@@ -108,7 +108,7 @@ const Login = () => {
               </>,
               <>
                 <div>
-                  <Label children={"비밀번호"} htmlFor="password" />
+                  <Label htmlFor="password">비밀번호</Label>
                   <input
                     type={typetoggle}
                     id="password"

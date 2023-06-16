@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
 import { AuthTitle, GaiderTitle } from "components/title/Title";
-import { Label } from "components/label/Label";
+import  Label  from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import Table from "components/table/Table";
 import Button from "components/button/Button";
@@ -278,7 +278,7 @@ const Regist = () => {
           {[
             <>
               <div>
-                <Label isRequire children={"이메일"} htmlFor="userEmail" />
+                <Label isRequire htmlFor="userEmail" >이메일</Label>
                 <input
                   type="email"
                   id="userEmail"
@@ -300,7 +300,7 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire children={"이메일 인증"} htmlFor="userEmail" />
+                <Label isRequire htmlFor="userEmail" >이메일 인증증</Label>
                 <input
                   tabIndex="4"
                   type="text"
@@ -316,7 +316,7 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire children={"닉네임"} htmlFor="nickname" />
+                <Label isRequire htmlFor="nickname" >닉네임</Label>
                 <input
                   type="text"
                   id="nickname"
@@ -351,7 +351,7 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire children={"아이디"} htmlFor="userid" />
+                <Label isRequire htmlFor="userid" >아이디</Label>
                 <input
                   type="text"
                   id="userid"
@@ -388,7 +388,7 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire children={"비밀번호"} htmlFor="password" />
+                <Label isRequire htmlFor="password" >비밀번호</Label>
                 <input
                   type={typetoggle}
                   id="password"
@@ -417,7 +417,7 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire children={"비밀번호 확인"} htmlFor="passwordChk" />
+                <Label isRequire htmlFor="passwordChk" >비밀번호 확인</Label>
                 <input
                   type={typetoggle}
                   id="passwordChk"

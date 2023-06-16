@@ -1,9 +1,9 @@
 import React from "react";
 import s from "./label.module.scss";
 
-const Label = ({ children, isRequire }) => {
+const Label = ({ children, isRequire, ...rest }) => {
   return (
-    <label className={s.label}>
+    <label {...rest} className={s.label}>
       {children}
       {isRequire && (
         <span className={s.isRequire} title="필수사항">
@@ -14,4 +14,4 @@ const Label = ({ children, isRequire }) => {
   );
 };
 
-export {Label};
+export default Label;

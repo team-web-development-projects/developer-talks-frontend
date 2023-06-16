@@ -8,7 +8,7 @@ import axios from "axios";
 import s from "./account.module.scss";
 import LineStyle from "components/lineStyle/LineStyle";
 import Table from "components/table/Table";
-import { Label } from "components/label/Label";
+import Label from "components/label/Label";
 
 // import { useNavigate } from 'react-router-dom';
 
@@ -164,24 +164,34 @@ function Account() {
             <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
               {[
                 <div>
-                  <Label isRequire children={"이메일"} htmlFor="userEmail" />
+                  <Label isRequire htmlFor="userEmail">
+                    이메일
+                  </Label>
                   <input id="userEmail" name="email" value={userData.email} onChange={handleChange} type="text" />
                 </div>,
                 <div>
-                  <Label isRequire children={"아이디"} htmlFor="userid" />
+                  <Label isRequire htmlFor="userid">
+                    아이디
+                  </Label>
                   <input id="userid" name="userid" value={userData.userid} onChange={handleChange} type="text" />
                 </div>,
                 <div>
-                  <Label isRequire children={"닉네임"} htmlFor="nickname" />
+                  <Label isRequire htmlFor="nickname">
+                    닉네임
+                  </Label>
                   <input id="nickname" name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
                   <Button>중복확인</Button>
                 </div>,
                 <div>
-                  <Label isRequire children={"비밀번호"} htmlFor="password" />
+                  <Label isRequire htmlFor="password">
+                    비밀번호
+                  </Label>
                   <input id="password" name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                 </div>,
                 <div>
-                  <Label isRequire children={"비밀번호 확인"} htmlFor="passwordChk" />
+                  <Label isRequire htmlFor="passwordChk">
+                    비밀번호 확인
+                  </Label>
                   <input id="passwordChk" name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
                   {/* <div className={s.typechange} type="typechange" onClick={typechange}> */}
                   {/* 👀 */}
