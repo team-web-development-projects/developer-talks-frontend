@@ -4,7 +4,7 @@ import FormUserGuide from "components/form/FormUserGuide";
 import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import Snslogin from "components/snsLogin/Snslogin";
+import { LoginGoogle, LoginKakao, LoginNaver, Snslogin } from "components/snsLogin/Snslogin";
 import { Title } from "components/title/Title";
 import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
@@ -49,7 +49,11 @@ const Login = () => {
         reset();
       })
       .catch(function (error) {
-        showToast("error", "😎 정보를 다시 입력해주세요(회원정보가 없는 것일 수 있습니다.)");
+        showToast("error", () => (
+          <div>
+            😎 정보를 다시 입력해주세요 <br /> (회원정보가 없는 것일 수 있습니다.)
+          </div>
+        ));
       });
   };
   const typechange = () => {
@@ -69,7 +73,6 @@ const Login = () => {
 
   return (
     <>
-      <ToastCont />
       {modal && (
         <BasicModal setOnModal={() => setModal(false)} dimClick={() => navigate("/")}>
           로그인이 완료되었습니다. <br />
@@ -141,7 +144,11 @@ const Login = () => {
         </fieldset>
         <br />
         <LineStyle gray text={"SNS 로그인"} />
-        <Snslogin />
+
+        <Snslogin>
+          <LoginGoogle />
+          <LoginNaver />
+        </Snslogin>
       </Form>
       <FormUserGuide />
     </>

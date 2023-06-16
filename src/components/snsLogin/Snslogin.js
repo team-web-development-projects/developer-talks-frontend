@@ -1,6 +1,6 @@
 import s from "./snslogin.module.scss";
 
-const LoginGoogle = () => {
+export const LoginGoogle = () => {
   const open = async () => {
     await new Promise((r) => setTimeout(r, 1000));
     window.open("https://dtalks-api.site/oauth2/authorization/google", "_self");
@@ -14,7 +14,7 @@ const LoginGoogle = () => {
   );
 };
 
-const LoginKakao = () => {
+export const LoginKakao = () => {
   const open = async () => {
     await new Promise((r) => setTimeout(r, 1000));
     window.location.href = `http://localhost:8080/oauth2/authorization/kakao`;
@@ -28,7 +28,7 @@ const LoginKakao = () => {
   );
 };
 
-const LoginNaver = () => {
+export const LoginNaver = () => {
   const open = async () => {
     await new Promise((r) => setTimeout(r, 1000));
     window.location.href = `http://localhost:8080/oauth2/authorization/google`;
@@ -42,13 +42,16 @@ const LoginNaver = () => {
   );
 };
 
-const Snslogin = () => {
+export const Snslogin = ({ children }) => {
   return (
     // 스타일 적용 필요
-    <div className={s.snswrap}> 
-      <LoginGoogle />
-      <LoginNaver />
-      <LoginKakao />
+    <div className={s.snswrap}>
+      {children}
+      {/*
+    <LoginGoogle />
+    <LoginNaver />
+    <LoginKakao />
+  */}
     </div>
   );
 };

@@ -25,6 +25,7 @@ import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import { setRefreshToken } from "store/Cookie";
 import { parseJwt } from "hooks/useParseJwt";
+import { ToastCont } from "components/toast/ToastCont";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
@@ -126,6 +127,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastCont />
       <Routes>
         {/* */}
         <Route path="/" element={<NavigateMain />}>
