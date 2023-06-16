@@ -149,6 +149,7 @@ const Login = () => {
         <Snslogin>
           <LoginGoogle />
           <LoginNaver />
+          <LoginKakao />
         </Snslogin>
       </Form>
       <FormUserGuide />
