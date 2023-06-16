@@ -5,8 +5,6 @@ import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { LoginGoogle, LoginKakao, LoginNaver, Snslogin } from "components/snsLogin/Snslogin";
-import { Title } from "components/title/Title";
-import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { useState } from "react";
@@ -83,7 +81,10 @@ const Login = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           <legend>로그인페이지</legend>
-          <Title />
+          <p className={s.title}>
+            Developer-Talks 가입으로
+            <br /> 다양한 사람들을 만나보세요!
+          </p>
           <Table tableTitle={"Developer-Talks"} tableText={"계정로그인"}>
             {[
               <>

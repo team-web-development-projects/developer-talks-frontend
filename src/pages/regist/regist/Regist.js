@@ -1,7 +1,6 @@
 import axios from "axios";
 import Form from "components/form/Form";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { useRef, useState } from "react";
@@ -10,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
-import { AuthTitle, GaiderTitle } from "components/title/Title";
 import  Label  from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import Table from "components/table/Table";
@@ -226,7 +224,6 @@ const Regist = () => {
 
   return (
     <>
-      <ToastCont />
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
@@ -236,7 +233,10 @@ const Regist = () => {
       )}
       <Form White onSubmit={handleSubmit(onSubmit)}>
         <legend>정보입력</legend>
-        <AuthTitle authlogins={authlogins} />
+        <div className={s.headername}>
+          <p>{authlogins} 계정 회원가입</p>
+          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
+        </div>
         <div className={s.prople}>
           <div className={s.imgwrap}>
             {imageFile && <img src={imageFile} alt="프로필이미지" />}
@@ -252,16 +252,22 @@ const Regist = () => {
           버튼
         </button>
         <span>프로필 이미지 선택☝️</span>
-        <GaiderTitle />
+        <div className={s.gaider}>
+          <span>🙏추가 안내</span>
+          <ul>
+            <li>
+              <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
+            </li>
+            <li>
+              <span>디톡스</span>를 이용한 프로필 변경은 여기를 참고해주세요.
+            </li>
+          </ul>
+        </div>
         <label>관심있는 태그입력</label>
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span
-                key={index}
-                onClick={() => clickTag(item)}
-                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
-              >
+              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
                 {item}
               </span>
             ))}
@@ -308,7 +314,9 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire htmlFor="userEmail" >이메일 인증증</Label>
+                <Label isRequire htmlFor="userEmail">
+                  이메일 인증증
+                </Label>
                 <input
                   tabIndex="4"
                   type="text"
@@ -324,7 +332,9 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire htmlFor="nickname" >닉네임</Label>
+                <Label isRequire htmlFor="nickname">
+                  닉네임
+                </Label>
                 <input
                   type="text"
                   id="nickname"
@@ -352,16 +362,16 @@ const Regist = () => {
                 </Button>
               </div>
               {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
-                <small className="alert">중복된 닉네임입니다.</small>
-              )}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
               {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
                 <small className="true">사용할 수 있는 닉네임입니다.</small>
               )}
             </>,
             <>
               <div>
-                <Label isRequire htmlFor="userid" >아이디</Label>
+                <Label isRequire htmlFor="userid">
+                  아이디
+                </Label>
                 <input
                   type="text"
                   id="userid"
@@ -394,13 +404,13 @@ const Regist = () => {
               </div>
               {errors.userid && <small role="alert">{errors.userid.message}</small>}
               {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-              {duplicateId !== "" && duplicateId === false && (
-                <small className="true">사용할 수 있는 아이디입니다.</small>
-              )}
+              {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
             </>,
             <>
               <div>
-                <Label isRequire htmlFor="password" >비밀번호</Label>
+                <Label isRequire htmlFor="password">
+                  비밀번호
+                </Label>
                 <input
                   type={typetoggle}
                   id="password"
@@ -429,7 +439,9 @@ const Regist = () => {
             </>,
             <>
               <div>
-                <Label isRequire htmlFor="passwordChk" >비밀번호 확인</Label>
+                <Label isRequire htmlFor="passwordChk">
+                  비밀번호 확인
+                </Label>
                 <input
                   type={typetoggle}
                   id="passwordChk"

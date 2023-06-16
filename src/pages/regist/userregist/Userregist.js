@@ -5,8 +5,6 @@ import  Label  from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Table from "components/table/Table";
-import { AuthTitle, GaiderTitle } from "components/title/Title";
-import { ToastCont } from "components/toast/ToastCont";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
@@ -177,7 +175,6 @@ const Userregist = () => {
 
   return (
     <div className="userregistname">
-      <ToastCont />
       {modal && (
         <BasicModal setOnModal={() => setModal()}>
           회원가입이 완료되었습니다. <br />
@@ -186,7 +183,10 @@ const Userregist = () => {
         </BasicModal>
       )}
       <Form White className="registIDform" onSubmit={handleSubmit(onSubmit)}>
-        <AuthTitle authlogins={authlogins} />
+        <div className={s.headername}>
+          <p>{authlogins} 계정 회원가입</p>
+          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
+        </div>
         <div className={s.prople}>
           <div className={s.imgwrap}>
             {imageFile && <img src={imageFile} alt="프로필이미지" />}
@@ -196,13 +196,22 @@ const Userregist = () => {
         <button
           onClick={(e) => {
             e.preventDefault();
-            // propileSubmit();
           }}
         >
           버튼
         </button>
         <span>프로필 이미지 선택☝️</span>
-        <GaiderTitle />
+        <div className={s.gaider}>
+          <span>🙏추가 안내</span>
+          <ul>
+            <li>
+              <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
+            </li>
+            <li>
+              <span>디톡스</span>를 이용한 프로필 변경은 여기를 참고해주세요.
+            </li>
+          </ul>
+        </div>
         <label>관심있는 태그입력</label>
         <div className={s.tagalign}>
           <div className={s.tags}>
@@ -228,12 +237,14 @@ const Userregist = () => {
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           {[
             <div>
-              <Label htmlFor="userEmail" >이메일</Label>
+              <Label htmlFor="userEmail">이메일</Label>
               <input id="userEmail" className="disable" type="text" placeholder={userEmail} readOnly />
             </div>,
             <>
               <div>
-                <Label isRequire htmlFor="nickname" >닉네임</Label>
+                <Label isRequire htmlFor="nickname">
+                  닉네임
+                </Label>
                 <input
                   type="text"
                   id="nickname"
