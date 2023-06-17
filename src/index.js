@@ -2,23 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 // import { HashRouter } from "react-router-dom";
 import {
-  unstable_HistoryRouter as Router,
-  BrowserRouter,
+  BrowserRouter
 } from "react-router-dom";
 import App from "./App";
-import history from "./hooks/useHistory";
 // import "./index.scss";
 // import './assets/style/index.scss';
+import { CookiesProvider } from "react-cookie";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import reportWebVitals from "./reportWebVitals";
-
-import store from "./store";
 import { Provider } from "react-redux";
-import { CookiesProvider } from "react-cookie";
-import { GOOGLE_ID } from "constants/api";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { isDev } from "util/Util";
+import reportWebVitals from "./reportWebVitals";
+import store from "./store";
 
 const queryClient = new QueryClient({
   defaultOptions: {
