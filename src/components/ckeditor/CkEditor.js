@@ -14,10 +14,10 @@ const CkEditor = ({ form, setForm, placeholder }) => {
           loader.file.then((file) => {
             formData.append("file", file);
             console.log("dd", file.name, formData);
-            // setForm((prevForm) => ({
-            //   ...prevForm,
-            //   files: [...prevForm.files, 111]
-            // }));
+            setForm((prevForm) => ({
+              ...prevForm,
+              files: [...prevForm.files, file.name]
+            }));
             // setForm({
             //   ...form, ['files']: formData.name
             // })

@@ -15,6 +15,7 @@ export default function BoardPost({ type }) {
   const [form, setForm] = useState({
     title: "",
     content: "",
+    files: [],
   });
   const [getType, setGetType] = useState();
 
@@ -31,25 +32,32 @@ export default function BoardPost({ type }) {
     }
   }, [type]);
 
+  console.log('ff', form.files);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
     console.log(`
             제목: ${form.title}
             내용: ${form.content}
+            이미지 : ${form.files}
         `);
 
-    console.log('post auth', auth.accessToken);
+    console.log("post auth", auth.accessToken);
     axios
       .post(
         `${ROOT_API}/${type}`,
         {
-          title: form.title,
-          content: form.content,
+          postDto: {
+            title: form.title,
+            content: form.content,
+          },
+          files: form.files,
         },
         {
           headers: {
             "Content-Type": "application/json",
+            // "Content-Type": "multipart/form-data",
             "X-AUTH-TOKEN": auth.accessToken,
           },
         }
@@ -69,10 +77,7 @@ export default function BoardPost({ type }) {
   return (
     <>
       {modal && (
-        <BasicModal
-          setOnModal={() => setModal()}
-          dimClick={() => navigate(`/${getType}`)}
-        >
+        <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/${getType}`)}>
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.
           <button onClick={() => navigate(`/${getType}`)}>확인</button>
@@ -90,11 +95,7 @@ export default function BoardPost({ type }) {
           />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
-            <CkEditor
-              form={form}
-              setForm={setForm}
-              placeholder={"내용을 입력해주세요."}
-            />
+            <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
           </div>
           <div className={s.btnRgn}>
             <Link to="/board" className={s.cancel}>
