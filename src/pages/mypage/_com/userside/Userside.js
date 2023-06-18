@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./Userside.scss";
 
 const Userside = () => {
+  const auth = useSelector((state) => state.authToken).accessToken;
   const [isActive, setIsActive] = useState("mypage");
   const [imageFile, setImageFile] = useState("");
   const location = useLocation();
@@ -19,45 +20,23 @@ const Userside = () => {
   const handleClick = (value) => {
     setIsActive(value);
   };
+
+  const userinfo = parseJwt(auth);
   useEffect(() => {
     axios
       .get(`${ROOT_API}/users/profile/image`, {
         headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
+          "X-AUTH-TOKEN": auth,
         },
       })
       .then(function (response) {
         console.log("정보 성공:", response);
-        // setImageFile(response.data);
+        setImageFile(response.data.url);
       })
       .catch(function (error) {
         console.log("정보:실패 ", error.response);
       });
-  }, []);
-
-  const auth = useSelector((state) => state.authToken).accessToken;
-  const userinfo = parseJwt(auth);
-
-  const changeProfileImg = (e) => {
-    if (e.target.files) {
-      const formData = new FormData();
-      formData.append("file", e.target.files[0]);
-
-      axios
-        .post(`${ROOT_API}/users/profile/image`, formData, {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "multipart/form-data",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => console.log(error));
-    }
-  };
+  }, [auth.accessToken]);
 
   return (
     <>
@@ -65,7 +44,7 @@ const Userside = () => {
       <section className="side">
         <div className="imgwrap">
           <img src={imageFile} alt="" />
-          <input type="file" name="" id="" onChange={changeProfileImg} />
+          <input type="file" name="" id="" />
         </div>
         <ul className="nav">
           <li className={location.pathname === "/mypage" && "is-active"} onClick={() => handleClick("mypage")}>

@@ -109,7 +109,7 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite === undefined || favorite.length === 0 ? (
-                <>내용이 없습니다</>
+                <>{contacts.contact}내용이 없습니다</>// 수정필요
               ) : (
                 favorite.map((item, index) => (
                   <div key={index} className={s.userdata}>

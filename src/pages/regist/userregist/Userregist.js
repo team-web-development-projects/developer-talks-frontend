@@ -1,12 +1,12 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
-import  Label  from "components/label/Label";
+import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
-import { API_HEADER, ROOT_API } from "constants/api";
+import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,7 +28,6 @@ const Userregist = () => {
     joinableCount: 1,
   });
   const nicknameRef = useRef(null);
-  const profileRef = useRef(null);
   const [modal, setModal] = useState(false);
   const [description, setDescription] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -37,44 +36,68 @@ const Userregist = () => {
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
   };
-
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleChangeProfileImage = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    const imageUrl = URL.createObjectURL(file);
+    setImageFile(imageUrl);
+  };
+  const [profileImageId, setProfileImageId] = useState("");
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
+    if (!selectedImage) {
+      return;
+    }
+    console.log(selectedImage);
+    const formData = new FormData();
+    formData.append("file", selectedImage);
     if (duplicateNickName === false) {
-      console.log(`
+      axios
+        .post(`${ROOT_API}/users/profile/image`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            accept: "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          setProfileImageId(response.data.id);
+          console.log(`
       nickname: ${data.nickname},
       skills: ${selectedTags.tags},
       description: ${description},
       profileImageId: ${profileImageId}`);
-      axios
-        .put(
-          `${ROOT_API}/oauth/sign-up`,
-          {
-            nickname: data.nickname,
-            skills: selectedTags.tags,
-            description: description,
-            profileImageId: profileImageId,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
-            },
-          }
-        )
-        .then((response) => {
-          setModal(true);
-          // if (autoLogin) {
-          //NOTE 자동로그인
-          localStorage.removeItem("authAtk");
-          localStorage.setItem("refreshToken", response.data.refreshToken);
-          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-          navigate("/");
-          reset();
-          // }
-        })
-        .catch(() => {
-          showToast("error", "😎 로그인 실패되었어요");
+          axios
+            .put(
+              `${ROOT_API}/oauth/sign-up`,
+              {
+                nickname: data.nickname,
+                skills: selectedTags.tags,
+                description: description,
+                profileImageId: profileImageId,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
+                },
+              }
+            )
+            .then((response) => {
+              setModal(true);
+              // if (autoLogin) {
+              //NOTE 자동로그인
+              localStorage.removeItem("authAtk");
+              localStorage.setItem("refreshToken", response.data.refreshToken);
+              dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+              navigate("/");
+              reset();
+              // }
+            })
+            .catch(() => {
+              showToast("error", "😎 로그인 실패되었어요");
+            });
         });
     } else {
       showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
@@ -109,32 +132,6 @@ const Userregist = () => {
     watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
-
-  const [profileImageId, setProfileImageId] = useState("");
-  // const propileSubmit = async (data) => {
-  //   try {
-  //     if (profileRef.current && profileRef.current.files && profileRef.current.files.length > 0) {
-  //       const formData = new FormData(); //NOTE 프로필 이미지
-  //       formData.append("file", profileRef.current.files[0]);
-  //       const response = await axios.post(`${ROOT_API}/users/profile/image`, formData, {
-  //         headers: {
-  //           "X-AUTH-TOKEN": auth.accessToken,
-  //           "Content-Type": "multipart/form-data",
-  //           accept: "application/json",
-  //         },
-  //       });
-  //       console.log(response.data, "dfd,,,fd");
-  //       console.log(formData, "dfdfd");
-  //       setProfileImageId(response.data.id);
-  //     } else {
-  //       console.log("파일을 선택해주세요.");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const inputRef = useRef(null);
 
   const validateDuplicate = (data) => {
     //NOTE 중복체크 통신//ok
@@ -190,7 +187,7 @@ const Userregist = () => {
         <div className={s.prople}>
           <div className={s.imgwrap}>
             {imageFile && <img src={imageFile} alt="프로필이미지" />}
-            <input accept="image/*" ref={profileRef} type="file" name="프로필이미지" id="profile" />
+            <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
           </div>
         </div>
         <button

@@ -1,18 +1,18 @@
 import axios from "axios";
+import Button from "components/button/Button";
 import Form from "components/form/Form";
+import Label from "components/label/Label";
+import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
-import  Label  from "components/label/Label";
-import LineStyle from "components/lineStyle/LineStyle";
-import Table from "components/table/Table";
-import Button from "components/button/Button";
 
 axios.defaults.withCredentials = true;
 
@@ -23,33 +23,34 @@ const Regist = () => {
   const useridRef = useRef(null);
   const nicknameRef = useRef(null);
   const [description, setDescription] = useState("");
-  const profileRef = useRef(null);
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
     joinableCount: 1,
   });
   const [modal, setModal] = useState(false);
-  const [imageFile, setImageFile] = useState(
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-  );
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [duplicateId, setDuplicateId] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
-  let [inputEmail, setInputEmail] = useState("");
+  const [inputEmail, setInputEmail] = useState("");
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [profileImageId, setProfileImageId] = useState("");
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
   };
-  const changeprofileImageId = (e) => {
-    const file = e.target.files[0];
+  const handleChangeProfileImage = (event) => {
+    const file = event.target.files[0];
     setSelectedImage(file);
+    const imageUrl = URL.createObjectURL(file);
+    setImageFile(imageUrl);
   };
+
   const {
     register,
     handleSubmit,
@@ -57,75 +58,72 @@ const Regist = () => {
     watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
-  const [profileImageId, setProfileImageId] = useState("");
-  const formData = new FormData();
-  formData.append("image", selectedImage);
-  // const propileSubmit = () => {
-  const propileSubmit = async () => {
-    await new Promise((r) => setTimeout(r, 1000));
 
-    axios
-      .post(
-        `${ROOT_API}/users/profile/image`,
-        formData,
-        {
-          id: selectedImage,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => console.log(error));
-  };
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
+    if (!selectedImage) {
+      return;
+    }
+    console.log(selectedImage);
+    const formData = new FormData();
+    formData.append("file", selectedImage);
+
     if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
+    axios
+      .post(`${ROOT_API}/users/profile/image`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setProfileImageId(response.data.id);
+        console.log(`
+    email: ${data.userEmail},
+    nickname: ${data.nickname},
+    userid: ${data.userid},
+    password: ${data.password},
+    skills: ${selectedTags.tags},
+    description: ${description},
+    profileImageId: ${profileImageId}`);
+        axios
+          .post(
+            `${ROOT_API}/sign-up`,
+            {
+              email: data.userEmail,
+              nickname: data.nickname,
+              userid: data.userid,
+              password: data.password,
+              skills: selectedTags.tags,
+              description: description,
+              profileImageId: response.data.id,
+            },
+            { headers: { API_HEADER } }
+          )
+          .then(() => {
+            axios
+              .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
+              .then((response) => {
+                dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+                localStorage.setItem("refreshToken", response.data.refreshToken);
+                setModal(true);
+                navigate("/");
+                reset();
+              })
+              .catch(() => {
+                showToast("error", "😎 로그인 실패되었어요");
+              });
+          })
+          .catch(() => {
+            showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
+          });
+
+
+
+      })
+      .catch((error) => console.log(error));
       //NOTE 버튼 다 클릭하면 실행
-      console.log(`
-  email: ${data.userEmail},
-  nickname: ${data.nickname},
-  userid: ${data.userid},
-  password: ${data.password},
-  skills: ${selectedTags.tags},
-  description: ${description},
-  profileImageId: ${profileImageId}`);
-      axios
-        .post(
-          `${ROOT_API}/sign-up`,
-          {
-            email: data.userEmail,
-            nickname: data.nickname,
-            userid: data.userid,
-            password: data.password,
-            skills: selectedTags.tags,
-            description: description,
-            profileImageId: profileImageId,
-          },
-          { headers: { API_HEADER } }
-        )
-        .then(() => {
-          axios
-            .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
-            .then((response) => {
-              dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              localStorage.setItem("refreshToken", response.data.refreshToken);
-              setModal(true);
-              navigate("/");
-              reset();
-            })
-            .catch(() => {
-              showToast("error", "😎 로그인 실패되었어요");
-            });
-        })
-        .catch(() => {
-          showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
-        });
     } else {
       showToast("error", "😎 모든 버튼에 확인되지 않았어요");
     }
@@ -172,8 +170,10 @@ const Regist = () => {
             .get(`${ROOT_API}/email/verify`, {
               params: { email: watch().userEmail },
             })
-            .then(() => {
+            .then((res) => {
               setVerityEmailcheck(true);
+              console.log(res.data, "fdfddfd");
+              setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
             })
             .catch(() => {
@@ -240,17 +240,9 @@ const Regist = () => {
         <div className={s.prople}>
           <div className={s.imgwrap}>
             {imageFile && <img src={imageFile} alt="프로필이미지" />}
-            <input type="file" accept="image/*" onChange={changeprofileImageId} name="프로필이미지" id="profile" />
+            <input type="file" accept="image/*" onChange={handleChangeProfileImage} name="프로필이미지" id="profile" />
           </div>
         </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            propileSubmit();
-          }}
-        >
-          버튼
-        </button>
         <span>프로필 이미지 선택☝️</span>
         <div className={s.gaider}>
           <span>🙏추가 안내</span>
@@ -288,7 +280,7 @@ const Regist = () => {
         <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           {[
-            <>
+            <React.Fragment key={1}>
               <div>
                 <Label isRequire htmlFor="userEmail">
                   이메일
@@ -311,26 +303,27 @@ const Regist = () => {
                 </Button>
               </div>
               {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
-            </>,
-            <>
+            </React.Fragment>,
+            <React.Fragment key={2}>
               <div>
-                <Label isRequire htmlFor="userEmail">
-                  이메일 인증증
+                <Label isRequire htmlFor="inputEmail">
+                  이메일 인증
                 </Label>
                 <input
                   tabIndex="4"
                   type="text"
-                  id="userEmail"
-                  placeholder="입력해주세요"
-                  {...register("username", { required: true })}
+                  id="inputEmail"
+                  value={inputEmail}
+                  placeholder="인증번호를 입력해주세요"
+                  {...register("inputEmail", { required: true })}
                   onChange={handleInputChange}
                 />
                 <Button onClick={compareEmail} tabIndex="5">
                   확인
                 </Button>
               </div>
-            </>,
-            <>
+            </React.Fragment>,
+            <React.Fragment key={3}>
               <div>
                 <Label isRequire htmlFor="nickname">
                   닉네임
@@ -366,8 +359,8 @@ const Regist = () => {
               {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
                 <small className="true">사용할 수 있는 닉네임입니다.</small>
               )}
-            </>,
-            <>
+            </React.Fragment>,
+            <React.Fragment key={4}>
               <div>
                 <Label isRequire htmlFor="userid">
                   아이디
@@ -405,8 +398,8 @@ const Regist = () => {
               {errors.userid && <small role="alert">{errors.userid.message}</small>}
               {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
               {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
-            </>,
-            <>
+            </React.Fragment>,
+            <React.Fragment key={5}>
               <div>
                 <Label isRequire htmlFor="password">
                   비밀번호
@@ -436,8 +429,8 @@ const Regist = () => {
                 />
               </div>
               {errors.password && <small role="alert">{errors.password.message}</small>}
-            </>,
-            <>
+            </React.Fragment>,
+            <React.Fragment key={6}>
               <div>
                 <Label isRequire htmlFor="passwordChk">
                   비밀번호 확인
@@ -475,7 +468,7 @@ const Regist = () => {
                 </div>
               </div>
               {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
-            </>,
+            </React.Fragment>,
           ]}
         </Table>
         <div className="registSubmit">

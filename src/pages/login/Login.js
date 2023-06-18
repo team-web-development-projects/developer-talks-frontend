@@ -1,21 +1,20 @@
 import axios from "axios";
+import Button from "components/button/Button";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
 import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { LoginGoogle, LoginKakao, LoginNaver, Snslogin } from "components/snsLogin/Snslogin";
+import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
-import { setRefreshToken } from "store/Cookie";
 import s from "./login.module.scss";
-import Button from "components/button/Button";
-import Table from "components/table/Table";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -87,7 +86,7 @@ const Login = () => {
           </p>
           <Table tableTitle={"Developer-Talks"} tableText={"계정로그인"}>
             {[
-              <>
+              <React.Fragment key={1}>
                 <div>
                   <Label htmlFor="userId">아이디</Label>
                   <input
@@ -109,8 +108,8 @@ const Login = () => {
                   />
                 </div>
                 {errors.userId && <small role="alert">{errors.userId.message}</small>}
-              </>,
-              <>
+              </React.Fragment>,
+              <React.Fragment key={2}>
                 <div>
                   <Label htmlFor="password">비밀번호</Label>
                   <input
@@ -135,7 +134,7 @@ const Login = () => {
                   </div>
                 </div>
                 {errors.password && <small role="alert">{errors.password.message}</small>}
-              </>,
+              </React.Fragment>,
             ]}
           </Table>
           <Button FullWidth size="large" type="submit" tabIndex="3" disabled={isSubmitting}>
