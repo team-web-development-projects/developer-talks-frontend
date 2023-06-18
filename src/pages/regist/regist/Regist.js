@@ -74,7 +74,6 @@ const Regist = () => {
       .post(`${ROOT_API}/users/profile/image`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          accept: "application/json",
         },
       })
       .then((response) => {

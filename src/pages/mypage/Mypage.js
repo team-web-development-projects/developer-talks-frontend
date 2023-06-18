@@ -13,9 +13,11 @@ const Mypage = ({ type }) => {
   const navigate = useNavigate();
   const [select, setSelect] = useState(0);
   const [favorite, setFavorite] = useState([]);
-  let userId = "";
+  let userId;
+  let nickname;
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
+    nickname = parseJwt(auth.accessToken).nickname;
   }
 
   const onSelect = (type) => {
@@ -29,7 +31,7 @@ const Mypage = ({ type }) => {
         axios
           .get(
             // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
-            `${ROOT_API}/users/recent/activity/${userId}`,
+            `${ROOT_API}/users/recent/activity/${nickname}`,
             {
               params: { page: 0, size: 10 }, //NOTE 가람님이 활동 시간명 변경
               headers: {
@@ -40,6 +42,10 @@ const Mypage = ({ type }) => {
           .then((res) => {
             setFavorite(res.data.content);
             console.log("1", res.data.content);
+          })
+          .catch(() => {
+            console.log(nickname);
+            console.log(parseJwt(auth.accessToken));
           });
         break;
       case 1:
@@ -109,7 +115,7 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite === undefined || favorite.length === 0 ? (
-                <>{contacts.contact}내용이 없습니다</>// 수정필요
+                <>{contacts.contact}내용이 없습니다</> // 수정필요
               ) : (
                 favorite.map((item, index) => (
                   <div key={index} className={s.userdata}>
