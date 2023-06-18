@@ -124,96 +124,102 @@ const MyStudyRoom = () => {
     }
   };
 
+  console.log('마이페이지', myList);
+
   return (
     <MypageContent>
       {personModal && (
         <StudyRoomPersonModal setOnModal={() => setPerseonModal()} modalUserData={modalUserData} roomId={roomid} />
       )}
       <div className={classNames("content-wrap", [s.mystudyroom])}>
-        <h3>스터디룸 신청 리스트</h3>
-        <ul className={s.list}>
-          {asignList && asignList.content.length !== 0 ? (
-            asignList.content.map((item, index) => (
-              <li onClick={asignJoin} key={index} className={s.list_item}>
-                <div className={s.room_title}>{item.title}</div>
-                <span className={s.user} onClick={(e) => clickUser(e, index)}>
-                  {item.nickname}
-                  {drop.index === index && drop.state && (
-                    <DropDown>
-                      <li onClick={() => asignUser(item.studyRoomId, item.studyRoomUserId)}>승인하기</li>
-                      <li>유저정보보기</li>
-                    </DropDown>
-                  )}
-                </span>
-              </li>
-            ))
-          ) : (
-            <>리스트가 없습니다.</>
+        <section>
+          <h3>스터디룸 신청 리스트</h3>
+          <ul className={s.list}>
+            {asignList && asignList.content.length !== 0 ? (
+              asignList.content.map((item, index) => (
+                <li onClick={asignJoin} key={index} className={s.list_item}>
+                  <div className={s.room_title}>{item.title}</div>
+                  <span className={s.user} onClick={(e) => clickUser(e, index)}>
+                    {item.nickname}
+                    {drop.index === index && drop.state && (
+                      <DropDown>
+                        <li onClick={() => asignUser(item.studyRoomId, item.studyRoomUserId)}>승인하기</li>
+                        <li>유저정보보기</li>
+                      </DropDown>
+                    )}
+                  </span>
+                </li>
+              ))
+            ) : (
+              <>리스트가 없습니다.</>
+            )}
+          </ul>
+          {asignList && asignList.length !== 0 && (
+            <div className={s.pageContainer}>
+              <Pagination
+                currentPage={asignList.pageable.pageNumber + 1}
+                totalPage={asignList.totalPages}
+                paginate={setCurrentMyListPage}
+              />
+            </div>
           )}
-        </ul>
-        {asignList && asignList.length !== 0 && (
-          <div className={s.pageContainer}>
-            <Pagination
-              currentPage={asignList.pageable.pageNumber + 1}
-              totalPage={asignList.totalPages}
-              paginate={setCurrentMyListPage}
-            />
-          </div>
-        )}
+        </section>
 
-        <h3>참여중 스터디룸</h3>
-        <ul className={s.list}>
-          {myList && myList.length !== 0 ? (
-            myList.content.map((item, index) => (
-              <li
-                key={index}
-                className={s.list_item}
-                onClick={() => {
-                  if (
-                    item.studyRoomUsers.filter((item) => item.nickname === getNickname && item.status === true)
-                      .length === 1
-                  ) {
-                    navigate(`/studyroom/${item.id}`);
-                  } else {
-                    alert("승인요청중입니다");
-                  }
-                }}
-              >
-                <div className={s.list_title}>
-                  {item.title}
-                  {roomUserInfo(item)}
-                </div>
-                <div className={s.count_wrap}>
-                  <div
-                    className={s.count}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setPerseonModal(true);
-                      setModalUserData(myList.content[index].studyRoomUsers);
-                      setRoomid(item.id);
-                    }}
-                  >
-                    <BsFillPeopleFill size={16} />
-                    <span>
-                      {item.joinCount}/{item.joinableCount}
-                    </span>
+        <section>
+          <h3>참여중 스터디룸</h3>
+          <ul className={s.list}>
+            {myList && myList.length !== 0 ? (
+              myList.content.map((item, index) => (
+                <li
+                  key={index}
+                  className={s.list_item}
+                  onClick={() => {
+                    if (
+                      item.studyRoomUsers.filter((item) => item.nickname === getNickname && item.status === true)
+                        .length === 1
+                    ) {
+                      navigate(`/studyroom/${item.id}`);
+                    } else {
+                      alert("승인요청중입니다");
+                    }
+                  }}
+                >
+                  <div className={s.list_title}>
+                    {item.title}
+                    {roomUserInfo(item)}
                   </div>
-                </div>
-              </li>
-            ))
-          ) : (
-            <>리스트가 없습니다.</>
+                  <div className={s.count_wrap}>
+                    <div
+                      className={s.count}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPerseonModal(true);
+                        setModalUserData(myList.content[index].studyRoomUsers);
+                        setRoomid(item.id);
+                      }}
+                    >
+                      <BsFillPeopleFill size={16} />
+                      <span>
+                        {item.studyRoomUsers.filter((item) => item.status).length}/{item.joinableCount}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <>리스트가 없습니다.</>
+            )}
+          </ul>
+          {myList && myList.length !== 0 && (
+            <div className={s.pageContainer}>
+              <Pagination
+                currentPage={myList.pageable.pageNumber + 1}
+                totalPage={myList.totalPages}
+                paginate={setCurrentMyListPage}
+              />
+            </div>
           )}
-        </ul>
-        {myList && myList.length !== 0 && (
-          <div className={s.pageContainer}>
-            <Pagination
-              currentPage={myList.pageable.pageNumber + 1}
-              totalPage={myList.totalPages}
-              paginate={setCurrentMyListPage}
-            />
-          </div>
-        )}
+        </section>
       </div>
     </MypageContent>
   );

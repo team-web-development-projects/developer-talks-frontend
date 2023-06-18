@@ -7,10 +7,13 @@
       justify-content: flex-end;
     }
     .is-my {
-      .btn-out {
+      .btn-out, .auth {
         display: none;
       }
     }
+    // .auth {
+    //   display: none;
+    // }
     .btn-outroom, .btn-out {
       background: #dc3545;
     }

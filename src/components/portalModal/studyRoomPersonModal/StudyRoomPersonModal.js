@@ -49,20 +49,55 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
       .catch((error) => console.log(error));
   };
 
+  // 승인 or 거부
+  const accept = (userId, status) => {
+    console.log("acc", roomId, userId, status);
+    axios
+      .post(`${ROOT_API}/study-rooms/accept/${roomId}/${userId}`, {
+        params: { status: status },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  // 권한
+  const roomAuth = (userId, ) => {
+
+  }
+
   const buttonType = (data, index) => {
-    const result = data.filter((item) => item.nickname === getNickname && item.studyRoomLevel === "LEADER");
-    if (result.length === 1) {
-      return (
-        <Fragment>
+    const isLeader = data.filter((item) => item.nickname === getNickname && item.studyRoomLevel === "LEADER");
+    return (
+      <Fragment>
+        {data[index].status && data[index].studyRoomLevel === "NORMAL" && (
+          // 내가 방장일때,
           <Button size="small" classname="btn-out" onClick={() => getOut(data[index].nickname)}>
             강퇴
           </Button>
-          <Button size="small" classname="btn-power">
+        )}
+        {data[index].status && isLeader.length !== 0 && (
+          <Button size="small" classname="btn-power auth">
             권한
           </Button>
-        </Fragment>
-      );
-    }
+        )}
+        {!data[index].status && (
+          <>
+            <Button size="small" classname="btn-power" onClick={() => accept(data[index].id, true)}>
+              승인
+            </Button>
+            <Button size="small" classname="btn-out" onClick={() => accept(data[index].id, true)}>
+              거부
+            </Button>
+          </>
+        )}
+      </Fragment>
+    );
   };
 
   return (

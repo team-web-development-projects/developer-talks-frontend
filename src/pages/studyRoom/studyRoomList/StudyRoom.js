@@ -63,6 +63,8 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
+  console.log('list', data);
+
   return (
     <>
       {auth.accessToken !== null ? (
