@@ -9,17 +9,25 @@ import s from "./account.module.scss";
 import LineStyle from "components/lineStyle/LineStyle";
 import Table from "components/table/Table";
 import Label from "components/label/Label";
-
-// import { useNavigate } from 'react-router-dom';
+import { showToast } from "components/toast/showToast";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [imageFile, setImageFile] = useState("");
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
     joinableCount: 1,
   });
-
+  const handleChangeProfileImage = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    const imageUrl = URL.createObjectURL(file);
+    setImageFile(imageUrl);
+    showToast("success", "😎 이미지가 업로드 되었습니다");
+  };
   const clickTag = (tag) => {
     //NOTE 기술 테그
     if (selectedTags.tags.includes(tag)) {
@@ -45,9 +53,17 @@ function Account() {
   const [userData, setUserData] = useState(""); //유저데이터 가져오기
   useEffect(() => {
     axios
+      .get(`${ROOT_API}/users/profile/image`, {
+        headers: {
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then(function (response) {
+        setImageFile(response.data.url);
+      });
+    axios
       .get(`${ROOT_API}/users/info`, {
         headers: {
-          "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
@@ -55,11 +71,6 @@ function Account() {
         console.log("cc정보 성공:", data);
         setUserData(data);
         setSelectedTags({ ...selectedTags, tags: data.skills });
-        console.log(data.skills);
-        console.log(selectedTags, "ssss");
-      })
-      .catch(function (error) {
-        console.log("cc정보:실패 ", error.response);
       });
   }, [auth.accessToken]);
 
@@ -89,38 +100,7 @@ function Account() {
   const saveUser = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
-
-    //   axios
-    //     .put(`${ROOT_API}/users/profile/description`, userData.description, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "X-AUTH-TOKEN": auth.accessToken,
-    //       },
-    //     })
-    //     .then(function (data) {
-    //       console.log(data);
-    //     })
-    //     .catch((error) => console.log(error));
   };
-
-  // axios
-  // .put(`${ROOT_API}/users/profile/skill`, userData.skills, {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "X-AUTH-TOKEN": auth.accessToken,
-  //   },
-  // })
-  // .then(function (data) {
-  //   console.log(data);
-  // })
-  // .catch((error) => console.log(error));
-  // };
-
-  // "{skills: [DJANGO, AWS]}";
-
-  // if (userData.description.includes("description")) {
-  //   JSON.parse(setUserData({ ...userData, description: userData.description }));
-  // }
 
   return (
     <MypageContent>
@@ -136,7 +116,14 @@ function Account() {
         </ul>
         {select === 0 && (
           <Form onSubmit={userEdit}>
-            {/* TODO 프로필이랑 관심있는 태그입력 넣기 */}
+            <div className={s.prople}>
+              <div className={s.imgwrap}>
+                {imageFile && <img src={imageFile} alt="프로필이미지" />}
+                <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
+              </div>
+            </div>
+            <span>프로필 이미지 선택☝️</span>
+            <br/>
             <label>한 줄 내소개</label>
             <div className={s.description}>
               <input
@@ -164,6 +151,13 @@ function Account() {
             <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
               {[
                 <div>
+                  <Label isRequire htmlFor="nickname">
+                    닉네임
+                  </Label>
+                  <input id="nickname" name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
+                  <Button>중복확인</Button>
+                </div>,
+                <div>
                   <Label isRequire htmlFor="userEmail">
                     이메일
                   </Label>
@@ -174,13 +168,6 @@ function Account() {
                     아이디
                   </Label>
                   <input id="userid" name="userid" value={userData.userid} onChange={handleChange} type="text" />
-                </div>,
-                <div>
-                  <Label isRequire htmlFor="nickname">
-                    닉네임
-                  </Label>
-                  <input id="nickname" name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
-                  <Button>중복확인</Button>
                 </div>,
                 <div>
                   <Label isRequire htmlFor="password">

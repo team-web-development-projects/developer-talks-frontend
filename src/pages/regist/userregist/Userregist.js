@@ -16,12 +16,10 @@ import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
 
 const Userregist = () => {
-  const [authlogins, setAutologins] = useState("");
-  let navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-
+  let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [authlogins, setAutologins] = useState("");
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -33,17 +31,19 @@ const Userregist = () => {
   const [userEmail, setUserEmail] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [profileImageId, setProfileImageId] = useState("");
   const handleCheckboxChange = (event) => {
     setAutoLogin(event.target.checked);
   };
-  const [selectedImage, setSelectedImage] = useState(null);
   const handleChangeProfileImage = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
     const imageUrl = URL.createObjectURL(file);
     setImageFile(imageUrl);
+    showToast("success", "😎 이미지가 업로드 되었습니다");
   };
-  const [profileImageId, setProfileImageId] = useState("");
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
     if (!selectedImage) {
@@ -52,6 +52,7 @@ const Userregist = () => {
     console.log(selectedImage);
     const formData = new FormData();
     formData.append("file", selectedImage);
+
     if (duplicateNickName === false) {
       axios
         .post(`${ROOT_API}/users/profile/image`, formData, {
@@ -75,7 +76,7 @@ const Userregist = () => {
                 nickname: data.nickname,
                 skills: selectedTags.tags,
                 description: description,
-                profileImageId: profileImageId,
+                profileImageId:response.data.id,
               },
               {
                 headers: {
@@ -190,13 +191,6 @@ const Userregist = () => {
             <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
           </div>
         </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-          }}
-        >
-          버튼
-        </button>
         <span>프로필 이미지 선택☝️</span>
         <div className={s.gaider}>
           <span>🙏추가 안내</span>

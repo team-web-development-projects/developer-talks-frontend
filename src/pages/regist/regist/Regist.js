@@ -49,6 +49,7 @@ const Regist = () => {
     setSelectedImage(file);
     const imageUrl = URL.createObjectURL(file);
     setImageFile(imageUrl);
+    showToast("success", "😎 이미지가 업로드 되었습니다");
   };
 
   const {
@@ -118,9 +119,6 @@ const Regist = () => {
           .catch(() => {
             showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
           });
-
-
-
       })
       .catch((error) => console.log(error));
       //NOTE 버튼 다 클릭하면 실행

@@ -1,7 +1,6 @@
 import axios from "axios";
 import Logout from "components/logout/Logout";
 import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -11,17 +10,13 @@ const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
   const [isActive, setIsActive] = useState("mypage");
   const [imageFile, setImageFile] = useState("");
+  const [userData, setUserData] = useState("");
   const location = useLocation();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await new Promise((r) => setTimeout(r, 1000));
-  };
 
   const handleClick = (value) => {
     setIsActive(value);
   };
 
-  const userinfo = parseJwt(auth);
   useEffect(() => {
     axios
       .get(`${ROOT_API}/users/profile/image`, {
@@ -32,9 +27,16 @@ const Userside = () => {
       .then(function (response) {
         console.log("정보 성공:", response);
         setImageFile(response.data.url);
+      });
+    axios
+      .get(`${ROOT_API}/users/info`, {
+        headers: {
+          "X-AUTH-TOKEN": auth,
+        },
       })
-      .catch(function (error) {
-        console.log("정보:실패 ", error.response);
+      .then(({ data }) => {
+        console.log("cc정보 성공:", data);
+        setUserData(data);
       });
   }, [auth.accessToken]);
 
@@ -44,8 +46,8 @@ const Userside = () => {
       <section className="side">
         <div className="imgwrap">
           <img src={imageFile} alt="" />
-          <input type="file" name="" id="" />
         </div>
+        <span>{userData.description}</span>
         <ul className="nav">
           <li className={location.pathname === "/mypage" && "is-active"} onClick={() => handleClick("mypage")}>
             <Link to="/mypage">활동내역</Link>
