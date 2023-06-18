@@ -1,47 +1,60 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ROOT_API } from "constants/api";
-import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const News = () => {
-  const naviate = useNavigate();
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/news`);
-    return data;
-  }
+  const auth = useSelector((state) => state.authToken);
+  console.log("a", auth);
 
-  const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
-    queryKey: ["news"],
-    queryFn: () => fetchProjects(),
-  });
+  const mutation = useMutation(
+    () =>
+      axios(`${ROOT_API}/news`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      }),
+    {
+      onSuccess: (data) => {
+        console.log("success", data);
+      },
+    }
+  );
 
-  console.log("news data", data);
+  // async function fetchProjects() {
+  //   const { data } = await axios.get(`${ROOT_API}/news`);
+  //   return data;
+  // }
+
+  // const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
+  //   queryKey: ["news"],
+  //   queryFn: () => fetchProjects(),
+  // });
+
+  // console.log("news data", data);
   return (
-    <div>
-      <section>
-        <strong>IT 뉴스</strong>
-        <ul>
-          {data ? (
-            data.map((item, index) => (
-              <li key={index} onClick={() => naviate(`/board/${item.id}`)}>
-                <div className="info">
-                  <span>
-                    {item.nickname} {item.createDate}
-                  </span>
-                  <span>
-                    {item.recommendCount} {item.viewCount}
-                  </span>
-                </div>
-                <p>{item.title}</p>
-              </li>
-            ))
-          ) : (
-            <li className="not-list">최신 뉴스가 존재하지 않습니다.</li>
-          )}
-        </ul>
-      </section>
-    </div>
+    <section>
+      <button onClick={() => mutation.mutate()}>ddd</button>
+      <strong>IT 뉴스</strong>
+      <ul>
+        {
+          //   data ? (
+          //   data.map((item, index) => (
+          //     <li key={index}>
+          //       <a href={item.url} target="_blank" rel="noreferrer">
+          //         <p>{item.title}</p>
+          //       </a>
+          //     </li>
+          //   ))
+          // ) : (
+          //   <li className="not-list">최신 뉴스가 존재하지 않습니다.</li>
+          // )
+        }
+      </ul>
+    </section>
   );
 };
 

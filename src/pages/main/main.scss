@@ -1,6 +1,9 @@
 .main-page {
   padding-top: 20px;
   section {
+    &:last-child {
+      margin-bottom: 40px;
+    }
     strong {
       display: block;
       padding: 16px 20px;
@@ -18,6 +21,9 @@
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
     cursor: pointer;
+    &:last-child {
+      border-bottom: none;
+    }
     p {
       font-weight: 600;
     }

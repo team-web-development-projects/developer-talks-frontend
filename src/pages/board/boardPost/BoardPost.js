@@ -32,7 +32,7 @@ export default function BoardPost({ type }) {
     }
   }, [type]);
 
-  console.log('ff', form.files);
+  console.log("ff", form.files);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,16 +44,23 @@ export default function BoardPost({ type }) {
         `);
 
     console.log("post auth", auth.accessToken);
+    const datas = {
+      // 포스트 데이터
+      postDto: {
+        contentType: "application/json",
+        title: form.title,
+        content: form.content,
+      },
+      files: form.files,
+    };
     axios
       .post(
         `${ROOT_API}/${type}`,
-        {
-          postDto: {
-            title: form.title,
-            content: form.content,
-          },
-          files: form.files,
-        },
+          datas,
+          // postDto: {
+          //   title: form.title,
+          //   content: form.content,
+          // },
         {
           headers: {
             "Content-Type": "application/json",

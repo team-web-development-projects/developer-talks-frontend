@@ -16,9 +16,7 @@ const Best = () => {
     queryFn: () => fetchProjects(),
   });
 
-  console.log('main data', data);
   return (
-    <div>
       <section>
         <strong>추천수 베스트 5</strong>
         <ul>
@@ -38,7 +36,6 @@ const Best = () => {
             ))}
         </ul>
       </section>
-    </div>
   );
 };
 
