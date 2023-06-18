@@ -55,8 +55,8 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
       .catch((error) => console.log(error));
   };
   const handleUpdate = () => {
-    setIsUpdateToggle((prev) => !prev); 
-    setForm({ ...form, ["content"]: content })
+    setIsUpdateToggle((prev) => !prev);
+    setForm({ ...form, ["content"]: content });
   };
   const handleUpdatePost = () => {
     axios
@@ -91,7 +91,11 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
         },
       })
       .then(() => {
-        toast.success("댓글이 정상적으로 삭제되었습니다.", { position: "top-center", autoClose: 1000, hideProgressBar: true });
+        toast.success("댓글이 정상적으로 삭제되었습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+        });
         setControlRender((prev) => !prev);
       })
       .catch((error) => console.log(error));

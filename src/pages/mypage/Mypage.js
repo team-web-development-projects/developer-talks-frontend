@@ -1,22 +1,18 @@
 import axios from "axios";
+import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { getUer } from "hooks/useAuth";
-import "./Mypage.scss";
-import { ROOT_API } from "constants/api";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
+import s from "./mypage.module.scss";
+import Pagination from "components/pagination/Pagination";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
   const navigate = useNavigate();
-  const [select, setSelect] = useState(-1);
+  const [select, setSelect] = useState(0);
   const [favorite, setFavorite] = useState([]);
-  const dispatch = useDispatch();
-  console.log("auth", auth.accessToken);
-  // const { getNickname } = getUer(auth !== null && auth.accessToken);
-
   let userId = "";
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
@@ -89,25 +85,24 @@ const Mypage = ({ type }) => {
             setFavorite(res.data.content);
             console.log("3", res.data.content);
           });
+
         break;
       default:
     }
-    if (auth.accessToken === null) {
+    if (auth.accessToken === null && localStorage.getItem("refreshToken") === null) {
       navigate("/login", { replace: true });
     }
-    // console.log("dd", favorite);
   }, [auth.accessToken, navigate, select, userId]);
-  // console.log("dd", favorite);
 
   return (
     <>
       {auth.accessToken !== null ? (
         <MypageContent>
-          <section className="content-wrap">
-            <ul className="nav">
+          <section className={s.contentwrap}>
+            <ul className={s.nav}>
               {contacts.map((contact, index) => (
                 <li key={index}>
-                  <button onClick={() => onSelect(index)} className={`${select === index ? "select" : ""}`}>
+                  <button onClick={() => onSelect(index)} className={`${select === index ? `${s.select}` : ""}`}>
                     {contact}
                   </button>
                 </li>
@@ -115,27 +110,44 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite === undefined || favorite.length === 0 ? (
-                <>내용이 없습니다</> //NOTE 내용없음 버그 수정//ok
+                <>{contacts.contact}내용이 없습니다</>// 수정필요
               ) : (
                 favorite.map((item, index) => (
-                  <div key={index} className="user-data">
-                    <div className="create-time">{item.createDate}</div>
-                    {item.title && (
-                      <p className="title" onClick={() => navigate(`/board/${item.id}`)}>
-                        타이틀: {item.title}{" "}
-                      </p>
-                    )}
-                    {item.content && (
-                      <>
-                        <span>내용: </span>
-                        <span dangerouslySetInnerHTML={{ __html: item.content }}></span>
-                      </>
-                    )}
-                    {item.writer || item.nickname}
+                  <div key={index} className={s.userdata}>
+                    <div className={s.text}>
+                      <div className={s.type}>
+                        {item.type && item.type === "COMMENT" ? (
+                          <>
+                            <span>{item.writer || item.nickname}</span>
+                            <p>님의 질문에 달린 답변에</p>
+                            <span>댓글</span>
+                            <p>을 작성하였습니다</p>
+                          </>
+                        ) : (
+                          <>
+                            <p>카테고리에</p>
+                            <span>질문</span>
+                            <p>을 작성하였습니다.</p>
+                          </>
+                        )}
+                        {item.secret == false && "🔓"}
+                        {item.secret == true && "🔒"}
+                        {(item.viewCount || item.viewCount === 0) && <span className={s.viewCount}>조회수 {item.viewCount}</span>}
+                        {(item.recommendCount || item.recommendCount === 0) && <span className={s.viewCount}>추천수 {item.recommendCount}</span>}
+                        {(item.favoriteCount || item.favoriteCount === 0) && <span className={s.viewCount}>좋아요수 {item.favoriteCount}</span>}
+                      </div>
+                      {(item.title || item.postTitle) && (
+                        <p className={s.title} onClick={() => navigate(`/board/${item.id}`)}>
+                          {item.title || item.postTitle}{" "}
+                        </p>
+                      )}
+                    </div>
+                    <div className={s.createtime}>{item.createDate}</div>
                   </div>
                 ))
               )}
             </div>
+            {/* <Pagination currentPage={data.pageable.pageNumber + 1} totalPage={data.totalPages} paginate={setCurrentPage} /> */}
           </section>
         </MypageContent>
       ) : null}

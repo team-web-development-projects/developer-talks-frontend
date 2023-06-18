@@ -25,6 +25,17 @@
   &.is_cancle {
     
   }
+
+  &.is_large {
+    height: 60px;
+    font-size: 16px;
+    min-width: 120px;
+  }
+  
+  &.is_fullWidth{
+    width: 100%;
+  }
+
   &:hover {
     background: #585858;
   }
