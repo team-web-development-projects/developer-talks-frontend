@@ -14,6 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
 import { parseJwt } from "hooks/useParseJwt";
 import classNames from "classnames";
+import BoardBanner from "components/boardBanner/BoardBanner";
+import SearchInput from "components/searchInput/SearchInput";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -77,18 +79,17 @@ const BoardList = ({ type }) => {
               <br />
             </BasicModal>
           )}
-          <div className={s.banner}>
-            <p>⭐스터디룸⭐</p>
+          <BoardBanner className={s.banner}>
+            <p>스터디룸</p>
             <p>공부방</p>
-          </div>
+          </BoardBanner>
           <div className={s.header}>
-            <form className={s.search} onSubmit={handleSearch}>
-              <BiSearch />
-              <input type="text" placeholder="원하는 내용을 검색해보세요~!" />
-            </form>
+            <SearchInput type={type} />
             <div className={s.bottom}>
               <Select init="최신순" options={["최신순", "조회순"]} />
-              <Button onClick={handleClick}>✏️룸 만들기</Button>
+              <Button onClick={handleClick} size="small">
+                룸 만들기
+              </Button>
             </div>
           </div>
           <ul

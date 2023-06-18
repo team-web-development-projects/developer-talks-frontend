@@ -21,9 +21,13 @@
 }
 
 .page {
-  max-width: $content-max-width;
-  min-height: calc(100vh - 80px - 95px); 
   margin: 0 auto;
+  padding-top: 40px;
+  max-width: $content-max-width;
+  min-height: calc(100vh - 110px - 95px);
+  &.is-mypage {
+    padding-top: 0;
+  }
 }
 
 .board-page {

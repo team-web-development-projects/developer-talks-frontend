@@ -1,14 +1,17 @@
+@import 'assets/style/variable.scss';
+
 .boardContainer {
-  margin: 0px 20px;
-  padding: 30px;
+  padding: 18px 0;
   border-bottom: solid 1px #cfcccc;
   &:hover {
-    background: #eeeeee;
     cursor: pointer;
+    .title {
+      color: $primary;
+    }
   }
   .title {
-    margin-bottom: 10px;
-    font-size: 30px;
+    margin-bottom: 3px;
+    font-size: 24px;
     font-weight: 500;
   }
   .content {

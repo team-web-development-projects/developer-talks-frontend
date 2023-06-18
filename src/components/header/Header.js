@@ -19,7 +19,6 @@ const Header = () => {
   const targetRef = useRef(null);
   outOfClick(targetRef);
 
-
   const showPopover = () => {
     setPopover(!popover);
   };
@@ -67,12 +66,11 @@ const Header = () => {
     return data;
   }
 
-  const { status, data, error, isFetching, isPreviousData, isLoading } =
-    useQuery({
-      queryKey: ["popover"],
-      // queryFn: () => fetchProjects(),
-      // suspense: true,
-    });
+  const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
+    queryKey: ["popover"],
+    // queryFn: () => fetchProjects(),
+    // suspense: true,
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (status === "loading") return <div>Loading...</div>;
@@ -83,54 +81,55 @@ const Header = () => {
 
   return (
     <header className="header">
-      {/* <button onClick={() => setHeader('true')}>클릭</button> */}
-      <div className="logo">
-        <Link to="/"> Developer-Talks</Link>
-      </div>
-      <nav className="navBar">
-        <ul className="right">
-          <li>
-            <Link to="/qna">Q&A</Link>
-          </li>
-          <li>
-            <Link to="/board">커뮤니티</Link>
-          </li>
-          <li>
-            <Link to="/studyroom">스터디공간</Link>
-          </li>
-
-          <li className="popover-link">
-            <span onClick={showPopover} ref={targetRef}>
-              <span className="bell">
-                <AiFillBell size={24} color="#2f92ff" />
-              </span>
-              {popover && (
-                <div className="popover">
-                  {user.map((item, index) => (
-                    <div key={index}>{item.nickname}</div>
-                  ))}
-                </div>
-              )}
-            </span>
-            {
-              //   popover &&
-              //   user.map((a, index) {
-              //     return <div key={a.id}>{a.amount}</div>;
-              // })
-            }
-          </li>
-          <li className="header-user">
-            <Link to="/mypage">
-              <BsFillPersonFill size={24} />
-            </Link>
-            {nickname && <span>{`${nickname}님`}</span>}
-          </li>
-        </ul>
-      </nav>
-      <div className="menuBar">
-        <Link to="/">
-          <FiMenu size={24} />
+      <div className="header-wrap">
+        <Link className="logo" to="/">
+          Developer-Talks
         </Link>
+        <nav className="navBar">
+          <ul className="right">
+            <li>
+              <Link to="/qna">Q&A</Link>
+            </li>
+            <li>
+              <Link to="/board">커뮤니티</Link>
+            </li>
+            <li>
+              <Link to="/studyroom">스터디룸</Link>
+            </li>
+
+            <li className="popover-link">
+              <span onClick={showPopover} ref={targetRef}>
+                <span className="bell">
+                  <AiFillBell size={24} color="#2f92ff" />
+                </span>
+                {popover && (
+                  <div className="popover">
+                    {user.map((item, index) => (
+                      <div key={index}>{item.nickname}</div>
+                    ))}
+                  </div>
+                )}
+              </span>
+              {
+                //   popover &&
+                //   user.map((a, index) {
+                //     return <div key={a.id}>{a.amount}</div>;
+                // })
+              }
+            </li>
+            <li className="header-user">
+              <Link to="/mypage">
+                <BsFillPersonFill size={24} />
+              </Link>
+              {nickname && <span>{`${nickname}님`}</span>}
+            </li>
+          </ul>
+        </nav>
+        <div className="menuBar">
+          <Link to="/">
+            <FiMenu size={24} />
+          </Link>
+        </div>
       </div>
     </header>
   );

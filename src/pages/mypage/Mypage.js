@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
-import s from "./mypage.module.scss";
 import Pagination from "components/pagination/Pagination";
+import s from "./mypagecontent.module.scss";
+import mypage from "./mypage.module.scss";
 
 const Mypage = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -98,7 +99,7 @@ const Mypage = ({ type }) => {
     <>
       {auth.accessToken !== null ? (
         <MypageContent>
-          <section className={s.contentwrap}>
+          <section className={s.contentWrap}>
             <ul className={s.nav}>
               {contacts.map((contact, index) => (
                 <li key={index}>
@@ -110,12 +111,12 @@ const Mypage = ({ type }) => {
             </ul>
             <div className="">
               {favorite === undefined || favorite.length === 0 ? (
-                <>{contacts.contact}내용이 없습니다</>// 수정필요
+                <>{contacts.contact}내용이 없습니다</> // 수정필요
               ) : (
                 favorite.map((item, index) => (
-                  <div key={index} className={s.userdata}>
-                    <div className={s.text}>
-                      <div className={s.type}>
+                  <div key={index} className={mypage.userdata}>
+                    <div className={mypage.text}>
+                      <div className={mypage.type}>
                         {item.type && item.type === "COMMENT" ? (
                           <>
                             <span>{item.writer || item.nickname}</span>
@@ -130,19 +131,25 @@ const Mypage = ({ type }) => {
                             <p>을 작성하였습니다.</p>
                           </>
                         )}
-                        {item.secret == false && "🔓"}
-                        {item.secret == true && "🔒"}
-                        {(item.viewCount || item.viewCount === 0) && <span className={s.viewCount}>조회수 {item.viewCount}</span>}
-                        {(item.recommendCount || item.recommendCount === 0) && <span className={s.viewCount}>추천수 {item.recommendCount}</span>}
-                        {(item.favoriteCount || item.favoriteCount === 0) && <span className={s.viewCount}>좋아요수 {item.favoriteCount}</span>}
+                        {item.secret === false && "🔓"}
+                        {item.secret === true && "🔒"}
+                        {(item.viewCount || item.viewCount === 0) && (
+                          <span className={mypage.viewCount}>조회수 {item.viewCount}</span>
+                        )}
+                        {(item.recommendCount || item.recommendCount === 0) && (
+                          <span className={mypage.viewCount}>추천수 {item.recommendCount}</span>
+                        )}
+                        {(item.favoriteCount || item.favoriteCount === 0) && (
+                          <span className={mypage.viewCount}>좋아요수 {item.favoriteCount}</span>
+                        )}
                       </div>
                       {(item.title || item.postTitle) && (
-                        <p className={s.title} onClick={() => navigate(`/board/${item.id}`)}>
+                        <p className={mypage.title} onClick={() => navigate(`/board/${item.id}`)}>
                           {item.title || item.postTitle}{" "}
                         </p>
                       )}
                     </div>
-                    <div className={s.createtime}>{item.createDate}</div>
+                    <div className={mypage.createtime}>{item.createDate}</div>
                   </div>
                 ))
               )}

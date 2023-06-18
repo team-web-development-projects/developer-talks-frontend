@@ -8,51 +8,32 @@ const News = () => {
   const auth = useSelector((state) => state.authToken);
   console.log("a", auth);
 
-  const mutation = useMutation(
-    () =>
-      axios(`${ROOT_API}/news`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: (data) => {
-        console.log("success", data);
-      },
-    }
-  );
+  async function fetchProjects() {
+    const { data } = await axios.get(`${ROOT_API}/news`);
+    return data;
+  }
 
-  // async function fetchProjects() {
-  //   const { data } = await axios.get(`${ROOT_API}/news`);
-  //   return data;
-  // }
-
-  // const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
-  //   queryKey: ["news"],
-  //   queryFn: () => fetchProjects(),
-  // });
+  const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
+    queryKey: ["news"],
+    queryFn: () => fetchProjects(),
+  });
 
   // console.log("news data", data);
   return (
     <section>
-      <button onClick={() => mutation.mutate()}>ddd</button>
       <strong>IT 뉴스</strong>
       <ul>
-        {
-          //   data ? (
-          //   data.map((item, index) => (
-          //     <li key={index}>
-          //       <a href={item.url} target="_blank" rel="noreferrer">
-          //         <p>{item.title}</p>
-          //       </a>
-          //     </li>
-          //   ))
-          // ) : (
-          //   <li className="not-list">최신 뉴스가 존재하지 않습니다.</li>
-          // )
-        }
+        {data ? (
+          data.map((item, index) => (
+            <li key={index}>
+              <a href={item.url} target="_blank" rel="noreferrer">
+                <p>{item.title}</p>
+              </a>
+            </li>
+          ))
+        ) : (
+          <li className="not-list">최신 뉴스가 존재하지 않습니다.</li>
+        )}
       </ul>
     </section>
   );

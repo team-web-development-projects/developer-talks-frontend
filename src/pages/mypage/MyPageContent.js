@@ -1,10 +1,10 @@
 import React from "react";
-import "./mypagecontent.scss";
+import s from "./mypagecontent.module.scss";
 import Userside from "./_com/userside/Userside";
 
 const MypageContent = ({ children }) => {
   return (
-    <div className="mypage">
+    <div className={s.mypage}>
       <Userside />
       {children}
     </div>

@@ -1,5 +1,15 @@
+@import 'assets/style/variable.scss';
+
 .main-page {
-  padding-top: 20px;
+  article {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px; 
+    vertical-align: top;
+    section {
+      width: 100%;
+    }
+  }
   section {
     &:last-child {
       margin-bottom: 40px;
@@ -8,7 +18,7 @@
       display: block;
       padding: 16px 20px;
       width: 100%;
-      background: #767676;
+      background: $secondary;
       color: white;
       border-radius: 16px;
       box-sizing: border-box;
@@ -16,6 +26,8 @@
   }
   ul {
     margin-top: 14px;
+    max-height: 300px;
+    overflow: auto;
   }
   li {
     border-bottom: 1px solid #ccc;

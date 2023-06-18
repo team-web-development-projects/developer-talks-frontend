@@ -1,0 +1,14 @@
+.banner {
+  padding: 20px 0 20px 30px;
+  color: black;
+  background: #c5dfee;
+  border-radius: 12px;
+  p {
+    font-size: 14px;
+    &:first-child {
+      margin-bottom: 4px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+  }
+}

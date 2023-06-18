@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardList.module.scss";
 import { useRef } from "react";
+import BoardBanner from "components/boardBanner/BoardBanner";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -73,20 +74,20 @@ const BoardList = ({ type }) => {
           <br />
         </BasicModal>
       )}
-      <div className={s.banner}>
-        <p>{type === "post" ? "⭐자유주제⭐" : "❓Q&A❓"}</p>
+      <BoardBanner>
+        <p>{type === "post" ? "자유주제" : "Q&A"}</p>
         <p>
           {type === "post"
-            ? "여러 회원들과 자유롭게 대화하세요😀"
-            : "궁금한 것이 있다면 무엇이든 질문해보아요😊"}
+            ? "여러 회원들과 자유롭게 대화하세요"
+            : "궁금한 것이 있다면 무엇이든 질문해보세요"}
         </p>
-      </div>
+      </BoardBanner>
       <div className={s.header}>
         <SearchInput type={type} />
         <div className={s.bottom}>
           {/* TODO: 옛날순 정렬 */}
           <Select init="최신순" options={["최신순", "옛날순"]} />
-          <Button onClick={handleClickPost}>✏️작성하기</Button>
+          <Button size="small" onClick={handleClickPost}>작성하기</Button>
         </div>
       </div>
       <ul>

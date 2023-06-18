@@ -189,29 +189,4 @@ function App() {
   );
 }
 
-// 헤더 포함
-// function NavigateMain() {
-//   return (
-//     <>
-//       <Header />
-//       <div className="page">
-//         <Outlet />
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// }
-
-// 헤더 미포함
-// function NavigatePost() {
-//   return (
-//     <>
-//       <div className="page">
-//         <Outlet />
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// }
-
 export default App;

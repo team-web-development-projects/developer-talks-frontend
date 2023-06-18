@@ -39,15 +39,15 @@ const BoardItem = ({
           <p className={s.nickname}>{nickname}</p>
           <div className={s.countInfo}>
             <div className={s.item}>
-              <AiOutlineEye />
+              <AiOutlineEye color="#444" />
               <p>{vCnt}</p>
             </div>
             <div className={s.item}>
-              <AiOutlineStar />
+              <AiOutlineStar color="#444" />
               <p>{fCnt}</p>
             </div>
             <div className={s.item}>
-              <FiThumbsUp />
+              <FiThumbsUp color="#444" />
               <p>{rCnt}</p>
             </div>
           </div>

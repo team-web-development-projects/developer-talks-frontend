@@ -1,38 +1,38 @@
+@import 'assets/style/variable.scss';
+
 .mypage {
   display: flex;
   min-height: inherit;
   .main {
     display: flex;
   }
-  .content-wrap {
+  .contentWrap {
     margin: 0 auto;
     width: 60%;
+    margin-top: 40px;
     .nav {
       display: flex;
       justify-content: space-around;
-      margin-top: 5%;
-      margin-bottom: 5%;
       border-radius: 10px;
       border: 1px solid #ccc;
       li {
-        width: 150px;
+        width: 100%;
         text-align: center;
         font-size: 17px;
-
         button {
-          width: 85%;
+          width: 60%;
           background-color: white;
-          padding: 20px;
+          padding: 16px 20px;
           font-weight: 700;
 
           &:hover {
-            color: #ff0000;
-            border-bottom: 3px solid #ff0000;
+            color: $primary;
+            border-bottom: 3px solid $primary;
           }
         }
         .select {
-          color: #ff0000;
-          border-bottom: 3px solid #ff0000;
+          color: $primary;
+          border-bottom: 3px solid $primary;
         }
       }
     }

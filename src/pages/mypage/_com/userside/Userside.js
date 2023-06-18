@@ -46,12 +46,14 @@ const Userside = () => {
         <div className="imgwrap">
           <img src={imageFile} alt="" />
         </div>
-        <span>{userData.description}</span>
         <ul className="nav">
           <li className={location.pathname === "/mypage" && "is-active"} onClick={() => handleClick("mypage")}>
             <Link to="/mypage">활동내역</Link>
           </li>
-          <li className={location.pathname === "/my-studyroom" && "is-active"} onClick={() => handleClick("my-studyroom")}>
+          <li
+            className={location.pathname === "/my-studyroom" && "is-active"}
+            onClick={() => handleClick("my-studyroom")}
+          >
             <Link to="/my-studyroom">스터디룸</Link>
           </li>
           <li className={location.pathname === "/account" && "is-active"} onClick={() => handleClick("account")}>

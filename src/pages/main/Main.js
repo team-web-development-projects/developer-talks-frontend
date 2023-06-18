@@ -8,9 +8,11 @@ import News from "pages/_com/news/News";
 
 const Main = () => {
   return (
-    <div className="main-page page">
-      <Best />
-      <News />
+    <div className="main-page">
+      <article>
+        <Best />
+        <News />
+      </article>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const Logout = () => {
   };
 
   return (
-    <Button onClick={logout} size="medium" classname={s.logout}>
+    <Button onClick={logout} size="small" type="cancle" classname={s.logout} >
       로그아웃
     </Button>
   );
