@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 const News = () => {
   const auth = useSelector((state) => state.authToken);
-  console.log("a", auth);
 
   async function fetchProjects() {
     const { data } = await axios.get(`${ROOT_API}/news`);
@@ -18,7 +17,7 @@ const News = () => {
     queryFn: () => fetchProjects(),
   });
 
-  // console.log("news data", data);
+  console.log("news data", data);
   return (
     <section>
       <strong>IT 뉴스</strong>

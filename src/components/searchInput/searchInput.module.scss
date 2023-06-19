@@ -5,8 +5,8 @@
   align-items: center;
   padding-right: 10px;
   font-size: 25px;
-  border-radius: 15px;
-  outline: solid 1px black;
+  border-radius: 18px;
+  outline: solid 1px #d1d5db;
   &:focus-within {
     outline: solid 2px $primary;
   }
@@ -17,8 +17,12 @@
     font-size: 16px;
     border: none;
     box-sizing: border-box;
+    &::placeholder {
+      font-size: 14px;
+    }
   }
   button {
+    transform: translate(0px, 1px);
     background: none;
   }
 }

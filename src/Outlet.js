@@ -14,15 +14,12 @@ export const NavigateMain = () => {
   const mypage = ["/mypage", "/my-studyroom", "/account"];
 
   useEffect(() => {
-    console.log("dd", location.pathname);
     if (mypage.includes(location.pathname)) {
       dispatch(SET_ROUTER({ state: "mypage" }));
     } else {
       dispatch(SET_ROUTER({ state: null }));
     }
   }, [location, dispatch]);
-
-  console.log("router", pageRouter);
 
   return (
     <>

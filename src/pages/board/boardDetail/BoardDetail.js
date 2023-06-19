@@ -77,7 +77,7 @@ const BoardDetail = ({ type }) => {
         <header>
           <span className={s.nick}>{post.nickname}</span>
           <div className={s.info}>
-            <span>{post.createDate} •</span>
+            <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
             <span>조회수 {post.viewCount}</span>
           </div>
           <p className={s.title}>{post.title}</p>
