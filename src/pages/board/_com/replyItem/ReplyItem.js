@@ -8,7 +8,7 @@ import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useSelector } from "react-redux";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { set } from "react-hook-form";
 const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList, setControlRender }) => {
@@ -102,7 +102,6 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
   };
   return (
     <>
-      <ToastContainer />
       <li className={s.container}>
         <div className={s.info}>
           <p>{nickname}</p>

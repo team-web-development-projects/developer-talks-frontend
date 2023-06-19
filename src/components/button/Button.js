@@ -2,7 +2,15 @@ import React from "react";
 import s from "./button.module.scss";
 import classnames from "classnames";
 
-const Button = ({FullWidth, children, onClick, classname, type, size = "big" }) => {
+/**
+ *
+ * @param {string} type 버튼 유형 - success cancle
+ * @param {string} size 버튼 사이즈 - small medium large big
+ * @param {boolean} fullWidth width100% 유무
+ * @returns
+ */
+
+const Button = ({ FullWidth, children, onClick, classname, type, size = "big" }) => {
   return (
     <button
       className={classnames(`${s.button} ${classname}`, {

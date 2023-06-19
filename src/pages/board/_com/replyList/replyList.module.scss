@@ -1,22 +1,26 @@
 .notice_reply {
   margin-top: 100px;
   .title {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: #8b8b8b;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
   }
   .inputTrue{
     margin-bottom: 40px;
   }
   .inputFalse {
+    display: flex;
+    align-items: center;
     margin-bottom: 40px;
-    width: 96%;
+    height: 54px;
+    padding-left: 20px;
+    width: 100%;
     border: solid 1px #cfcccc;
-    border-radius: 10px;
-    padding: 20px;
-    font-size: 20px;
+    border-radius: 8px;
+    font-size: 16px;
     color: #8b8b8b;
+    box-sizing: border-box;
     cursor: pointer;
   }
   .replies {

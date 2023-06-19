@@ -10,6 +10,7 @@ import { FiThumbsUp } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
+import Button from "components/button/Button";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -81,9 +82,9 @@ const BoardDetail = ({ type }) => {
           </div>
           <p className={s.title}>{post.title}</p>
           {nickname === post.nickname && (
-            <div>
-              <button onClick={clickUpdate}>수정</button>
-              <button onClick={deletePost}>삭제</button>
+            <div className={s.button_wrap}>
+              <Button onClick={clickUpdate} size="small" type="success">수정</Button>
+              <Button onClick={deletePost} size="small" type="cancle">삭제</Button>
             </div>
           )}
         </header>
@@ -102,7 +103,7 @@ const BoardDetail = ({ type }) => {
             setPost={setPost}
           >
             <AiOutlineStar />
-            <p>{post.favoriteCount}</p>
+            <span>{post.favoriteCount}</span>
           </BoardCount>
           <BoardCount
             type={"recommend"}
@@ -114,7 +115,7 @@ const BoardDetail = ({ type }) => {
             setPost={setPost}
           >
             <FiThumbsUp />
-            <p>{post.recommendCount}</p>
+            <span>{post.recommendCount}</span>
           </BoardCount>
         </div>
         <ReplyList nickname={nickname} />

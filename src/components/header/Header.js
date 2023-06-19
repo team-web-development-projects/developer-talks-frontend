@@ -10,36 +10,28 @@ import "./header.scss";
 import { parseJwt } from "hooks/useParseJwt";
 import { ROOT_API } from "constants/api";
 import { outOfClick } from "hooks/useOutOfClick";
+import classNames from "classnames";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
   const [popover, setPopover] = useState(false);
-  const [userhi, setUserhi] = useState(false);
   let nickname = "";
   const targetRef = useRef(null);
-  outOfClick(targetRef);
+  const location = useLocation();
+  outOfClick(targetRef); // NOTE: 아웃오브클릭 테스트
 
   const showPopover = () => {
     setPopover(!popover);
   };
-  const location = useLocation(); //url 정보 들어 있음.
 
   if (auth.accessToken !== null) {
     nickname = parseJwt(auth.accessToken).nickname;
   }
-  useEffect(() => {
-    if (auth.accessToken == null) {
-      setUserhi(false);
-    } else {
-      setUserhi(true);
-    }
-  }, [auth.accessToken]);
 
   useEffect(() => {
     setPopover(false);
   }, [location]);
-  // useEffect 훅을 사용하여, location 값이 변경될 때마다 popover 상태를 false로 업데이트
-  // []한번 실행
+
   let [user, setUser] = useState([
     {
       id: "1",
@@ -69,15 +61,27 @@ const Header = () => {
   const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
     queryKey: ["popover"],
     // queryFn: () => fetchProjects(),
-    // suspense: true,
   });
 
   if (isLoading) return <div>Loading...</div>;
   if (status === "loading") return <div>Loading...</div>;
 
-  // const UserList = users.map((user) => <User />);
+  console.log("dd", location.pathname);
 
-  // [읽기, 쓰기] = useState('초기값') // 초기값 타입 : string, number ,array, json, boolean(true, false)
+  const menuRouter = [
+    {
+      link: "/qna",
+      text: "Q&A",
+    },
+    {
+      link: "/board",
+      text: "커뮤니티",
+    },
+    {
+      link: "/studyroom",
+      text: "스터디룸",
+    },
+  ];
 
   return (
     <header className="header">
@@ -87,16 +91,18 @@ const Header = () => {
         </Link>
         <nav className="navBar">
           <ul className="right">
-            <li>
-              <Link to="/qna">Q&A</Link>
-            </li>
-            <li>
-              <Link to="/board">커뮤니티</Link>
-            </li>
-            <li>
-              <Link to="/studyroom">스터디룸</Link>
-            </li>
-
+            {menuRouter.map((item, i) => (
+              <li key={i}>
+                <Link
+                  to={item.link}
+                  className={classNames("", {
+                    "is-active": location.pathname === item.link,
+                  })}
+                >
+                  {item.text}
+                </Link>
+              </li>
+            ))}
             <li className="popover-link">
               <span onClick={showPopover} ref={targetRef}>
                 <span className="bell">
@@ -110,12 +116,6 @@ const Header = () => {
                   </div>
                 )}
               </span>
-              {
-                //   popover &&
-                //   user.map((a, index) {
-                //     return <div key={a.id}>{a.amount}</div>;
-                // })
-              }
             </li>
             <li className="header-user">
               <Link to="/mypage">
