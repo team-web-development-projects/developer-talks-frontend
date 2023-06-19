@@ -1,3 +1,5 @@
+@import 'assets/style/variable.scss';
+
 .sidebackground {
   // z-index: -1;
   // position: fixed;
@@ -10,14 +12,18 @@
 
 .side {
   max-width: 300px;
-  width: 35%;
-  background-color: #f3f3f3;
+  width: 100%;
+  padding-right: 20px;
+  // background-color: #f3f3f3;
+  border-right: 1px solid #f3f3f3;
   .imgwrap {
     position: relative;
-    margin: 20px;
-    height: 180px;
+    margin: 20px auto;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
     overflow: hidden;
-    border-radius: 12px;
 
     input[type="file"] {
       position: absolute;
@@ -29,13 +35,15 @@
   }
 
   img {
-    position: absolute;
-    top: -1000%;
-    right: -1000%;
-    bottom: -1000%;
-    left: -1000%;
-    margin: auto;
+    // position: absolute;
+    // top: -1000%;
+    // right: -1000%;
+    // bottom: -1000%;
+    // left: -1000%;
+    // margin: auto;
+    width: 100%;
     height: 100%;
+    object-fit: cover;
     // padding: 20px;
     // width: 100%;
     // height: 220px;
@@ -47,16 +55,19 @@
     padding-left: 0;
 
     li {
+      margin-bottom: 2px;
+      border-radius: 4px;
       &:hover {
-        background-color: #ffffff;
+        background-color: #e5e7eb;
+      }
+      &.is-active {
+        background-color: #e5e7eb;
       }
       a {
         display: block;
-        padding: 20px;
+        padding: 10px 20px 10px 14px;
+        font-size: 14px;
       }
     }
   }
-}
-.is-active {
-  background-color: #ffffff;
 }

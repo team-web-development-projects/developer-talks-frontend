@@ -118,7 +118,12 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
           <br />
         </BasicModal>
       )}
-      <Button classname={checkButton? s.btnTrue: s.btnFalse} onClick={() => handleClick(type)}>
+      <Button
+        theme="outline"
+        color={checkButton ? "#063eff" : "#9ca3af"}
+        size="medium"
+        onClick={() => handleClick(type)}
+      >
         {children}
       </Button>
     </>

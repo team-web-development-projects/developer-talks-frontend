@@ -1,8 +1,8 @@
 .form {
   margin: 0 auto;
-  margin-top: 10%;
-  padding: 100px 30px;
+  padding: 60px 40px 40px 40px;
   // width: 70%;
+  margin-top: 30px;
   border-radius: 10px;
   box-sizing: border-box;
   text-align: center;
@@ -27,10 +27,11 @@
 
 .form-user-guide {
   width: 100%;
-  background-color: #ffffff;
   margin: 0 auto;
-  text-align: center;
   padding-top: 30px;
+  padding-bottom: 80px;
+  text-align: center;
+  background-color: #ffffff;
 
   li {
     list-style: none;

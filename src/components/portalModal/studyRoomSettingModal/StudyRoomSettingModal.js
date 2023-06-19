@@ -168,10 +168,10 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
             <CkEditor form={indata} setForm={setIndata} placeholder={"내용을 입력해주세요."} />
           </div>
         </form>
-        <Button size="small" type="submit" onClick={handleSubmit}>
+        <Button size="small" theme="submit" onClick={handleSubmit}>
           저장
         </Button>
-        <Button size="small" type="cancle" onClick={() => setModals(true)}>
+        <Button size="small" theme="cancle" onClick={() => setModals(true)}>
           삭제
         </Button>
       </ModalFrame>

@@ -72,6 +72,7 @@ const ReplyList = ({ nickname }) => {
       })
       .catch((error) => console.log(error));
   }, [controlRender]);
+
   return (
     <>
       <div className={s.notice_reply}>

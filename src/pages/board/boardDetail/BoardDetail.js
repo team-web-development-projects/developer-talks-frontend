@@ -83,8 +83,12 @@ const BoardDetail = ({ type }) => {
           <p className={s.title}>{post.title}</p>
           {nickname === post.nickname && (
             <div className={s.button_wrap}>
-              <Button onClick={clickUpdate} size="small" type="success">수정</Button>
-              <Button onClick={deletePost} size="small" type="cancle">삭제</Button>
+              <Button onClick={clickUpdate} size="small" theme="success">
+                수정
+              </Button>
+              <Button onClick={deletePost} size="small" theme="cancle">
+                삭제
+              </Button>
             </div>
           )}
         </header>

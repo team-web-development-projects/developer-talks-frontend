@@ -1,9 +1,12 @@
 .container {
   padding: 20px 0px;
-  .nickname{
-      margin-bottom:10px;
+  .nickname {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
   }
-  .content{
+  .content {
       font-size: 20px;
   }
 }

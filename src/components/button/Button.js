@@ -4,24 +4,26 @@ import classnames from "classnames";
 
 /**
  *
- * @param {string} type 버튼 유형 - success cancle
+ * @param {string} theme 버튼 theme - success cancle, 라인만 있는거 outline
  * @param {string} size 버튼 사이즈 - small medium large big
  * @param {boolean} fullWidth width100% 유무
  * @returns
  */
 
-const Button = ({ FullWidth, children, onClick, classname, type, size = "big" }) => {
+const Button = ({ FullWidth, children, onClick, classname, theme, size = "big", color }) => {
   return (
     <button
       className={classnames(`${s.button} ${classname}`, {
-        [s.is_success]: type === "success",
-        [s.is_cancle]: type === "cancle",
+        [s.is_success]: theme === "success",
+        [s.is_cancle]: theme === "cancle",
+        [s.is_outline]: theme === "outline",
         [s.is_small]: size === "small",
         [s.is_medium]: size === "medium",
         [s.is_large]: size === "large",
         [s.is_big]: size === "big",
         [s.is_fullWidth]: FullWidth,
       })}
+      style={{ borderColor: color, color: color }}
       onClick={onClick}
     >
       {children}

@@ -10,11 +10,12 @@ import { useSelector } from "react-redux";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { set } from "react-hook-form";
+import ProfileImg from "components/profileImg/ProfileImg";
+
 const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList, setControlRender }) => {
   const auth = useSelector((state) => state.authToken);
   const [ispostToggle, setIsPostToggle] = useState(false);
-  const [isgetToggle, setIsGetToggle] = useState(false);
+  const [isgetToggle, setIsGetToggle] = useState(true);
   const [isUpdateToggle, setIsUpdateToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
@@ -100,20 +101,24 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
       })
       .catch((error) => console.log(error));
   };
+
   return (
     <>
       <li className={s.container}>
         <div className={s.info}>
+          <ProfileImg />
           <p>{nickname}</p>
-          {secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
+          {secret && <BsLock size={20} />}
           {isSelf ? (
-            <div>
-              <button onClick={handleUpdate}>수정</button>
-              <button onClick={handleDelete}>삭제</button>
+            <div className={s.btn_wrap}>
+              <Button onClick={handleUpdate} size="small">
+                수정
+              </Button>
+              <Button onClick={handleDelete} size="small" theme="cancle">
+                삭제
+              </Button>
             </div>
-          ) : (
-            <div></div>
-          )}
+          ) : null}
         </div>
         {isUpdateToggle ? (
           <div>
@@ -138,23 +143,22 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
           {rereplyList.length ? (
             <button className={s.replyBtn} onClick={handleClickReRe}>
               {isgetToggle ? (
-                <div>
+                <>
                   <AiFillCaretUp className={s.icon} />
-                  숨기기
-                </div>
+                  댓글 모두 숨기기
+                </>
               ) : (
-                <div>
+                <>
                   <AiFillCaretDown className={s.icon} />
-                  {rereplyList.length}개 대댓글
-                </div>
+                  댓글 {rereplyList.length}개 보기
+                </>
               )}
             </button>
           ) : (
             <div></div>
           )}
           <button onClick={handleToggle} className={s.replyBtn}>
-            <AiOutlineMessage size={20} className={s.icon} />
-            대댓글 달기
+            댓글 쓰기
           </button>
         </div>
         <div className={s.rereplyContainer}>

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./Userside.scss";
+import { parseJwt } from "hooks/useParseJwt";
+import ProfileImg from "components/profileImg/ProfileImg";
 
 const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
@@ -44,7 +46,7 @@ const Userside = () => {
     <>
       <section className="side">
         <div className="imgwrap">
-          <img src={imageFile} alt="" />
+          <ProfileImg nickname={"aa"} size="big" />
         </div>
         <ul className="nav">
           <li className={location.pathname === "/mypage" && "is-active"} onClick={() => handleClick("mypage")}>

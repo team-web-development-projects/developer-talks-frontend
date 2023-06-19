@@ -1,15 +1,16 @@
+import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
+import Label from "components/label/Label";
+import LineStyle from "components/lineStyle/LineStyle";
+import Table from "components/table/Table";
+import { showToast } from "components/toast/showToast";
+import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MypageContent from "./MyPageContent";
-import { ROOT_API } from "constants/api";
-import axios from "axios";
-import s from "./account.module.scss";
-import LineStyle from "components/lineStyle/LineStyle";
-import Table from "components/table/Table";
-import Label from "components/label/Label";
-import { showToast } from "components/toast/showToast";
+import s from "./mypagecontent.module.scss";
+import account from "./account.module.scss";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
@@ -104,7 +105,7 @@ function Account() {
 
   return (
     <MypageContent>
-      <section className={s.contentwrap}>
+      <section className={s.contentWrap}>
         <ul className={s.nav}>
           {tabTitle.map((item, index) => (
             <li key={index}>
@@ -116,16 +117,22 @@ function Account() {
         </ul>
         {select === 0 && (
           <Form onSubmit={userEdit}>
-            <div className={s.prople}>
-              <div className={s.imgwrap}>
+            <div className={account.profile}>
+              <div className={account.imgwrap}>
                 {imageFile && <img src={imageFile} alt="프로필이미지" />}
-                <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
+                <input
+                  accept="image/*"
+                  type="file"
+                  name="프로필이미지"
+                  onChange={handleChangeProfileImage}
+                  id="profile"
+                />
               </div>
             </div>
             <span>프로필 이미지 선택☝️</span>
-            <br/>
+            <br />
             <label>한 줄 내소개</label>
-            <div className={s.description}>
+            <div className={account.description}>
               <input
                 type="description"
                 id="description"
@@ -135,13 +142,16 @@ function Account() {
                 maxLength={80}
                 onChange={handleChange}
               />
-              <Button onClick={saveUser}>저장</Button>
             </div>
             <label>관심있는 태그입력</label>
-            <div className={s.tagalign}>
-              <div className={s.tags}>
+            <div className={account.tagalign}>
+              <div className={account.tags}>
                 {tags.map((item, index) => (
-                  <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+                  <span
+                    key={index}
+                    onClick={() => clickTag(item)}
+                    className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+                  >
                     {item}
                   </span>
                 ))}
@@ -173,20 +183,34 @@ function Account() {
                   <Label isRequire htmlFor="password">
                     비밀번호
                   </Label>
-                  <input id="password" name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
+                  <input
+                    id="password"
+                    name="password"
+                    autoComplete="password"
+                    value={userData.password}
+                    onChange={handleChange}
+                    type="password"
+                  />
                 </div>,
                 <div>
                   <Label isRequire htmlFor="passwordChk">
                     비밀번호 확인
                   </Label>
-                  <input id="passwordChk" name="password" autoComplete="password" value={userData.password} onChange={handleChange} type="password" />
-                  {/* <div className={s.typechange} type="typechange" onClick={typechange}> */}
+                  <input
+                    id="passwordChk"
+                    name="password"
+                    autoComplete="password"
+                    value={userData.password}
+                    onChange={handleChange}
+                    type="password"
+                  />
+                  {/* <div className={account.typechange} type="typechange" onClick={typechange}> */}
                   {/* 👀 */}
                   {/* </div> */}
                 </div>,
               ]}
             </Table>
-            <Button FullWidth size="large">
+            <Button FullWidth size="large" onClick={saveUser}>
               저장
             </Button>
             <br />
@@ -196,11 +220,11 @@ function Account() {
           </Form>
         )}
         {select === 1 && (
-          <form className={s.delete}>
+          <form className={account.delete}>
             <div className={s.deletgaider}>
-              회원 탈퇴일로부터 계정과 닉네임을 포함한 계정 정보(아이디/이메일/닉네임)는 개인정보 보호방침에 따라 60일간 보관(잠김)되며, 60일 경과된
-              후에는 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된 게시물은 삭제되지 않으며, 익명처리 후 디톡스로 소유권이
-              귀속됩니다.
+              회원 탈퇴일로부터 계정과 닉네임을 포함한 계정 정보(아이디/이메일/닉네임)는 개인정보 보호방침에 따라 60일간
+              보관(잠김)되며, 60일 경과된 후에는 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된
+              게시물은 삭제되지 않으며, 익명처리 후 디톡스로 소유권이 귀속됩니다.
             </div>
             <input type="checkbox" />
             <label>계정 삭제에 관한 정책을 읽고 이에 동의합니다</label>

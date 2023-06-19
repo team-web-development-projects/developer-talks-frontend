@@ -66,8 +66,6 @@ const Header = () => {
   if (isLoading) return <div>Loading...</div>;
   if (status === "loading") return <div>Loading...</div>;
 
-  console.log("dd", location.pathname);
-
   const menuRouter = [
     {
       link: "/qna",
