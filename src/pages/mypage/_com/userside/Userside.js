@@ -27,7 +27,6 @@ const Userside = () => {
         },
       })
       .then(function (response) {
-        console.log("정보 성공:", response);
         setImageFile(response.data.url);
       });
     axios
@@ -37,7 +36,6 @@ const Userside = () => {
         },
       })
       .then(({ data }) => {
-        console.log("cc정보 성공:", data);
         setUserData(data);
       });
   }, [auth.accessToken]);

@@ -14,9 +14,11 @@ const Mypage = ({ type }) => {
   const navigate = useNavigate();
   const [select, setSelect] = useState(0);
   const [favorite, setFavorite] = useState([]);
-  let userId = "";
+  let userId;
+  let nickname;
   if (auth.accessToken !== null) {
     userId = parseJwt(auth.accessToken).userid;
+    nickname = parseJwt(auth.accessToken).nickname;
   }
 
   const onSelect = (type) => {
@@ -27,22 +29,25 @@ const Mypage = ({ type }) => {
   useEffect(() => {
     switch (select) {
       case 0:
-        console.log("0클릭", select);
-        // axios
-        //   .get(
-        //     // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
-        //     `${ROOT_API}/users/recent/activity/${getNickname}`,
-        //     {
-        //       params: { page: 0, size: 10 },
-        //       headers: {
-        //         "X-AUTH-TOKEN": auth.accessToken,
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     console.log("1", res.data.content);
-        //     setFavorite(res.data.content);
-        //   });
+        axios
+          .get(
+            // 최근 활동 = 글작성, 댓글, 답변 등 모든 내용 포함 //1
+            `${ROOT_API}/users/recent/activity/${nickname}`,
+            {
+              params: { page: 0, size: 10 }, //NOTE 가람님이 활동 시간명 변경
+              headers: {
+                "X-AUTH-TOKEN": auth.accessToken,
+              },
+            }
+          )
+          .then((res) => {
+            setFavorite(res.data.content);
+            console.log("1", res.data.content);
+          })
+          .catch(() => {
+            console.log(nickname);
+            console.log(parseJwt(auth.accessToken));
+          });
         break;
       case 1:
         axios

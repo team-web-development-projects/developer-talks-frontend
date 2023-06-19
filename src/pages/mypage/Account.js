@@ -15,13 +15,18 @@ import account from "./account.module.scss";
 function Account() {
   const auth = useSelector((state) => state.authToken);
   const [selectedImage, setSelectedImage] = useState(null);
-
-  const [imageFile, setImageFile] = useState("");
+  const [profileImageId, setProfileImageId] = useState("");
+  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
     joinableCount: 1,
   });
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
+
+  const tabTitle = ["회원정보 수정", "회원 탈퇴"];
+  const [select, setSelect] = useState(0);
+  const [userData, setUserData] = useState(""); //유저데이터 가져오기
   const handleChangeProfileImage = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
@@ -43,15 +48,16 @@ function Account() {
       });
     }
   };
-  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
-
-  const tabTitle = ["회원정보 수정", "회원 탈퇴"];
-  const [select, setSelect] = useState(0);
   const onSelect = (type) => {
     setSelect(type);
   };
 
-  const [userData, setUserData] = useState(""); //유저데이터 가져오기
+  const handleChange = (e) => {
+    console.log(userData.description);
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
   useEffect(() => {
     axios
       .get(`${ROOT_API}/users/profile/image`, {
@@ -69,7 +75,6 @@ function Account() {
         },
       })
       .then(({ data }) => {
-        console.log("cc정보 성공:", data);
         setUserData(data);
         setSelectedTags({ ...selectedTags, tags: data.skills });
       });
@@ -80,27 +85,65 @@ function Account() {
     setUserData("");
   };
 
-  const userEdit = (e) => {
-    //NOTE 수정
+  const onSubmit = async (e) => {
+    console.log(auth.accessToken);
     e.preventDefault();
-    console.log(`
-    아이디: ${userData.description}
+    console.log(auth);
+    await new Promise((r) => setTimeout(r, 1000));
+    console.log(selectedImage, "dddddd");
+    const formData = new FormData();
+    formData.append("file", selectedImage);
+    if (selectedImage) {
+      axios
+        .put(`${ROOT_API}/users/profile/image`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          setProfileImageId(response.data.id);
+          setImageFile(response.data.url);
+        });
+    }
+    axios
+      .put(
+        `${ROOT_API}/users/profile`,
+        {
+          description: userData.description,
+          skills: selectedTags.tags,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+    axios
+      .put(`${ROOT_API}/users/profile/nickname`, userData.nickname, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        //NOTE 수정
+        console.log(`
+    소개: ${userData.description}
       닉네임: ${userData.nickname}
       이메일: ${userData.email}
       아이디: ${userData.userid}
       비밀번호: ${userData.password}   
     `);
-  };
-
-  const handleChange = (e) => {
-    console.log(userData.description);
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
-
-  const saveUser = async (e) => {
-    e.preventDefault();
-    await new Promise((r) => setTimeout(r, 1000));
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -116,7 +159,7 @@ function Account() {
           ))}
         </ul>
         {select === 0 && (
-          <Form onSubmit={userEdit}>
+          <Form onSubmit={onSubmit}>
             <div className={account.profile}>
               <div className={account.imgwrap}>
                 {imageFile && <img src={imageFile} alt="프로필이미지" />}
@@ -210,7 +253,7 @@ function Account() {
                 </div>,
               ]}
             </Table>
-            <Button FullWidth size="large" onClick={saveUser}>
+            <Button FullWidth size="large">
               저장
             </Button>
             <br />
