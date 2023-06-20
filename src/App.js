@@ -26,6 +26,7 @@ import "./assets/style/index.scss";
 import { setRefreshToken } from "store/Cookie";
 import { parseJwt } from "hooks/useParseJwt";
 import { ToastCont } from "components/toast/ToastCont";
+import epochConvert from "util/epochConverter";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
@@ -34,20 +35,17 @@ function App() {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
 
-  console.log('auth', auth);
+  console.log("auth", auth);
 
   useEffect(() => {
-    //NOTE 구글 로그인 시 메인으로 가게 만드는
-    // if (window.location.href.includes("accessToken") && !window.location.href.includes("refreshToken")) {
-    //   const searchParams = new URLSearchParams(window.location.search);
-    //   const accessToken = searchParams.get("accessToken");
-    //   navigate("/userregist", { replace: true });
-    //   dispatch(SET_TOKEN({ accessToken: accessToken }));
-    //   console.log(accessToken);
-    // }
+    // 구글 로그인 토큰 인증
     if (window.location.href.includes("accessToken")) {
-      const accessToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[0];
-      const refreshToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[1];
+      // if (window.location.href.includes("accessToken") && window.location.href.includes("refreshToken")) {
+      // const accessToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[0];
+      // const refreshToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[1];
+      const searchParams = new URLSearchParams(window.location.search);
+      const accessToken = searchParams.get("accessToken");
+      const refreshToken = searchParams.get("refreshToken");
       if (parseJwt(accessToken).nickname) {
         dispatch(SET_TOKEN({ accessToken: accessToken }));
         navigate("/", { replace: true });
@@ -57,27 +55,7 @@ function App() {
       }
       dispatch(SET_TOKEN({ accessToken: accessToken }));
       localStorage.setItem("refreshToken", refreshToken);
-      // console.log("atk: ", accessToken);
-      // console.log("rtk: ", refreshToken);
-      // console.log("auth: ", auth);
     }
-
-    // if (window.location.href.includes("accessToken")) {
-    //   const accessToken = window.location.href.split("accessToken=")[1];
-    //   const refreshToken = window.location.href.split("accessToken=")[1].split("&refreshToken=")[0];
-    //   dispatch(SET_TOKEN({ accessToken: accessToken }));
-    //   console.log("토큰있음");
-    //   navigate("/", { replace: true });
-    // }
-
-    // if (window.location.href.includes("accessToken") && window.location.href.includes("refreshToken")) {
-    //   const searchParams = new URLSearchParams(window.location.search);
-    //   const accessToken = searchParams.get("accessToken");
-    //   const refreshToken = searchParams.get("refreshToken");
-    //   navigate("/", { replace: true });
-    //   dispatch(SET_TOKEN({ accessToken: accessToken }));
-    //   setRefreshToken(refreshToken);
-    // }
   }, [dispatch, navigate, location, auth.accessToken]);
 
   // useEffect(() => {
@@ -106,7 +84,9 @@ function App() {
   // };
 
   useEffect(() => {
+    // 토큰 재갱신
     removeCookieToken();
+    console.log('c', localStorage.getItem('refreshToken'))
     if (auth.accessToken === null && localStorage.getItem("refreshToken") !== undefined) {
       axios
         .post(`${ROOT_API}/token/refresh`, {
@@ -127,26 +107,14 @@ function App() {
     }
   }, [auth.accessToken, dispatch, location]);
 
-  const Api = axios.create({
-    baseURL: `${ROOT_API}/token/refresh`,
-  });
-
-  Api.interceptors.response.use(
-    (response) => {
-      if (response.status === 200) {
-        console.log("Request succeeded!11");
-        console.log("res", response);
-        // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-      }
-      if (response.status !== 200) {
-        console.log("dd");
-      }
-      return response;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+  // useEffect(() => {
+  //   // 리프레쉬 토큰 만료 재갱신
+  //   console.log("rr", epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp));
+  //   if (epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp)) {
+  //     localStorage.removeItem("refreshToken");
+  //     navigate('/login');
+  //   }
+  // }, [location]);
 
   return (
     <div className="App">

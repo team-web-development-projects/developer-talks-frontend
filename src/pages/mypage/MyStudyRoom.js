@@ -10,7 +10,8 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MypageContent from "./MyPageContent";
-import s from "./mystudyroom.module.scss";
+import s from "./mypagecontent.module.scss";
+import mystudy from "./mystudyroom.module.scss";
 
 const MyStudyRoom = () => {
   const navigate = useNavigate();
@@ -71,21 +72,14 @@ const MyStudyRoom = () => {
 
   // 가입승인
   const asignUser = (studyRoomId, studyRoomUserId) => {
-    console.log(`${studyRoomId}, ${studyRoomUserId}`);
     axios
-      .post(
-        `${ROOT_API}/study-rooms/accept/${studyRoomId}/${studyRoomUserId}`,
-        {
-          studyRoomId: studyRoomId,
-          studyRoomUserId: studyRoomUserId,
+      .post(`${ROOT_API}/study-rooms/accept/${studyRoomId}/${studyRoomUserId}`, {
+        params: { status: true },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      })
       .then(function (response) {
         alert("승인 되었습니다.");
         axios
@@ -117,10 +111,10 @@ const MyStudyRoom = () => {
       (item) => item.studyRoomLevel === "LEADER" && item.nickname === getNickname
     );
     if (asigning.length === 1) {
-      return <span className={s.room_list_tag}>승인요청중</span>;
+      return <span className={mystudy.room_list_tag}>승인요청중</span>;
     }
     if (isRoomLeader.length === 1) {
-      return <span className={s.room_list_tag}>방장</span>;
+      return <span className={mystudy.room_list_tag}>방장</span>;
     }
   };
 
@@ -131,15 +125,15 @@ const MyStudyRoom = () => {
       {personModal && (
         <StudyRoomPersonModal setOnModal={() => setPerseonModal()} modalUserData={modalUserData} roomId={roomid} />
       )}
-      <div className={classNames("content-wrap", [s.mystudyroom])}>
+      <div className={classNames([s.contentWrap], [mystudy.mystudyroom])}>
         <section>
           <h3>스터디룸 신청 리스트</h3>
-          <ul className={s.list}>
+          <ul className={mystudy.list}>
             {asignList && asignList.content.length !== 0 ? (
               asignList.content.map((item, index) => (
-                <li onClick={asignJoin} key={index} className={s.list_item}>
-                  <div className={s.room_title}>{item.title}</div>
-                  <span className={s.user} onClick={(e) => clickUser(e, index)}>
+                <li onClick={asignJoin} key={index} className={mystudy.list_item}>
+                  <div className={mystudy.room_title}>{item.title}</div>
+                  <span className={mystudy.user} onClick={(e) => clickUser(e, index)}>
                     {item.nickname}
                     {drop.index === index && drop.state && (
                       <DropDown>
@@ -155,7 +149,7 @@ const MyStudyRoom = () => {
             )}
           </ul>
           {asignList && asignList.length !== 0 && (
-            <div className={s.pageContainer}>
+            <div className={mystudy.pageContainer}>
               <Pagination
                 currentPage={asignList.pageable.pageNumber + 1}
                 totalPage={asignList.totalPages}
@@ -167,12 +161,12 @@ const MyStudyRoom = () => {
 
         <section>
           <h3>참여중 스터디룸</h3>
-          <ul className={s.list}>
+          <ul className={mystudy.list}>
             {myList && myList.length !== 0 ? (
               myList.content.map((item, index) => (
                 <li
                   key={index}
-                  className={s.list_item}
+                  className={mystudy.list_item}
                   onClick={() => {
                     if (
                       item.studyRoomUsers.filter((item) => item.nickname === getNickname && item.status === true)
@@ -184,13 +178,13 @@ const MyStudyRoom = () => {
                     }
                   }}
                 >
-                  <div className={s.list_title}>
+                  <div className={mystudy.list_title}>
                     {item.title}
                     {roomUserInfo(item)}
                   </div>
-                  <div className={s.count_wrap}>
+                  <div className={mystudy.count_wrap}>
                     <div
-                      className={s.count}
+                      className={mystudy.count}
                       onClick={(e) => {
                         e.stopPropagation();
                         setPerseonModal(true);
@@ -211,7 +205,7 @@ const MyStudyRoom = () => {
             )}
           </ul>
           {myList && myList.length !== 0 && (
-            <div className={s.pageContainer}>
+            <div className={mystudy.pageContainer}>
               <Pagination
                 currentPage={myList.pageable.pageNumber + 1}
                 totalPage={myList.totalPages}
