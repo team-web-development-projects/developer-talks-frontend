@@ -3,6 +3,7 @@ import { ROOT_API } from "constants/api";
 import { useQuery, useMutation } from "react-query";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import s from "./news.module.scss";
 
 const News = () => {
   const auth = useSelector((state) => state.authToken);
@@ -19,14 +20,21 @@ const News = () => {
 
   console.log("news data", data);
   return (
-    <section>
+    <section className={s.news}>
       <strong>IT 뉴스</strong>
       <ul>
         {data ? (
           data.map((item, index) => (
             <li key={index}>
               <a href={item.url} target="_blank" rel="noreferrer">
-                <p>{item.title}</p>
+                <div className={s.imgwrap}>
+                  <img src={item.image} alt="" />
+                </div>
+                <div className={s.content_wrap}>
+                  <p className={s.title}>{item.title}</p>
+                  <div className={s.content}>{item.content}</div>
+                </div>
+                <span>{item.date}</span>
               </a>
             </li>
           ))
