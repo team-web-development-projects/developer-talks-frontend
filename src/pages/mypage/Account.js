@@ -13,9 +13,15 @@ import Userid from "./_com_Account/Uerid";
 import Email from "./_com_Account/Email";
 import Nickname from "./_com_Account/Nickname";
 import Description from "./_com_Account/Description";
+import { parseJwt } from "hooks/useParseJwt";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
+  const provider = parseJwt(auth.accessToken).provider;
+  let disabled;
+  if (provider) {
+    disabled = true;
+  }
   const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const tabTitle = ["회원정보 수정", "회원 탈퇴"];
   const [select, setSelect] = useState(0);
@@ -110,12 +116,37 @@ function Account() {
               setImageFile={setImageFile}
               imageFile={imageFile}
               selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
             />
             <LineStyle gray text={" 기본정보를 입력해주세요"} />
-            <Nickname auth={auth} ROOT_API={ROOT_API} axios={axios} userData={userData} handleChange={handleChange} />
-            <Email auth={auth} ROOT_API={ROOT_API} axios={axios} userData={userData} handleChange={handleChange} />
-            <Userid auth={auth} ROOT_API={ROOT_API} axios={axios} userData={userData} handleChange={handleChange} />
-            <Password auth={auth} ROOT_API={ROOT_API} axios={axios} userData={userData} handleChange={handleChange} />
+            <Nickname auth={auth} ROOT_API={ROOT_API} axios={axios} userData={userData} showToast={showToast} handleChange={handleChange} />
+            <Email
+              auth={auth}
+              ROOT_API={ROOT_API}
+              axios={axios}
+              disabled={disabled}
+              showToast={showToast}
+              userData={userData}
+              handleChange={handleChange}
+            />
+            <Userid
+              auth={auth}
+              ROOT_API={ROOT_API}
+              axios={axios}
+              disabled={disabled}
+              userData={userData}
+              showToast={showToast}
+              handleChange={handleChange}
+            />
+            <Password
+              auth={auth}
+              ROOT_API={ROOT_API}
+              axios={axios}
+              disabled={disabled}
+              showToast={showToast}
+              userData={userData}
+              handleChange={handleChange}
+            />
           </>
         )}
         {select === 1 && (

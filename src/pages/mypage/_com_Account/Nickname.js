@@ -3,8 +3,9 @@ import Form from "components/form/Form";
 import Label from "components/label/Label";
 import Button from "components/button/Button";
 
-const Nickname = ({ auth, ROOT_API, axios, userData, handleChange }) => {
+const Nickname = ({ auth, ROOT_API, axios, userData, handleChange, showToast }) => {
   const onSubmitNickname = async (e) => {
+    e.preventDefault();
     axios
       .put(`${ROOT_API}/users/profile/nickname`, userData.nickname, {
         headers: {
@@ -14,15 +15,7 @@ const Nickname = ({ auth, ROOT_API, axios, userData, handleChange }) => {
       })
       .then((response) => {
         console.log(response);
-
-        //NOTE 수정
-        console.log(`
-    소개: ${userData.description}
-      닉네임: ${userData.nickname}
-      이메일: ${userData.email}
-      아이디: ${userData.userid}
-      비밀번호: ${userData.password}   
-    `);
+        showToast("success", "😎 정보가 수정 되었습니다");
       })
       .catch((error) => console.log(error));
   };
