@@ -1,7 +1,11 @@
 import React from "react";
 import { randomProfile } from "hooks/useRandomProfile";
 import s from "./profileimg.module.scss";
-import classnames from 'classnames';
+import classnames from "classnames";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { ROOT_API } from "constants/api";
+import { useSelector } from "react-redux";
 
 /**
  *
@@ -10,10 +14,62 @@ import classnames from 'classnames';
  * @returns
  */
 
-const ProfileImg = ({ size = "small", nickname }) => {
-  return <div dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} className={classnames(s.img_wrap, {
-    [s.is_big] : size === 'big'
-  })} />;
+const ProfileImg = ({ size = "small", nickname, setImageFile, imageFile, setUserData }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const auth = useSelector((state) => state.authToken).accessToken;
+  const handleChangeProfileImage = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    const imageUrl = URL.createObjectURL(file);
+    setImageFile(imageUrl);
+  };
+  useEffect(() => {
+    axios
+      .get(`${ROOT_API}/users/profile/image`, {
+        headers: {
+          "X-AUTH-TOKEN": auth,
+        },
+      })
+      .then(function (response) {
+        setImageFile(response.data.url);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get(`${ROOT_API}/users/info`, {
+        headers: {
+          "X-AUTH-TOKEN": auth,
+        },
+      })
+      .then(({ data }) => {
+        setUserData(data);
+      });
+  }, [auth.accessToken]);
+  return (
+    <>
+      {imageFile ? (
+        <div className={s.profile}>
+          <div
+            className={classnames(s.img_wrap, {
+              [s.is_big]: size === "big",
+            })}
+          >
+            <img src={imageFile} alt="프로필이미지" />
+            <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
+          </div>
+        </div>
+      ) : (
+        <div
+          dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }}
+          className={classnames(s.img_wrap, {
+            [s.is_big]: size === "big",
+          })}
+        />
+      )}
+    </>
+  );
 };
 
 export default ProfileImg;

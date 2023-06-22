@@ -150,7 +150,7 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
         👀
       </div>
       <br />
-      <Button FullWidth size="large" type="submit">
+      <Button FullWidth size="large" type="submit" disabled={disabled}>
         저장
       </Button>
     </Form>

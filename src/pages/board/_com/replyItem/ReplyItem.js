@@ -21,6 +21,8 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
     content: "",
     secret: false,
   });
+  const [imageFile, setImageFile] = useState("");
+  const [userData, setUserData] = useState("");
   const [rereplyList, setRereplyList] = useState(childrenList);
   const handleToggle = () => {
     setIsPostToggle((prev) => !prev);
@@ -106,7 +108,7 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
     <>
       <li className={s.container}>
         <div className={s.info}>
-          <ProfileImg />
+          <ProfileImg setImageFile={setImageFile} imageFile={imageFile} setUserData={setUserData} />
           <p>{nickname}</p>
           {secret && <BsLock size={20} />}
           {isSelf ? (

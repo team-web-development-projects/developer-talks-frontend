@@ -19,32 +19,11 @@ const Userside = () => {
     setIsActive(value);
   };
 
-  useEffect(() => {
-    axios
-      .get(`${ROOT_API}/users/profile/image`, {
-        headers: {
-          "X-AUTH-TOKEN": auth,
-        },
-      })
-      .then(function (response) {
-        setImageFile(response.data.url);
-      });
-    axios
-      .get(`${ROOT_API}/users/info`, {
-        headers: {
-          "X-AUTH-TOKEN": auth,
-        },
-      })
-      .then(({ data }) => {
-        setUserData(data);
-      });
-  }, [auth.accessToken]);
-
   return (
     <>
       <section className="side">
         <div className="imgwrap">
-          <ProfileImg nickname={"aa"} size="big" />
+          <ProfileImg nickname={"aa"} size="big" setImageFile={setImageFile} imageFile={imageFile} setUserData={setUserData} />
         </div>
         <ul className="nav">
           <li className={location.pathname === "/mypage" && "is-active"} onClick={() => handleClick("mypage")}>
