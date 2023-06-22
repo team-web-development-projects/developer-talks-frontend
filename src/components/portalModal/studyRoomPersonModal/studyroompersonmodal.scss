@@ -2,12 +2,22 @@
   .user-list {
     padding: 18px 6px;
     border-bottom: 1px solid #ccc;
+    .me {
+      display: inline-flex;
+      height: 30px;
+      padding: 0px 8px;
+      background: #416ae7;
+      border-radius: 50%;
+      color: white;
+      align-items: center;
+      font-size: 14px;
+    }
     .btn-wrap {
       margin-top: 10px;
       justify-content: flex-end;
     }
     .is-my {
-      .btn-out, .auth, select {
+      .btn-power, .btn-out, .auth, select {
         display: none;
       }
     }

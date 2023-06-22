@@ -98,12 +98,13 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
     console.log("d", isLeader);
     return (
       <Fragment>
-        {data[index].status && data[index].studyRoomLevel === "NORMAL" && (
-          // 내가 방장일때,
-          <Button size="small" classname="btn-out" onClick={() => getOut(data[index].nickname)}>
-            강퇴
-          </Button>
-        )}
+        {data[index].status &&
+          (data[index].studyRoomLevel === "NORMAL" || data[index].studyRoomLevel === "SUB_LEADER") && (
+            // 내가 방장일때,
+            <Button size="small" classname="btn-out" onClick={() => getOut(data[index].nickname)}>
+              강퇴
+            </Button>
+          )}
         {data[index].status && isLeader.length !== 0 && (
           // <Button size="small" classname="btn-power auth" onClick={() => roomAuth(data[index].id)}>
           //   권한
@@ -130,13 +131,17 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
     );
   };
 
+  console.log("dd", modalUserData);
+
   return (
     <ModalFrame setOnModal={setOnModal} classname="basic-modal studyroom-user-modal" onClose isDim>
       인원 관리
       <ul>
         {modalUserData.map((item, index) => (
           <li key={index} className="user-list">
-            <div>{item.nickname}</div>
+            <div>
+              {item.nickname} {item.nickname === getNickname && <span className="me">나</span>}
+            </div>
             <div
               className={classNames("btn-wrap", {
                 "is-my": item.nickname === getNickname,

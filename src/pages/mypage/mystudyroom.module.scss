@@ -63,9 +63,21 @@
   .room_list_tag {
     display: inline-flex;
     margin-left: 10px;
-    border-radius: 10px;
     padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 14px;
     background: #6c757d;
     color: #fff;
+    &.is_Leader {
+      background: #ffe000;
+      color: black;
+    }
+    &.is_subLeader {
+      background: #ff8f00;
+    }
+    &.is_normal {
+      background: #6ba5ef;
+      color: #fff;
+    }
   }
 }

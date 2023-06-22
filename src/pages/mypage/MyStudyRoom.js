@@ -110,15 +110,28 @@ const MyStudyRoom = () => {
     const isRoomLeader = data.studyRoomUsers.filter(
       (item) => item.studyRoomLevel === "LEADER" && item.nickname === getNickname
     );
+    const isNormal = data.studyRoomUsers.filter(
+      (item) => item.studyRoomLevel === "NORMAL" && item.nickname === getNickname
+    );
+    const isSubLeader = data.studyRoomUsers.filter(
+      (item) => item.studyRoomLevel === "SUB_LEADER" && item.nickname === getNickname
+    );
+    console.log('dd', isRoomLeader, isSubLeader, isNormal);
     if (asigning.length === 1) {
       return <span className={mystudy.room_list_tag}>승인요청중</span>;
     }
     if (isRoomLeader.length === 1) {
-      return <span className={mystudy.room_list_tag}>방장</span>;
+      return <span className={`${mystudy.room_list_tag} ${mystudy.is_Leader}`}>방장</span>;
+    }
+    if (isSubLeader.length === 1) {
+      return <span className={`${mystudy.room_list_tag} ${mystudy.is_subLeader}`}>부방장</span>;
+    }
+    if (isNormal.length === 1) {
+      return <span className={`${mystudy.room_list_tag} ${mystudy.is_normal}`}>일반</span>;
     }
   };
 
-  console.log('마이페이지', myList);
+  console.log("마이페이지", myList);
 
   return (
     <MypageContent>
