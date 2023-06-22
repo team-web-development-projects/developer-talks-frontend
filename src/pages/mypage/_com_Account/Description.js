@@ -3,7 +3,7 @@ import Button from "components/button/Button";
 import { useState } from "react";
 import Tags from "components/tags/Tags";
 
-const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, showToast, setImageFile, imageFile, selectedTags }) => {
+const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, showToast, setImageFile, imageFile, selectedTags, setSelectedTags }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImageId, setProfileImageId] = useState("");
 
@@ -33,6 +33,7 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
         })
         .then((response) => {
           console.log(response);
+          
           setProfileImageId(response.data.id);
           setImageFile(response.data.url);
         });
@@ -78,7 +79,7 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
           onChange={handleChange}
         />
       </div>
-      <Tags selectedTags={selectedTags} setSelectedTags={selectedTags} text={"관심있는 테그입력"} />
+      <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 테그입력"} />
       <Button FullWidth size="large" type="submit">
         저장
       </Button>
