@@ -5,18 +5,14 @@ import Button from "components/button/Button";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-const Password = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showToast }) => {
+const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
   const [typetoggle, setTypetoggle] = useState("password");
-  const [isFormValid, setIsFormValid] = useState(false);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm({ mode: "onChange" }); //NOTE 수정 전에도 disablw적용 필요
-  useEffect(() => {
-    setIsFormValid(Object.keys(errors).length === 0); // 입력값이 변경될 때마다 isFormValid 업데이트
-  }, [errors]);
   const typechange = () => {
     //NOTE 비밀번호 토글//ok
     setTypetoggle("text");
@@ -28,17 +24,17 @@ const Password = ({ auth, ROOT_API, axios, userData, handleChange, disabled, sho
 
   const onSubmitPassword = async () => {
     console.log(auth.accessToken);
+    console.log(watch().newPassword);
     axios
       .put(
         `${ROOT_API}/users/profile/password`,
         {
-          newPassword: userData.newPassword,
-          checkNewPassword: userData.checkNewPassword,
-          oldPassword: userData.oldPassword,
+          newPassword: watch().newPassword,
+          checkNewPassword: watch().checkNewPassword,
+          oldPassword: watch().oldPassword,
         },
         {
           headers: {
-            "Content-Type": "application/json",
             "X-AUTH-TOKEN": auth.accessToken,
           },
         }
@@ -64,11 +60,10 @@ const Password = ({ auth, ROOT_API, axios, userData, handleChange, disabled, sho
               type={typetoggle}
               placeholder="최소 1개의 특수문자를 포함해주세요"
               autoComplete="password"
-              value={userData.newPassword}
-              onChange={handleChange}
               disabled={disabled}
               maxLength={15}
               {...register("newPassword", {
+                required: "공백일 수 없습니다.",
                 minLength: {
                   value: 8,
                   message: "8자리 이상 비밀번호를 사용해주세요.",
@@ -95,11 +90,10 @@ const Password = ({ auth, ROOT_API, axios, userData, handleChange, disabled, sho
               type={typetoggle}
               placeholder="*******"
               autoComplete="password"
-              value={userData.checkNewPassword}
-              onChange={handleChange}
               disabled={disabled}
               maxLength={15}
               {...register("checkNewPassword", {
+                required: "공백일 수 없습니다.",
                 minLength: {
                   value: 8,
                   message: "8자리 이상 비밀번호를 사용해주세요.",
@@ -131,11 +125,10 @@ const Password = ({ auth, ROOT_API, axios, userData, handleChange, disabled, sho
               type={typetoggle}
               placeholder="*******"
               autoComplete="password"
-              value={userData.oldPassword}
-              onChange={handleChange}
               disabled={disabled}
               maxLength={15}
               {...register("oldPassword", {
+                required: "공백일 수 없습니다.",
                 minLength: {
                   value: 8,
                   message: "8자리 이상 비밀번호를 사용해주세요.",
@@ -157,7 +150,7 @@ const Password = ({ auth, ROOT_API, axios, userData, handleChange, disabled, sho
         👀
       </div>
       <br />
-      <Button FullWidth disabled={!isFormValid} size="large" type="submit">
+      <Button FullWidth size="large" type="submit">
         저장
       </Button>
     </Form>

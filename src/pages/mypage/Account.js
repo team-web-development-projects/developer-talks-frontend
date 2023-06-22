@@ -35,7 +35,7 @@ function Account() {
     joinableCount: 1,
   });
   const handleChange = (e) => {
-    console.log(userData.description);
+    console.log(userData.userid);
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };

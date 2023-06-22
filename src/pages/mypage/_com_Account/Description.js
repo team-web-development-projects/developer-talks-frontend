@@ -33,6 +33,7 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
         })
         .then((response) => {
           console.log(response);
+        showToast("success", "😎 정보가 수정 되었습니다");
           
           setProfileImageId(response.data.id);
           setImageFile(response.data.url);
@@ -54,6 +55,8 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
       )
       .then((response) => {
         console.log(response);
+        showToast("success", "😎 정보가 수정 되었습니다");
+
       })
       .catch((error) => console.log(error));
   };
