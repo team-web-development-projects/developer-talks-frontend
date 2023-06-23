@@ -1,24 +1,20 @@
-import React, { useEffect } from "react";
-import { ROOT_API } from "constants/api";
-import { useQuery, useMutation } from "react-query";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { ROOT_API } from "constants/api";
+import { useQuery } from "react-query";
 import s from "./news.module.scss";
 
 const News = () => {
-  const auth = useSelector((state) => state.authToken);
 
   async function fetchProjects() {
     const { data } = await axios.get(`${ROOT_API}/news`);
     return data;
   }
 
-  const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["news"],
     queryFn: () => fetchProjects(),
   });
 
-  console.log("news data", data);
   return (
     <section className={s.news}>
       <strong>IT 뉴스</strong>

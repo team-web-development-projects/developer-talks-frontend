@@ -8,8 +8,8 @@ import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import MypageContent from "./MyPageContent";
-import s from "./mypagecontent.module.scss";
+import MypageContent from "../../MyPageContent";
+import s from "../../mypagecontent.module.scss";
 import account from "./account.module.scss";
 
 function Account() {
@@ -147,7 +147,7 @@ function Account() {
   };
 
   return (
-    <MypageContent>
+    <>
       <section className={s.contentWrap}>
         <ul className={s.nav}>
           {tabTitle.map((item, index) => (
@@ -276,7 +276,7 @@ function Account() {
           </form>
         )}
       </section>
-    </MypageContent>
+    </>
   );
 }
 

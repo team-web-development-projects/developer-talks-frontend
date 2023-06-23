@@ -131,8 +131,6 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
     );
   };
 
-  console.log("dd", modalUserData);
-
   return (
     <ModalFrame setOnModal={setOnModal} classname="basic-modal studyroom-user-modal" onClose isDim>
       인원 관리

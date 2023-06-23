@@ -117,7 +117,11 @@ const Header = () => {
             </li>
             <li className="header-user">
               <Link to="/mypage">
-                <BsFillPersonFill size={24} />
+                {location.pathname === "/mypage" ? (
+                  <BsFillPersonFill size={24} color="#2f92ff" />
+                ) : (
+                  <BsFillPersonFill size={24} />
+                )}
               </Link>
               {nickname && <span>{`${nickname}님`}</span>}
             </li>

@@ -5,7 +5,6 @@ import Userside from "./_com/userside/Userside";
 const MypageContent = ({ children }) => {
   return (
     <div className={s.mypage}>
-      <Userside />
       {children}
     </div>
   );

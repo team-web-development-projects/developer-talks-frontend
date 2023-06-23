@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import MypageContent from "./MyPageContent";
-import s from "./mypagecontent.module.scss";
+import MypageContent from "../../MyPageContent";
+import s from "../../mypagecontent.module.scss";
 import mystudy from "./mystudyroom.module.scss";
 
 const MyStudyRoom = () => {
@@ -134,7 +134,7 @@ const MyStudyRoom = () => {
   console.log("마이페이지", myList);
 
   return (
-    <MypageContent>
+    <>
       {personModal && (
         <StudyRoomPersonModal setOnModal={() => setPerseonModal()} modalUserData={modalUserData} roomId={roomid} />
       )}
@@ -228,7 +228,7 @@ const MyStudyRoom = () => {
           )}
         </section>
       </div>
-    </MypageContent>
+    </>
   );
 };
 
