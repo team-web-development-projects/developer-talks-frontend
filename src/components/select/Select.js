@@ -8,6 +8,8 @@ const Select = ({ sendText, options }) => {
   const [select, setSelect] = useState("");
   const [dropdown, setDropDown] = useState(false);
 
+  // console.log("cc", sendText);
+
   return (
     <div
       className={classnames([s.container], {

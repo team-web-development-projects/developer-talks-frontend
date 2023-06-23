@@ -1,7 +1,7 @@
 @import 'assets/style/variable.scss';
 
 .boardContainer {
-  padding: 18px 0;
+  padding: 16px 0;
   border-bottom: solid 1px #cfcccc;
   &:hover {
     cursor: pointer;
@@ -9,8 +9,17 @@
       color: $primary;
     }
   }
+  .info_wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    .icons {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
   .title {
-    margin-bottom: 3px;
     font-size: 24px;
     font-weight: 500;
   }
@@ -24,23 +33,23 @@
   .nickname {
     color: #797979;
   }
-  .bottomInfo{
+  .bottomInfo {
     display:flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 10px;
+    align-items: flex-end;
   }
-  .countInfo{
+  .countInfo {
     display:flex;
     flex-direction: row;
-    .item{
-      display:flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left:15px;
-      color:#797979;
-    }
-    p{
-      margin-left: 7px;
-    }
+  }
+  .item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 15px;
+    color: #797979;
+    gap: 3px;
   }
 }

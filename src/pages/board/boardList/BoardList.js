@@ -1,4 +1,5 @@
 import axios from "axios";
+import BoardBanner from "components/boardBanner/BoardBanner";
 import BoardItem from "components/boardItem/BoardItem";
 import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
@@ -7,13 +8,11 @@ import Scrolltop from "components/scrolltop/Scrolltop";
 import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
 import { ROOT_API } from "constants/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardList.module.scss";
-import { useRef } from "react";
-import BoardBanner from "components/boardBanner/BoardBanner";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -22,11 +21,10 @@ const BoardList = ({ type }) => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectText, setSelectText] = useState("");
 
   const handleClickPost = () => {
-    auth && auth.accessToken
-      ? navigate(`/${type === "post" ? "board" : "qna"}/post`)
-      : setModal(true);
+    auth && auth.accessToken ? navigate(`/${type === "post" ? "board" : "qna"}/post`) : setModal(true);
   };
 
   async function getBoardList() {
@@ -76,34 +74,26 @@ const BoardList = ({ type }) => {
       )}
       <BoardBanner>
         <p>{type === "post" ? "자유주제" : "Q&A"}</p>
-        <p>
-          {type === "post"
-            ? "여러 회원들과 자유롭게 대화하세요"
-            : "궁금한 것이 있다면 무엇이든 질문해보세요"}
-        </p>
+        <p>{type === "post" ? "여러 회원들과 자유롭게 대화하세요" : "궁금한 것이 있다면 무엇이든 질문해보세요"}</p>
       </BoardBanner>
       <div className={s.header}>
         <SearchInput type={type} />
         <div className={s.bottom}>
           {/* TODO: 옛날순 정렬 */}
-          <Select init="최신순" options={["최신순", "옛날순"]} />
-          <Button size="small" onClick={handleClickPost}>작성하기</Button>
+          <Select
+            init="최신순"
+            options={["최신순", "추천순", "댓글순", "스크랩순", "조회순"]}
+            // sendText={setSelectText}
+          />
+          <Button size="small" onClick={handleClickPost}>
+            작성하기
+          </Button>
         </div>
       </div>
       <ul>
         {data ? (
-          data.content.map((board) => (
-            <BoardItem
-              key={board.id}
-              id={board.id}
-              title={board.title}
-              nickname={board.nickname}
-              vCnt={board.viewCount}
-              fCnt={board.favoriteCount}
-              rCnt={board.recommendCount}
-              type={type}
-              currentPage={currentPage}
-            />
+          data.content.map((board, index) => (
+            <BoardItem key={index} data={board} type={type} currentPage={currentPage} />
           ))
         ) : (
           <li>등록된 게시글이 없습니다.</li>
@@ -111,11 +101,7 @@ const BoardList = ({ type }) => {
       </ul>
 
       <div className={s.pageContainer}>
-        <Pagination
-          currentPage={data.pageable.pageNumber + 1}
-          totalPage={data.totalPages}
-          paginate={setCurrentPage}
-        />
+        <Pagination currentPage={data.pageable.pageNumber + 1} totalPage={data.totalPages} paginate={setCurrentPage} />
       </div>
       <Scrolltop />
     </>

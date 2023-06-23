@@ -18,7 +18,7 @@ const Header = () => {
   let nickname = "";
   const targetRef = useRef(null);
   const location = useLocation();
-  outOfClick(targetRef); // NOTE: 아웃오브클릭 테스트
+  // outOfClick(targetRef); // NOTE: 아웃오브클릭 테스트
 
   const showPopover = () => {
     setPopover(!popover);
@@ -94,7 +94,7 @@ const Header = () => {
                 <Link
                   to={item.link}
                   className={classNames("", {
-                    "is-active": location.pathname === item.link,
+                    "is-active": location.pathname.includes(item.link),
                   })}
                 >
                   {item.text}
