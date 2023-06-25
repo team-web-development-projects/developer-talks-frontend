@@ -32,8 +32,6 @@ export default function BoardPost({ type }) {
     }
   }, [type]);
 
-  console.log("ff", form.files);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
@@ -42,33 +40,20 @@ export default function BoardPost({ type }) {
             내용: ${form.content}
             이미지 : ${form.files}
         `);
-
-    console.log("post auth", auth.accessToken);
-    const datas = {
-      // 포스트 데이터
-      postDto: {
-        contentType: "application/json",
-        title: form.title,
-        content: form.content,
-      },
-      files: form.files,
-    };
+    const frm = new FormData();
+    if (form.files.length !== 0) {
+      form.files.forEach((file) => {
+        frm.append("files", file);
+      });
+    }
+    frm.append("title", form.title);
+    frm.append("content", form.content);
     axios
-      .post(
-        `${ROOT_API}/${type}`,
-          datas,
-          // postDto: {
-          //   title: form.title,
-          //   content: form.content,
-          // },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // "Content-Type": "multipart/form-data",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      .post(`${ROOT_API}/${type}`, frm, {
+        headers: {
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
       .then((response) => {
         console.log(response);
         setModal(true);
@@ -91,15 +76,9 @@ export default function BoardPost({ type }) {
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>
+        <img src="https://dtalksbucket.s3.ap-northeast-2.amazonaws.com/%2F%2Fhome/ubuntuposts/1687710550971_46258e7d-21eb-4e13-9da1-b53563954e6ctest1.png"></img>
         <div className={s.container}>
-          <input
-            className={s.title}
-            type="text"
-            name="title"
-            value={form.title}
-            placeholder="제목을 작성해주세요."
-            onChange={handleChange}
-          />
+          <input className={s.title} type="text" name="title" value={form.title} placeholder="제목을 작성해주세요." onChange={handleChange} />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
             <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
