@@ -3,7 +3,7 @@ import Logout from "components/logout/Logout";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Userside.scss";
 import { parseJwt } from "hooks/useParseJwt";
 import ProfileImg from "components/profileImg/ProfileImg";
@@ -15,34 +15,38 @@ import Account from "../account/Account";
 const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
   const [isActive, setIsActive] = useState("mypage");
+  const navigate = useNavigate();
   const [imageFile, setImageFile] = useState("");
   const [userData, setUserData] = useState("");
   const location = useLocation();
+
 
   const handleClick = (value) => {
     setIsActive(value);
   };
 
   useEffect(() => {
-    axios
-      .get(`${ROOT_API}/users/profile/image`, {
-        headers: {
-          "X-AUTH-TOKEN": auth,
-        },
-      })
-      .then(function (response) {
-        setImageFile(response.data.url);
-      });
-    axios
-      .get(`${ROOT_API}/users/info`, {
-        headers: {
-          "X-AUTH-TOKEN": auth,
-        },
-      })
-      .then(({ data }) => {
-        setUserData(data);
-      });
-  }, [auth.accessToken]);
+    if (auth) {
+      axios
+        .get(`${ROOT_API}/users/profile/image`, {
+          headers: {
+            "X-AUTH-TOKEN": auth,
+          },
+        })
+        .then(function (response) {
+          setImageFile(response.data.url);
+        });
+      axios
+        .get(`${ROOT_API}/users/info`, {
+          headers: {
+            "X-AUTH-TOKEN": auth,
+          },
+        })
+        .then(({ data }) => {
+          setUserData(data);
+        });
+    }
+  }, [auth]);
 
   const Menu = [
     {
