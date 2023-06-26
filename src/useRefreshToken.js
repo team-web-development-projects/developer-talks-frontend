@@ -9,25 +9,24 @@ import { SET_TOKEN } from "store/Auth";
 import { removeCookieToken } from "store/Cookie";
 import epochConvert from "util/epochConverter";
 
-export default async function useRefreshToken() {
+export default function useRefreshToken() {
   const auth = useSelector((state) => state.authToken);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // useEffect(() => {
+  useEffect(() => {
     // 토큰 재갱신
     removeCookieToken();
     // atk 가 없고, rtk 가 있을 때 - 최초 1회 로그인 후 로그아웃 안했을 때
-    if (auth.accessToken === null && localStorage.getItem("refreshToken") !== undefined) {
+    if (auth.accessToken === null && localStorage.getItem("refreshToken")) {
       // atrk 가 없고, rtk가 있지만 rtk의 만료시간이 현재 시간보다 이전일때
-      // console.log("rr", localStorage.getItem("refreshToken"));
-      // console.log("rr", epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp));
+      // console.log("cc", epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp));
       if (epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp)) {
         localStorage.removeItem("refreshToken");
         navigate("/login");
       }
-      await axios
+      axios
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: localStorage.getItem("refreshToken"),
           headers: {
@@ -44,7 +43,7 @@ export default async function useRefreshToken() {
           console.log("재갱신 실패: ", error.response.data);
         });
     }
-  // }, [auth.accessToken, dispatch, location]);
-};
+  }, [auth.accessToken, dispatch, location]);
+}
 
 // export default useRefreshToken;

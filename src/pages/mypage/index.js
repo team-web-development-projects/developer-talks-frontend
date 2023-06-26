@@ -1,12 +1,18 @@
-import React from 'react'
-import Userside from './_com/userside/Userside';
+import React, { useEffect } from "react";
+import Userside from "./_com/userside/Userside";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  return (
-    <div>
-      <Userside />
-    </div>
-  );
-}
+  const auth = useSelector((state) => state.authToken);
+  const navigate = useNavigate();
 
-export default Index
+  useEffect(() => {
+    if (auth.accessToken === null && localStorage.getItem("refreshToken") === null) {
+      navigate("/login", { replace: true });
+    }
+  }, [auth.accessToken, navigate]);
+  return <div>{auth.accessToken !== null ? <Userside /> : null}</div>;
+};
+
+export default Index;
