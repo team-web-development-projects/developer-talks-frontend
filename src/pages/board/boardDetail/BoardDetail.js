@@ -18,6 +18,7 @@ const BoardDetail = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
   const [post, setPost] = useState({
     userInfo: {},
+    imageUrls: [],
   });
   const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
@@ -32,8 +33,11 @@ const BoardDetail = ({ type }) => {
         },
       })
       .then((res) => {
+        let cnt = 0;
+        res.data.content = res.data.content.replace(/<img>/g, (match, capture) => {
+          return `<img src=${res.data.imageUrls[cnt++]} />`;
+        });
         setPost(res.data);
-        console.log(res.data);
       })
       .catch((error) => console.log(error));
     if (auth.accessToken !== null) {

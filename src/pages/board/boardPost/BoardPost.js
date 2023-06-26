@@ -76,7 +76,6 @@ export default function BoardPost({ type }) {
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>
-        <img src="https://dtalksbucket.s3.ap-northeast-2.amazonaws.com/%2F%2Fhome/ubuntuposts/1687710550971_46258e7d-21eb-4e13-9da1-b53563954e6ctest1.png"></img>
         <div className={s.container}>
           <input className={s.title} type="text" name="title" value={form.title} placeholder="제목을 작성해주세요." onChange={handleChange} />
           <div className={s.editor}>
