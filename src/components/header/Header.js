@@ -1,16 +1,13 @@
-import { useEffect, useState, useRef } from "react";
-import { FiMenu } from "react-icons/fi";
+import classNames from "classnames";
+import Notification from "components/noti/Notification";
+import { parseJwt } from "hooks/useParseJwt";
+import { useEffect, useRef, useState } from "react";
 import { AiFillBell } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
-import { Link, useLocation } from "react-router-dom";
-import { useQuery } from "react-query";
-import axios from "axios";
+import { FiMenu } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
-import { parseJwt } from "hooks/useParseJwt";
-import { ROOT_API } from "constants/api";
-import { outOfClick } from "hooks/useOutOfClick";
-import classNames from "classnames";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
@@ -31,40 +28,6 @@ const Header = () => {
   useEffect(() => {
     setPopover(false);
   }, [location]);
-
-  let [user, setUser] = useState([
-    {
-      id: "1",
-      nickname: "Ann",
-    },
-    {
-      id: "2",
-      nickname: "Tree",
-    },
-    {
-      id: "3",
-      nickname: "Lotto",
-    },
-  ]);
-
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/post/list/user/${nickname}`, {
-      // params: { page: currentPage - 1, size: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
-  }
-
-  const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
-    queryKey: ["popover"],
-    // queryFn: () => fetchProjects(),
-  });
-
-  if (isLoading) return <div>Loading...</div>;
-  if (status === "loading") return <div>Loading...</div>;
 
   const menuRouter = [
     {
@@ -107,11 +70,7 @@ const Header = () => {
                   <AiFillBell size={24} color="#2f92ff" />
                 </span>
                 {popover && (
-                  <div className="popover">
-                    {user.map((item, index) => (
-                      <div key={index}>{item.nickname}</div>
-                    ))}
-                  </div>
+                  <Notification />
                 )}
               </span>
             </li>

@@ -33,28 +33,14 @@
   }
 
   .navBar {
-    ul {
+    .right {
       display: flex;
       align-items: center;
       align-items: space-between;
-      li {
+      > li {
         padding: 0 30px;
         &.popover-link {
           cursor: pointer;
-        }
-        .popover {
-          position: absolute;
-          top: calc(100% + 10px);
-          right: 0;
-          left: auto;
-          width: 150px;
-          margin: auto;
-          padding: 10px;
-          background: white;
-          color: black;
-          border-radius: 8px;
-          border: 1px solid #ccc;
-          z-index: 1;
         }
         a {
           display: block;

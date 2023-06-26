@@ -1,0 +1,17 @@
+.noti {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  left: auto;
+  width: 150px;
+  margin: auto;
+  padding: 10px;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  z-index: 1;
+
+  max-height: 200px;
+  overflow: auto;
+}
