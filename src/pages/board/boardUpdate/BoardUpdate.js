@@ -1,6 +1,6 @@
 import Button from "components/button/Button";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import s from "../boardPost/boardPost.module.scss";
@@ -16,26 +16,29 @@ const BoardUpdate = ({ type }) => {
   const { state } = useLocation();
   const auth = useSelector((state) => state.authToken);
   const [form, setForm] = useState({
-    title: state.title,
-    content: state.content,
+    title:state.title,
+    content:state.content,
+    userInfo: {},
+    files:[],
   });
+  console.log(form)
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
+    const frm = new FormData();
+    if (form.files.length !== 0) {
+      form.files.forEach((file) => {
+        frm.append("files", file);
+      });
+    }
+    frm.append("title", form.title);
+    frm.append("content", form.content);
     axios
-      .put(
-        `${ROOT_API}/post/${postId}`,
-        {
-          title: form.title,
-          content: form.content,
+      .put(`${ROOT_API}/${type}/${postId}`, frm, {
+        headers: {
+          "X-AUTH-TOKEN": auth.accessToken,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      })
       .then((response) => {
         console.log(response);
         setModalY(true);
@@ -61,24 +64,20 @@ const BoardUpdate = ({ type }) => {
           글 수정을 취소하시겠습니까?
           <br />
           수정된 내용은 저장되지 않습니다.
-          <button onClick={() => navigate(-1)}>확인</button>
+          <button onClick={() => console.log(form)}>확인</button>
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
-          <input
-            className={s.title}
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-          />
+          <input className={s.title} type="text" name="title" value={form.title} onChange={handleChange} />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
             <CkEditor form={form} setForm={setForm} />
           </div>
           <div className={s.btnRgn}>
-            <div className={s.cancel} onClick={()=>setModalN(true)}>취소</div>
+            <div className={s.cancel} onClick={() => setModalN(true)}>
+              취소
+            </div>
             <Button>수정</Button>
           </div>
         </div>

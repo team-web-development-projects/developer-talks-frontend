@@ -1,34 +1,18 @@
-import React from "react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import "./ckeditor.css";
-import axios from "axios";
 
 const CkEditor = ({ form, setForm, placeholder }) => {
-
   const customUploadAdapter = (loader) => {
     return {
       upload() {
         return new Promise((resolve, reject) => {
-          const formData = new FormData();
           loader.file.then((file) => {
-            formData.append("file", file);
-            console.log("dd", file.name, formData);
+            console.log("파일정보: ", file);
             setForm((prevForm) => ({
               ...prevForm,
-              files: [...prevForm.files, file.name]
+              files: [...prevForm.files, file],
             }));
-            // setForm({
-            //   ...form, ['files']: formData.name
-            // })
-            // axios
-            //   .post("http://localhost:8080/api/v0/file/upload", formData)
-            //   .then((res) => {
-            //     resolve({
-            //       default: res.data.data.uri,
-            //     });
-            //   })
-            //   .catch((err) => reject(err));
           });
         });
       },

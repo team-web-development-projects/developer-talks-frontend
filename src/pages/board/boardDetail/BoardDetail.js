@@ -16,7 +16,10 @@ const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
-  const [post, setPost] = useState([]);
+  const [post, setPost] = useState({
+    userInfo: {},
+    imageUrls: [],
+  });
   const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
   const [modalD, setModalD] = useState(false);
@@ -29,7 +32,13 @@ const BoardDetail = ({ type }) => {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then((res) => setPost(res.data))
+      .then((res) => {
+        let cnt = 0;
+        res.data.imagedContent = res.data.content.replace(/<img>/g, (match, capture) => {
+          return `<img src=${res.data.imageUrls[cnt++]} />`;
+        });
+        setPost(res.data);
+      })
       .catch((error) => console.log(error));
     if (auth.accessToken !== null) {
       setNickName(parseJwt(auth.accessToken).nickname);
@@ -60,7 +69,7 @@ const BoardDetail = ({ type }) => {
   };
   const clickUpdate = () => {
     navigate(`/${type === "post" ? "board" : "qna"}/update/${post.id}`, {
-      state: { title: post.title, content: post.content },
+      state: { title: post.title, content: post.imagedContent, imageUrls: post.imageUrls },
     });
   };
   return (
@@ -75,13 +84,18 @@ const BoardDetail = ({ type }) => {
       )}
       <div className={s.container}>
         <header>
-          <span className={s.nick}>{post.nickname}</span>
-          <div className={s.info}>
-            <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
-            <span>조회수 {post.viewCount}</span>
+          <div className={s.userInfoContainer}>
+            <img className={s.profile} src={post.userInfo.userProfile} />
+            <div>
+              <span className={s.nick}>{post.userInfo.nickname}</span>
+              <div className={s.info}>
+                <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
+                <span>조회수 {post.viewCount}</span>
+              </div>
+            </div>
           </div>
           <p className={s.title}>{post.title}</p>
-          {nickname === post.nickname && (
+          {nickname === post.userInfo.nickname && (
             <div className={s.button_wrap}>
               <Button onClick={clickUpdate} size="small" theme="success">
                 수정
@@ -94,13 +108,13 @@ const BoardDetail = ({ type }) => {
         </header>
         <main>
           {/* TODO: content 내용 이슈 */}
-          <div className={s.content} dangerouslySetInnerHTML={{ __html: post.content }}></div>
+          <div className={s.content} dangerouslySetInnerHTML={{ __html: post.imagedContent }}></div>
         </main>
         <div className={s.countContainer}>
           <BoardCount
             type={"favorite"}
             token={auth.accessToken}
-            isOwner={nickname === post.nickname}
+            isOwner={nickname === post.userInfo.nickname}
             checkStatus={checkStatus}
             setCheckStatus={setCheckStatus}
             postId={post.id}
@@ -112,7 +126,7 @@ const BoardDetail = ({ type }) => {
           <BoardCount
             type={"recommend"}
             token={auth.accessToken}
-            isOwner={nickname === post.nickname}
+            isOwner={nickname === post.userInfo.nickname}
             checkStatus={checkStatus}
             setCheckStatus={setCheckStatus}
             postId={post.id}
