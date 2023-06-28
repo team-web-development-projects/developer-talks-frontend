@@ -10,7 +10,7 @@ import classnames from "classnames";
  * @returns
  */
 
-const Button = ({ FullWidth, children, onClick, classname, theme, size = "big", color }) => {
+const Button = ({ FullWidth, children,disabled, onClick, classname, theme, size = "big", color }) => {
   return (
     <button
       className={classnames(`${s.button} ${classname}`, {
@@ -25,6 +25,7 @@ const Button = ({ FullWidth, children, onClick, classname, theme, size = "big", 
       })}
       style={{ borderColor: color, color: color }}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>

@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
+import ProfileImg from "components/profileImg/ProfileImg";
 
 axios.defaults.withCredentials = true;
 
@@ -29,7 +30,6 @@ const Regist = () => {
     joinableCount: 1,
   });
   const [modal, setModal] = useState(false);
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const [duplicateId, setDuplicateId] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   const [inputEmail, setInputEmail] = useState("");
@@ -37,19 +37,15 @@ const Regist = () => {
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [profileImageId, setProfileImageId] = useState("");
+    const [profileImgData, setProfileImgData] = useState({
+      id: "",
+      url: "",
+      inputName: "",
+    });
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
-  };
-  const handleChangeProfileImage = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-    const imageUrl = URL.createObjectURL(file);
-    setImageFile(imageUrl);
-    showToast("success", "😎 이미지가 업로드 되었습니다");
   };
 
   const {
@@ -62,65 +58,38 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    if (!selectedImage) {
-      return;
-    }
-    console.log(selectedImage);
-    const formData = new FormData();
-    formData.append("file", selectedImage);
-
     if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
-    axios
-      .post(`${ROOT_API}/users/profile/image`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        setProfileImageId(response.data.id);
-        console.log(`
-    email: ${data.userEmail},
-    nickname: ${data.nickname},
-    userid: ${data.userid},
-    password: ${data.password},
-    skills: ${selectedTags.tags},
-    description: ${description},
-    profileImageId: ${profileImageId}`);
-        axios
-          .post(
-            `${ROOT_API}/sign-up`,
-            {
-              email: data.userEmail,
-              nickname: data.nickname,
-              userid: data.userid,
-              password: data.password,
-              skills: selectedTags.tags,
-              description: description,
-              profileImageId: response.data.id,
-            },
-            { headers: { API_HEADER } }
-          )
-          .then(() => {
-            axios
-              .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
-              .then((response) => {
-                dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-                localStorage.setItem("refreshToken", response.data.refreshToken);
-                setModal(true);
-                navigate("/");
-                reset();
-              })
-              .catch(() => {
-                showToast("error", "😎 로그인 실패되었어요");
-              });
-          })
-          .catch(() => {
-            showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
-          });
-      })
-      .catch((error) => console.log(error));
-      //NOTE 버튼 다 클릭하면 실행
+      axios
+        .post(
+          `${ROOT_API}/sign-up`,
+          {
+            email: data.userEmail,
+            nickname: data.nickname,
+            userid: data.userid,
+            password: data.password,
+            skills: selectedTags.tags,
+            description: description,
+            profileImageId: profileImgData.id,
+          },
+          { headers: { API_HEADER } }
+        )
+        .then(() => {
+          axios
+            .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
+            .then((response) => {
+              dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+              localStorage.setItem("refreshToken", response.data.refreshToken);
+              setModal(true);
+              navigate("/");
+              reset();
+            })
+            .catch(() => {
+              showToast("error", "😎 로그인 실패되었어요");
+            });
+        })
+        .catch(() => {
+          showToast("error", "😎 회원가입 절차를 제대로 확인해주세요");
+        });
     } else {
       showToast("error", "😎 모든 버튼에 확인되지 않았어요");
     }
@@ -234,13 +203,7 @@ const Regist = () => {
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-        <div className={s.prople}>
-          <div className={s.imgwrap}>
-            {imageFile && <img src={imageFile} alt="프로필이미지" />}
-            <input type="file" accept="image/*" onChange={handleChangeProfileImage} name="프로필이미지" id="profile" />
-          </div>
-        </div>
-        <span>프로필 이미지 선택☝️</span>
+        <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
         <div className={s.gaider}>
           <span>🙏추가 안내</span>
           <ul>

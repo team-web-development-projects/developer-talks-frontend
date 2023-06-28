@@ -15,50 +15,21 @@ import Account from "../account/Account";
 const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
   const [isActive, setIsActive] = useState("mypage");
-  const navigate = useNavigate();
-  const [imageFile, setImageFile] = useState("");
-  const [userData, setUserData] = useState("");
   const location = useLocation();
-
-
+    const [profileImgData, setProfileImgData] = useState({
+      id: "",
+      url: "",
+      inputName: "",
+    });
   const handleClick = (value) => {
     setIsActive(value);
   };
-
-  useEffect(() => {
-    if (auth) {
-      axios
-        .get(`${ROOT_API}/users/profile/image`, {
-          headers: {
-            "X-AUTH-TOKEN": auth,
-          },
-        })
-        .then(function (response) {
-          setImageFile(response.data.url);
-        });
-      axios
-        .get(`${ROOT_API}/users/info`, {
-          headers: {
-            "X-AUTH-TOKEN": auth,
-          },
-        })
-        .then(({ data }) => {
-          setUserData(data);
-        });
-    }
-  }, [auth]);
-
-  const Menu = [
-    {
-      text: "활동내역",
-    },
-  ];
 
   return (
     <MypageContent>
       <section className="side">
         <div className="imgwrap">
-          <ProfileImg nickname={"aa"} size="big" />
+          <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
         </div>
         <ul className="nav">
           <li className={isActive === "mypage" && "is-active"} onClick={() => handleClick("mypage")}>

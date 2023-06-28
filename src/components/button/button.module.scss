@@ -53,4 +53,7 @@
   &:active {
     background: #000000;
   }
+  &:disabled{
+    background: #585858;
+  }
 }
