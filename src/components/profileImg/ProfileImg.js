@@ -47,6 +47,7 @@ const ProfileImg = ({ size = "small", nickname, setImageFile, imageFile, setUser
         setUserData(data);
       });
   }, [auth.accessToken]);
+  
   return (
     <>
       {imageFile ? (
