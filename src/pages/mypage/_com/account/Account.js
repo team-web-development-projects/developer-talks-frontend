@@ -8,13 +8,14 @@ import { useSelector } from "react-redux";
 import MypageContent from "../../MyPageContent";
 import s from "../../mypagecontent.module.scss";
 import account from "./account.module.scss";
-import Password from "./_com_Account/Password";
-import Userid from "./_com_Account/Uerid";
-import Email from "./_com_Account/Email";
-import Nickname from "./_com_Account/Nickname";
-import Description from "./_com_Account/Description";
 import { parseJwt } from "hooks/useParseJwt";
 import ProfileImg from "components/profileImg/ProfileImg";
+import Description from "pages/mypage/_com_Account/Description";
+import Email from "pages/mypage/_com_Account/Email";
+import Userid from "pages/mypage/_com_Account/Uerid";
+import Password from "pages/mypage/_com_Account/Password";
+import Nickname from "pages/mypage/_com_Account/Nickname";
+
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
