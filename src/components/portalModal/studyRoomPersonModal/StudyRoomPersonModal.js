@@ -95,7 +95,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
 
   const buttonType = (data, index) => {
     const isLeader = data.filter((item) => item.nickname === getNickname && item.studyRoomLevel === "LEADER");
-    console.log("d", isLeader);
+    console.log("d", data);
     return (
       <Fragment>
         {data[index].status &&
@@ -117,7 +117,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
             </select>
           </>
         )}
-        {!data[index].status && (
+        {!data[index].status && isLeader.length !== 0 && (
           <>
             <Button size="small" classname="btn-power" onClick={() => accept(data[index].id, true)}>
               승인

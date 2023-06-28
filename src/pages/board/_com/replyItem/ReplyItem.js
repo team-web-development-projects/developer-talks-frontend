@@ -108,7 +108,6 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
     <>
       <li className={s.container}>
         <div className={s.info}>
-          <ProfileImg setImageFile={setImageFile} imageFile={imageFile} setUserData={setUserData} />
           <p>{nickname}</p>
           {secret && <BsLock size={20} />}
           {isSelf ? (

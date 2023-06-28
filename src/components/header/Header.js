@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import Notification from "components/noti/Notification";
+import ProfileImg from "components/profileImg/ProfileImg";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useRef, useState } from "react";
 import { AiFillBell } from "react-icons/ai";
@@ -69,19 +70,11 @@ const Header = () => {
                 <span className="bell">
                   <AiFillBell size={24} color="#2f92ff" />
                 </span>
-                {popover && (
-                  <Notification />
-                )}
+                {popover && <Notification />}
               </span>
             </li>
             <li className="header-user">
-              <Link to="/mypage">
-                {location.pathname === "/mypage" ? (
-                  <BsFillPersonFill size={24} color="#2f92ff" />
-                ) : (
-                  <BsFillPersonFill size={24} />
-                )}
-              </Link>
+              <Link to="/mypage">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg />}</Link>
               {nickname && <span>{`${nickname}님`}</span>}
             </li>
           </ul>

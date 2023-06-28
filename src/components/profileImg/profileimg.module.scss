@@ -1,10 +1,11 @@
 .img_wrap {
   position: relative;
-  margin: 20px auto;
-  width: 40px;
-  height: 40px;
-
+  width: 30px;
+  height: 30px;
+  margin-bottom: 6px;
+  
   &.is_big {
+    margin: 20px auto;
     width: 220px;
     height: 220px;
   }
