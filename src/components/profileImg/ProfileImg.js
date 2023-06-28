@@ -15,7 +15,7 @@ import { showToast } from "components/toast/showToast";
  * @returns
  */
 
-const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname }) => {
+const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname, border }) => {
   const auth = useSelector((state) => state.authToken);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname
     <div
       className={classnames(s.img_wrap, {
         [s.is_big]: size === "big",
+        [s.is_border]: border === "color",
       })}
     >
       {profileImgData.url ? (

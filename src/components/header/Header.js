@@ -8,6 +8,7 @@ import { FiMenu } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
+import ProfileImg from "components/profileImg/ProfileImg";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
@@ -15,6 +16,11 @@ const Header = () => {
   let nickname = "";
   const targetRef = useRef(null);
   const location = useLocation();
+      const [profileImgData, setProfileImgData] = useState({
+        id: "",
+        url: "",
+        inputName: "",
+      });
   // outOfClick(targetRef); // NOTE: 아웃오브클릭 테스트
 
   const showPopover = () => {
@@ -69,17 +75,15 @@ const Header = () => {
                 <span className="bell">
                   <AiFillBell size={24} color="#2f92ff" />
                 </span>
-                {popover && (
-                  <Notification />
-                )}
+                {popover && <Notification />}
               </span>
             </li>
             <li className="header-user">
               <Link to="/mypage">
                 {location.pathname === "/mypage" ? (
-                  <BsFillPersonFill size={24} color="#2f92ff" />
+                  <ProfileImg nickname={"aa"} profileImgData={profileImgData} setProfileImgData={setProfileImgData} border="color" />
                 ) : (
-                  <BsFillPersonFill size={24} />
+                  <ProfileImg nickname={"aa"} profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
                 )}
               </Link>
               {nickname && <span>{`${nickname}님`}</span>}

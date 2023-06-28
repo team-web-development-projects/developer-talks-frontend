@@ -23,6 +23,7 @@ const Private = () => {
       })
       .then((response) => {
         setStatus(response.data);
+        console.log(response,"ss")
       });
     console.log(status, "111ee");
 

@@ -30,7 +30,6 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
           showToast("success", "😎 정보가 수정 되었습니다");
         })
         .catch((error) => console.log(error));
-      showToast("success", "😎 정보가 수정에 오류가 있습니다.");
     } else {
       showToast("errors", "😎 체크먼저 해주세요");
     }
