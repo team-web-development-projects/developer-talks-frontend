@@ -14,7 +14,7 @@ import Email from "./_com_Account/Email";
 import Nickname from "./_com_Account/Nickname";
 import Description from "./_com_Account/Description";
 import { parseJwt } from "hooks/useParseJwt";
-import ProfileImgUpload from "components/profileImgUpload/ProfileImgUpload";
+import ProfileImg from "components/profileImg/ProfileImg";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
@@ -29,7 +29,11 @@ function Account() {
   const onSelect = (type) => {
     setSelect(type);
   };
-
+    const [profileImgData, setProfileImgData] = useState({
+      id: "",
+      url: "",
+      inputName: "",
+    });
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -98,7 +102,7 @@ function Account() {
         </ul>
         {select === 0 && (
           <>
-            <ProfileImgUpload />
+            <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData ={setProfileImgData}/>
             <Description
               auth={auth}
               ROOT_API={ROOT_API}

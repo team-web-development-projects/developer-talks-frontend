@@ -6,6 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { ROOT_API } from "constants/api";
 import { useSelector } from "react-redux";
+import { showToast } from "components/toast/showToast";
 
 /**
  *
@@ -14,62 +15,54 @@ import { useSelector } from "react-redux";
  * @returns
  */
 
-const ProfileImg = ({ size = "small", nickname, setImageFile, imageFile, setUserData }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const auth = useSelector((state) => state.authToken).accessToken;
-  const handleChangeProfileImage = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-    const imageUrl = URL.createObjectURL(file);
-    setImageFile(imageUrl);
-  };
+const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname }) => {
+  const auth = useSelector((state) => state.authToken);
+
   useEffect(() => {
     axios
       .get(`${ROOT_API}/users/profile/image`, {
-        headers: {
-          "X-AUTH-TOKEN": auth,
-        },
+        headers: { "X-AUTH-TOKEN": auth.accessToken },
       })
       .then(function (response) {
-        setImageFile(response.data.url);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    axios
-      .get(`${ROOT_API}/users/info`, {
-        headers: {
-          "X-AUTH-TOKEN": auth,
-        },
-      })
-      .then(({ data }) => {
-        setUserData(data);
+        setProfileImgData({ ...profileImgData, url: response.data.url });
+        console.log(profileImgData);
       });
   }, [auth.accessToken]);
-  
+
+  const handleChangeProfileImage = async (event) => {
+    await new Promise((r) => setTimeout(r, 1000));
+
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    axios
+      .put(`${ROOT_API}/users/profile/image`, formData, {
+        headers: { "X-AUTH-TOKEN": auth.accessToken },
+      })
+      .then((response) => {
+        showToast("success", "😎 정보가 수정 되었습니다");
+        setProfileImgData({
+          id: response.data.id,
+          url: response.data.url,
+          inputName: response.data.inputName,
+        });
+      });
+  };
+
   return (
-    <>
-      {imageFile ? (
-        <div className={s.profile}>
-          <div
-            className={classnames(s.img_wrap, {
-              [s.is_big]: size === "big",
-            })}
-          >
-            <img src={imageFile} alt="프로필이미지" />
-            <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
-          </div>
-        </div>
+    <div
+      className={classnames(s.img_wrap, {
+        [s.is_big]: size === "big",
+      })}
+    >
+      {profileImgData.url ? (
+        <img src={profileImgData.url} alt="프로필이미지" />
       ) : (
-        <div
-          dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }}
-          className={classnames(s.img_wrap, {
-            [s.is_big]: size === "big",
-          })}
-        />
+        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
       )}
-    </>
+      <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
+    </div>
   );
 };
 
