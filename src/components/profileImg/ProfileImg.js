@@ -27,11 +27,9 @@ const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname
         setProfileImgData({ ...profileImgData, url: response.data.url });
         console.log(profileImgData);
       });
-  }, [auth.accessToken]);
+  }, []);
 
   const handleChangeProfileImage = async (event) => {
-    await new Promise((r) => setTimeout(r, 1000));
-
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
