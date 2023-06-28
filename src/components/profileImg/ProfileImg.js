@@ -15,25 +15,43 @@ import { showToast } from "components/toast/showToast";
  * @returns
  */
 
-const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname, border }) => {
+const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nickname, border }) => {
   const auth = useSelector((state) => state.authToken);
 
   useEffect(() => {
+    profileImgData.url &&
+      axios
+        .get(`${ROOT_API}/users/profile/image`, {
+          headers: { "X-AUTH-TOKEN": auth.accessToken },
+        })
+        .then(function (response) {
+          setProfileImgData({ ...profileImgData, url: response.data.url });
+          console.log(profileImgData);
+        });
+  }, []);
+
+  const handleChangeFirstProfileImage = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
     axios
-      .get(`${ROOT_API}/users/profile/image`, {
+      .post(`${ROOT_API}/users/profile/image`, formData, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
       })
-      .then(function (response) {
-        setProfileImgData({ ...profileImgData, url: response.data.url });
-        console.log(profileImgData);
+      .then((response) => {
+        showToast("success", "😎 정보가 수정 되었습니다");
+        setProfileImgData({
+          id: response.data.id,
+          url: response.data.url,
+          inputName: response.data.inputName,
+        });
       });
-  }, []);
+  };
 
   const handleChangeProfileImage = async (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-
     axios
       .put(`${ROOT_API}/users/profile/image`, formData, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
@@ -56,11 +74,16 @@ const ProfileImg = ({ size = "small", profileImgData,setProfileImgData, nickname
       })}
     >
       {profileImgData.url ? (
-        <img src={profileImgData.url} alt="프로필이미지" />
+        <>
+          <img src={profileImgData.url} alt="프로필이미지" />
+          <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
+        </>
       ) : (
-        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
+        <>
+          <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
+          <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeFirstProfileImage} id="profile" />
+        </>
       )}
-      <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
     </div>
   );
 };
