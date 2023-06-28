@@ -34,7 +34,7 @@ const BoardDetail = ({ type }) => {
       })
       .then((res) => {
         let cnt = 0;
-        res.data.content = res.data.content.replace(/<img>/g, (match, capture) => {
+        res.data.imagedContent = res.data.content.replace(/<img>/g, (match, capture) => {
           return `<img src=${res.data.imageUrls[cnt++]} />`;
         });
         setPost(res.data);
@@ -69,7 +69,7 @@ const BoardDetail = ({ type }) => {
   };
   const clickUpdate = () => {
     navigate(`/${type === "post" ? "board" : "qna"}/update/${post.id}`, {
-      state: { title: post.title, content: post.content },
+      state: { title: post.title, content: post.imagedContent, imageUrls: post.imageUrls },
     });
   };
   return (
@@ -108,7 +108,7 @@ const BoardDetail = ({ type }) => {
         </header>
         <main>
           {/* TODO: content 내용 이슈 */}
-          <div className={s.content} dangerouslySetInnerHTML={{ __html: post.content }}></div>
+          <div className={s.content} dangerouslySetInnerHTML={{ __html: post.imagedContent }}></div>
         </main>
         <div className={s.countContainer}>
           <BoardCount
