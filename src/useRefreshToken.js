@@ -23,6 +23,7 @@ export default function useRefreshToken() {
       // atrk 가 없고, rtk가 있지만 rtk의 만료시간이 현재 시간보다 이전일때
       // console.log("cc", epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp));
       if (epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp)) {
+        console.log('토큰 만료');
         localStorage.removeItem("refreshToken");
         navigate("/login");
       }
@@ -35,12 +36,12 @@ export default function useRefreshToken() {
           },
         })
         .then(function (response) {
-          console.log("재갱신 성공:", response);
+          // console.log("재갱신 성공:", response);
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
           // setLoading(false); // app.js 의 '타이머로 재갱신 테스트 코드' 와 연결
         })
         .catch(function (error) {
-          console.log("재갱신 실패: ", error.response.data);
+          // console.log("재갱신 실패: ", error.response.data);
         });
     }
   }, [auth.accessToken, dispatch, location]);
