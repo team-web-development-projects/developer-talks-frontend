@@ -14,6 +14,7 @@ import Email from "./_com_Account/Email";
 import Nickname from "./_com_Account/Nickname";
 import Description from "./_com_Account/Description";
 import { parseJwt } from "hooks/useParseJwt";
+import ProfileImgUpload from "components/profileImgUpload/ProfileImgUpload";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
@@ -22,18 +23,19 @@ function Account() {
   if (provider) {
     disabled = true;
   }
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const tabTitle = ["회원정보 수정", "회원 탈퇴"];
   const [select, setSelect] = useState(0);
   const [userData, setUserData] = useState(""); //유저데이터 가져오기
   const onSelect = (type) => {
     setSelect(type);
   };
+
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
     joinableCount: 1,
   });
+
   const handleChange = (e) => {
     console.log(userData.userid);
     const { name, value } = e.target;
@@ -41,15 +43,6 @@ function Account() {
   };
 
   useEffect(() => {
-    axios
-      .get(`${ROOT_API}/users/profile/image`, {
-        headers: {
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then(function (response) {
-        setImageFile(response.data.url);
-      });
     axios
       .get(`${ROOT_API}/users/info`, {
         headers: {
@@ -105,6 +98,7 @@ function Account() {
         </ul>
         {select === 0 && (
           <>
+            <ProfileImgUpload />
             <Description
               auth={auth}
               ROOT_API={ROOT_API}
@@ -113,8 +107,6 @@ function Account() {
               handleChange={handleChange}
               account={account}
               showToast={showToast}
-              setImageFile={setImageFile}
-              imageFile={imageFile}
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />

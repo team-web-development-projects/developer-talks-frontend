@@ -2,10 +2,11 @@ import Table from "components/table/Table";
 import Form from "components/form/Form";
 import Label from "components/label/Label";
 import Button from "components/button/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showToast }) => {
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   const onSubmitEmail = async (e) => {
     e.preventDefault();
@@ -29,8 +30,7 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
           showToast("success", "😎 정보가 수정 되었습니다");
         })
         .catch((error) => console.log(error));
-          showToast("success", "😎 정보가 수정에 오류가 있습니다.");
-
+      showToast("success", "😎 정보가 수정에 오류가 있습니다.");
     } else {
       showToast("errors", "😎 체크먼저 해주세요");
     }
@@ -49,7 +49,11 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
             .then((res) => {
               setVerityEmailcheck(true);
               showToast("success", "😎 인증문자가 발송되었습니다");
-              console.log(res.data, "fdfddfd");
+              console.log(res.data.timer, "fdfddfd");
+              setTimer(res.data.timer);
+
+              // Start the timer here
+              startTimer();
             })
             .catch(() => {
               showToast("error", "😎 이메일을 제대로 입력해주세요");
@@ -73,6 +77,18 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
         showToast("error", "😎 인증을 제대로 입력해주세요");
       });
   };
+  const startTimer = () => {
+    const timer = setInterval(() => {
+      setTimer((prevCount) => prevCount - 1);
+    }, 1000);
+    setTimer(timer); // Store the timer ID in state to access it in the cleanup function
+  };
+  useEffect(() => {
+    return () => {
+      clearInterval(timer); // Clear the interval timer when the component unmounts
+    };
+  }, [timer]);
+
   return (
     <Form onSubmit={onSubmitEmail}>
       <Table>
@@ -97,6 +113,7 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
           </div>,
         ]}
       </Table>
+      {timer}
       <Button type="submit" disabled={disabled} onClick={onSubmitEmail} FullWidth size="large">
         저장
       </Button>
