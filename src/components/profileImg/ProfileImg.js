@@ -31,6 +31,26 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     }
   );
 
+  const handleChangeFirstProfileImage = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    console.log('form', formData);
+    axios
+      .post(`${ROOT_API}/users/profile/image`, formData, {
+        headers: { "X-AUTH-TOKEN": auth.accessToken },
+      })
+      .then((response) => {
+        showToast("success", "😎 정보가 수정 되었습니다");
+        console.log('res', response);
+        setProfileImgData({
+          id: response.data.id,
+          url: response.data.url,
+          inputName: response.data.inputName,
+        });
+      });
+  };
+
   const { isLoading: isPostingTutorial, mutate: chnageImg } = useMutation(
     ["profileChange"],
     (formData) =>
@@ -41,6 +61,11 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       onSuccess: (res) => {
         queryClient.invalidateQueries(["profileImg"]);
         showToast("success", "정보가 수정 되었습니다");
+        setProfileImgData({
+          id: res.data.id,
+          url: res.data.url,
+          inputName: res.data.inputName,
+        });
       },
     }
   );
@@ -50,7 +75,8 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     const formData = new FormData();
     formData.append("file", file);
 
-    chnageImg(formData);
+    console.log("dd", formData);
+    chnageImg( formData );
     // axios
     //   .put(`${ROOT_API}/users/profile/image`, formData, {
     //     headers: { "X-AUTH-TOKEN": auth.accessToken },
@@ -64,7 +90,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //   });
   };
 
-
   return (
     <div
       className={classnames(s.img_wrap, {
@@ -73,11 +98,11 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       })}
     >
       {/*
-    */}
-    {data && !isLoading && data.url && <img src={data.url} alt="프로필이미지" />}
-    {data && !isLoading && data.url === "" && (
-      <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
-    )}
+       */}
+      {data && !isLoading && data.url && <img src={data.url} alt="프로필이미지" />}
+      {data && !isLoading && data.url === "" && (
+        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
+      )}
       <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
     </div>
   );

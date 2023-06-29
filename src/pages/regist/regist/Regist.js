@@ -58,6 +58,7 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
+    console.log("확인버튼", verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName);
     if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
       axios
         .post(
@@ -132,13 +133,13 @@ const Regist = () => {
       .get(`${ROOT_API}/users/check/email/${watch().userEmail}`) //NOTE 이메일 중복 확인//ok
       .then((response) => {
         if (response.data.duplicated === false) {
+          console.log("없음");
           axios
-            .get(`${ROOT_API}/email/verify`, {
-              params: { email: watch().userEmail },
+            .post(`${ROOT_API}/email/verify`, {
+              email: watch().userEmail,
             })
             .then((res) => {
               setVerityEmailcheck(true);
-              console.log(res.data, "fdfddfd");
               setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
             })
@@ -153,13 +154,20 @@ const Regist = () => {
   const compareEmail = (e) => {
     //NOTE 인증확인//ok
     e.preventDefault();
-    if (code === inputEmail && code) {
-      showToast("success", "😎 인증이 확인되었습니다");
-      setCompareEmailcheck(true);
-    } else {
-      showToast("error", "😎 인증을 제대로 확인해주세요");
-    }
+    console.log("code", inputEmail);
+    axios
+      .get(`${ROOT_API}/email/verify`, {
+        params: { code: inputEmail },
+      })
+      .then((res) => {
+        setCompareEmailcheck(true);
+        showToast("success", "😎 인증이 확인되었습니다");
+      })
+      .catch(() => {
+        showToast("error", "인증을 제대로 확인해주세요");
+      });
   };
+
   const handleInputChange = (e) => {
     setInputEmail(e.target.value);
   };
