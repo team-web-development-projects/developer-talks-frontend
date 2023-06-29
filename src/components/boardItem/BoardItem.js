@@ -23,9 +23,15 @@ const BoardItem = ({ data, type, currentPage }) => {
   return (
     <>
       <li className={s.boardContainer} onClick={() => linkClick(data.id, type)}>
+        {type !== "post" && (
+          <div className={s.answerContainer}>
+            <p>답변</p>
+            <p>0</p>
+          </div>
+        )}
         <div className={s.frontContainer}>
           <div className={s.info_wrap}>
-            <img className={s.userProfile} src={data.userInfo.userProfile}/>
+            <img className={s.userProfile} src={data.userInfo.userProfile} />
             <span className="nickname">{data.userInfo.nickname}</span>
             <span className={s.item}>
               <AiOutlineEye color="#444" size={14} />

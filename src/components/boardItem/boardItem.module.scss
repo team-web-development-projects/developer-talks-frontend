@@ -11,6 +11,17 @@
       color: $primary;
     }
   }
+  .answerContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border:1px solid #cfcccc;
+    border-radius: 10px;
+    width:70px;
+    height: 70px;
+    margin-right: 20px;
+  }
   .frontContainer{
     flex:1;
   }
