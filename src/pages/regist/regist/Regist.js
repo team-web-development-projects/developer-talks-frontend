@@ -37,11 +37,11 @@ const Regist = () => {
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
-    const [profileImgData, setProfileImgData] = useState({
-      id: "",
-      url: "",
-      inputName: "",
-    });
+  const [profileImgData, setProfileImgData] = useState({
+    id: "",
+    url: "",
+    inputName: "",
+  });
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
@@ -203,7 +203,7 @@ const Regist = () => {
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-        <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
+        <ProfileImg size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
         <div className={s.gaider}>
           <span>🙏추가 안내</span>
           <ul>
@@ -219,7 +219,11 @@ const Regist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+              >
                 {item}
               </span>
             ))}
@@ -315,7 +319,9 @@ const Regist = () => {
                 </Button>
               </div>
               {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+                <small className="alert">중복된 닉네임입니다.</small>
+              )}
               {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
                 <small className="true">사용할 수 있는 닉네임입니다.</small>
               )}
@@ -357,7 +363,9 @@ const Regist = () => {
               </div>
               {errors.userid && <small role="alert">{errors.userid.message}</small>}
               {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-              {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
+              {duplicateId !== "" && duplicateId === false && (
+                <small className="true">사용할 수 있는 아이디입니다.</small>
+              )}
             </React.Fragment>,
             <React.Fragment key={5}>
               <div>

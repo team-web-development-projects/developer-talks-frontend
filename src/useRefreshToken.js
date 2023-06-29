@@ -21,7 +21,8 @@ export default function useRefreshToken() {
     // atk 가 없고, rtk 가 있을 때 - 최초 1회 로그인 후 로그아웃 안했을 때
     if (auth.accessToken === null && localStorage.getItem("refreshToken")) {
       // atrk 가 없고, rtk가 있지만 rtk의 만료시간이 현재 시간보다 이전일때
-      // console.log("cc", epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp));
+      console.log("cc", epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp));
+      console.log('토큰 재갱신');
       if (epochConvert(parseJwt(localStorage.getItem("refreshToken")).exp)) {
         console.log('토큰 만료');
         localStorage.removeItem("refreshToken");

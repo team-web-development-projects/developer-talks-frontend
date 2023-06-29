@@ -18,12 +18,18 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery(["profileImg"], async () => {
-    const res = await axios.get(`${ROOT_API}/users/profile/image`, {
-      headers: { "X-AUTH-TOKEN": auth.accessToken },
-    });
-    return res.data;
-  });
+  const { data, isLoading } = useQuery(
+    ["profileImg"],
+    async () => {
+      const res = await axios.get(`${ROOT_API}/users/profile/image`, {
+        headers: { "X-AUTH-TOKEN": auth.accessToken },
+      });
+      return res.data;
+    },
+    {
+      enabled: auth.accessToken !== null,
+    }
+  );
 
   const { isLoading: isPostingTutorial, mutate: chnageImg } = useMutation(
     ["profileChange"],
@@ -58,6 +64,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //   });
   };
 
+
   return (
     <div
       className={classnames(s.img_wrap, {
@@ -65,10 +72,12 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
         [s.is_border]: border === "color",
       })}
     >
-      {!isLoading && data.url && <img src={data.url} alt="프로필이미지" />}
-      {!isLoading && data.url === "" && (
-        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
-      )}
+      {/*
+    */}
+    {data && !isLoading && data.url && <img src={data.url} alt="프로필이미지" />}
+    {data && !isLoading && data.url === "" && (
+      <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
+    )}
       <input accept="image/*" type="file" name="프로필이미지" onChange={handleChangeProfileImage} id="profile" />
     </div>
   );

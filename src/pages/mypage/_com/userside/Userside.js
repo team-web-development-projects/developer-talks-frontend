@@ -33,7 +33,6 @@ const Userside = () => {
           <ProfileImg size="big" />
         </div>
         <ul className="nav">
-          <li className={classNames()}></li>
           <li className={classNames("", { "is-active": isActive === "mypage" })} onClick={() => handleClick("mypage")}>
             활동내역
           </li>
