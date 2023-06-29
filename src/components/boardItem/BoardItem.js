@@ -23,16 +23,29 @@ const BoardItem = ({ data, type, currentPage }) => {
   return (
     <>
       <li className={s.boardContainer} onClick={() => linkClick(data.id, type)}>
-        <div className={s.info_wrap}>
-          <span className="nickname">{data.userInfo.nickname}</span>
-          <span className={s.item}>
-            <AiOutlineEye color="#444" size={14} />
-            <span>{data.viewCount}</span>
-          </span>
-          <span className={s.item}>
-            {data.createDate}
-          </span>
-          <div className={s.icons}>
+        {type !== "post" && (
+          <div className={s.answerContainer}>
+            <p>답변</p>
+            <p>0</p>
+          </div>
+        )}
+        <div className={s.frontContainer}>
+          <div className={s.info_wrap}>
+            <img className={s.userProfile} src={data.userInfo.userProfile} />
+            <span className="nickname">{data.userInfo.nickname}</span>
+            <span className={s.item}>
+              <AiOutlineEye color="#444" size={14} />
+              <span>{data.viewCount}</span>
+            </span>
+            <span className={s.item}>{data.createDate}</span>
+          </div>
+          <p className={s.title}>{data.title}</p>
+        </div>
+
+        <div></div>
+
+        <div className={s.bottomInfo}>
+          <div className={s.countInfo}>
             <div className={s.item}>
               <AiOutlineStar color="#444" size={12} />
               <p>{data.favoriteCount}</p>
@@ -41,17 +54,17 @@ const BoardItem = ({ data, type, currentPage }) => {
               <FiThumbsUp color="#444" size={12} />
               <p>{data.recommendCount}</p>
             </div>
-          </div>
-        </div>
-        <div className={s.bottomInfo}>
-          <p className={s.title}>{data.title}</p>
-          <div className={s.countInfo}>
             <div className={s.item}>
               <AiOutlineComment color="#444" size={14} />
               <p>{data.commentCount}</p>
             </div>
           </div>
         </div>
+        {data.thumbnailUrl && (
+          <div className={s.img}>
+            <img src={data.thumbnailUrl} />
+          </div>
+        )}
       </li>
     </>
   );

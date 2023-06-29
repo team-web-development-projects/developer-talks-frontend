@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import s from "./replyList.module.scss";
-import { ROOT_API } from "constants/api";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import CkEditor from "components/ckeditor/CkEditor";
 import Button from "components/button/Button";
-import { BsLock, BsUnlock } from "react-icons/bs";
+import CkEditor from "components/ckeditor/CkEditor";
+import { ROOT_API } from "constants/api";
 import ReplyItem from "pages/board/_com/replyItem/ReplyItem";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import s from "./replyList.module.scss";
 
 const ReplyList = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
@@ -52,7 +51,7 @@ const ReplyList = ({ nickname }) => {
       )
       .then((response) => {
         setControlRender((prev) => !prev);
-        setForm({ ["content"]: "", ["secret"]: "false" });
+        // setForm({ ["content"]: "", ["secret"]: "false" });
         scrollDown();
       })
       .catch((error) => console.log(error));
@@ -113,6 +112,7 @@ const ReplyList = ({ nickname }) => {
               id={reply.id}
               postId={postId}
               content={reply.content}
+              //TODO: props없애기
               isSelf={reply.nickname === nickname}
               nickname={reply.nickname}
               secret={reply.secret}

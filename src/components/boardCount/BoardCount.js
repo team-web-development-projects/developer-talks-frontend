@@ -49,7 +49,6 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
       setModalS(true);
     } else {
       if (isFavorite ? !checkStatus.favorite : !checkStatus.recommend) {
-        await new Promise((r) => setTimeout(r, 1000));
         axios
           .post(
             `${ROOT_API}/post/${type}/${postId}`,
@@ -81,7 +80,6 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
     }
   };
   const handleClickCancle = async () => {
-    await new Promise((r) => setTimeout(r, 1000));
     axios
       .delete(`${ROOT_API}/post/${type}/${postId}`, {
         headers: {

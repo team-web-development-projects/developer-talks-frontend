@@ -1,6 +1,8 @@
 @import 'assets/style/variable.scss';
 
 .boardContainer {
+  display:flex;
+  flex-direction: row;
   padding: 16px 0;
   border-bottom: solid 1px #cfcccc;
   &:hover {
@@ -8,6 +10,20 @@
     .title {
       color: $primary;
     }
+  }
+  .answerContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border:1px solid #cfcccc;
+    border-radius: 10px;
+    width:70px;
+    height: 70px;
+    margin-right: 20px;
+  }
+  .frontContainer{
+    flex:1;
   }
   .info_wrap {
     position: relative;
@@ -19,8 +35,15 @@
       top: 0;
     }
   }
+  .userProfile{
+    width:30px;
+    height:30px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
   .title {
-    font-size: 24px;
+    margin-top:5px;
+    font-size: 30px;
     font-weight: 500;
   }
   .content {
@@ -51,5 +74,15 @@
     margin-left: 15px;
     color: #797979;
     gap: 3px;
+  }
+  .img{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    width:70px;
+    height: 70px;
+    border: 1px solid #cfcccc;
+    border-radius: 10px;
+    padding:1px;
   }
 }
