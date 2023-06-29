@@ -38,6 +38,7 @@ const BoardDetail = ({ type }) => {
           return `<img src=${res.data.imageUrls[cnt++]} />`;
         });
         setPost(res.data);
+        console.log(res.data)
       })
       .catch((error) => console.log(error));
     if (auth.accessToken !== null) {

@@ -6,7 +6,7 @@ const RereplyItem = ({ rr }) => {
   return (
     <div className={s.container}>
       <div className={s.nickname}>
-        <ProfileImg nickname={rr.nickname}/>
+        {/* <ProfileImg nickname={rr.nickname}/> */}
         {rr.nickname}
       </div>
       <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }}></div>
