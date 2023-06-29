@@ -20,7 +20,7 @@ import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import Index from "pages/mypage";
-
+import FindUser from 'pages/finduser/FindUser';
 function App() {
   const auth = useSelector((state) => state.authToken);
   
@@ -83,6 +83,7 @@ function App() {
           <Route path="/qna/post" element={<BoardPost type="questions" />} />
           <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/finduser" element={<FindUser />} />
 
           <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />

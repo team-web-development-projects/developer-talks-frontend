@@ -51,8 +51,37 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
       <Table>
         {[
           <div>
+            <Label isRequire htmlFor="oldPassword">
+              기존 비밀번호
+            </Label>
+            <input
+              id="oldPassword"
+              name="oldPassword"
+              type={typetoggle}
+              placeholder="*******"
+              autoComplete="password"
+              disabled={disabled}
+              maxLength={15}
+              {...register("oldPassword", {
+                required: "공백일 수 없습니다.",
+                minLength: {
+                  value: 8,
+                  message: "8자리 이상 비밀번호를 사용해주세요.",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "15자리 이히 비밀번호를 사용해주세요.",
+                },
+                pattern: {
+                  value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                  message: "특수문자를 포함해주세요",
+                },
+              })}
+            />
+          </div>,
+          <div>
             <Label isRequire htmlFor="newPassword">
-              비밀번호
+              새로운비밀번호
             </Label>
             <input
               id="newPassword"
@@ -114,35 +143,6 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
               })}
             />
             {errors.checkNewPassword && <small role="alert">{errors.checkNewPassword.message}</small>}
-          </div>,
-          <div>
-            <Label isRequire htmlFor="oldPassword">
-              기존 비밀번호
-            </Label>
-            <input
-              id="oldPassword"
-              name="oldPassword"
-              type={typetoggle}
-              placeholder="*******"
-              autoComplete="password"
-              disabled={disabled}
-              maxLength={15}
-              {...register("oldPassword", {
-                required: "공백일 수 없습니다.",
-                minLength: {
-                  value: 8,
-                  message: "8자리 이상 비밀번호를 사용해주세요.",
-                },
-                maxLength: {
-                  value: 15,
-                  message: "15자리 이히 비밀번호를 사용해주세요.",
-                },
-                pattern: {
-                  value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                  message: "특수문자를 포함해주세요",
-                },
-              })}
-            />
           </div>,
         ]}
       </Table>

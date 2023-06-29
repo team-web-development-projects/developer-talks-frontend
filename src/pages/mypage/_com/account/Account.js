@@ -15,6 +15,7 @@ import Email from "pages/mypage/_com_Account/Email";
 import Userid from "pages/mypage/_com_Account/Uerid";
 import Password from "pages/mypage/_com_Account/Password";
 import Nickname from "pages/mypage/_com_Account/Nickname";
+import Private from "components/private/Private";
 
 
 function Account() {
@@ -103,6 +104,7 @@ function Account() {
         </ul>
         {select === 0 && (
           <>
+          <Private/>
             <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData ={setProfileImgData}/>
             <Description
               auth={auth}

@@ -14,7 +14,7 @@ import s from "./profileimg.module.scss";
  * @returns
  */
 
-const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nickname }) => {
+const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nickname, border }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
@@ -62,6 +62,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     <div
       className={classnames(s.img_wrap, {
         [s.is_big]: size === "big",
+        [s.is_border]: border === "color",
       })}
     >
       {!isLoading && data.url && <img src={data.url} alt="프로필이미지" />}

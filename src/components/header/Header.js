@@ -16,6 +16,11 @@ const Header = () => {
   let nickname = "";
   const targetRef = useRef(null);
   const location = useLocation();
+      const [profileImgData, setProfileImgData] = useState({
+        id: "",
+        url: "",
+        inputName: "",
+      });
   // outOfClick(targetRef); // NOTE: 아웃오브클릭 테스트
 
   const showPopover = () => {
@@ -74,7 +79,7 @@ const Header = () => {
               </span>
             </li>
             <li className="header-user">
-              <Link to="/mypage">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg />}</Link>
+              <Link to="/mypage">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color"/>}</Link>
               {nickname && <span>{`${nickname}님`}</span>}
             </li>
           </ul>
