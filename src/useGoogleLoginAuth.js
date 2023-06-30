@@ -28,7 +28,7 @@ const useGoogleLoginAuth = () => {
         navigate("/userregist", { replace: true });
       }
       dispatch(SET_TOKEN({ accessToken: accessToken }));
-      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("dtrtk", refreshToken);
     }
   }, [dispatch, navigate, location, auth.accessToken]);
 };

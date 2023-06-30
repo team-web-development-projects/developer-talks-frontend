@@ -90,7 +90,7 @@ const Userregist = () => {
               // if (autoLogin) {
               //NOTE 자동로그인
               localStorage.removeItem("authAtk");
-              localStorage.setItem("refreshToken", response.data.refreshToken);
+              localStorage.setItem("dtrtk", response.data.refreshToken);
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
               navigate("/");
               reset();

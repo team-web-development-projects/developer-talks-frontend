@@ -58,7 +58,6 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    console.log("확인버튼", verityEmailcheck, compareEmailcheck, duplicateId, duplicateNickName);
     if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
       axios
         .post(
@@ -79,7 +78,7 @@ const Regist = () => {
             .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
             .then((response) => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              localStorage.setItem("refreshToken", response.data.refreshToken);
+              localStorage.setItem("dtrtk", response.data.refreshToken);
               setModal(true);
               navigate("/");
               reset();
@@ -164,7 +163,7 @@ const Regist = () => {
         showToast("success", "😎 인증이 확인되었습니다");
       })
       .catch(() => {
-        showToast("error", "인증을 제대로 확인해주세요");
+        showToast("error", "인증을 정확히 확인해주세요");
       });
   };
 
@@ -211,18 +210,15 @@ const Regist = () => {
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-        <ProfileImg size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
         <div className={s.gaider}>
-          <span>🙏추가 안내</span>
           <ul>
             <li>
               <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
             </li>
-            <li>
-              <span>디톡스</span>를 이용한 프로필 변경은 여기를 참고해주세요.
-            </li>
           </ul>
         </div>
+        <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
+
         <label>관심있는 태그입력</label>
         <div className={s.tagalign}>
           <div className={s.tags}>

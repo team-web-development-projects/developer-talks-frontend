@@ -41,7 +41,7 @@ const Login = () => {
       .then(function (response) {
         console.log("로그인 성공:", response);
         // setRefreshToken({ refreshToken: response.data.refreshToken });
-        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("dtrtk", response.data.refreshToken);
         dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
         setModal(true);
         reset();
