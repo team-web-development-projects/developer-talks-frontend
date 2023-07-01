@@ -58,7 +58,7 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
+    if (verityEmailcheck && duplicateId === false && duplicateNickName === false) {
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -133,14 +133,13 @@ const Regist = () => {
       .then((response) => {
         if (response.data.duplicated === false) {
           axios
-            .get(`${ROOT_API}/email/verify`, {
-              params: { email: watch().userEmail },
+            .post(`${ROOT_API}/email/verify`, {
+              email: watch().userEmail,
             })
             .then((res) => {
               setVerityEmailcheck(true);
-              console.log(res.data, "fdfddfd");
-              setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
+              console.log(res.data.timer, "fdfddfd");
             })
             .catch(() => {
               showToast("error", "😎 이메일을 제대로 입력해주세요");
@@ -150,15 +149,18 @@ const Regist = () => {
         }
       });
   };
-  const compareEmail = (e) => {
-    //NOTE 인증확인//ok
+  const verityEmailchecking = async (e) => {
+    //NOTE 이메일 인증//ok
     e.preventDefault();
-    if (code === inputEmail && code) {
-      showToast("success", "😎 인증이 확인되었습니다");
-      setCompareEmailcheck(true);
-    } else {
-      showToast("error", "😎 인증을 제대로 확인해주세요");
-    }
+    axios
+      .get(`${ROOT_API}/email/verify?code=${inputEmail}`)
+      .then((res) => {
+        console.log(res.data, "fdfddfd");
+        showToast("success", "😎 인증되었습니다");
+      })
+      .catch(() => {
+        showToast("error", "😎 인증을 제대로 입력해주세요");
+      });
   };
   const handleInputChange = (e) => {
     setInputEmail(e.target.value);
@@ -203,7 +205,7 @@ const Regist = () => {
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-        <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} />
+        {/* <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} /> */}
         <div className={s.gaider}>
           <span>🙏추가 안내</span>
           <ul>
@@ -278,7 +280,7 @@ const Regist = () => {
                   {...register("inputEmail", { required: true })}
                   onChange={handleInputChange}
                 />
-                <Button onClick={compareEmail} tabIndex="5">
+                <Button onClick={verityEmailchecking} tabIndex="5">
                   확인
                 </Button>
               </div>
