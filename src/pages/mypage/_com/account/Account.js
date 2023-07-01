@@ -31,11 +31,11 @@ function Account() {
   const onSelect = (type) => {
     setSelect(type);
   };
-    const [profileImgData, setProfileImgData] = useState({
-      id: "",
-      url: "",
-      inputName: "",
-    });
+    // const [profileImgData, setProfileImgData] = useState({
+    //   id: "",
+    //   url: "",
+    //   inputName: "",
+    // });
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
@@ -105,7 +105,7 @@ function Account() {
         {select === 0 && (
           <>
           <Private/>
-            <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData ={setProfileImgData}/>
+            {/* <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData ={setProfileImgData}/> */}
             <Description
               auth={auth}
               ROOT_API={ROOT_API}
