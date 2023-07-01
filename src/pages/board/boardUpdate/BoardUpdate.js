@@ -16,15 +16,16 @@ const BoardUpdate = ({ type }) => {
   const { state } = useLocation();
   const auth = useSelector((state) => state.authToken);
   const [form, setForm] = useState({
-    title:state.title,
-    content:state.content,
+    title: state.title,
+    content: state.content,
     userInfo: {},
-    files:[],
+    files: [],
+    imgUrls: state.imgUrls,
   });
-  console.log(form)
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
+    form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
     const frm = new FormData();
     if (form.files.length !== 0) {
       form.files.forEach((file) => {
@@ -33,6 +34,7 @@ const BoardUpdate = ({ type }) => {
     }
     frm.append("title", form.title);
     frm.append("content", form.content);
+    frm.append("imgUrls", form.imgUrls);
     axios
       .put(`${ROOT_API}/${type}/${postId}`, frm, {
         headers: {
@@ -49,6 +51,7 @@ const BoardUpdate = ({ type }) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
+  
   return (
     <>
       {modalY && (
