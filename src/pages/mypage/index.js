@@ -8,7 +8,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (auth.accessToken === null && localStorage.getItem("refreshToken") === null) {
+    if (auth.accessToken === null && localStorage.getItem("dtrtk") === null) {
       navigate("/login", { replace: true });
     }
   }, [auth.accessToken, navigate]);
