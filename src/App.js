@@ -26,7 +26,7 @@ function App() {
   
   const [loading, setLoading] = useState(false);
 
-  // console.log("auth", auth);
+  // console.log("auth", auth.accessToken);
 
   useGoogleLoginAuth();
   useRefreshToken();

@@ -4,21 +4,26 @@ import { useQuery } from "react-query";
 import s from "./news.module.scss";
 
 const News = () => {
-
   async function fetchProjects() {
     const { data } = await axios.get(`${ROOT_API}/news`);
     return data;
   }
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["news"],
     queryFn: () => fetchProjects(),
+    refetchInterval: 60 * 60 * 1000, // 1시간
+    refetchIntervalInBackground: true,
+    keepPreviousData: true,
+    staleTime: 60 * 60 * 1000, // 테스트코드
+    cacheTime: 60 * 60 * 1000, // 테스트코드
   });
 
   return (
     <section className={s.news}>
       <strong>IT 뉴스</strong>
       <ul>
+        {isLoading && <li>로딩중입니다..</li>}
         {data ? (
           data.map((item, index) => (
             <li key={index}>

@@ -33,8 +33,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     }
   );
 
-  console.log("data", auth.accessToken !== null);
-
   const handleChangeFirstProfileImage = async (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
@@ -90,9 +88,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //     });
     //   });
   };
-
-  // console.log("dd", auth.accessToken, data);
-  console.log("dd", profileImgData);
 
   return (
     <div
