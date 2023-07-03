@@ -27,6 +27,9 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   // console.log("auth", auth);
+  const pageRouter = useSelector((state) => state.pageRouter);
+
+  console.log("page", pageRouter);
 
   useGoogleLoginAuth();
   useRefreshToken();

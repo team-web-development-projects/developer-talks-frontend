@@ -7,6 +7,10 @@ import Best from "pages/_com/best/Best";
 import News from "pages/_com/news/News";
 import Chat from "components/chat/Chat";
 import Chat2 from "components/chat/Chat2";
+import Chat3 from "components/chat/Chat3";
+import Chat4 from "components/chat/Chat4";
+import { useSelector } from "react-redux";
+import RednerTest from "components/chat/RenderTest";
 
 const Main = () => {
   return (
@@ -16,9 +20,9 @@ const Main = () => {
         <News />
       </article>
       {/*
-      <Chat/>
+      <RednerTest/>
     */}
-    <Chat2/>
+    <Chat3 />
     </div>
   );
 };
