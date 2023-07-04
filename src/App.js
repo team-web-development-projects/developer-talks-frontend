@@ -4,8 +4,11 @@ import BoardDetail from "pages/board/boardDetail/BoardDetail";
 import BoardList from "pages/board/boardList/BoardList";
 import BoardPost from "pages/board/boardPost/BoardPost";
 import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
+import FindPassword from "pages/findpassword/FindPassword";
+import FindUser from 'pages/finduser/FindUser';
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
+import Index from "pages/mypage";
 import Regist from "pages/regist/regist/Regist";
 import Userregist from "pages/regist/userregist/Userregist";
 import StudyRoomDetail from "pages/studyRoom/studyRoomDetail/StudyRoomDetail";
@@ -19,8 +22,6 @@ import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
-import Index from "pages/mypage";
-import FindUser from 'pages/finduser/FindUser';
 function App() {
   const auth = useSelector((state) => state.authToken);
   
@@ -84,6 +85,7 @@ function App() {
           <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/finduser" element={<FindUser />} />
+          <Route path="/findpassword" element={<FindPassword />} />
 
           <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />
