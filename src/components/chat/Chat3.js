@@ -1,32 +1,24 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect, useState } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { SET_ROUTER } from "store/PageRouter";
 
 const Chat3 = () => {
-  const location = useLocation();
-  const dispatch = useDispatch();
   const auth = useSelector((state) => state.authToken);
-  const pageRouter = useSelector((state) => state.pageRouter);
   const [conec, setConnec] = useState(false);
 
   //socket 연결
   const headers = {
     "X-AUTH-TOKEN": auth.accessToken,
   };
-  // const socket = new SockJS("ws://dtalks-api.site/ws/chat");
-  const socket = new SockJS("https://dtalks-api.site/ws/chat");
-  const stomp = new Stomp.over(socket);
 
-  // const websocket = new WebSocket("https://dtalks-api.site/ws/chat");
-  // const stomp = new Stomp.over(websocket);
+  const socket = new SockJS("https://dtalks-api.site/ws/chat");
+  const stomp = new Stomp.over(socket, { headers });
 
   useEffect(() => {
     stomp.connect(headers, () => {
       setConnec(true);
+      console.log('소켓 연결됨');
       // try {
       //방 생성
 
@@ -34,7 +26,7 @@ const Chat3 = () => {
       stomp.subscribe(
         `/sub/rooms/1`,
         (body) => {
-          console.log(body);
+          console.log("body: ", JSON.stringify(body.body).message);
           //이후 처리
         },
         headers
@@ -66,16 +58,6 @@ const Chat3 = () => {
         "X-AUTH-TOKEN": auth.accessToken,
       },
       body
-      // message
-      // JSON.stringify({ message: message })
-      // message
-      // {
-      //   "X-AUTH-TOKEN": auth.accessToken,
-      // },
-      // JSON.stringify(
-      //   // message: message,
-      //   message
-      // )
     );
   };
   return (

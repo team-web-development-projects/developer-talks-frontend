@@ -21,15 +21,10 @@ import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import Index from "pages/mypage";
 import FindUser from 'pages/finduser/FindUser';
+
 function App() {
   const auth = useSelector((state) => state.authToken);
-  
   const [loading, setLoading] = useState(false);
-
-  // console.log("auth", auth);
-  const pageRouter = useSelector((state) => state.pageRouter);
-
-  console.log("page", pageRouter);
 
   useGoogleLoginAuth();
   useRefreshToken();
