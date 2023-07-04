@@ -1,11 +1,12 @@
 @import 'assets/style/variable.scss';
 
 .noti {
+  display: none;
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100%);
   right: 0;
   left: auto;
-  width: 250px;
+  width: 350px;
   margin: auto;
   background: white;
   color: black;
@@ -14,8 +15,12 @@
   z-index: 1;
   cursor: auto;
 
-  max-height: 200px;
+  max-height: 250px;
   overflow: auto;
+
+  &.is_show {
+    display: block;
+  }
   .title {
     position: relative;
     padding: 6px 10px;
@@ -34,15 +39,35 @@
     }
   }
   li {
+    position: relative;
     font-size: 14px;
+    &.not_alarm {
+      padding: 10px;
+    }
     &.is_read {
       a {
         background: #fff;
+        color: #b7b7b7;
       }
     }
     a {
       padding: 10px;
       background: #eee;
+    }
+    .ctl {
+      position: absolute;
+      right: 10px;
+      top: 0;
+      bottom: 0;
+
+      display: flex;
+      gap: 10px;
+      margin: auto;
+      height: fit-content;
+      font-size: 12px;
+      span {
+        cursor: pointer;
+      }
     }
   }
 }
