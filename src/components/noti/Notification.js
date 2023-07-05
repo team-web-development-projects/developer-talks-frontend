@@ -16,22 +16,20 @@ const Notification = ({ unRead, classname }) => {
   const getAlarmAll = useQuery({
     queryKey: ["alaram"],
     queryFn: () => alarmAll(),
-    staleTime: 1 * 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: true,
+    // staleTime: 1 * 60 * 1000,
+    // cacheTime: 5 * 60 * 1000,
   });
 
   const getAlarmUnRead = useQuery({
     queryKey: ["alaramUnRead"],
     queryFn: () => alarmUnRead(),
-    staleTime: 1 * 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: true,
+    // staleTime: 1 * 60 * 1000,
+    // cacheTime: 5 * 60 * 1000,
   });
 
   // 모든 알람
   async function alarmAll() {
-    const { data } = await axios.get(`${ROOT_API}/alarm/all`, {
+    const { data } = await axios.get(`${ROOT_API}/notifications/all`, {
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,
@@ -42,7 +40,7 @@ const Notification = ({ unRead, classname }) => {
 
   // 읽지 않은 알람
   async function alarmUnRead() {
-    const { data } = await axios.get(`${ROOT_API}/alarm/count`, {
+    const { data } = await axios.get(`${ROOT_API}/notifications/count`, {
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,
@@ -56,7 +54,7 @@ const Notification = ({ unRead, classname }) => {
     ["readAll"],
     () =>
       axios.post(
-        `${ROOT_API}/alarm`,
+        `${ROOT_API}/notifications/read/all`,
         {},
         {
           headers: { "X-AUTH-TOKEN": auth.accessToken },
@@ -78,7 +76,7 @@ const Notification = ({ unRead, classname }) => {
   const { isLoading: isLoadingIdDelete, mutate: idDelete } = useMutation(
     ["deleteId"],
     (id) =>
-      axios.delete(`${ROOT_API}/alarm/${id}`, {
+      axios.delete(`${ROOT_API}/notifications/${id}`, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
       }),
     {
@@ -97,7 +95,7 @@ const Notification = ({ unRead, classname }) => {
   const { mutate: idRead } = useMutation(
     ["readId"],
     (id) =>
-      axios.post(`${ROOT_API}/alarm/${id}`, {
+      axios.post(`${ROOT_API}/notifications/read/${id}`, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
       }),
     {
@@ -114,8 +112,7 @@ const Notification = ({ unRead, classname }) => {
     idRead(id);
   };
 
-  // console.log("data", getAlarmAll.data.length);
-  console.log("dta", getAlarmUnRead.isSuccess);
+  console.log("dd", getAlarmAll.data);
 
   return (
     <div
