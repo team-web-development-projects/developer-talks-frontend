@@ -1,74 +1,79 @@
-import React, { useEffect, useRef, useState } from "react";
-import SockJS from "sockjs-client";
-// import Stomp from '@stomp/stompjs';
-import Stomp from "stompjs";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import io from "socket.io-client";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
-const ROOM_SEQ = 1;
-
-const Chat = () => {
+const Chat = ({ roomId }) => {
   const auth = useSelector((state) => state.authToken);
-  const [chatMessages, setChatMessages] = useState([]);
-  // const [message, setMessage] = useState("Hello world");
-  const sockJS = new SockJS("https://dtalks-api.site/ws/chat");
-  console.log("auth", auth.accessToken);
+  const [conec, setConnec] = useState(false);
+  const [text, setText] = useState("");
+
+  //socket 연결
   const headers = {
     "X-AUTH-TOKEN": auth.accessToken,
   };
-  const stompClient = Stomp.over(sockJS, { headers });
+
+  const socket = new SockJS("https://dtalks-api.site/ws/chat");
+  const stomp = new Stomp.over(socket, { headers });
 
   useEffect(() => {
-    // const stompClient = Stomp.over(socket);
-    // const sockJS = new WebSocket("ws://dtalks-api.site/ws/chat"); // WebSocket 서버 주소로 변경해야 합니다.
-    // let sockJS = new SockJS("ws://dtalks-api.site/ws/chat");
+    stomp.connect(headers, () => {
+      setConnec(true);
+      console.log("소켓 연결됨");
+      // try {
+      //방 생성
 
-    // 소켓 연결 시도
-    stompClient.connect({}, () => {
-      console.log("STOMP 연결됨");
+      //이벤트 구독
+      stomp.subscribe(
+        // `/sub/rooms/${roomId}`,
+        `/sub/rooms/1`,
+        (body) => {
+          console.log("body: ", JSON.stringify(body.body).message);
+          //이후 처리
+        },
+        headers
+      );
 
-      // 구독
-      stompClient.subscribe("/sub/rooms/1", (message) => {
-        console.log("메시지 수신:", message);
-      });
-      sendMessage();
+      // } catch (e) {
+      //axios 예외처리
+      //axios는 기본적으로 200응답 외에는 에러를 던지므로
+      //방 생성 or 방 입장에 관한 api오류시 이곳에서 처리해야함
+      // console.log("error: ", e);
+      // }
     });
-    // 컴포넌트가 언마운트될 때 소켓 연결 정리
     return () => {
-      // stompClient.disconnect();
+      //연결 끊기
+      stomp.disconnect(() => {
+        console.log("socket연결 해제");
+      });
     };
-  }, [auth]);
+  }, []);
 
-  // sendMessage(); // 예시로 컴포넌트가 마운트될 때 메시지 전송
-  const sendMessage = () => {
-    const message = "Hello, Server!"; // 전송할 메시지
-    // stompClient.send("/pub/rooms/1", {}, message);
-    stompClient.send("/pub/rooms/1", {}, JSON.stringify(message));
+  const click = (e) => {
+    e.preventDefault();
+    // const body = JSON.stringify("Hello");
+    console.log("헤더", auth.accessToken);
+    stomp.send(
+      // `/pub/rooms/${roomId}`,
+      `/pub/rooms/1`,
+      {
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+      JSON.stringify(text)
+    );
+  };
+
+  const onChange = (e) => {
+    setText(e.target.value);
   };
 
   return (
     <div>
-      {chatMessages && chatMessages.length > 0 && (
-        <ul>
-          {chatMessages.map((_chatMessage, index) => (
-            <li key={index}>{_chatMessage.message}</li>
-          ))}
-        </ul>
-      )}
-      <div>
-        <input
-          type={"text"}
-          placeholder={"message"}
-          // value={message}
-          // onChange={(e) => setMessage(e.target.value)}
-          // onKeyPress={(e) => e.which === 13 && publish(message)}
-        />
-        {/*
-      */}
-      <button onClick={sendMessage}>send</button>
-      </div>
+      <form onSubmit={click}>
+        <input type="text" name="" id="" onChange={onChange} />
+        <button>전송</button>
+      </form>
     </div>
   );
 };
-
 export default Chat;
