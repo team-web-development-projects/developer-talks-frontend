@@ -1,44 +1,62 @@
 import axios from "axios";
 import Button from "components/button/Button";
+import Form from "components/form/Form";
 import Label from "components/label/Label";
 import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
-import React, { useState } from "react";
-import s from "./finduser.module.scss";
-import { useSelector } from "react-redux";
-import { parseJwt } from "hooks/useParseJwt";
 import { ROOT_API } from "constants/api";
-import Form from "components/form/Form"
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import s from "./finduser.module.scss";
 
 const FindUser = () => {
-  const [email, setEmail] = useState("");
   const auth = useSelector((state) => state.authToken);
-  const handleChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const findUserId = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+  });
+  const findUserId = async () => {
+    await new Promise((r) => setTimeout(r, 1000));
     axios
-      .get(`${ROOT_API}/users/userid?email=${email}`, {
+      .get(`${ROOT_API}/users/userid?email=${watch().userEmail}`, {
         headers: {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
       .then((response) => {
-      showToast("success", "😎 중복체크를 제대로 확인해주세요");
-
+        showToast("success", "😎 해당 이메일로 귀하의 아이디가 발송되었었습니다.");
+      })
+      .catch((error) => {
+        showToast("errors", "😎 정보를 다시 확인해주세요.");
       });
   };
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(findUserId)}>
       <p className={s.title}>회원정보 찾기</p>
       <Table tableTitle={"Developer-Talks"} tableText={"회원정보찾기"}>
         <Label isRequire htmlFor="userEmail">
           이메일입력하시면 아이디를 찾을 수 있어요
         </Label>
-        <input id="userEmail" name="email" value={email} onChange={handleChange} type="text" />
+        <input
+          type="email"
+          id="userEmail"
+          placeholder="이메일을 입력해주세요"
+          tabIndex="2"
+          {...register("userEmail", {
+            required: "이메일은 필수 입력입니다.",
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "이메일 형식에 맞지 않습니다.",
+            },
+          })}
+        />
       </Table>
-      <Button FullWidth size="large" type="submit" tabIndex="3" onClick={findUserId}>
+      {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
+      <Button FullWidth size="large" type="submit" tabIndex="3" disabled={!isValid}>
         {" "}
         찾기
       </Button>

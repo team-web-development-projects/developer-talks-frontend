@@ -14,7 +14,9 @@ const FormUserGuide = () => {
               <Link to="/finduser">아이디 찾기</Link>
             </li>
             <li>|</li>
-            <li>비밀번호 찾기</li>
+            <li>
+              <Link to="/findpassword">비밀번호 찾기</Link>
+            </li>
             <li>|</li>
             <li>
               <Link to="/regist">회원가입 하기</Link>

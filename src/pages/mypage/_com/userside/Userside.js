@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Userside.scss";
 import { parseJwt } from "hooks/useParseJwt";
-import ProfileImg from "components/profileImg/ProfileImg";
+// import ProfileImg from "components/profileImg/ProfileImg";
 import Mypage from "../mypage/Mypage";
 import MypageContent from "pages/mypage/MyPageContent";
 import MyStudyRoom from "../mystudyroom/MyStudyRoom";
@@ -17,11 +17,11 @@ const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
   const [isActive, setIsActive] = useState("mypage");
   const location = useLocation();
-  const [profileImgData, setProfileImgData] = useState({
-    id: "",
-    url: "",
-    inputName: "",
-  });
+  // const [profileImgData, setProfileImgData] = useState({
+  //   id: "",
+  //   url: "",
+  //   inputName: "",
+  // });
   const handleClick = (value) => {
     setIsActive(value);
   };
@@ -30,7 +30,7 @@ const Userside = () => {
     <MypageContent>
       <section className="side">
         <div className="imgwrap">
-          <ProfileImg size="big" />
+          {/* <ProfileImg size="big" /> */}
         </div>
         <ul className="nav">
           <li className={classNames("", { "is-active": isActive === "mypage" })} onClick={() => handleClick("mypage")}>

@@ -119,37 +119,40 @@ const Mypage = ({ type }) => {
                 <div key={index} className={mypage.userdata}>
                   <div className={mypage.text}>
                     <div className={mypage.type}>
-                      {item.type && item.type === "COMMENT" ? (
+                      {item.type === "COMMENT" && (
                         <>
                           <span>{item.writer || item.nickname}</span>
                           <p>님의 질문에 달린 답변에</p>
                           <span>댓글</span>
                           <p>을 작성하였습니다</p>
                         </>
-                      ) : (
+                      )}
+                      {item.type === "POST" && (
                         <>
-                          <p>카테고리에</p>
+                          <p>커뮤니티에</p>
                           <span>질문</span>
                           <p>을 작성하였습니다.</p>
                         </>
                       )}
+                      {item.type === "STUDY_CREATE" && (
+                        <>
+                          <p>스터디룸에</p>
+                          <span>룸</span>
+                          <p>을 만들었습니다.</p>
+                        </>
+                      )}
                       {item.secret === false && "🔓"}
                       {item.secret === true && "🔒"}
-                      {(item.viewCount || item.viewCount === 0) && (
-                        <span className={mypage.viewCount}>조회수 {item.viewCount}</span>
-                      )}
-                      {(item.recommendCount || item.recommendCount === 0) && (
-                        <span className={mypage.viewCount}>추천수 {item.recommendCount}</span>
-                      )}
-                      {(item.favoriteCount || item.favoriteCount === 0) && (
-                        <span className={mypage.viewCount}>좋아요수 {item.favoriteCount}</span>
-                      )}
+                      {(item.viewCount || item.viewCount === 0) && <span className={mypage.viewCount}>조회수 {item.viewCount}</span>}
+                      {(item.recommendCount || item.recommendCount === 0) && <span className={mypage.viewCount}>추천수 {item.recommendCount}</span>}
+                      {(item.favoriteCount || item.favoriteCount === 0) && <span className={mypage.viewCount}>좋아요수 {item.favoriteCount}</span>}
                     </div>
                     {(item.title || item.postTitle) && (
                       <p className={mypage.title} onClick={() => navigate(`/board/${item.id}`)}>
                         {item.title || item.postTitle}{" "}
                       </p>
                     )}
+                    <div dangerouslySetInnerHTML={{ __html: item.content && item.content }}></div>
                   </div>
                   <div className={mypage.createtime}>{item.createDate}</div>
                 </div>

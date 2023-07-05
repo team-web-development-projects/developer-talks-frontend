@@ -58,7 +58,7 @@ const Regist = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    if (verityEmailcheck && compareEmailcheck && duplicateId === false && duplicateNickName === false) {
+    if (verityEmailcheck && duplicateId === false && duplicateNickName === false) {
       axios
         .post(
           `${ROOT_API}/sign-up`,
@@ -141,6 +141,7 @@ const Regist = () => {
               setVerityEmailcheck(true);
               setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
+              console.log(res.data.timer, "fdfddfd");
             })
             .catch(() => {
               showToast("error", "😎 이메일을 제대로 입력해주세요");
@@ -150,8 +151,8 @@ const Regist = () => {
         }
       });
   };
-  const compareEmail = (e) => {
-    //NOTE 인증확인//ok
+  const verityEmailchecking = async (e) => {
+    //NOTE 이메일 인증//ok
     e.preventDefault();
     console.log("code", inputEmail);
     axios
@@ -286,7 +287,7 @@ const Regist = () => {
                   {...register("inputEmail", { required: true })}
                   onChange={handleInputChange}
                 />
-                <Button onClick={compareEmail} tabIndex="5">
+                <Button onClick={verityEmailchecking} tabIndex="5">
                   확인
                 </Button>
               </div>
