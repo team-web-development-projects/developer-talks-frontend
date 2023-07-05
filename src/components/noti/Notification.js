@@ -13,19 +13,12 @@ const Notification = ({ unRead, classname }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
-  const getAlarmAll = useQuery({
-    queryKey: ["alaram"],
-    queryFn: () => alarmAll(),
-    // staleTime: 1 * 60 * 1000,
-    // cacheTime: 5 * 60 * 1000,
-  });
-
-  const getAlarmUnRead = useQuery({
-    queryKey: ["alaramUnRead"],
-    queryFn: () => alarmUnRead(),
-    // staleTime: 1 * 60 * 1000,
-    // cacheTime: 5 * 60 * 1000,
-  });
+  const queries = useQueries([
+    { queryKey: ["alaram"], queryFn: () => alarmAll() },
+    { queryKey: ["alaramUnRead"], queryFn: () => alarmUnRead() },
+  ]);
+  const getAlarmAll = queries[0];
+  const getAlarmUnRead = queries[1];
 
   // 모든 알람
   async function alarmAll() {
@@ -101,7 +94,7 @@ const Notification = ({ unRead, classname }) => {
     {
       onSuccess: (res) => {
         // setUnread(getAlarmAll.data);
-        console.log('res', res);
+        console.log("res", res);
         queryClient.invalidateQueries(["alaram"]);
         queryClient.invalidateQueries(["alaramUnRead"]);
       },
@@ -112,7 +105,7 @@ const Notification = ({ unRead, classname }) => {
     idRead(id);
   };
 
-  console.log("dd", getAlarmAll.data);
+  console.log("dd", getAlarmAll.data, getAlarmUnRead.data);
 
   return (
     <div

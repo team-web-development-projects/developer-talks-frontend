@@ -3,15 +3,18 @@
 .boardContainer {
   display:flex;
   flex-direction: row;
-  padding: 16px 0;
+  justify-content: space-between;
+  height: 130px;
+  padding: 14px 0 9px 0;
   border-bottom: solid 1px #cfcccc;
+  box-sizing: border-box;
   &:hover {
     cursor: pointer;
     .title {
       color: $primary;
     }
   }
-  .answerContainer{
+  .answerContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,8 +25,10 @@
     height: 70px;
     margin-right: 20px;
   }
-  .frontContainer{
-    flex:1;
+  .frontContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .info_wrap {
     position: relative;
@@ -40,9 +45,11 @@
     height:30px;
     border-radius: 50%;
     margin-right: 5px;
+    border: 1px solid #ccc;
+    overflow: hidden;
   }
   .title {
-    margin-top:5px;
+    padding-bottom: 10px;
     font-size: 30px;
     font-weight: 500;
   }
@@ -55,6 +62,11 @@
   }
   .nickname {
     color: #797979;
+  }
+  .right {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
   }
   .bottomInfo {
     display:flex;
@@ -75,14 +87,17 @@
     color: #797979;
     gap: 3px;
   }
-  .img{
+  .img {
     display: flex;
     align-items: center;
-    margin-left: 10px;
     width:70px;
     height: 70px;
     border: 1px solid #cfcccc;
     border-radius: 10px;
-    padding:1px;
+    overflow: hidden;
+    img {
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }

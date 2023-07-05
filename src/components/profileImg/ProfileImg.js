@@ -20,6 +20,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
+  // 초기 회원가입때는 프로필 이미지가 없으니 있으면안된다. 
   const { data, isLoading: getLoading } = useQuery(
     ["profileImg"],
     async () => {
@@ -29,7 +30,8 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       return res.data;
     },
     {
-      enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
+      // enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
+      enabled: localStorage.getItem("dtrtk") !== null
     }
   );
 
@@ -88,6 +90,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //     });
     //   });
   };
+  // console.log('get image:', data)
 
   return (
     <div
@@ -100,8 +103,8 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       {/* 마이페이지에 이미지가 있는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && !getLoading && data.url && <img src={data.url} alt="프로필이미지" />}
       {/* 마이페이지에 이미지가 없는 경우, 회원가입 페이지는 포함 안됨. */}
-      {auth.accessToken && data && !getLoading && data.url === "" && (
-        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(nickname) }} />
+      {data === undefined && (
+        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
       )}
       {!auth.accessToken && (
         <img

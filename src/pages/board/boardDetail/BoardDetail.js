@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
+import { randomProfile } from "hooks/useRandomProfile";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -38,7 +39,7 @@ const BoardDetail = ({ type }) => {
           return `<img src=${res.data.imageUrls[cnt++]} />`;
         });
         setPost(res.data);
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((error) => console.log(error));
     if (auth.accessToken !== null) {
@@ -73,6 +74,7 @@ const BoardDetail = ({ type }) => {
       state: { title: post.title, content: post.imagedContent, imgUrls: post.imageUrls },
     });
   };
+
   return (
     <>
       {modalD && (
@@ -86,7 +88,11 @@ const BoardDetail = ({ type }) => {
       <div className={s.container}>
         <header>
           <div className={s.userInfoContainer}>
-            <img className={s.profile} src={post.userInfo.userProfile} />
+            {post.userInfo.userProfile !== null ? (
+              <img className={s.profile} src={post.userInfo.userProfile} alt="프로필 이미지" />
+            ) : (
+              <div className={s.profile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+            )}
             <div>
               <span className={s.nick}>{post.userInfo.nickname}</span>
               <div className={s.info}>

@@ -10,11 +10,11 @@
     margin-top: 15px;
   }
 }
-.boardContainer{
+.boardContainer {
   &:hover{
     background: #eeeeee;
   }
-  .title{
+  .title {
     margin-bottom: 10px;
     font-size:30px;
     font-weight: 500;
@@ -30,8 +30,12 @@
     color:#797979;
   }
 }
-.pageContainer{
+.pageContainer {
   display: flex;
   justify-content: center;
   margin: 20px 0px;
+}
+.notlist {
+  margin-top: 20px;
+  text-align: center;
 }

@@ -91,12 +91,12 @@ const BoardList = ({ type }) => {
         </div>
       </div>
       <ul>
-        {data ? (
+        {data.totalElements ? (
           data.content.map((board, index) => (
             <BoardItem key={index} data={board} type={type} currentPage={currentPage} />
           ))
         ) : (
-          <li>등록된 게시글이 없습니다.</li>
+          <li className={s.notlist}>등록된 게시글이 없습니다.</li>
         )}
       </ul>
 
