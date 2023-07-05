@@ -24,7 +24,6 @@ import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 function App() {
   const auth = useSelector((state) => state.authToken);
-  
   const [loading, setLoading] = useState(false);
 
   // console.log("auth", auth.accessToken);
