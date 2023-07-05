@@ -122,8 +122,11 @@ const Notification = ({ unRead, classname }) => {
          */}
       </div>
       <ul>
-        {getAlarmAll.isLoading && <li>로딩중입니다..</li>}
-        {getAlarmAll.data && getAlarmAll.data.length !== 0 ? (
+        {
+          getAlarmAll.isLoading && <li>로딩중입니다..</li>
+        }
+        {
+          getAlarmAll.data && getAlarmAll.data.length !== 0 ? (
           getAlarmAll.data.map((item, i) => (
             <li
               key={i}
@@ -144,7 +147,8 @@ const Notification = ({ unRead, classname }) => {
           ))
         ) : (
           <li className={s.not_alarm}>알람이 없습니다.</li>
-        )}
+        )
+      }
       </ul>
     </div>
   );
