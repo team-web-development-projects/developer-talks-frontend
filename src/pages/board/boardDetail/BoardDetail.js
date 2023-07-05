@@ -70,7 +70,7 @@ const BoardDetail = ({ type }) => {
   };
   const clickUpdate = () => {
     navigate(`/${type === "post" ? "board" : "qna"}/update/${post.id}`, {
-      state: { title: post.title, content: post.imagedContent, imageUrls: post.imageUrls },
+      state: { title: post.title, content: post.imagedContent, imgUrls: post.imageUrls },
     });
   };
   return (
