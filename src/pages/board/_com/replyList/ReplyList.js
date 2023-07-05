@@ -109,14 +109,8 @@ const ReplyList = ({ nickname }) => {
           replyList.map((reply) => (
             <ReplyItem
               key={reply.id}
-              id={reply.id}
+              reply={reply}
               postId={postId}
-              content={reply.content}
-              //TODO: props없애기
-              isSelf={reply.nickname === nickname}
-              nickname={reply.nickname}
-              secret={reply.secret}
-              childrenList={reply.childrenList}
               setControlRender={setControlRender}
             />
           ))
