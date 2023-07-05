@@ -12,6 +12,7 @@ import MypageContent from "pages/mypage/MyPageContent";
 import MyStudyRoom from "../mystudyroom/MyStudyRoom";
 import Account from "../account/Account";
 import classNames from "classnames";
+import ProfileImg from "components/profileImg/ProfileImg";
 
 const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
@@ -30,7 +31,7 @@ const Userside = () => {
     <MypageContent>
       <section className="side">
         <div className="imgwrap">
-          {/* <ProfileImg size="big" /> */}
+          <ProfileImg size="big" />
         </div>
         <ul className="nav">
           <li className={classNames("", { "is-active": isActive === "mypage" })} onClick={() => handleClick("mypage")}>
