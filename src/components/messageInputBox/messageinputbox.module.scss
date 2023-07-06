@@ -24,6 +24,8 @@
 
 // 쪽지 항목
 .messageitem {
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
     margin-bottom: 10px;
     background-color: #fff;
