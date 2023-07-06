@@ -25,8 +25,8 @@ const Chat = ({ roomId }) => {
 
       //이벤트 구독
       stomp.subscribe(
-        // `/sub/rooms/${roomId}`,
-        `/sub/rooms/1`,
+        `/sub/rooms/${roomId}`,
+        // `/sub/rooms/1`,
         (body) => {
           console.log("body: ", JSON.stringify(body.body).message);
           //이후 처리
@@ -54,8 +54,8 @@ const Chat = ({ roomId }) => {
     // const body = JSON.stringify("Hello");
     console.log("헤더", auth.accessToken);
     stomp.send(
-      // `/pub/rooms/${roomId}`,
-      `/pub/rooms/1`,
+      `/pub/rooms/${roomId}`,
+      // `/pub/rooms/1`,
       {
         "X-AUTH-TOKEN": auth.accessToken,
       },

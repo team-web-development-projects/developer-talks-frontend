@@ -3,7 +3,7 @@ import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Pagination from "components/pagination/Pagination";
 import s from "../../mypagecontent.module.scss";
 import mypage from "./mypage.module.scss";
@@ -74,7 +74,7 @@ const Mypage = ({ type }) => {
   }
   // console.log("data", select, queries[select].isSuccess && queries[select].data.content);
   useEffect(() => {
-    setCurrentPage(1);
+    // setCurrentPage(1);
   }, []);
 
   useEffect(() => {
@@ -169,6 +169,7 @@ const Mypage = ({ type }) => {
             ))}
           </ul>
           <div className={mypage.list}>
+            <Link to="/mypage?param1=value1&param2=value2">Go to Page</Link>
             {
               queries[select].isSuccess && queries[select].data.content.length === 0 && <div>내용이 없습니다</div> // 수정필요
             }
@@ -178,10 +179,15 @@ const Mypage = ({ type }) => {
                   {
                     // item.title
                     select === 0 && MyActivity(item)
+                    // MyActivity(item && item)
+                    // queries[select].isSuccess && 'true'
                   }
                   {select === 1 && MyPost(item)}
                   {select === 2 && MyReply(item)}
-                  {select === 3 && MyScrab(item)}
+                  {
+                    select === 3 && MyScrab(item)
+                    // queries[select].isSuccess && queries[select].data.content && select === 3 && MyScrab(item)
+                  }
 
                   {/*
                     {(item.viewCount || item.viewCount === 0) && (

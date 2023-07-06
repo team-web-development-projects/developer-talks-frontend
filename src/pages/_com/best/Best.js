@@ -14,6 +14,8 @@ const Best = () => {
   const { status, data, error, isFetching, isPreviousData, isLoading } = useQuery({
     queryKey: ["best"],
     queryFn: () => fetchProjects(),
+    staleTime: 1 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000
   });
 
   return (
