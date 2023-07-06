@@ -211,30 +211,32 @@ const ReplyItem = ({ postId, reply }) => {
           </div>
           <div className={s.rereplyContainer}>
             <div className={s.box}></div>
-            {ispostToggle && (
-              <form onSubmit={handleRePost}>
-                <div>
-                  <CkEditor form={reForm} setForm={setReForm} />
-                  <div className={s.btnRgn}>
-                    <label className={s.secret}>
-                      <input
-                        type="checkbox"
-                        name="secret"
-                        onChange={() => {
-                          setReForm({ ...reForm, ["secret"]: !reForm.secret });
-                        }}
-                      />{" "}
-                      시크릿 댓글
-                    </label>
-                    <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
-                      취소
-                    </Button>
-                    <Button size="medium">등록</Button>
-                  </div>
-                </div>
-              </form>
-            )}
-            <div className={s.container}>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}</div>
+            <div className={s.container}>
+              {ispostToggle && (
+                <form onSubmit={handleRePost}>
+                  {/* <div> */}
+                    <CkEditor form={reForm} setForm={setReForm} />
+                    <div className={s.btnRgn}>
+                      <label className={s.secret}>
+                        <input
+                          type="checkbox"
+                          name="secret"
+                          onChange={() => {
+                            setReForm({ ...reForm, ["secret"]: !reForm.secret });
+                          }}
+                        />{" "}
+                        시크릿 댓글
+                      </label>
+                      <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
+                        취소
+                      </Button>
+                      <Button size="medium">등록</Button>
+                    </div>
+                  {/* </div> */}
+                </form>
+              )}
+              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}</div>
+            </div>
           </div>
         </li>
       )}

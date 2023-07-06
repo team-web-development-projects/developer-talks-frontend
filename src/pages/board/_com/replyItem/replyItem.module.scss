@@ -1,5 +1,4 @@
 .container {
-  padding: 26px 0 14px 0;
   list-style: none;
   border-bottom: solid 1px #cfcccc;
   &:last-child {
@@ -9,6 +8,7 @@
     position: relative;
     display: flex;
     flex-direction: row;
+    margin-top: 30px;
     margin-bottom: 15px;
     align-items: center;
     gap: 10px;
@@ -39,16 +39,13 @@
 }
 .rereplyContainer {
   display: flex;
-  // flex-direction: column;
-  // margin-left:30px;
-  // width:100%;
   .box {
     margin-right: 30px;
     width: 8px;
     background-color: #cfcccc;
   }
-  .container{
-    width:100%;
+  .container {
+    width: 100%;
   }
 }
 .btnRgn {
@@ -62,7 +59,7 @@
     cursor: pointer;
     font-size: 17px;
   }
-  .cancle{
+  .cancle {
     margin: 0px 10px;
   }
 }
