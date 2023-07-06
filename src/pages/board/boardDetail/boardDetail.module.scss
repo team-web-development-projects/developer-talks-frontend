@@ -11,11 +11,13 @@
       display:flex;
       align-items: center;
     }
-    .profile{
+    .profile {
       width:50px;
       height:50px;
-      border-radius: 25px;
-      margin-right:10px
+      border-radius: 50%;
+      margin-right:10px;
+      overflow: hidden;
+      border: 1px solid #ccc;
     }
     .nick {
       font-size: 25px;

@@ -9,9 +9,22 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    margin-bottom: 4px;
+    margin-bottom: 15px;
     align-items: center;
     gap: 10px;
+    .profile {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .nickname {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .date {
+      font-size: 15px;
+      color: #696969;
+    }
   }
   .btn_wrap {
     position: absolute;
@@ -43,28 +56,6 @@
     margin-right: 30px;
     cursor: pointer;
     font-size: 17px;
-  }
-  .post {
-    width: 60px;
-  }
-  .cancel {
-    padding: 20px 0;
-    margin-right: 10px;
-    width: 60px;
-    height: 20px;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 17px;
-    border: 1px solid #cfcccc;
-    &:hover {
-      background-color: #585858;
-      color: #ffffff;
-      cursor: pointer;
-    }
-    &:active {
-      background-color: #000000;
-      color: #ffffff;
-    }
   }
 }
 .replyBtnContainer {

@@ -36,6 +36,11 @@ const Select = ({ sendText, options }) => {
                 onClick={() => {
                   setDropDown(false);
                   setSelect(opt);
+                  if (opt==="최신순") sendText("");
+                  else if (opt==="추천순") sendText("recommendCount,desc");
+                  else if (opt==="댓글순") sendText("commentCount,desc");
+                  else if (opt==="스크랩순") sendText("favoriteCount,desc");
+                  else if (opt==="조회순") sendText("viewCount,desc");
                 }}
               >
                 <p>{opt}</p>

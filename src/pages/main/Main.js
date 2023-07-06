@@ -1,10 +1,6 @@
-import axios from "axios";
-import { ROOT_API } from "constants/api";
-import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
-import "./main.scss";
 import Best from "pages/_com/best/Best";
 import News from "pages/_com/news/News";
+import "./main.scss";
 
 const Main = () => {
   return (

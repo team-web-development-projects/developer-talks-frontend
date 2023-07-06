@@ -30,7 +30,7 @@ const BoardList = ({ type }) => {
   async function getBoardList() {
     if (keyword) {
       const { data } = await axios.get(`${ROOT_API}/${type}/search`, {
-        params: { keyword: keyword, page: currentPage - 1, size: 10 },
+        params: { keyword: keyword, page: currentPage - 1, size: 10, sort: selectText },
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
@@ -39,7 +39,7 @@ const BoardList = ({ type }) => {
       return data;
     } else {
       const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
-        params: { page: currentPage - 1, size: 10 },
+        params: { page: currentPage - 1, size: 10, sort: selectText },
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
@@ -58,7 +58,7 @@ const BoardList = ({ type }) => {
   useEffect(() => {
     setCurrentPage(1);
     refetchQuery.current();
-  }, [keyword, type]);
+  }, [keyword, type, selectText]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -79,11 +79,10 @@ const BoardList = ({ type }) => {
       <div className={s.header}>
         <SearchInput type={type} />
         <div className={s.bottom}>
-          {/* TODO: 옛날순 정렬 */}
           <Select
             init="최신순"
             options={["최신순", "추천순", "댓글순", "스크랩순", "조회순"]}
-            // sendText={setSelectText}
+            sendText={setSelectText}
           />
           <Button size="small" onClick={handleClickPost}>
             작성하기
@@ -91,12 +90,12 @@ const BoardList = ({ type }) => {
         </div>
       </div>
       <ul>
-        {data ? (
+        {data.totalElements ? (
           data.content.map((board, index) => (
             <BoardItem key={index} data={board} type={type} currentPage={currentPage} />
           ))
         ) : (
-          <li>등록된 게시글이 없습니다.</li>
+          <li className={s.notlist}>등록된 게시글이 없습니다.</li>
         )}
       </ul>
 

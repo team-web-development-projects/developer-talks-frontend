@@ -35,16 +35,47 @@
   }
 }
 
+.list {
+  margin: 10px 0;
+}
+
 .userdata {
   display: flex;
   justify-content: space-between;
+  height: 80px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #d2d4d9;
 
-  .type {
+  .title {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
 
     span {
       color: #00a9dc;
+    }
+  }
+}
+
+.text_wrap {
+  width: 100%;
+  padding: 8px 0 10px 0;
+  .content {
+    position: relative;
+    margin-top: 10px;
+  }
+  .img_wrap {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 2px;
+    margin: auto;
+
+    display: block;
+    width: 40px;
+    height: 40px;
+    img {
+      height: 100%;
+      object-fit: cover;
     }
   }
 }

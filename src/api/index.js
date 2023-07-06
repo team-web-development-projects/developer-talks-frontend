@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ROOT_API } from "constants/api";
 
+// NOTE: 테스트중
 const apiClient = axios.create({
   // baseURL: "http://localhost:8080/api",
   baseURL: `${ROOT_API}`,
@@ -10,13 +11,13 @@ const apiClient = axios.create({
 });
 
 async function alarmAll(auth) {
-  // const { data } = await apiClient.get(`${ROOT_API}/alarm/all`, {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "X-AUTH-TOKEN": auth,
-  //   },
-  // });
-  // return data;
+  const { data } = await apiClient.get(`${ROOT_API}/alarm/all`, {
+    headers: {
+      "Content-Type": "application/json",
+      "X-AUTH-TOKEN": auth,
+    },
+  });
+  return data;
 }
 
 const getProfileImg = async (auth) => {
