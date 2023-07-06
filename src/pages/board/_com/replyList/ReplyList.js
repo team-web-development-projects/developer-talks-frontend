@@ -13,8 +13,6 @@ const ReplyList = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const { postId } = useParams();
-  // const [replyList, setReplyList] = useState([]);
-  const [controlRender, setControlRender] = useState(false);
   const [isToggle, setIsToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
@@ -104,11 +102,7 @@ const ReplyList = ({ nickname }) => {
         ) : (
           <div className={s.inputFalse}>로그인 후, 댓글을 달아주세요.</div>
         )}
-        {replyList ? (
-          replyList.map((reply) => <ReplyItem key={reply.id} reply={reply} postId={postId} setControlRender={setControlRender} />)
-        ) : (
-          <div>등록된 답변이 없습니다.</div>
-        )}
+        {replyList ? replyList.map((reply) => <ReplyItem key={reply.id} reply={reply} postId={postId} />) : <div>등록된 답변이 없습니다.</div>}
       </div>
     </>
   );

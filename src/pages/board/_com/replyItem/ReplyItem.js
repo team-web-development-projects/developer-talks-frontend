@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
 import { useMutation, useQueryClient } from "react-query";
 
-const ReplyItem = ({ postId, reply, setControlRender }) => {
+const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const [ispostToggle, setIsPostToggle] = useState(false);
@@ -23,17 +23,17 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
     content: reply.content,
     secret: reply.secret,
   });
+  const [reForm, setReForm] = useState({
+    content: "",
+    secret: false,
+  });
+
   const [isSelf, setIsSelf] = useState(false);
-  const handleToggle = () => {
+  const handleReToggle = () => {
+    setReForm({ ["content"]: "", ["secret"]: false });
     setIsPostToggle((prev) => !prev);
   };
-  //TODO: 시크릿 에러 잡기
-  const toggleSecret = () => {
-    setForm((prevForm) => {
-      return { ...prevForm, secret: !prevForm.secret };
-    });
-    console.log(form.secret);
-  };
+
   const handleClickReRe = () => {
     setIsGetToggle((prev) => !prev);
   };
@@ -48,6 +48,8 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
       }),
     {
       onSuccess: () => {
+        setReForm({ ["content"]: "", ["secret"]: false });
+        setIsPostToggle((prev) => !prev);
         queryClient.invalidateQueries(["replyList"]);
       },
     }
@@ -85,12 +87,18 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
     }
   );
 
-  const handlePost = () => {
+  const handleRePost = (e) => {
+    e.preventDefault();
     const newComment = {
-      content: form.content,
-      secret: form.secret,
+      content: reForm.content,
+      secret: reForm.secret,
     };
     postCommentMutation.mutate(newComment);
+  };
+
+  const handleRePostCancle = () => {
+    setReForm({ ["content"]: "", ["secret"]: false });
+    setIsPostToggle((prev) => !prev);
   };
 
   const handleUpdate = () => {
@@ -192,7 +200,7 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
             ) : (
               <div></div>
             )}
-            <button onClick={handleToggle} className={s.replyBtn}>
+            <button onClick={handleReToggle} className={s.replyBtn}>
               댓글 쓰기
             </button>
           </div>
@@ -200,21 +208,27 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
             <div className={s.box}></div>
             <div>
               {ispostToggle && (
-                <div>
-                  <CkEditor form={form} setForm={setForm} />
-                  <div className={s.btnRgn}>
-                    <div className={s.secret} onClick={toggleSecret}>
-                      {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
-                      시크릿 댓글
+                <form onSubmit={handleRePost}>
+                  <div>
+                    <CkEditor form={reForm} setForm={setReForm} />
+                    <div className={s.btnRgn}>
+                      <label className={s.secret}>
+                        <input
+                          type="checkbox"
+                          name="secret"
+                          onChange={() => {
+                            setReForm({ ...reForm, ["secret"]: !reForm.secret });
+                          }}
+                        />{" "}
+                        시크릿 댓글
+                      </label>
+                      <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
+                        취소
+                      </Button>
+                      <Button size="medium">등록</Button>
                     </div>
-                    <Button theme="outline" color="#9ca3af" size="medium" onClick={handleToggle}>
-                      취소
-                    </Button>
-                    <Button size="medium" onClick={handlePost}>
-                      등록
-                    </Button>
                   </div>
-                </div>
+                </form>
               )}
               {isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
             </div>
