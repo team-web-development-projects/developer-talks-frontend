@@ -9,9 +9,22 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    margin-bottom: 4px;
+    margin-bottom: 15px;
     align-items: center;
     gap: 10px;
+    .profile{
+      width:50px;
+      height:50px;
+      border-radius:50%;
+    }
+    .nickname{
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .date{
+      font-size: 15px;
+      color: #696969;
+    }
   }
   .btn_wrap {
     position: absolute;

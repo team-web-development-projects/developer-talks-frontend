@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
-import s from "./replyItem.module.scss";
-import { BsLock, BsUnlock } from "react-icons/bs";
-import { AiFillCaretDown, AiFillCaretUp, AiOutlineMessage } from "react-icons/ai";
+import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
-import axios from "axios";
 import { ROOT_API } from "constants/api";
-import { useSelector } from "react-redux";
+import { parseJwt } from "hooks/useParseJwt";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
+import { useEffect, useState } from "react";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { BsLock, BsUnlock } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProfileImg from "components/profileImg/ProfileImg";
-import { parseJwt } from "hooks/useParseJwt";
-import { set } from "react-hook-form";
+import s from "./replyItem.module.scss";
 
 const ReplyItem = ({ postId, reply, setControlRender }) => {
   const auth = useSelector((state) => state.authToken);
@@ -25,10 +23,7 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
     secret: false,
     childrenList: [],
   });
-  const [imageFile, setImageFile] = useState("");
-  const [userData, setUserData] = useState("");
   const [isSelf, setIsSelf] = useState(false);
-  const [rereplyList, setRereplyList] = useState(reply.childrenList);
   const handleToggle = () => {
     setIsPostToggle((prev) => !prev);
   };
@@ -120,7 +115,11 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
     <>
       <li className={s.container}>
         <div className={s.info}>
-          <p>{reply.userInfo.nickname}</p>
+          <img className={s.profile} src={reply.userInfo.userProfile} alt="profile" />
+          <div>
+            <p className={s.nickname}>{reply.userInfo.nickname}</p>
+            <p className={s.date}>{reply.modifiedDate}</p>
+          </div>
           {reply.secret && <BsLock size={20} />}
           {isSelf ? (
             <div className={s.btn_wrap}>
@@ -153,7 +152,7 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
           <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
         )}
         <div className={s.replyBtnContainer}>
-          {rereplyList.length ? (
+          {reply.childrenList.length ? (
             <button className={s.replyBtn} onClick={handleClickReRe}>
               {isgetToggle ? (
                 <>
@@ -163,7 +162,7 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
               ) : (
                 <>
                   <AiFillCaretDown className={s.icon} />
-                  댓글 {rereplyList.length}개 보기
+                  댓글 {reply.childrenList.length}개 보기
                 </>
               )}
             </button>
