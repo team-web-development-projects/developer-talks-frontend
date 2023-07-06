@@ -140,10 +140,10 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
                 {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
                 시크릿 댓글
               </div>
-              <div className={s.cancel} onClick={handleUpdateCancle}>
+              <Button theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                 취소
-              </div>
-              <Button classname={s.post} onClick={handleUpdatePost}>
+              </Button>
+              <Button size="medium" onClick={handleUpdatePost}>
                 수정
               </Button>
             </div>
@@ -184,10 +184,10 @@ const ReplyItem = ({ postId, reply, setControlRender }) => {
                     {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
                     시크릿 댓글
                   </div>
-                  <div className={s.cancel} onClick={handleToggle}>
+                  <Button theme="outline" color="#9ca3af" size="medium" onClick={handleToggle}>
                     취소
-                  </div>
-                  <Button classname={s.post} onClick={handlePost}>
+                  </Button>
+                  <Button size="medium" onClick={handlePost}>
                     등록
                   </Button>
                 </div>

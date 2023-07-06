@@ -18,12 +18,12 @@ const ReplyList = ({ nickname }) => {
     content: "",
     secret: false,
   });
-  const scrollDown = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
-  };
+  // const scrollDown = () => {
+  //   window.scrollTo({
+  //     top: document.documentElement.scrollHeight,
+  //     behavior: "smooth",
+  //   });
+  // };
   const handleClick = () => {
     setIsToggle((prev) => !prev);
   };
@@ -51,13 +51,14 @@ const ReplyList = ({ nickname }) => {
       )
       .then((response) => {
         setControlRender((prev) => !prev);
-        // setForm({ ["content"]: "", ["secret"]: "false" });
-        scrollDown();
+        // scrollDown();
       })
       .catch((error) => console.log(error));
   };
   useEffect(() => {
     setIsToggle(false);
+    setForm({ ["content"]: "", ["secret"]: false});
+    
     axios
       .get(`${ROOT_API}/comment/list/post/${postId}`, {
         headers: {
@@ -91,10 +92,10 @@ const ReplyList = ({ nickname }) => {
                   />{" "}
                   시크릿 댓글
                 </label>
-                <div className={s.cancel} onClick={handleClick}>
+                <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleClick}>
                   취소
-                </div>
-                <Button classname={s.post}>등록</Button>
+                </Button>
+                <Button size="medium">등록</Button>
               </div>
             </div>
           </form>
