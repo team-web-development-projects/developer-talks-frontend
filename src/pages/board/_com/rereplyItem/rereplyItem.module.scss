@@ -1,8 +1,8 @@
 .container {
   padding: 26px 0 14px 0;
   list-style: none;
+  width: 100%;
   border-bottom: solid 1px #cfcccc;
-  width:100%;
   &:last-child {
     border-bottom: none;
   }

@@ -39,12 +39,16 @@
 }
 .rereplyContainer {
   display: flex;
-  flex-direction: row;
-  width:100%;
+  // flex-direction: column;
+  // margin-left:30px;
+  // width:100%;
   .box {
     margin-right: 30px;
     width: 8px;
     background-color: #cfcccc;
+  }
+  .container{
+    width:100%;
   }
 }
 .btnRgn {
