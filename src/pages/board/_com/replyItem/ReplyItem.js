@@ -3,15 +3,16 @@ import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
+import { randomProfile } from "hooks/useRandomProfile";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 import { useEffect, useState } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-import { BsLock, BsUnlock } from "react-icons/bs";
+import { BsLock } from "react-icons/bs";
+import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
-import { useMutation, useQueryClient } from "react-query";
 
 const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
@@ -139,7 +140,11 @@ const ReplyItem = ({ postId, reply }) => {
       {(!reply.secret || (reply.secret && isSelf)) && (
         <li className={s.container}>
           <div className={s.info}>
-            <img className={s.profile} src={reply.userInfo.userProfile} alt="profile" />
+            {reply.userInfo.userProfile !== null ? (
+              <img className={s.profile} src={reply.userInfo.userProfile} alt="프로필 이미지" />
+            ) : (
+              <div className={s.profile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+            )}
             <div>
               <p className={s.nickname}>{reply.userInfo.nickname}</p>
               <p className={s.date}>{reply.modifiedDate}</p>
@@ -206,32 +211,30 @@ const ReplyItem = ({ postId, reply }) => {
           </div>
           <div className={s.rereplyContainer}>
             <div className={s.box}></div>
-            <div>
-              {ispostToggle && (
-                <form onSubmit={handleRePost}>
-                  <div>
-                    <CkEditor form={reForm} setForm={setReForm} />
-                    <div className={s.btnRgn}>
-                      <label className={s.secret}>
-                        <input
-                          type="checkbox"
-                          name="secret"
-                          onChange={() => {
-                            setReForm({ ...reForm, ["secret"]: !reForm.secret });
-                          }}
-                        />{" "}
-                        시크릿 댓글
-                      </label>
-                      <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
-                        취소
-                      </Button>
-                      <Button size="medium">등록</Button>
-                    </div>
+            {ispostToggle && (
+              <form onSubmit={handleRePost}>
+                <div>
+                  <CkEditor form={reForm} setForm={setReForm} />
+                  <div className={s.btnRgn}>
+                    <label className={s.secret}>
+                      <input
+                        type="checkbox"
+                        name="secret"
+                        onChange={() => {
+                          setReForm({ ...reForm, ["secret"]: !reForm.secret });
+                        }}
+                      />{" "}
+                      시크릿 댓글
+                    </label>
+                    <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
+                      취소
+                    </Button>
+                    <Button size="medium">등록</Button>
                   </div>
-                </form>
-              )}
-              {isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
-            </div>
+                </div>
+              </form>
+            )}
+            {isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
           </div>
         </li>
       )}
