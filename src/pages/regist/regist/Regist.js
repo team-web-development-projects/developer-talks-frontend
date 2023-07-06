@@ -37,11 +37,11 @@ const Regist = () => {
   const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
   const [code, setCode] = useState("");
-    const [profileImgData, setProfileImgData] = useState({
-      id: "",
-      url: "",
-      inputName: "",
-    });
+  const [profileImgData, setProfileImgData] = useState({
+    id: "",
+    url: "",
+    inputName: "",
+  });
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
@@ -78,7 +78,7 @@ const Regist = () => {
             .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
             .then((response) => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              localStorage.setItem("refreshToken", response.data.refreshToken);
+              localStorage.setItem("dtrtk", response.data.refreshToken);
               setModal(true);
               navigate("/");
               reset();
@@ -132,12 +132,14 @@ const Regist = () => {
       .get(`${ROOT_API}/users/check/email/${watch().userEmail}`) //NOTE 이메일 중복 확인//ok
       .then((response) => {
         if (response.data.duplicated === false) {
+          console.log("없음");
           axios
             .post(`${ROOT_API}/email/verify`, {
               email: watch().userEmail,
             })
             .then((res) => {
               setVerityEmailcheck(true);
+              setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
               console.log(res.data.timer, "fdfddfd");
             })
@@ -152,16 +154,20 @@ const Regist = () => {
   const verityEmailchecking = async (e) => {
     //NOTE 이메일 인증//ok
     e.preventDefault();
+    console.log("code", inputEmail);
     axios
-      .get(`${ROOT_API}/email/verify?code=${inputEmail}`)
+      .get(`${ROOT_API}/email/verify`, {
+        params: { code: inputEmail },
+      })
       .then((res) => {
-        console.log(res.data, "fdfddfd");
-        showToast("success", "😎 인증되었습니다");
+        setCompareEmailcheck(true);
+        showToast("success", "😎 인증이 확인되었습니다");
       })
       .catch(() => {
-        showToast("error", "😎 인증을 제대로 입력해주세요");
+        showToast("error", "인증을 정확히 확인해주세요");
       });
   };
+
   const handleInputChange = (e) => {
     setInputEmail(e.target.value);
   };
@@ -205,23 +211,24 @@ const Regist = () => {
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-        {/* <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData={setProfileImgData} /> */}
         <div className={s.gaider}>
-          <span>🙏추가 안내</span>
           <ul>
             <li>
               <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
             </li>
-            <li>
-              <span>디톡스</span>를 이용한 프로필 변경은 여기를 참고해주세요.
-            </li>
           </ul>
         </div>
+        <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
+
         <label>관심있는 태그입력</label>
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+              >
                 {item}
               </span>
             ))}
@@ -317,7 +324,9 @@ const Regist = () => {
                 </Button>
               </div>
               {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+                <small className="alert">중복된 닉네임입니다.</small>
+              )}
               {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
                 <small className="true">사용할 수 있는 닉네임입니다.</small>
               )}
@@ -359,7 +368,9 @@ const Regist = () => {
               </div>
               {errors.userid && <small role="alert">{errors.userid.message}</small>}
               {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
-              {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
+              {duplicateId !== "" && duplicateId === false && (
+                <small className="true">사용할 수 있는 아이디입니다.</small>
+              )}
             </React.Fragment>,
             <React.Fragment key={5}>
               <div>

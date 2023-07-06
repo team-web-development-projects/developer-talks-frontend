@@ -11,7 +11,7 @@ const Logout = () => {
 
   const logout = () => {
     // removeCookieToken();
-    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("dtrtk");
     dispatch(DELETE_TOKEN());
     navigate("/");
   };

@@ -13,6 +13,8 @@ import MyStudyRoom from "../mystudyroom/MyStudyRoom";
 import Account from "../account/Account";
 import classNames from "classnames";
 import MyMessage from "../mymessage/MyMessage";
+import ProfileImg from "components/profileImg/ProfileImg";
+
 const Userside = () => {
   const auth = useSelector((state) => state.authToken).accessToken;
   const [isActive, setIsActive] = useState("mypage");
@@ -29,9 +31,10 @@ const Userside = () => {
   return (
     <MypageContent>
       <section className="side">
-        <div className="imgwrap">{/* <ProfileImg size="big" /> */}</div>
+        <div className="imgwrap">
+          <ProfileImg size="big" />
+        </div>
         <ul className="nav">
-          <li className={classNames()}></li>
           <li className={classNames("", { "is-active": isActive === "mypage" })} onClick={() => handleClick("mypage")}>
             활동내역
           </li>

@@ -24,7 +24,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    console.log('dd', data.userId, data.password);
+    console.log("dd", data.userId, data.password);
     axios
       .post(
         `${ROOT_API}/sign-in`,
@@ -41,8 +41,9 @@ const Login = () => {
       .then(function (response) {
         console.log("로그인 성공:", response);
         // setRefreshToken({ refreshToken: response.data.refreshToken });
-        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("dtrtk", response.data.refreshToken);
         dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+        axios.get(`${ROOT_API}/notifications/subscribe`).then((res) => console.log("test: ", res));
         setModal(true);
         reset();
       })
