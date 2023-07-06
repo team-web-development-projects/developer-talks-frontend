@@ -3,15 +3,17 @@ import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
 import ReplyItem from "pages/board/_com/replyItem/ReplyItem";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import s from "./replyList.module.scss";
 
 const ReplyList = ({ nickname }) => {
   const auth = useSelector((state) => state.authToken);
+  const queryClient = useQueryClient();
   const { postId } = useParams();
-  const [replyList, setReplyList] = useState([]);
+  // const [replyList, setReplyList] = useState([]);
   const [controlRender, setControlRender] = useState(false);
   const [isToggle, setIsToggle] = useState(false);
   const [form, setForm] = useState({
@@ -26,52 +28,48 @@ const ReplyList = ({ nickname }) => {
   // };
   const handleClick = () => {
     setIsToggle((prev) => !prev);
+    setForm({ ["content"]: "", ["secret"]: false });
   };
 
-  const handlePost = (e) => {
-    e.preventDefault();
-    console.log("secret: ", form.secret);
-    if (!form.content) {
-      alert("댓글을 입력해주세요.");
-      return;
-    }
-    axios
-      .post(
-        `${ROOT_API}/comment/${postId}`,
-        {
-          content: form.content,
-          secret: form.secret,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
-      .then((response) => {
-        setControlRender((prev) => !prev);
-        // scrollDown();
-      })
-      .catch((error) => console.log(error));
-  };
-  useEffect(() => {
-    setIsToggle(false);
-    setForm({ ["content"]: "", ["secret"]: false});
-    
-    axios
-      .get(`${ROOT_API}/comment/list/post/${postId}`, {
+  const postCommentMutation = useMutation(
+    (newComment) =>
+      axios.post(`${ROOT_API}/comment/${postId}`, newComment, {
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
         },
-      })
-      .then(({ data }) => {
-        setReplyList(data);
-        console.log("답변 get결과: ", data);
-      })
-      .catch((error) => console.log(error));
-  }, [controlRender]);
+      }),
+    {
+      onSuccess: () => {
+        setIsToggle((prev) => !prev);
+        setForm({ ["content"]: "", ["secret"]: false });
+        queryClient.invalidateQueries(["replyList"]);
+      },
+    }
+  );
+
+  const handlePost = (e) => {
+    e.preventDefault();
+    const newComment = {
+      content: form.content,
+      secret: form.secret,
+    };
+    postCommentMutation.mutate(newComment);
+  };
+
+  const { isLoading, data: replyList } = useQuery(["replyList"], async () => {
+    const res = await axios.get(`${ROOT_API}/comment/list/post/${postId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    });
+    return res.data;
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -107,14 +105,7 @@ const ReplyList = ({ nickname }) => {
           <div className={s.inputFalse}>로그인 후, 댓글을 달아주세요.</div>
         )}
         {replyList ? (
-          replyList.map((reply) => (
-            <ReplyItem
-              key={reply.id}
-              reply={reply}
-              postId={postId}
-              setControlRender={setControlRender}
-            />
-          ))
+          replyList.map((reply) => <ReplyItem key={reply.id} reply={reply} postId={postId} setControlRender={setControlRender} />)
         ) : (
           <div>등록된 답변이 없습니다.</div>
         )}
