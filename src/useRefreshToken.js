@@ -28,6 +28,7 @@ export default function useRefreshToken() {
         localStorage.removeItem("dtrtk");
         navigate("/login");
       }
+      console.log("rtk", localStorage.getItem("dtrtk"));
       axios
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: localStorage.getItem("dtrtk"),
@@ -37,12 +38,12 @@ export default function useRefreshToken() {
           },
         })
         .then(function (response) {
-          // console.log("재갱신 성공:", response);
+          console.log("재갱신 성공:", response);
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
           // setLoading(false); // app.js 의 '타이머로 재갱신 테스트 코드' 와 연결
         })
         .catch(function (error) {
-          // console.log("재갱신 실패: ", error.response.data);
+          console.log("재갱신 실패: ", error.response.data);
         });
     }
   }, [auth.accessToken, dispatch, location]);
