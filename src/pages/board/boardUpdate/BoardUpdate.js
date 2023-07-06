@@ -51,7 +51,7 @@ const BoardUpdate = ({ type }) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  
+
   return (
     <>
       {modalY && (

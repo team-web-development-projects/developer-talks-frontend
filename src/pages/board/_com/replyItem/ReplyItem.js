@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import s from "./replyItem.module.scss";
-import { BsLock, BsUnlock } from "react-icons/bs";
-import { AiFillCaretDown, AiFillCaretUp, AiOutlineMessage } from "react-icons/ai";
+import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
-import axios from "axios";
 import { ROOT_API } from "constants/api";
-import { useSelector } from "react-redux";
+import { parseJwt } from "hooks/useParseJwt";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
+import { useEffect, useState } from "react";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { BsLock, BsUnlock } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProfileImg from "components/profileImg/ProfileImg";
+import s from "./replyItem.module.scss";
 
-const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList, setControlRender }) => {
+const ReplyItem = ({ postId, reply, setControlRender }) => {
   const auth = useSelector((state) => state.authToken);
   const [ispostToggle, setIsPostToggle] = useState(false);
   const [isgetToggle, setIsGetToggle] = useState(true);
   const [isUpdateToggle, setIsUpdateToggle] = useState(false);
   const [form, setForm] = useState({
     content: "",
+    userInfo: {},
     secret: false,
+    childrenList: [],
   });
-  const [imageFile, setImageFile] = useState("");
-  const [userData, setUserData] = useState("");
-  const [rereplyList, setRereplyList] = useState(childrenList);
+  const [isSelf, setIsSelf] = useState(false);
   const handleToggle = () => {
     setIsPostToggle((prev) => !prev);
   };
@@ -40,7 +40,7 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
   const handlePost = () => {
     axios
       .post(
-        `${ROOT_API}/comment/${postId}/${id}`,
+        `${ROOT_API}/comment/${postId}/${reply.id}`,
         {
           content: form.content,
           secret: form.secret,
@@ -59,12 +59,12 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
   };
   const handleUpdate = () => {
     setIsUpdateToggle((prev) => !prev);
-    setForm({ ...form, ["content"]: content });
+    setForm({ ...form, ["content"]: reply.content });
   };
   const handleUpdatePost = () => {
     axios
       .put(
-        `${ROOT_API}/comment/${id}`,
+        `${ROOT_API}/comment/${reply.id}`,
         {
           content: form.content,
           secret: form.secret,
@@ -87,7 +87,7 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
   };
   const handleDelete = () => {
     axios
-      .delete(`${ROOT_API}/comment/${id}`, {
+      .delete(`${ROOT_API}/comment/${reply.id}`, {
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
@@ -103,13 +103,24 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
       })
       .catch((error) => console.log(error));
   };
-
+  useEffect(() => {
+    if (auth.accessToken !== null) {
+      const nickname = parseJwt(auth.accessToken).nickname;
+      if (nickname === reply.nickname) {
+        setIsSelf(true);
+      }
+    }
+  }, []);
   return (
     <>
       <li className={s.container}>
         <div className={s.info}>
-          <p>{nickname}</p>
-          {secret && <BsLock size={20} />}
+          <img className={s.profile} src={reply.userInfo.userProfile} alt="profile" />
+          <div>
+            <p className={s.nickname}>{reply.userInfo.nickname}</p>
+            <p className={s.date}>{reply.modifiedDate}</p>
+          </div>
+          {reply.secret && <BsLock size={20} />}
           {isSelf ? (
             <div className={s.btn_wrap}>
               <Button onClick={handleUpdate} size="small">
@@ -129,19 +140,19 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
                 {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
                 시크릿 댓글
               </div>
-              <div className={s.cancel} onClick={handleUpdateCancle}>
+              <Button theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                 취소
-              </div>
-              <Button classname={s.post} onClick={handleUpdatePost}>
+              </Button>
+              <Button size="medium" onClick={handleUpdatePost}>
                 수정
               </Button>
             </div>
           </div>
         ) : (
-          <div className={s.content} dangerouslySetInnerHTML={{ __html: content }}></div>
+          <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
         )}
         <div className={s.replyBtnContainer}>
-          {rereplyList.length ? (
+          {reply.childrenList.length ? (
             <button className={s.replyBtn} onClick={handleClickReRe}>
               {isgetToggle ? (
                 <>
@@ -151,7 +162,7 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
               ) : (
                 <>
                   <AiFillCaretDown className={s.icon} />
-                  댓글 {rereplyList.length}개 보기
+                  댓글 {reply.childrenList.length}개 보기
                 </>
               )}
             </button>
@@ -173,16 +184,16 @@ const ReplyItem = ({ id, postId, content, isSelf, nickname, secret, childrenList
                     {form.secret ? <BsLock size={20} /> : <BsUnlock size={20} />}
                     시크릿 댓글
                   </div>
-                  <div className={s.cancel} onClick={handleToggle}>
+                  <Button theme="outline" color="#9ca3af" size="medium" onClick={handleToggle}>
                     취소
-                  </div>
-                  <Button classname={s.post} onClick={handlePost}>
+                  </Button>
+                  <Button size="medium" onClick={handlePost}>
                     등록
                   </Button>
                 </div>
               </div>
             )}
-            {isgetToggle && childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
+            {isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
           </div>
         </div>
       </li>
