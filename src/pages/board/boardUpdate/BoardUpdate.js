@@ -34,7 +34,10 @@ const BoardUpdate = ({ type }) => {
     }
     frm.append("title", form.title);
     frm.append("content", form.content);
-    frm.append("imgUrls", form.imgUrls);
+    if (form.imgUrls.length !== 0) {
+      frm.append("imgUrls", form.imgUrls);
+    }
+    
     axios
       .put(`${ROOT_API}/${type}/${postId}`, frm, {
         headers: {
