@@ -42,6 +42,8 @@ const ReplyList = ({ nickname }) => {
         setIsToggle((prev) => !prev);
         setForm({ ["content"]: "", ["secret"]: false });
         queryClient.invalidateQueries(["replyList"]);
+        queryClient.invalidateQueries(["boardDetail"]);
+
       },
     }
   );

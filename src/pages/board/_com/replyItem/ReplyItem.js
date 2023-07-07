@@ -83,6 +83,7 @@ const ReplyItem = ({ postId, reply }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["replyList"]);
+        queryClient.invalidateQueries(["boardDetail"]);
         toast.success("댓글이 삭제되었습니다.");
       },
     }
