@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom";
 import types from "./mypage.module.scss";
+// import { TAB_ROUTER } from "store/PageRouter";
+// import { useDispatch } from "react-redux";
 
 export const MyActivity = (item) => {
+  // const dispatch = useDispatch();
+  // /studyroom/${item.id}
   switch (item.type) {
     case "STUDY_CREATE":
       return (
-        <Link className={types.text_wrap} to={`/studyroom/${item.id}`}>
+        <Link
+          className={types.text_wrap}
+          to={`/studyroom/${item.id}`}
+          onClick={() => {
+            // navigate(`/studyroom/${item.id}`);
+          }}
+        >
           <div className={types.title}>
             <div>
               <span>스터디룸</span>을 생성하였습니다.
@@ -17,7 +27,14 @@ export const MyActivity = (item) => {
       );
     case "POST":
       return (
-        <Link className={types.text_wrap} to={`/board/${item.id}`}>
+        <Link
+          className={types.text_wrap}
+          to={`/board/${item.id}`}
+          onClick={() => {
+            // navigate(`/board/${item.id}`);
+            // dispatch(TAB_ROUTER({ tab: "tab0" }));
+          }}
+        >
           <div className={types.title}>
             <div>
               <span>게시글</span>을 생성하였습니다.
@@ -87,7 +104,7 @@ export const MyScrab = (item) => {
       <div className={types.content}>
         {item.title}
         <span className={types.img_wrap}>
-          <img src={item.thumbnailUrl} alt="썸네일" />
+          {item.thumbnailUrl !== null && <img src={item.thumbnailUrl} alt="썸네일" />}
         </span>
       </div>
     </Link>

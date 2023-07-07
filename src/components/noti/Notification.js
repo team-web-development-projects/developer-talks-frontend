@@ -88,7 +88,7 @@ const Notification = ({ unRead, classname }) => {
   const { mutate: idRead } = useMutation(
     ["readId"],
     (id) =>
-      axios.post(`${ROOT_API}/notifications/read/${id}`, {
+      axios.post(`${ROOT_API}/notifications/read/${id}`, {}, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
       }),
     {
@@ -122,16 +122,13 @@ const Notification = ({ unRead, classname }) => {
          */}
       </div>
       <ul>
-        {
-          getAlarmAll.isLoading && <li>로딩중입니다..</li>
-        }
-        {
-          getAlarmAll.data && getAlarmAll.data.length !== 0 ? (
+        {getAlarmAll.isLoading && <li>로딩중입니다..</li>}
+        {getAlarmAll.data && getAlarmAll.data.length !== 0 ? (
           getAlarmAll.data.map((item, i) => (
             <li
               key={i}
               className={classnames("", {
-                [s.is_read]: item.alarmStatus === "READ",
+                [s.is_read]: item.readStatus === "READ",
               })}
             >
               <Link to={item.url}>{item.url}</Link>
@@ -147,8 +144,7 @@ const Notification = ({ unRead, classname }) => {
           ))
         ) : (
           <li className={s.not_alarm}>알람이 없습니다.</li>
-        )
-      }
+        )}
       </ul>
     </div>
   );
