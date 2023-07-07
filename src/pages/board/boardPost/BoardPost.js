@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
+import { toast } from 'react-toastify';
 
 export default function BoardPost({ type }) {
   const [modal, setModal] = useState(false);
@@ -34,6 +35,14 @@ export default function BoardPost({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (form.title.trim() === '') {
+      toast.error('제목을 입력해주세요.');
+      return;
+    }
+    if (form.content.trim() === '') {
+      toast.error('내용을 입력해주세요.');
+      return;
+    }
     await new Promise((r) => setTimeout(r, 1000));
     console.log(`
             제목: ${form.title}
