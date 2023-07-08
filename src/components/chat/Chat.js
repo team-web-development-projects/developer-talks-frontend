@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-const Chat = ({ roomId }) => {
+const Chat = ({ postId }) => {
   const auth = useSelector((state) => state.authToken);
   const [conec, setConnec] = useState(false);
+  const [temp, setTemp] = useState(postId);
   const [text, setText] = useState("");
 
   //socket 연결
@@ -14,21 +15,23 @@ const Chat = ({ roomId }) => {
   };
 
   const socket = new SockJS("https://dtalks-api.site/ws/chat");
-  const stomp = new Stomp.over(socket, { headers });
+  const stomp = new Stomp.over(socket);
 
   useEffect(() => {
-    stomp.connect(headers, () => {
+    console.log("roomid", postId);
+    stomp.connect(headers, ({ temp }) => {
       setConnec(true);
       console.log("소켓 연결됨");
       // try {
       //방 생성
+      console.log("roomId", postId);
 
       //이벤트 구독
       stomp.subscribe(
-        `/sub/rooms/${roomId}`,
+        `/sub/rooms/${postId}`,
         // `/sub/rooms/1`,
         (body) => {
-          console.log("body: ", JSON.stringify(body.body).message);
+          console.log("body: ", body);
           //이후 처리
         },
         headers
@@ -54,7 +57,7 @@ const Chat = ({ roomId }) => {
     // const body = JSON.stringify("Hello");
     console.log("헤더", auth.accessToken);
     stomp.send(
-      `/pub/rooms/${roomId}`,
+      `/pub/rooms/${postId}`,
       // `/pub/rooms/1`,
       {
         "X-AUTH-TOKEN": auth.accessToken,

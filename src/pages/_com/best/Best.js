@@ -19,25 +19,25 @@ const Best = () => {
   });
 
   return (
-      <section>
-        <strong>추천수 베스트 5</strong>
-        <ul>
-          {data &&
-            data.map((item, index) => (
-              <li key={index} onClick={() => naviate(`/board/${item.id}`)}>
-                <div className="info">
-                  <span>
-                    {item.nickname} {item.createDate}
-                  </span>
-                  <span>
-                    {item.recommendCount} {item.viewCount}
-                  </span>
-                </div>
-                <p>{item.title}</p>
-              </li>
-            ))}
-        </ul>
-      </section>
+    <section>
+      <strong>추천수 베스트 5</strong>
+      <ul>
+        {data &&
+          data.map((item, index) => (
+            <li key={index} onClick={() => naviate(`/board/${item.id}`)}>
+              <div className="info">
+                <span>
+                  {item.nickname} {item.createDate}
+                </span>
+                <span>
+                  추천수: {item.recommendCount}
+                </span>
+              </div>
+              <p>{item.title}</p>
+            </li>
+          ))}
+      </ul>
+    </section>
   );
 };
 

@@ -9,7 +9,7 @@ import { ROOT_API } from "constants/api";
 import Chat from "components/chat/Chat";
 
 const StudyRoomDetail = () => {
-  const { roomId } = useParams();
+  const { postId } = useParams();
   const auth = useSelector((state) => state.authToken);
   // const socket = io("https://dtalks-api.site", {
   //   cors: {
@@ -31,11 +31,9 @@ const StudyRoomDetail = () => {
     console.log("change handle");
   }
 
-  console.log("dd", roomId);
-
   useEffect(() => {
     axios
-      .get(`${ROOT_API}/study-rooms/${roomId}`, {
+      .get(`${ROOT_API}/study-rooms/${postId}`, {
         headers: {
           "Content-Type": "application/json",
           "X-AUTH-TOKEN": auth.accessToken,
@@ -47,7 +45,7 @@ const StudyRoomDetail = () => {
       .catch(function (error) {
         console.log("로그인 실패: ", error.response);
       });
-  }, [auth.accessToken, roomId]);
+  }, [auth.accessToken, postId]);
 
   return (
     <div className="room-detail">
@@ -61,7 +59,7 @@ const StudyRoomDetail = () => {
         </div>
         <div className="content">
           컨텐츠 test socket connection
-          <Chat roomId={roomId} />
+          <Chat postId={postId} />
         </div>
         <div className="right-menu">
           <ul>

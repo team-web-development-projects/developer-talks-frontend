@@ -22,6 +22,7 @@ const MessageInputBox = ({ datas, setDatas, type }) => {
       })
       .then((response) => {
         const datas = response.data;
+        console.log('recive data', datas);
         setDatas(datas);
       });
   };

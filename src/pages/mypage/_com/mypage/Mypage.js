@@ -169,7 +169,9 @@ const Mypage = ({ type }) => {
             ))}
           </ul>
           <div className={mypage.list}>
-            <Link to="/mypage?param1=value1&param2=value2">Go to Page</Link>
+              {/*
+              <Link to="/mypage?param1=value1&param2=value2">Go to Page</Link>
+             */}
             {
               queries[select].isSuccess && queries[select].data.content.length === 0 && <div>내용이 없습니다</div> // 수정필요
             }

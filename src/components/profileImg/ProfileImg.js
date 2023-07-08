@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import defaultUserImage from "./defaultUserImage.svg";
 import s from "./profileimg.module.scss";
 import classNames from "classnames";
+import Gravatar from "react-gravatar";
+import { parseJwt } from "hooks/useParseJwt";
 
 /**
  *
@@ -46,7 +48,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       })
       .then((response) => {
         showToast("success", "😎 정보가 수정 되었습니다");
-        console.log("res", response);
         setProfileImgData({
           id: response.data.id,
           url: response.data.url,
@@ -91,6 +92,9 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //   });
   };
   // console.log('get image:', data)
+  console.log('dd', 
+  parseJwt(auth.accessToken)
+  )
 
   return (
     <div
@@ -103,8 +107,11 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       {/* 마이페이지에 이미지가 있는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && !getLoading && data.url && <img src={data.url} alt="프로필이미지" />}
       {/* 마이페이지에 이미지가 없는 경우, 회원가입 페이지는 포함 안됨. */}
-      {data === undefined && (
-        <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+      {
+      }
+      {auth.accessToken && data === undefined && (
+        // <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+        <Gravatar email={parseJwt(auth.accessToken).sub} />
       )}
       {!auth.accessToken && (
         <img

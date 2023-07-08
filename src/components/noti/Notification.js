@@ -105,7 +105,7 @@ const Notification = ({ unRead, classname }) => {
     idRead(id);
   };
 
-  console.log("dd", getAlarmAll.data, getAlarmUnRead.data);
+  // console.log("dd", getAlarmAll.data, getAlarmUnRead.data);
 
   return (
     <div

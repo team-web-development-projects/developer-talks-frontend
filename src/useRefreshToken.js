@@ -22,13 +22,11 @@ export default function useRefreshToken() {
     if (auth.accessToken === null && localStorage.getItem("dtrtk")) {
       // atrk 가 없고, rtk가 있지만 rtk의 만료시간이 현재 시간보다 이전일때
       console.log("현재날짜가 만료시간보다 큼", epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp));
-      console.log("토큰 재갱신");
       if (epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp)) {
         console.log("토큰 만료");
         localStorage.removeItem("dtrtk");
         navigate("/login");
       }
-      console.log("rtk", localStorage.getItem("dtrtk"));
       axios
         .post(`${ROOT_API}/token/refresh`, {
           refreshToken: localStorage.getItem("dtrtk"),

@@ -6,6 +6,8 @@ import { SET_ROUTER } from "store/PageRouter";
 import s from "./boardItem.module.scss";
 import ConsoleViewer from "components/consoleViewer/ConsoleViewer";
 import { randomProfile } from "hooks/useRandomProfile";
+import Gravatar from "react-gravatar";
+import { parseJwt } from "hooks/useParseJwt";
 
 const BoardItem = ({ data, type, currentPage }) => {
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const BoardItem = ({ data, type, currentPage }) => {
             {data.userInfo.userProfile !== null ? (
               <img className={s.userProfile} src={data.userInfo.userProfile} alt="프로필 이미지" />
             ) : (
-              <div className={s.userProfile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+              <Gravatar email={parseJwt(auth.accessToken).sub}  className={s.userProfile}/>
             )}
             <span className="nickname">{data.userInfo.nickname}</span>
             <span className={s.item}>
