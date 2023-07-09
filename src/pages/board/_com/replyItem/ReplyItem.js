@@ -236,7 +236,7 @@ const ReplyItem = ({ postId, reply }) => {
                   {/* </div> */}
                 </form>
               )}
-              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}</div>
+              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}</div>
             </div>
           </div>
         </li>
