@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -38,7 +39,7 @@ const BoardDetail = ({ type }) => {
           return `<img src=${res.data.imageUrls[cnt++]} />`;
         });
         setPost(res.data);
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((error) => console.log(error));
     if (auth.accessToken !== null) {
@@ -88,7 +89,8 @@ const BoardDetail = ({ type }) => {
           <div className={s.userInfoContainer}>
             <img className={s.profile} src={post.userInfo.userProfile} />
             <div>
-              <span className={s.nick}>{post.userInfo.nickname}</span>
+              {/*NOTE 닉네임 클릭 시 유저정보 */}
+              <ShowUserInfo recieverNick={post.userInfo.nickname} ><span className={s.nick}>{post.userInfo.nickname}</span></ShowUserInfo>
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>

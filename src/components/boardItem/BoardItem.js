@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { SET_ROUTER } from "store/PageRouter";
 import s from "./boardItem.module.scss";
 import ConsoleViewer from "components/consoleViewer/ConsoleViewer";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 
 const BoardItem = ({ data, type, currentPage }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const BoardItem = ({ data, type, currentPage }) => {
 
   return (
     <>
-      <li className={s.boardContainer} onClick={() => linkClick(data.id, type)}>
+      <li className={s.boardContainer}>
         {type !== "post" && (
           <div className={s.answerContainer}>
             <p>답변</p>
@@ -32,14 +33,24 @@ const BoardItem = ({ data, type, currentPage }) => {
         <div className={s.frontContainer}>
           <div className={s.info_wrap}>
             <img className={s.userProfile} src={data.userInfo.userProfile} />
-            <span className="nickname">{data.userInfo.nickname}</span>
+            {/*NOTE 닉네임 클릭 시 유저정보 */}
+            <ShowUserInfo recieverNick={data.userInfo.nickname}>
+              <span className="nickname">{data.userInfo.nickname}</span>
+            </ShowUserInfo>
             <span className={s.item}>
               <AiOutlineEye color="#444" size={14} />
               <span>{data.viewCount}</span>
             </span>
             <span className={s.item}>{data.createDate}</span>
           </div>
-          <p className={s.title}>{data.title}</p>
+          <p
+            className={s.title}
+            onClick={() => {
+              linkClick(data.id, type);
+            }}
+          >
+            {data.title}
+          </p>
         </div>
 
         <div></div>
