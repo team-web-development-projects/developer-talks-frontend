@@ -59,7 +59,7 @@ const StudyRoomInfo = () => {
     if (!data.autoJoin) {
       if (getNickname === data.studyRoomUsers[0].nickname) {
         // setInModal(true);
-        requestRoom();
+        // requestRoom();
         navigate(`/studyroom/${postId}`);
       } else {
         setSecretModal(true);

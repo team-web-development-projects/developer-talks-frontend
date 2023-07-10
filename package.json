@@ -17,6 +17,7 @@
     "classnames": "^2.3.2",
     "dayjs": "^1.11.8",
     "env-cmd": "^10.1.0",
+    "event-source-polyfill": "^1.0.31",
     "gh-pages": "^5.0.0",
     "gravatar": "^1.8.2",
     "http-proxy-middleware": "^2.0.6",

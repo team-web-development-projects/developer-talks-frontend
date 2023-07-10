@@ -13,8 +13,10 @@ const Notification = ({ unRead, classname }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
+  console.log('noti', auth.accessToken);
+
   const queries = useQueries([
-    { queryKey: ["alaram"], queryFn: () => alarmAll() },
+    { queryKey: ["alaram"], queryFn: () => alarmAll(), enabled: auth.accessToken !== null },
     { queryKey: ["alaramUnRead"], queryFn: () => alarmUnRead() },
   ]);
   const getAlarmAll = queries[0];
@@ -24,7 +26,8 @@ const Notification = ({ unRead, classname }) => {
   async function alarmAll() {
     const { data } = await axios.get(`${ROOT_API}/notifications/all`, {
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
+        "Content-Type": "text/event-stream",
         "X-AUTH-TOKEN": auth.accessToken,
       },
     });
@@ -35,7 +38,8 @@ const Notification = ({ unRead, classname }) => {
   async function alarmUnRead() {
     const { data } = await axios.get(`${ROOT_API}/notifications/count`, {
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
+        "Content-Type": "text/event-stream",
         "X-AUTH-TOKEN": auth.accessToken,
       },
     });
@@ -88,9 +92,13 @@ const Notification = ({ unRead, classname }) => {
   const { mutate: idRead } = useMutation(
     ["readId"],
     (id) =>
-      axios.post(`${ROOT_API}/notifications/read/${id}`, {}, {
-        headers: { "X-AUTH-TOKEN": auth.accessToken },
-      }),
+      axios.post(
+        `${ROOT_API}/notifications/read/${id}`,
+        {},
+        {
+          headers: { "X-AUTH-TOKEN": auth.accessToken },
+        }
+      ),
     {
       onSuccess: (res) => {
         // setUnread(getAlarmAll.data);
@@ -106,6 +114,7 @@ const Notification = ({ unRead, classname }) => {
   };
 
   // console.log("dd", getAlarmAll.data, getAlarmUnRead.data);
+  console.log("dd", getAlarmAll.data);
 
   return (
     <div
@@ -116,7 +125,7 @@ const Notification = ({ unRead, classname }) => {
       <div className={s.title}>
         읽지 않은 알림 <span className={s.un_read}>{getAlarmUnRead && getAlarmUnRead.data}</span>
         <span className={s.all_read} onClick={readAll}>
-          모두 읽음으로 표시
+          모두 읽음
         </span>
         {/*
          */}
@@ -131,11 +140,13 @@ const Notification = ({ unRead, classname }) => {
                 [s.is_read]: item.readStatus === "READ",
               })}
             >
-              <Link to={item.url}>{item.url}</Link>
+              <Link to={item.url}>{item.message}</Link>
               <span className={s.ctl}>
-                <span onClick={(e) => readId(e, item.id)} className={s.read_log}>
-                  읽음 표시
-                </span>
+                {item.readStatus !== "READ" && (
+                  <span onClick={(e) => readId(e, item.id)} className={s.read_log}>
+                    읽음 표시
+                  </span>
+                )}
                 <span onClick={(e) => deleteId(e, item.id)} className={s.delete_log}>
                   삭제
                 </span>

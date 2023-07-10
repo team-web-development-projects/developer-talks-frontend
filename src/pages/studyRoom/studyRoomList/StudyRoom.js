@@ -56,6 +56,7 @@ const BoardList = ({ type }) => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
     queryFn: fetchProjects,
+    enabled: auth.accessToken != null
   });
   refetchQuery.current = refetch;
 

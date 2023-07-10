@@ -3,10 +3,9 @@ import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-const Chat = ({ postId }) => {
+const Chat = ({ postId, setChatText }) => {
   const auth = useSelector((state) => state.authToken);
   const [conec, setConnec] = useState(false);
-  const [temp, setTemp] = useState(postId);
   const [text, setText] = useState("");
 
   //socket 연결
@@ -18,20 +17,19 @@ const Chat = ({ postId }) => {
   const stomp = new Stomp.over(socket);
 
   useEffect(() => {
-    console.log("roomid", postId);
     stomp.connect(headers, ({ temp }) => {
       setConnec(true);
       console.log("소켓 연결됨");
       // try {
       //방 생성
-      console.log("roomId", postId);
 
       //이벤트 구독
       stomp.subscribe(
         `/sub/rooms/${postId}`,
-        // `/sub/rooms/1`,
         (body) => {
-          console.log("body: ", body);
+          console.log("body: ", JSON.parse(body.body).message);
+          setText('');
+          setChatText(JSON.parse(body.body).message)
           //이후 처리
         },
         headers
@@ -55,7 +53,6 @@ const Chat = ({ postId }) => {
   const click = (e) => {
     e.preventDefault();
     // const body = JSON.stringify("Hello");
-    console.log("헤더", auth.accessToken);
     stomp.send(
       `/pub/rooms/${postId}`,
       // `/pub/rooms/1`,
@@ -73,7 +70,7 @@ const Chat = ({ postId }) => {
   return (
     <div>
       <form onSubmit={click}>
-        <input type="text" name="" id="" onChange={onChange} />
+        <input type="text" name="" id="" onChange={onChange} value={text}/>
         <button>전송</button>
       </form>
     </div>

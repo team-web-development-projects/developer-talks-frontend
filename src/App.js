@@ -22,6 +22,7 @@ import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
+import Sse from "sse";
 function App() {
   const auth = useSelector((state) => state.authToken);
   const [loading, setLoading] = useState(false);
@@ -30,6 +31,7 @@ function App() {
 
   useGoogleLoginAuth();
   useRefreshToken();
+  Sse();
 
   //  NOTE: 타이머로 재갱신 테스트 코드
   // useEffect(() => {

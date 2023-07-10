@@ -24,7 +24,6 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    console.log("dd", data.userId, data.password);
     axios
       .post(
         `${ROOT_API}/sign-in`,
@@ -43,15 +42,15 @@ const Login = () => {
         // setRefreshToken({ refreshToken: response.data.refreshToken });
         localStorage.setItem("dtrtk", response.data.refreshToken);
         dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-        axios
-          .get(`${ROOT_API}/notifications/subscribe`, {
-            headers: {
-              "Content-Type": "text/event-stream",
-              Connection: "keep-alive",
-              "Cache-Control": "no-cache",
-            },
-          })
-          .then((res) => console.log("test: ", res));
+        // axios
+        //   .get(`${ROOT_API}/notifications/subscribe`, {
+        //     headers: {
+        //       "Content-Type": "text/event-stream",
+        //       Connection: "keep-alive",
+        //       "Cache-Control": "no-cache",
+        //     },
+        //   })
+        //   .then((res) => console.log("test: ", res));
         setModal(true);
         reset();
       })

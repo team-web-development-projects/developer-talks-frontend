@@ -92,9 +92,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //   });
   };
   // console.log('get image:', data)
-  console.log('dd', 
-  parseJwt(auth.accessToken)
-  )
 
   return (
     <div
