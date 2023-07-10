@@ -9,14 +9,16 @@ import { FiMenu } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
+import { useOutOfClick } from "hooks/useOutOfClick";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
+  const noti = useSelector((state) => state.notification);
+  // const noti = useSelector((state) => state.noti);
   const [popover, setPopover] = useState(false);
   let nickname = "";
   const targetRef = useRef(null);
   const location = useLocation();
-  // outOfClick(targetRef); // NOTE: 아웃오브클릭 테스트
 
   const showPopover = () => {
     setPopover(!popover);
@@ -45,6 +47,12 @@ const Header = () => {
     },
   ];
 
+  useOutOfClick(targetRef, () => {
+    setPopover(false);
+  });
+
+  // console.log('헤더 노티 : ', noti)
+
   return (
     <header className="header">
       <div className="header-wrap">
@@ -69,7 +77,7 @@ const Header = () => {
               <span onClick={showPopover} ref={targetRef}>
                 <span className="bell">
                   {/* TODO: 알람이 있을때 표시하기 */}
-                  {<span className="point" />}
+                  {noti.noti && <span className="point" />}
                   <TfiBell size={24} />
                 </span>
                 <Notification classname={popover ? "is_show" : ""} />

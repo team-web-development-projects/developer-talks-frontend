@@ -2,22 +2,31 @@ import axios from "axios";
 import { ROOT_API } from "constants/api";
 import React, { useState } from "react";
 import { useQuery, useQueries, useMutation, useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 import s from "./notification.module.scss";
 import Service from "api";
 import { useEffect } from "react";
+import { OFF_NOTI, ON_NOTI } from "store/Notification";
 
 const Notification = ({ unRead, classname }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
-
-  console.log('noti', auth.accessToken);
+  const dispatch = useDispatch();
+  const [filteredData, setFilteredData] = useState();
 
   const queries = useQueries([
-    { queryKey: ["alaram"], queryFn: () => alarmAll(), enabled: auth.accessToken !== null },
-    { queryKey: ["alaramUnRead"], queryFn: () => alarmUnRead() },
+    {
+      queryKey: ["alaram"],
+      queryFn: () => alarmAll(),
+      enabled: auth.accessToken !== null,
+    },
+    {
+      queryKey: ["alaramUnRead"],
+      queryFn: () => alarmUnRead(),
+      enabled: auth.accessToken !== null,
+    },
   ]);
   const getAlarmAll = queries[0];
   const getAlarmUnRead = queries[1];
@@ -38,8 +47,8 @@ const Notification = ({ unRead, classname }) => {
   async function alarmUnRead() {
     const { data } = await axios.get(`${ROOT_API}/notifications/count`, {
       headers: {
-        // "Content-Type": "application/json",
-        "Content-Type": "text/event-stream",
+        "Content-Type": "application/json",
+        // "Content-Type": "text/event-stream",
         "X-AUTH-TOKEN": auth.accessToken,
       },
     });
@@ -67,6 +76,11 @@ const Notification = ({ unRead, classname }) => {
   const readAll = (e) => {
     e.stopPropagation();
     allread();
+  };
+
+  const Offnoti = (e) => {
+    e.stopPropagation();
+    dispatch(OFF_NOTI());
   };
 
   // 특정 알람 삭제
@@ -102,7 +116,6 @@ const Notification = ({ unRead, classname }) => {
     {
       onSuccess: (res) => {
         // setUnread(getAlarmAll.data);
-        console.log("res", res);
         queryClient.invalidateQueries(["alaram"]);
         queryClient.invalidateQueries(["alaramUnRead"]);
       },
@@ -114,7 +127,27 @@ const Notification = ({ unRead, classname }) => {
   };
 
   // console.log("dd", getAlarmAll.data, getAlarmUnRead.data);
-  console.log("dd", getAlarmAll.data);
+  // console.log("AlarmAll: ", getAlarmAll.isSuccess && getAlarmAll.data);
+  const FilterData = (e, type) => {
+    e.stopPropagation();
+    console.log('나이');
+    if(type === 'all') {
+      setFilteredData(getAlarmAll.data);
+    }
+    if(type === 'read') {
+
+    }
+  }
+
+  useEffect(() => {
+    if (getAlarmUnRead && getAlarmUnRead.data === 0) {
+      // console.log("없음");
+      dispatch(OFF_NOTI());
+    } else {
+      // console.log("있음");
+      dispatch(ON_NOTI());
+    }
+  }, [dispatch, getAlarmUnRead]);
 
   return (
     <div
@@ -124,12 +157,29 @@ const Notification = ({ unRead, classname }) => {
     >
       <div className={s.title}>
         읽지 않은 알림 <span className={s.un_read}>{getAlarmUnRead && getAlarmUnRead.data}</span>
-        <span className={s.all_read} onClick={readAll}>
+        <span
+          className={s.all_read}
+          onClick={(e) => {
+            readAll(e);
+            Offnoti(e);
+          }}
+        >
           모두 읽음
         </span>
-        {/*
-         */}
       </div>
+      {/*
+      <div className={s.tab}>
+        <div className={s.nav} onClick={(e) => FilterData(e, 'all')}>
+          모든 알림 보기
+        </div>
+        <div className={s.nav} onClick={(e) => FilterData(e, 'read')}>
+          읽은 알림 보기
+        </div>
+        <div className={s.nav} onClick={(e) => FilterData(e, 'unread')}>
+          안읽은 알림 보기
+        </div>
+      </div>
+     */}
       <ul>
         {getAlarmAll.isLoading && <li>로딩중입니다..</li>}
         {getAlarmAll.data && getAlarmAll.data.length !== 0 ? (

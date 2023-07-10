@@ -17,9 +17,16 @@
 
   max-height: 250px;
   overflow: auto;
-
   &.is_show {
     display: block;
+  }
+  .tab {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 14px;
+    .nav {
+      cursor: pointer;
+    }
   }
   .title {
     position: relative;
@@ -67,6 +74,9 @@
       font-size: 12px;
       span {
         cursor: pointer;
+        &:hover {
+          color: $primary
+        }
       }
     }
   }
