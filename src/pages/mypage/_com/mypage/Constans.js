@@ -85,8 +85,8 @@ export const MyReply = (item) => {
         <div>{item.createDate}</div>
       </div>
       <div className={types.content}>
-        {item.content}
-        <span>{item.secret && "비밀글"}</span>
+        <div dangerouslySetInnerHTML={{ __html: item.content }}></div>
+        <span className={types.secret}>{item.secret && "비밀글"}</span>
       </div>
     </Link>
   );

@@ -140,7 +140,7 @@ const ReplyItem = ({ postId, reply }) => {
   return (
     <>
       {(!reply.secret || (reply.secret && isSelf)) && (
-        <li className={s.container}>
+        <div className={s.container}>
           <div className={s.info}>
             {reply.userInfo.userProfile !== null ? (
               <img className={s.profile} src={reply.userInfo.userProfile} alt="프로필 이미지" />
@@ -254,7 +254,7 @@ const ReplyItem = ({ postId, reply }) => {
               </div>
             </div>
           </div>
-        </li>
+        </div>
       )}
     </>
   );

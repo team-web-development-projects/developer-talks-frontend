@@ -100,7 +100,7 @@ const RereplyItem = ({ rr }) => {
   return (
     <>
       {(!rr.secret || (rr.secret && isSelf)) && (
-        <li className={s.container} onClick={handlePostClick}>
+        <div className={s.container} onClick={handlePostClick}>
           <div className={s.info}>
             {rr.userInfo.userProfile !== null ? (
               <img className={s.profile} src={rr.userInfo.userProfile} alt="프로필 이미지" />
@@ -181,7 +181,7 @@ const RereplyItem = ({ rr }) => {
               </div>
             </form>
           )} */}
-        </li>
+        </div>
       )}
     </>
   );

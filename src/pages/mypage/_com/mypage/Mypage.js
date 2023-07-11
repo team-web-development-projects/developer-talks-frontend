@@ -151,8 +151,9 @@ const Mypage = ({ type }) => {
   }, [auth.accessToken, navigate, select, userId]);
 
   // console.log("favorite", queries[0].isSuccess && queries[0].data);
-  // console.log("favorite", queries[1].isSuccess && queries[1].data);
-  console.log("favorite", queries[select].isSuccess && queries[select].data.content);
+  // console.log("favorite", queries[1].isSuccess && queries[1].data.content);
+  // console.log("favorite", queries[2].isSuccess && queries[2].data.content);
+  // console.log("favorite", queries[select].isSuccess && queries[select].data.content);
   // console.log("favorite", queries[3].isSuccess && queries[3].data);
 
   return (

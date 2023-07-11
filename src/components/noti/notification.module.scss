@@ -48,13 +48,14 @@
   li {
     position: relative;
     font-size: 14px;
+    border-top: 1px solid #eee;
     &.not_alarm {
       padding: 10px;
     }
     &.is_read {
       a {
         background: #fff;
-        color: #b7b7b7;
+        color: #b7b7b7!important;
       }
     }
     a {
