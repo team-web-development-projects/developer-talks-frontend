@@ -13,6 +13,8 @@ import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
 import { randomProfile } from "hooks/useRandomProfile";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
+import { toast } from "react-toastify";
+import { useQuery } from "react-query";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -26,23 +28,39 @@ const BoardDetail = ({ type }) => {
   const [checkStatus, setCheckStatus] = useState([]);
   const [modalD, setModalD] = useState(false);
 
+  const fetchPost = async (type, postId, auth) => {
+    const response = await axios.get(`${ROOT_API}/${type}/${postId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+    });
+    let cnt = 0;
+    response.data.imagedContent = response.data.content.replace(/<img>/g, (match, capture) => {
+      return `<img src=${response.data.imageUrls[cnt++]} />`;
+    });
+    setPost(response.data);
+  };
+
+  const { isLoading, isError } = useQuery(["boardDetail"], () => fetchPost(type, postId, auth));
+
   useEffect(() => {
-    axios
-      .get(`${ROOT_API}/${type}/${postId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then((res) => {
-        let cnt = 0;
-        res.data.imagedContent = res.data.content.replace(/<img>/g, (match, capture) => {
-          return `<img src=${res.data.imageUrls[cnt++]} />`;
-        });
-        setPost(res.data);
-        console.log(res.data);
-      })
-      .catch((error) => console.log(error));
+    // axios
+    //   .get(`${ROOT_API}/${type}/${postId}`, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "X-AUTH-TOKEN": auth.accessToken,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     let cnt = 0;
+    //     res.data.imagedContent = res.data.content.replace(/<img>/g, (match, capture) => {
+    //       return `<img src=${res.data.imageUrls[cnt++]} />`;
+    //     });
+    //     setPost(res.data);
+    //     console.log(res.data);
+    //   })
+    //   .catch((error) => console.log(error));
     if (auth.accessToken !== null) {
       setNickName(parseJwt(auth.accessToken).nickname);
       axios
@@ -70,11 +88,15 @@ const BoardDetail = ({ type }) => {
       .then(() => setModalD(true))
       .catch((error) => console.log(error));
   };
+
   const clickUpdate = () => {
     navigate(`/${type === "post" ? "board" : "qna"}/update/${post.id}`, {
       state: { title: post.title, content: post.imagedContent, imgUrls: post.imageUrls },
     });
   };
+
+  if (isLoading) return <div>loading...</div>;
+  if (isError) return <div>error...</div>;
 
   return (
     <>
@@ -109,9 +131,21 @@ const BoardDetail = ({ type }) => {
               <Button onClick={clickUpdate} size="small" theme="success">
                 수정
               </Button>
-              <Button onClick={deletePost} size="small" theme="cancle">
-                삭제
-              </Button>
+              {post.commentCount === 0 ? (
+                <Button onClick={deletePost} size="small" theme="cancle">
+                  삭제
+                </Button>
+              ) : (
+                <Button
+                  classname={s.btnCancle}
+                  onClick={() => {
+                    toast.error("댓글이 있는 게시글은 삭제가 불가능합니다.");
+                  }}
+                  size="small"
+                >
+                  삭제
+                </Button>
+              )}
             </div>
           )}
         </header>

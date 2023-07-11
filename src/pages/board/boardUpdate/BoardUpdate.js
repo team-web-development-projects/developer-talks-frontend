@@ -7,6 +7,7 @@ import s from "../boardPost/boardPost.module.scss";
 import CkEditor from "components/ckeditor/CkEditor";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
+import { toast } from 'react-toastify';
 
 const BoardUpdate = ({ type }) => {
   const [modalY, setModalY] = useState(false);
@@ -24,6 +25,14 @@ const BoardUpdate = ({ type }) => {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (form.title.trim() === '') {
+      toast.error('제목을 입력해주세요.');
+      return;
+    }
+    if (form.content.trim() === '') {
+      toast.error('내용을 입력해주세요.');
+      return;
+    }
     await new Promise((r) => setTimeout(r, 1000));
     form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
     const frm = new FormData();
@@ -34,7 +43,10 @@ const BoardUpdate = ({ type }) => {
     }
     frm.append("title", form.title);
     frm.append("content", form.content);
-    frm.append("imgUrls", form.imgUrls);
+    if (form.imgUrls.length !== 0) {
+      frm.append("imgUrls", form.imgUrls);
+    }
+    
     axios
       .put(`${ROOT_API}/${type}/${postId}`, frm, {
         headers: {
