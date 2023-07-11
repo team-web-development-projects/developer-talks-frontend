@@ -38,9 +38,11 @@ const BoardItem = ({ data, type, currentPage }) => {
             {data.userInfo.userProfile !== null ? (
               <img className={s.userProfile} src={data.userInfo.userProfile} alt="프로필 이미지" />
             ) : (
-              <Gravatar email={parseJwt(auth.accessToken).sub} className={s.userProfile} />
+              <Gravatar email={data.userInfo.nickname} className={s.userProfile} />
             )}
+            {/*
             <span className="nickname">{data.userInfo.nickname}</span>
+           */}
             {/*NOTE 닉네임 클릭 시 유저정보 */}
             <ShowUserInfo recieverNick={data.userInfo.nickname}>
               <span className="nickname">{data.userInfo.nickname}</span>

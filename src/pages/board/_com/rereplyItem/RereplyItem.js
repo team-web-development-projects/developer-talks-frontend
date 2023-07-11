@@ -9,6 +9,7 @@ import { parseJwt } from "hooks/useParseJwt";
 import { useEffect } from "react";
 import { ROOT_API } from "constants/api";
 import { toast } from "react-toastify";
+import Gravatar from "react-gravatar";
 import axios from "axios";
 import CkEditor from "components/ckeditor/CkEditor";
 
@@ -104,7 +105,7 @@ const RereplyItem = ({ rr }) => {
             {rr.userInfo.userProfile !== null ? (
               <img className={s.profile} src={rr.userInfo.userProfile} alt="프로필 이미지" />
             ) : (
-              <div className={s.profile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+              <Gravatar email={rr.userInfo.nickname} className={s.profile} />
             )}
             <div>
               <p className={s.nickname}>{rr.userInfo.nickname}</p>
@@ -139,7 +140,13 @@ const RereplyItem = ({ rr }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
+                  <Button
+                    classname={s.cancle}
+                    theme="outline"
+                    color="#9ca3af"
+                    size="medium"
+                    onClick={handleUpdateCancle}
+                  >
                     취소
                   </Button>
                   <Button size="medium">수정</Button>

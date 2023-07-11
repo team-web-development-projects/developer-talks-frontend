@@ -10,6 +10,7 @@ import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { BsLock } from "react-icons/bs";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
+import Gravatar from "react-gravatar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
@@ -144,7 +145,7 @@ const ReplyItem = ({ postId, reply }) => {
             {reply.userInfo.userProfile !== null ? (
               <img className={s.profile} src={reply.userInfo.userProfile} alt="프로필 이미지" />
             ) : (
-              <div className={s.profile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+              <Gravatar email={reply.userInfo.nickname} className={s.profile} />
             )}
             <div>
               <p className={s.nickname}>{reply.userInfo.nickname}</p>
@@ -178,7 +179,13 @@ const ReplyItem = ({ postId, reply }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
+                  <Button
+                    classname={s.cancle}
+                    theme="outline"
+                    color="#9ca3af"
+                    size="medium"
+                    onClick={handleUpdateCancle}
+                  >
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -216,27 +223,35 @@ const ReplyItem = ({ postId, reply }) => {
               {ispostToggle && (
                 <form onSubmit={handleRePost}>
                   {/* <div> */}
-                    <CkEditor form={reForm} setForm={setReForm} />
-                    <div className={s.btnRgn}>
-                      <label className={s.secret}>
-                        <input
-                          type="checkbox"
-                          name="secret"
-                          onChange={() => {
-                            setReForm({ ...reForm, ["secret"]: !reForm.secret });
-                          }}
-                        />{" "}
-                        시크릿 댓글
-                      </label>
-                      <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
-                        취소
-                      </Button>
-                      <Button size="medium">등록</Button>
-                    </div>
+                  <CkEditor form={reForm} setForm={setReForm} />
+                  <div className={s.btnRgn}>
+                    <label className={s.secret}>
+                      <input
+                        type="checkbox"
+                        name="secret"
+                        onChange={() => {
+                          setReForm({ ...reForm, ["secret"]: !reForm.secret });
+                        }}
+                      />{" "}
+                      시크릿 댓글
+                    </label>
+                    <Button
+                      classname={s.cancle}
+                      theme="outline"
+                      color="#9ca3af"
+                      size="medium"
+                      onClick={handleRePostCancle}
+                    >
+                      취소
+                    </Button>
+                    <Button size="medium">등록</Button>
+                  </div>
                   {/* </div> */}
                 </form>
               )}
-              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}</div>
+              <div>
+                {isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
+              </div>
             </div>
           </div>
         </li>

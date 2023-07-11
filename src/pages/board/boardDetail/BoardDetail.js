@@ -15,6 +15,7 @@ import { randomProfile } from "hooks/useRandomProfile";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
+import Gravatar from "react-gravatar";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -114,11 +115,13 @@ const BoardDetail = ({ type }) => {
             {post.userInfo.userProfile !== null ? (
               <img className={s.profile} src={post.userInfo.userProfile} alt="프로필 이미지" />
             ) : (
-              <div className={s.profile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
+              <Gravatar email={post.userInfo.nickname} className={s.profile} />
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <ShowUserInfo recieverNick={post.userInfo.nickname} ><span className={s.nick}>{post.userInfo.nickname}</span></ShowUserInfo>
+              <ShowUserInfo recieverNick={post.userInfo.nickname}>
+                <span className={s.nick}>{post.userInfo.nickname}</span>
+              </ShowUserInfo>
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
