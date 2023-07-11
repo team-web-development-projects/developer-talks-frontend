@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
 import { randomProfile } from "hooks/useRandomProfile";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -94,7 +95,8 @@ const BoardDetail = ({ type }) => {
               <div className={s.profile} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
             )}
             <div>
-              <span className={s.nick}>{post.userInfo.nickname}</span>
+              {/*NOTE 닉네임 클릭 시 유저정보 */}
+              <ShowUserInfo recieverNick={post.userInfo.nickname} ><span className={s.nick}>{post.userInfo.nickname}</span></ShowUserInfo>
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>

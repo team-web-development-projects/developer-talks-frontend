@@ -8,6 +8,7 @@ import ConsoleViewer from "components/consoleViewer/ConsoleViewer";
 import { randomProfile } from "hooks/useRandomProfile";
 import Gravatar from "react-gravatar";
 import { parseJwt } from "hooks/useParseJwt";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 
 const BoardItem = ({ data, type, currentPage }) => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const BoardItem = ({ data, type, currentPage }) => {
 
   return (
     <>
-      <li className={s.boardContainer} onClick={() => linkClick(data.id, type)}>
+      <li className={s.boardContainer}>
         {type !== "post" && (
           <div className={s.answerContainer}>
             <p>답변</p>
@@ -37,16 +38,27 @@ const BoardItem = ({ data, type, currentPage }) => {
             {data.userInfo.userProfile !== null ? (
               <img className={s.userProfile} src={data.userInfo.userProfile} alt="프로필 이미지" />
             ) : (
-              <Gravatar email={parseJwt(auth.accessToken).sub}  className={s.userProfile}/>
+              <Gravatar email={parseJwt(auth.accessToken).sub} className={s.userProfile} />
             )}
             <span className="nickname">{data.userInfo.nickname}</span>
+            {/*NOTE 닉네임 클릭 시 유저정보 */}
+            <ShowUserInfo recieverNick={data.userInfo.nickname}>
+              <span className="nickname">{data.userInfo.nickname}</span>
+            </ShowUserInfo>
             <span className={s.item}>
               <AiOutlineEye color="#444" size={14} />
               <span>{data.viewCount}</span>
             </span>
             <span className={s.item}>{data.createDate}</span>
           </div>
-          <p className={s.title}>{data.title}</p>
+          <p
+            className={s.title}
+            onClick={() => {
+              linkClick(data.id, type);
+            }}
+          >
+            {data.title}
+          </p>
         </div>
         <div className={s.right}>
           <div className={s.bottomInfo}>

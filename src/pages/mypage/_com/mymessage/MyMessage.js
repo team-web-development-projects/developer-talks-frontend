@@ -1,6 +1,6 @@
-import MessageForm from "components/messageForm/MessageForm";
-import MessageInbox from "components/messageInputBox/MessageInputBox";
-import MessageSearch from "components/messageSearch/MessageSearch";
+import MessageForm from "components/message/messageForm/MessageForm";
+import MessageInbox from "components/message/messageInputBox/MessageInputBox";
+import MessageSearch from "components/message/messageSearch/MessageSearch";
 import { useState } from "react";
 import s from "../../mypagecontent.module.scss";
 
