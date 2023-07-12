@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import s from "./replyList.module.scss";
 
-const ReplyList = ({ nickname }) => {
+const ReplyList = ({ nickname, replyCnt}) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const { postId } = useParams();
@@ -74,7 +74,7 @@ const ReplyList = ({ nickname }) => {
   return (
     <>
       <div className={s.notice_reply}>
-        <div className={s.title}>댓글 {replyList.length}</div>
+        <div className={s.title}>댓글 {replyCnt}</div>
         {isToggle ? (
           <form onSubmit={handlePost}>
             <div className={s.inputTrue}>

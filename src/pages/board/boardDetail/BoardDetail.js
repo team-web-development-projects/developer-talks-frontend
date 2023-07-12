@@ -177,7 +177,7 @@ const BoardDetail = ({ type }) => {
             <span>{post.recommendCount}</span>
           </BoardCount>
         </div>
-        <ReplyList nickname={nickname} />
+        <ReplyList nickname={nickname} replyCnt={post.commentCount}/>
       </div>
     </>
   );
