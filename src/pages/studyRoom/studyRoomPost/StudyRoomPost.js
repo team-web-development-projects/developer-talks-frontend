@@ -38,17 +38,9 @@ const StudyRoomPost = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
-    console.log(
-      `title: ${form.title}
-        content: ${form.content}
-        skills: ${selectedTags.tags}
-        autoJoin: ${selectedTags.autoJoin}
-        joinableCount: ${selectedTags.joinableCount}
-      `
-    );
     axios
       .post(
-        `${ROOT_API}/study-room`,
+        `${ROOT_API}/study-rooms`,
         {
           title: form.title,
           content: form.content,

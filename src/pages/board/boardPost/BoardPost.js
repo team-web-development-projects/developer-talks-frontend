@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./boardPost.module.scss";
+import { toast } from 'react-toastify';
 
 export default function BoardPost({ type }) {
   const [modal, setModal] = useState(false);
@@ -15,6 +16,7 @@ export default function BoardPost({ type }) {
   const [form, setForm] = useState({
     title: "",
     content: "",
+    files: [],
   });
   const [getType, setGetType] = useState();
 
@@ -33,27 +35,34 @@ export default function BoardPost({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (form.title.trim() === '') {
+      toast.error('제목을 입력해주세요.');
+      return;
+    }
+    if (form.content.trim() === '') {
+      toast.error('내용을 입력해주세요.');
+      return;
+    }
     await new Promise((r) => setTimeout(r, 1000));
     console.log(`
             제목: ${form.title}
             내용: ${form.content}
+            이미지 : ${form.files}
         `);
-
-    console.log('post auth', auth.accessToken);
+    const frm = new FormData();
+    if (form.files.length !== 0) {
+      form.files.forEach((file) => {
+        frm.append("files", file);
+      });
+    }
+    frm.append("title", form.title);
+    frm.append("content", form.content);
     axios
-      .post(
-        `${ROOT_API}/${type}`,
-        {
-          title: form.title,
-          content: form.content,
+      .post(`${ROOT_API}/${type}`, frm, {
+        headers: {
+          "X-AUTH-TOKEN": auth.accessToken,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      })
       .then((response) => {
         console.log(response);
         setModal(true);
@@ -69,10 +78,7 @@ export default function BoardPost({ type }) {
   return (
     <>
       {modal && (
-        <BasicModal
-          setOnModal={() => setModal()}
-          dimClick={() => navigate(`/${getType}`)}
-        >
+        <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/${getType}`)}>
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.
           <button onClick={() => navigate(`/${getType}`)}>확인</button>
@@ -80,21 +86,10 @@ export default function BoardPost({ type }) {
       )}
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
-          <input
-            className={s.title}
-            type="text"
-            name="title"
-            value={form.title}
-            placeholder="제목을 작성해주세요."
-            onChange={handleChange}
-          />
+          <input className={s.title} type="text" name="title" value={form.title} placeholder="제목을 작성해주세요." onChange={handleChange} />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
-            <CkEditor
-              form={form}
-              setForm={setForm}
-              placeholder={"내용을 입력해주세요."}
-            />
+            <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
           </div>
           <div className={s.btnRgn}>
             <Link to="/board" className={s.cancel}>

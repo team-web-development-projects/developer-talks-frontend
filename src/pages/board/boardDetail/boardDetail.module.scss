@@ -1,25 +1,42 @@
+@import 'assets/style/variable.scss';
+
 .container {
-  margin: 20px;
-  padding: 50px;
-  border: solid 1px #cfcccc;
+  position: relative;
+  padding: 0px 0px 100px 0px;
   header {
-    border-bottom: solid 1px #cfcccc;
+    .userInfoContainer{
+      display:flex;
+      align-items: center;
+    }
+    .profile {
+      width:50px;
+      height:50px;
+      border-radius: 50%;
+      margin-right:10px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+    }
     .nick {
       font-size: 25px;
       color: black;
     }
     .info {
       display: flex;
-      margin-bottom: 20px;
     }
     .title {
-      margin-top:20px;
-      margin-bottom: 20px;
-      font-size: 45px;
-      font-weight: 500;
+      margin-top: 40px;
+      font-size: 30px;
+      font-weight: 600;
+    }
+    .button_wrap {
+      position: absolute;
+      display: flex;
+      top: 10px;
+      right: 10px;
+      gap: 10px;
     }
     span {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 500;
       color: #8b8b8b;
     }
@@ -28,17 +45,26 @@
     display: flex;
     flex-direction: column;
     .content {
-      padding: 50px 0px;
-      font-size: 25px;
+      padding: 20px 0px 50px 0px;
+      font-size: 16px;
       border-bottom:solid 1px #cfcccc;
     }
+    .contentImage{
+      width:50%;      
+    }
   }
-  .countContainer{
+  .btnCancle{
+    background: #cfcccc;
+    color:#969696
+  }
+
+  .countContainer {
     display: flex;
     justify-content: center;
     margin-top: 60px;
-    .btn{
-      margin:0px 10px;
+    gap: 10px;
+    .btn {
+      color: red;
     }
   }
 }

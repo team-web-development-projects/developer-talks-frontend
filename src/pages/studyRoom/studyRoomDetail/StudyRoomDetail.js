@@ -6,9 +6,10 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
+import Chat from "components/chat/Chat";
 
-const StudyRoomDetqil = () => {
-  const { postId } = useParams();
+const StudyRoomDetail = () => {
+  const { roomId } = useParams();
   const auth = useSelector((state) => state.authToken);
   // const socket = io("https://dtalks-api.site", {
   //   cors: {
@@ -30,24 +31,23 @@ const StudyRoomDetqil = () => {
     console.log("change handle");
   }
 
+  console.log("dd", roomId);
+
   useEffect(() => {
     axios
-      .get(
-        `${ROOT_API}/study-room/${postId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      .get(`${ROOT_API}/study-rooms/${roomId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
       .then(function (response) {
         console.log("로그인 성공:", response);
       })
       .catch(function (error) {
         console.log("로그인 실패: ", error.response);
       });
-  }, [auth.accessToken, postId]);
+  }, [auth.accessToken, roomId]);
 
   return (
     <div className="room-detail">
@@ -61,8 +61,7 @@ const StudyRoomDetqil = () => {
         </div>
         <div className="content">
           컨텐츠 test socket connection
-          <button onClick={handleRequestSocket}>Request</button>
-          <input type="text" onChange={handleChange} />
+          <Chat roomId={roomId} />
         </div>
         <div className="right-menu">
           <ul>
@@ -75,4 +74,4 @@ const StudyRoomDetqil = () => {
   );
 };
 
-export default StudyRoomDetqil;
+export default StudyRoomDetail;

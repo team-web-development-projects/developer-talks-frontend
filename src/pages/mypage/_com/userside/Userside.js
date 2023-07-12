@@ -1,90 +1,60 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Logout from "components/logout/Logout";
 import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Userside.scss";
-import { useState } from "react";
+import { parseJwt } from "hooks/useParseJwt";
+// import ProfileImg from "components/profileImg/ProfileImg";
+import Mypage from "../mypage/Mypage";
+import MypageContent from "pages/mypage/MyPageContent";
+import MyStudyRoom from "../mystudyroom/MyStudyRoom";
+import Account from "../account/Account";
+import classNames from "classnames";
+import MyMessage from "../mymessage/MyMessage";
+import ProfileImg from "components/profileImg/ProfileImg";
 
 const Userside = () => {
-  const [isActive, setIsActive] = useState("");
-  const [imageFile, setImageFile] = useState("");
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await new Promise((r) => setTimeout(r, 1000));
-  };
+  const auth = useSelector((state) => state.authToken).accessToken;
+  const [isActive, setIsActive] = useState("mypage");
+  const location = useLocation();
+  // const [profileImgData, setProfileImgData] = useState({
+  //   id: "",
+  //   url: "",
+  //   inputName: "",
+  // });
   const handleClick = (value) => {
     setIsActive(value);
   };
 
-  const auth = useSelector((state) => state.authToken).accessToken;
-  const userinfo = parseJwt(auth);
-
-  const changeProfileImg = (e) => {
-    if (e.target.files) {
-      const formData = new FormData();
-      formData.append("file", e.target.files[0]);
-
-      axios
-        .post(`${ROOT_API}/users/profile/image`, formData, {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "multipart/form-data",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => console.log(error));
-    }
-  };
-
   return (
-    <>
-      <section className="sidebackground"></section>
+    <MypageContent>
       <section className="side">
         <div className="imgwrap">
-          <img src={imageFile} alt="" />
-          <input type="file" name="" id="" onChange={changeProfileImg} />
+          <ProfileImg size="big" />
         </div>
         <ul className="nav">
-          {/* <li>
-            <Link to="/introduction" className={isActive ? 'active' : ''} onClick={handleClick}>🎆 내소개</Link>
-          </li> */}
-          <li>
-            <Link
-              to="/mypage"
-              className={isActive === "mypage" ? "is-active" : ""}
-              onClick={() => handleClick("mypage")}
-            >
-              🧥 활동내역
-            </Link>
+          <li className={classNames("", { "is-active": isActive === "mypage" })} onClick={() => handleClick("mypage")}>
+            활동내역
           </li>
-          <li>
-            <Link
-              to="/my-studyroom"
-              className={isActive === "my-studyroom" ? "is-active" : ""}
-              onClick={() => handleClick("my-studyroom")}
-            >
-              스터디룸
-            </Link>
+          <li className={classNames("", { "is-active": isActive === "my-studyroom" })} onClick={() => handleClick("my-studyroom")}>
+            스터디룸
           </li>
-          <li>
-            <Link
-              to="/account"
-              className={isActive === "account" ? "is-active" : ""}
-              onClick={() => handleClick("account")}
-            >
-              🐹 회원정보수정 및 탈퇴
-            </Link>
+          <li className={classNames("", { "is-active": isActive === "my-message" })} onClick={() => handleClick("my-message")}>
+            쪽지
           </li>
-          <li></li>
+          <li className={classNames("", { "is-active": isActive === "account" })} onClick={() => handleClick("account")}>
+            회원정보수정 및 탈퇴
+          </li>
         </ul>
         <Logout />
       </section>
-    </>
+      <>{isActive === "mypage" && <Mypage />}</>
+      <>{isActive === "my-studyroom" && <MyStudyRoom />}</>
+      <>{isActive === "my-message" && <MyMessage />}</>
+      <>{isActive === "account" && <Account />}</>
+    </MypageContent>
   );
 };
 

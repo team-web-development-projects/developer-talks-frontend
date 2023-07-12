@@ -1,3 +1,6 @@
 .ck-editor__editable {
     min-height: 700px;
 }
+.ck.ck-editor__editable .image.ck-widget_selected {
+    z-index: 0;
+}
