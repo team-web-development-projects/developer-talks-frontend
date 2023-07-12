@@ -1,8 +1,11 @@
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import "./ckeditor.css";
+import { useState } from 'react';
 
 const CkEditor = ({ form, setForm, placeholder }) => {
+  // let fileNum = 0;
+  // const [content, setContent] = useState("123");
   const customUploadAdapter = (loader) => {
     return {
       upload() {
@@ -13,6 +16,7 @@ const CkEditor = ({ form, setForm, placeholder }) => {
               ...prevForm,
               files: [...prevForm.files, file],
             }));
+            // console.log("form content: ", content);
           });
         });
       },
@@ -39,6 +43,8 @@ const CkEditor = ({ form, setForm, placeholder }) => {
         onChange={(e, editor) => {
           const data = editor.getData();
           setForm({ ...form, ["content"]: data });
+          // setContent(data);
+          // console.log("data: ",data);
         }}
       />
     </>
