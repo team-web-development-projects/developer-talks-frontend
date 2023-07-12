@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import types from "./mypage.module.scss";
+import types from "./userinfolist.module.scss";
+
 // import { TAB_ROUTER } from "store/PageRouter";
 // import { useDispatch } from "react-redux";
 

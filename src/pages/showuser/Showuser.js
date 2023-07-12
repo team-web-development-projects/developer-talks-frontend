@@ -1,8 +1,8 @@
 import UserInfoList from "components/showUserInfo/UserInfoList/UserInfoList";
 
-const Mypage = ({ type }) => {
+const Showuser = ({ type }) => {
 
   return <UserInfoList/>;
 };
 
-export default Mypage;
+export default Showuser;
