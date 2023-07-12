@@ -66,11 +66,6 @@
     }
   }
 
-  .noti_link {
-    @include multi-dotdotdot(14px, 2);
-    max-width: 290px;
-  }
-
   .menuBar {
     display: none;
     padding: 20px;

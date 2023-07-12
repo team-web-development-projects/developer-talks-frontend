@@ -97,7 +97,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
     const isLeader = data.filter((item) => item.nickname === getNickname && item.studyRoomLevel === "LEADER");
     console.log("d", data);
     return (
-      <Fragment>
+      <>
         {data[index].status &&
           (data[index].studyRoomLevel === "NORMAL" || data[index].studyRoomLevel === "SUB_LEADER") && (
             // 내가 방장일때,
@@ -127,7 +127,7 @@ const StudyRoomPersonModal = ({ setOnModal, modalUserData, roomId }) => {
             </Button>
           </>
         )}
-      </Fragment>
+      </>
     );
   };
 

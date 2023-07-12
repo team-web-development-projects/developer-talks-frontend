@@ -61,6 +61,7 @@ const BoardList = ({ type }) => {
   }, [keyword, type, selectText]);
 
   if (isLoading) return <div>Loading...</div>;
+  console.log('data', data);
 
   return (
     <>

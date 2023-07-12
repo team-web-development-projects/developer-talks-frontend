@@ -1,6 +1,5 @@
 import Button from "components/button/Button";
 import s from "./rereplyItem.module.scss";
-import { randomProfile } from "hooks/useRandomProfile";
 import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "react-query";
 import { BsLock } from "react-icons/bs";

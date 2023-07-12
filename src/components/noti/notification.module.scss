@@ -1,4 +1,5 @@
 @import 'assets/style/variable.scss';
+@import 'assets/style/function.scss';
 
 .noti {
   display: none;
@@ -29,9 +30,12 @@
     }
   }
   .title {
-    position: relative;
+    position: sticky;
+    top: 0;
+    background: white;
     padding: 6px 10px;
     font-size: 14px;
+    z-index: 1;
     .un_read {
       color: $primary;
       font-size: 16px;
@@ -56,11 +60,14 @@
       a {
         background: #fff;
         color: #b7b7b7!important;
+        padding-right: 40px;
       }
     }
     a {
       padding: 10px;
       background: #eee;
+      @include multi-dotdotdot(14px, 2);
+      padding-right: 110px;
     }
     .ctl {
       position: absolute;

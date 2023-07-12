@@ -11,16 +11,20 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
-import { randomProfile } from "hooks/useRandomProfile";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 import Gravatar from "react-gravatar";
+import MessageModal from "components/portalModal/messagemodal/MessageModal";
+import { useOutOfClick } from "hooks/useOutOfClick";
+import { useRef } from "react";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
+  const targetRef = useRef(null);
+
   const [post, setPost] = useState({
     userInfo: {},
     imageUrls: [],
@@ -28,6 +32,8 @@ const BoardDetail = ({ type }) => {
   const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
   const [modalD, setModalD] = useState(false);
+  const [showUserInfo, setShowUserInfo] = useState(false);
+  const [meesageModal, setMeesageModal] = useState(false);
 
   const fetchPost = async (type, postId, auth) => {
     const response = await axios.get(`${ROOT_API}/${type}/${postId}`, {
@@ -96,11 +102,16 @@ const BoardDetail = ({ type }) => {
     });
   };
 
+  useOutOfClick(targetRef, () => {
+    setShowUserInfo(false);
+  });
+
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>error...</div>;
 
   return (
     <>
+      {meesageModal && <MessageModal setOnModal={() => setMeesageModal()} recieverNick={post.userInfo.nickname} />}
       {modalD && (
         <BasicModal setOnModal={() => setModalD()}>
           게시글이 삭제되었습니다.
@@ -119,9 +130,24 @@ const BoardDetail = ({ type }) => {
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <ShowUserInfo recieverNick={post.userInfo.nickname}>
-                <span className={s.nick}>{post.userInfo.nickname}</span>
-              </ShowUserInfo>
+              <span
+                className={`${s.nick} pointer`}
+                onClick={() => {
+                  setShowUserInfo(!showUserInfo);
+                }}
+              >
+                {post.userInfo.nickname}
+                {showUserInfo && (
+                  <div ref={targetRef}>
+                    <ShowUserInfo
+                      // ref={targetRef}
+                      recieverNick={post.userInfo.nickname}
+                      setShowUserInfo={setShowUserInfo}
+                      setMeesageModal={setMeesageModal}
+                    />
+                  </div>
+                )}
+              </span>
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>

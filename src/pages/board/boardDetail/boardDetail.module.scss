@@ -17,11 +17,17 @@
       border: 1px solid #ccc;
     }
     .nick {
+      position: relative;
       font-size: 25px;
       color: black;
     }
     .info {
       display: flex;
+      span {
+        font-size: 16px;
+        font-weight: 500;
+        color: #8b8b8b;
+      }
     }
     .title {
       margin-top: 40px;
@@ -34,11 +40,6 @@
       top: 10px;
       right: 10px;
       gap: 10px;
-    }
-    span {
-      font-size: 16px;
-      font-weight: 500;
-      color: #8b8b8b;
     }
   }
   main {

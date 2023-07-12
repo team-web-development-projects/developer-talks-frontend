@@ -2,7 +2,6 @@ import axios from "axios";
 import classnames from "classnames";
 import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
-import { randomProfile } from "hooks/useRandomProfile";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import defaultUserImage from "./defaultUserImage.svg";
