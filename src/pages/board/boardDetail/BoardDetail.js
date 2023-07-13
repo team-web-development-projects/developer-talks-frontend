@@ -119,7 +119,7 @@ const BoardDetail = ({ type }) => {
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <ShowUserInfo recieverNick={post.userInfo.nickname}>
+              <ShowUserInfo post={post} ninkname={post.userInfo.nickname}>
                 <span className={s.nick}>{post.userInfo.nickname}</span>
               </ShowUserInfo>
               <div className={s.info}>

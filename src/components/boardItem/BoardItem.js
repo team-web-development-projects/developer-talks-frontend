@@ -44,7 +44,7 @@ const BoardItem = ({ data, type, currentPage }) => {
             <span className="nickname">{data.userInfo.nickname}</span>
            */}
             {/*NOTE 닉네임 클릭 시 유저정보 */}
-            <ShowUserInfo recieverNick={data.userInfo.nickname}>
+            <ShowUserInfo post={data}>
               <span className="nickname">{data.userInfo.nickname}</span>
             </ShowUserInfo>
             <span className={s.item}>

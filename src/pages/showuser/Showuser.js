@@ -1,8 +1,11 @@
 import UserInfoList from "components/showUserInfo/UserInfoList/UserInfoList";
-
 const Showuser = ({ type }) => {
-
-  return <UserInfoList/>;
+ 
+  return (
+    <>
+      <UserInfoList />
+    </>
+  );
 };
 
 export default Showuser;

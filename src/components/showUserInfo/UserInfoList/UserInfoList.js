@@ -9,22 +9,30 @@ import { MyActivity, MyPost, MyReply, MyScrab } from "./Constans";
 import s from "./userinfolist.module.scss";
 import { useQueries } from "react-query";
 import { useParams } from "react-router-dom";
+import { useGetPostUser } from "hooks/useGetPostUser";
+import Gravatar from "react-gravatar";
 
 const UserInfoList = () => {
   const auth = useSelector((state) => state.authToken);
   const navigate = useNavigate();
   const [select, setSelect] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const userId = parseJwt(auth.accessToken).userid;
 
-  let targetNickname;
+  let userId;
+  let nickname;
+  if (auth.accessToken !== null) {
+    userId = parseJwt(auth.accessToken).userid;
+    nickname = parseJwt(auth.accessToken).nickname;
+  }
 
-  const { nickname } = useParams();
-
-  if (nickname) {
-    targetNickname = nickname;
-  } else {
-    targetNickname = parseJwt(auth.accessToken).nickname;
+  const { isLoading: Loading, data: postUserDatas } = useGetPostUser();
+  const { postId } = useParams();
+  let userInfo;
+  if (!Loading) {
+    const { content: postUserData } = postUserDatas;
+    const postUser = postUserData?.find((item) => item.id === parseInt(postId));
+    userInfo = postUser?.userInfo;
+    activity(userInfo);
   }
 
   const onSelect = (type) => {
@@ -33,14 +41,14 @@ const UserInfoList = () => {
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
   const queries = useQueries([
-    { queryKey: ["activity", currentPage], queryFn: () => activity() },
+    { queryKey: ["activity", currentPage, userInfo], queryFn: () => activity() },
     { queryKey: ["post", currentPage], queryFn: () => post() },
     { queryKey: ["reply"], queryFn: () => reply() },
     { queryKey: ["scrab", currentPage], queryFn: () => scrab() },
   ]);
 
   async function activity() {
-    const { data } = await axios.get(`${ROOT_API}/users/recent/activity/${targetNickname}`, {
+    const { data } = await axios.get(`${ROOT_API}/users/recent/activity/${nickname || userInfo?.nickname}`, {
       params: { page: currentPage - 1, size: 10 },
     });
     return data;
@@ -79,6 +87,17 @@ const UserInfoList = () => {
     <>
       {auth.accessToken !== null ? (
         <section className={s.contentWrap}>
+          {userInfo && userInfo?.userProfile !== null ? (
+            <>
+              <img className={s.userProfile} src={userInfo?.userProfile} alt="프로필 이미지" />
+              {userInfo?.nickname}
+            </>
+          ) : userInfo ? (
+            <>
+              <Gravatar email={userInfo?.nickname} className={s.userProfile} />
+              {userInfo?.nickname}
+            </>
+          ) : null}
           <ul className={s.nav}>
             {contacts.map((contact, index) => (
               <li key={index}>

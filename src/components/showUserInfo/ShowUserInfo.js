@@ -8,19 +8,20 @@ import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { showToast } from "components/toast/showToast";
 import { useNavigate } from "react-router-dom";
-
-const ShowUserInfo = ({ children, recieverNick }) => {
+// import { useGetPostUser } from "hooks/useGetPostUser";
+// import { useEffect } from "react";
+const ShowUserInfo = ({ children, post }) => {
   const [datas, setDatas] = useState([]);
   let navigate = useNavigate();
 
   const userInfo = async (e) => {
     axios
-      .get(`${ROOT_API}/users/private/${recieverNick}`)
+      .get(`${ROOT_API}/users/private/${post.userInfo.nickname}`)
       .then((response) => {
         if (response.data) {
           showToast("success", "😎 유저가 비공개인 상태입니다.");
         } else {
-          navigate(`/showuser/${recieverNick}`);
+          navigate(`/showuser/${post.id}`);
         }
       })
       .catch((error) => {
@@ -28,13 +29,25 @@ const ShowUserInfo = ({ children, recieverNick }) => {
       });
   };
 
+  // const { isLoading: Loading, data: postUserData } = useGetPostUser();
+  // useEffect(() => {
+  //   if (!Loading && postUserData) {
+  //     const postUser = postUserData.content.find((item) => item.id === post.id);
+  //     if (postUser) {
+  //       console.log(postUser);
+  //     } else {
+  //       console.log("id 값이 userPostId인 객체를 찾을 수 없습니다.");
+  //     }
+  //   }
+  // }, [Loading, postUserData, post]);
+
   return (
     <MessageModal
       messageForm={
         <DropDown>
           <li onClick={userInfo}>유저정보보기</li>
           <li>
-            <MessageModal messageForm={<MessageForm setDatas={setDatas} recieverNick={recieverNick} />}>쪽지보내기</MessageModal>
+            <MessageModal messageForm={<MessageForm setDatas={setDatas} post={post} />}>쪽지보내기</MessageModal>
           </li>
         </DropDown>
       }

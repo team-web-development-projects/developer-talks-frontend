@@ -6,10 +6,10 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import s from "./messageform.module.scss";
 
-const MessageForm = ({ setDatas, recieverNick }) => {
-   const handleInputChange = (event) => {
-     event.stopPropagation(); // 클릭 이벤트 전파 중지
-   };
+const MessageForm = ({ setDatas, post }) => {
+  const handleInputChange = (event) => {
+    event.stopPropagation(); // 클릭 이벤트 전파 중지
+  };
   const auth = useSelector((state) => state.authToken);
   const {
     register,
@@ -21,33 +21,32 @@ const MessageForm = ({ setDatas, recieverNick }) => {
     mode: "onChange",
   });
   const onSubmit = async (e) => {
-     axios
-       .post(
-         `${ROOT_API}/messages`,
-         {
-           senderNickname: parseJwt(auth.accessToken).nickname,
-           receiverNickname: recieverNick || watch().receiverNickname,
-           text: watch().text,
-         },
-         { headers: { "X-AUTH-TOKEN": auth.accessToken } }
-       )
-       .then((response) => {
-         showToast("success", "😎 쪽지가 발송되었었습니다.");
-         setDatas((prevdatas) => [
-           ...prevdatas,
-           { id: response.data, senderNickname: parseJwt(auth.accessToken).nickname, 
-            receiverNickname: watch().receiverNickname, text: watch().text },
-         ]);
-         reset();
-       })
-       .catch((error) => {
-         showToast("error", "😎 정보를 다시 확인해주세요.");
-       });
+    axios
+      .post(
+        `${ROOT_API}/messages`,
+        {
+          senderNickname: parseJwt(auth.accessToken).nickname,
+          receiverNickname: post.userInfo.nickname || watch().receiverNickname,
+          text: watch().text,
+        },
+        { headers: { "X-AUTH-TOKEN": auth.accessToken } }
+      )
+      .then((response) => {
+        showToast("success", "😎 쪽지가 발송되었었습니다.");
+        setDatas((prevdatas) => [
+          ...prevdatas,
+          { id: response.data, senderNickname: parseJwt(auth.accessToken).nickname, receiverNickname: watch().receiverNickname, text: watch().text },
+        ]);
+        reset();
+      })
+      .catch((error) => {
+        showToast("error", "😎 정보를 다시 확인해주세요.");
+      });
   };
 
   return (
     <form className={s.messageForm} onSubmit={handleSubmit(onSubmit)}>
-      {!recieverNick && (
+      {!post.userInfo.nickname && (
         <input
           type="text"
           className={s.messageInput}

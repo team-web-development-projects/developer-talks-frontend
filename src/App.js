@@ -24,6 +24,7 @@ import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import Sse from "sse";
 import Showuser from "pages/showuser/Showuser";
+
 function App() {
   const auth = useSelector((state) => state.authToken);
   const [loading, setLoading] = useState(false);
@@ -68,7 +69,7 @@ function App() {
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
           <Route path="mypage" element={<Index />} />
-          <Route path="showuser/:nickname" element={<Showuser />} />
+          <Route path="/showuser/:postId" element={<Showuser />} />
 
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
