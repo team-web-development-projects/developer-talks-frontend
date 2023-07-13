@@ -1,16 +1,28 @@
+@import 'assets/style/variable.scss';
+
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 20px;
+  padding: 0px 20px;
   color: white;
-  background-color: black;
+  background: black;
   border: 0;
   border-radius: 10px;
   text-align: center;
+  gap: 6px;
+  &.is_outline {
+    background: none;
+    border: 1px solid black;
+    &:hover {
+      background: none;
+    }
+  }
   &.is_small {
-    height: 32px;
-    font-size: 12px;
+    padding: 0 16px;
+    height: 38px;
+    font-size: 14px;
+    background: #0d6efd;
   }
   &.is_medium {
     height: 48px;
@@ -21,10 +33,27 @@
     font-size: 16px;
     min-width: 120px;
   }
+  &.is_cancle {
+    background: black;
+  }
+
+  &.is_large {
+    height: 60px;
+    font-size: 16px;
+    min-width: 120px;
+  }
+  
+  &.is_fullWidth{
+    width: 100%;
+  }
+
   &:hover {
-    background-color: #585858;
+    background: #585858;
   }
   &:active {
-    background-color: #000000;
+    background: #000000;
+  }
+  &:disabled{
+    background: #585858;
   }
 }

@@ -1,13 +1,55 @@
+@import 'assets/style/variable.scss';
+
 .boardContainer {
-  margin: 0px 20px;
-  padding: 30px;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 130px;
+  padding: 14px 0 9px 0;
   border-bottom: solid 1px #cfcccc;
+  box-sizing: border-box;
   &:hover {
-    background: #eeeeee;
     cursor: pointer;
+    .title {
+      color: $primary;
+    }
+  }
+  .answerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border:1px solid #cfcccc;
+    border-radius: 10px;
+    width:70px;
+    height: 70px;
+    margin-right: 20px;
+  }
+  .frontContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .info_wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    .icons {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .userProfile{
+    width:30px;
+    height:30px;
+    border-radius: 50%;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    overflow: hidden;
   }
   .title {
-    margin-bottom: 10px;
+    padding-bottom: 10px;
     font-size: 30px;
     font-weight: 500;
   }
@@ -21,23 +63,41 @@
   .nickname {
     color: #797979;
   }
-  .bottomInfo{
+  .right {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+  .bottomInfo {
     display:flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 10px;
+    align-items: flex-end;
   }
-  .countInfo{
+  .countInfo {
     display:flex;
     flex-direction: row;
-    .item{
-      display:flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left:15px;
-      color:#797979;
-    }
-    p{
-      margin-left: 7px;
+  }
+  .item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 15px;
+    color: #797979;
+    gap: 3px;
+  }
+  .img {
+    display: flex;
+    align-items: center;
+    width:70px;
+    height: 70px;
+    border: 1px solid #cfcccc;
+    border-radius: 10px;
+    overflow: hidden;
+    img {
+      height: 100%;
+      object-fit: cover;
     }
   }
 }

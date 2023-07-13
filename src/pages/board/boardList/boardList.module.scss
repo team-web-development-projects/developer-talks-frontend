@@ -1,15 +1,7 @@
-.banner {
-  padding: 30px;
-  color: white;
-  background: black;
-  :first-child {
-    font-size: 30px;
-    margin-bottom: 10px;
-  }
-}
+
 .header {
   margin-top: 30px;
-  padding: 30px;
+  padding: 30px 0 40px 0;
   border-top: 1px solid #cfcccc;
   border-bottom: 1px solid #cfcccc;
   .bottom {
@@ -18,11 +10,11 @@
     margin-top: 15px;
   }
 }
-.boardContainer{
+.boardContainer {
   &:hover{
     background: #eeeeee;
   }
-  .title{
+  .title {
     margin-bottom: 10px;
     font-size:30px;
     font-weight: 500;
@@ -38,8 +30,12 @@
     color:#797979;
   }
 }
-.pageContainer{
+.pageContainer {
   display: flex;
   justify-content: center;
   margin: 20px 0px;
+}
+.notlist {
+  margin-top: 20px;
+  text-align: center;
 }

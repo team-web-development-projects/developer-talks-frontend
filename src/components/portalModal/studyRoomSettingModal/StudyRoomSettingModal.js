@@ -11,27 +11,19 @@ import { useEffect } from "react";
 import BasicModal from "../basicmodal/BasicModal";
 import CkEditor from "components/ckeditor/CkEditor";
 import classnames from "classnames";
+import Button from "components/button/Button";
 
-const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
+const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
   const auth = useSelector((state) => state.authToken);
   const navigate = useNavigate();
   const [modals, setModals] = useState(false);
   const [indata, setIndata] = useState(data);
 
-  const tags = [
-    "DJANGO",
-    "SPRING",
-    "JAVASCRIPT",
-    "JAVA",
-    "PYTHON",
-    "CPP",
-    "REACT",
-    "AWS",
-  ];
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
 
   const deleteRoom = () => {
     axios
-      .delete(`${ROOT_API}/study-room/${data.id}`, {
+      .delete(`${ROOT_API}/study-rooms/${data.id}`, {
         headers: {
           "X-AUTH-TOKEN": auth.accessToken,
         },
@@ -44,10 +36,10 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
-    
+
     axios
       .put(
-        `${ROOT_API}/study-room/${id}`,
+        `${ROOT_API}/study-rooms/${id}`,
         {
           title: indata.title,
           content: indata.content,
@@ -63,12 +55,15 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
         }
       )
       .then((response) => {
-        console.log(response);
+        // console.log(response.data);
+        alert("수정되었습니다");
+        setGetData(response.data);
       })
       .catch((error) => console.log(error));
   };
 
   const clickTag = (tag) => {
+    console.log('get', tag);
     if (indata.skills.includes(tag)) {
       setIndata({
         ...indata,
@@ -81,6 +76,8 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
       });
     }
   };
+
+  console.log('tags', indata.skills);
 
   const handleTitle = (e) => {
     const title = e.target.value;
@@ -108,7 +105,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
     <>
       {modals && (
         <BasicModal setOnModal={() => setModals()} isDim={false}>
-          삭제 ㄱ?
+          정말 삭제할까요??
           <br />
           <button
             onClick={() => {
@@ -122,22 +119,12 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
           <button onClick={() => setModals(false)}>아니오</button>
         </BasicModal>
       )}
-      <ModalFrame
-        setOnModal={setOnModal}
-        classname="basic-modal studyroom-setting-modal"
-        onClose
-        isDim
-      >
+      <ModalFrame setOnModal={setOnModal} classname="basic-modal studyroom-setting-modal" onClose isDim>
         <div>수정</div>
         <form onSubmit={handleSubmit}>
-          <div className="title">
+          <div className="seetring-title">
             제목
-            <input
-              type="text"
-              name="title"
-              value={indata.title}
-              onChange={handleTitle}
-            />
+            <input type="text" name="title" value={indata.title} onChange={handleTitle} />
           </div>
           <div>
             <label htmlFor="chk">
@@ -170,7 +157,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
                 key={index}
                 onClick={() => clickTag(item)}
                 className={classnames("tag", {
-                  "is-select": tags.includes(indata.skills[index]),
+                  "is-select": indata.skills.includes(item),
                 })}
               >
                 {item}
@@ -178,15 +165,15 @@ const StudyRoomSettingModal = ({ setOnModal, id, data }) => {
             ))}
           </div>
           <div className="content">
-            <CkEditor
-              form={indata}
-              setForm={setIndata}
-              placeholder={"내용을 입력해주세요."}
-            />
+            <CkEditor form={indata} setForm={setIndata} placeholder={"내용을 입력해주세요."} />
           </div>
-          <button>저장</button>
         </form>
-        <button onClick={() => setModals(true)}>삭제</button>
+        <Button size="small" theme="submit" onClick={handleSubmit}>
+          저장
+        </Button>
+        <Button size="small" theme="cancle" onClick={() => setModals(true)}>
+          삭제
+        </Button>
       </ModalFrame>
     </>
   );

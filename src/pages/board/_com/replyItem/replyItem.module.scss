@@ -1,0 +1,88 @@
+.container {
+  list-style: none;
+  border-bottom: solid 1px #cfcccc;
+  &:last-child {
+    border-bottom: none;
+  }
+  .info {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    align-items: center;
+    gap: 10px;
+    .profile {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .nickname {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .date {
+      font-size: 15px;
+      color: #696969;
+    }
+  }
+  .btn_wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
+  }
+  .content {
+    font-size: 20px;
+  }
+}
+.rereplyContainer {
+  display: flex;
+  .box {
+    margin-right: 30px;
+    width: 8px;
+    background-color: #cfcccc;
+  }
+  .container {
+    width: 100%;
+  }
+}
+.btnRgn {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 10px;
+  background: #ffffff;
+  .secret {
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 17px;
+  }
+  .cancle {
+    margin: 0px 10px;
+  }
+}
+.replyBtnContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 20px 0px;
+}
+.replyBtn {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  height: 38px;
+  padding: 0px 12px;
+  background: white;
+  border: 1px solid #cfcccc;
+  border-radius: 5px;
+  color: #696969;
+  font-size: 14px;
+  &:hover {
+    background: #f2f2f2;
+  }
+  .icon {
+    margin-right: 5px;
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./studyroomdetail.scss";
 // import { io } from "socket.io-client";
@@ -6,43 +6,26 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
+import Chat from "components/chat/Chat";
 
-const StudyRoomDetqil = () => {
+const StudyRoomDetail = () => {
   const { postId } = useParams();
   const auth = useSelector((state) => state.authToken);
-  // const socket = io("https://dtalks-api.site", {
-  //   cors: {
-  //     origin: "*",
-  //   },
-  // });
-
-  // socket.on("test", (socket) => {
-  //   console.log(socket);
-  // });
-
-  const handleRequestSocket = () => {
-    // socket.emit("test", {
-    //   data: "test socket on client",
-    // });
-  };
-
-  function handleChange() {
-    console.log("change handle");
-  }
+  const [chatText, setChatText] = useState();
 
   useEffect(() => {
     axios
-      .get(
-        `${ROOT_API}/study-room/${postId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+      .get(`${ROOT_API}/${postId}/chats`, {
+        params: {
+          page: 0,size: 10
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      })
       .then(function (response) {
-        console.log("로그인 성공:", response);
+        console.log("챗 데이터:", response);
       })
       .catch(function (error) {
         console.log("로그인 실패: ", error.response);
@@ -60,9 +43,10 @@ const StudyRoomDetqil = () => {
           </ul>
         </div>
         <div className="content">
-          컨텐츠 test socket connection
-          <button onClick={handleRequestSocket}>Request</button>
-          <input type="text" onChange={handleChange} />
+          <div className="chat_list">
+            {chatText}
+          </div>
+          <Chat postId={postId} setChatText={setChatText} />
         </div>
         <div className="right-menu">
           <ul>
@@ -75,4 +59,4 @@ const StudyRoomDetqil = () => {
   );
 };
 
-export default StudyRoomDetqil;
+export default StudyRoomDetail;

@@ -1,0 +1,26 @@
+  .tagalign {
+      margin: 20px 0;
+
+      .tags {
+          align-items: center;
+          width: 100%;
+
+          span {
+              display: inline-block;
+              margin-right: 10px;
+              padding: 1px 10px 2px 10px;
+              border-radius: 10vw;
+              font-size: 14px;
+              color: #585858;
+              background: white;
+              border: 1px solid #585858;
+              cursor: pointer;
+
+              &.is_select {
+                  color: white;
+                  background: #585858;
+                  // border-color: 
+              }
+          }
+      }
+  }

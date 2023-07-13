@@ -1,4 +1,4 @@
-import { Cookies } from 'react-cookie';
+import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
 
@@ -15,10 +15,10 @@ export const setRefreshToken = (refreshToken) => {
 };
 
 export const getCookieToken = () => {
-  return cookies.get('refresh_token');
+  return cookies.get("refresh_token");
 };
 
 export const removeCookieToken = () => {
   //NOTE 로그아웃
-  return cookies.remove('refresh_token', { sameSite: 'strict', path: '/' });
+  return cookies.remove("refresh_token");
 };

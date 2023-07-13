@@ -29,7 +29,7 @@ const SearchInput = ({ type }) => {
         onChange={(e) => setText(e.target.value)}
       />
       <button>
-        <BiSearch size={30} />
+        <BiSearch size={24} />
       </button>
     </form>
   );
