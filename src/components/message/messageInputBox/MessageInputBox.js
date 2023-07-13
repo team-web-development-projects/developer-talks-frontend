@@ -13,6 +13,8 @@ const MessageInputBox = ({ datas, setDatas, type }) => {
     fetchMessages();
   }, [type]);
 
+  console.log('type', type);
+
   const fetchMessages = () => {
     axios
       .get(`${ROOT_API}/messages/${type}`, {
@@ -44,14 +46,13 @@ const MessageInputBox = ({ datas, setDatas, type }) => {
   };
 
   return (
-    <div className={s.messageinboxcontainer}>
-      <ul className={s.messagelistcontainer}>
-        {datas.map((data) => (
+    <div className={s.message_box}>
+      <ul className={s.message_list}>
+        {datas ? datas.map((data) => (
           <li key={data.id} className={s.messagelist}>
             <div className={s.messageitem}>
               <div className={s.flex}>
-                <div className={s.sender}>{data.receiverNickname}</div>
-                <div className={s.timestamp}>{data.senderNickname}</div>
+                <span className={s.sender}>{data.receiverNickname}</span> <span className={s.timestamp}>보낸 시간</span>
                 <div className={s.content}>
                   <p>{data.text}</p>
                 </div>
@@ -62,7 +63,7 @@ const MessageInputBox = ({ datas, setDatas, type }) => {
               </Button>
             </div>
           </li>
-        ))}
+        )) : <li>내용이 없습니다.</li>}
       </ul>
     </div>
   );

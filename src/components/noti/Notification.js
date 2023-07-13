@@ -128,6 +128,7 @@ const Notification = ({ unRead, classname }) => {
 
   // console.log("dd", getAlarmAll.data, getAlarmUnRead.data);
   // console.log("AlarmAll: ", getAlarmAll.isSuccess && getAlarmAll.data);
+  // NOTE: 읽은 알람, 안읽은 알람 필터 용 테스트코드
   const FilterData = (e, type) => {
     e.stopPropagation();
     console.log('나이');
@@ -189,8 +190,11 @@ const Notification = ({ unRead, classname }) => {
               className={classnames("", {
                 [s.is_read]: item.readStatus === "READ",
               })}
+              onClick={(e) => 
+              readId(e, item.id)
+            }
             >
-              <Link to={item.url}>{item.message}</Link>
+              <Link to={item.url} className='noti_link'>{item.message}</Link>
               <span className={s.ctl}>
                 {item.readStatus !== "READ" && (
                   <span onClick={(e) => readId(e, item.id)} className={s.read_log}>

@@ -5,8 +5,6 @@ import { useEffect } from "react";
 export function useOutOfClick(targetRef, handler) {
   useEffect(() => {
     const listener = (event) => {
-      // console.log("event.target", event.target);
-      // console.log("event.target111", targetRef);
       if (!targetRef.current || targetRef.current.contains(event.target)) {
         //현재선택된게없어도 선택된게있어도 return
 

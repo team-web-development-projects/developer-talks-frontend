@@ -37,9 +37,19 @@ $breakpoints-mobile: 767;
   max-width: 100%;
   max-height: $font-size*$line-height*$lines-to-show;
   /* Fallback for non-webkit */
-  margin: 0 auto;
   font-size: $font-size;
   line-height: $line-height;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin blind-scroll {
+  -ms-overflow-style: none;
+  /* 인터넷 익스플로러 */
+  scrollbar-width: none;
+  /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none;
+    /* 크롬, 사파리, 오페라, 엣지 */
+  }
 }

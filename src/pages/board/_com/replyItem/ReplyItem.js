@@ -3,7 +3,6 @@ import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
-import { randomProfile } from "hooks/useRandomProfile";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 import { useEffect, useState } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
@@ -140,7 +139,7 @@ const ReplyItem = ({ postId, reply }) => {
   return (
     <>
       {(!reply.secret || (reply.secret && isSelf)) && (
-        <li className={s.container}>
+        <div className={s.container}>
           <div className={s.info}>
             {reply.userInfo.userProfile !== null ? (
               <img className={s.profile} src={reply.userInfo.userProfile} alt="프로필 이미지" />
@@ -240,7 +239,7 @@ const ReplyItem = ({ postId, reply }) => {
               <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}</div>
             </div>
           </div>
-        </li>
+        </div>
       )}
     </>
   );

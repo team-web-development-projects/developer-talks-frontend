@@ -32,7 +32,7 @@ const Mypage = ({ type }) => {
   const queries = useQueries([
     { queryKey: ["activity", currentPage], queryFn: () => activity() },
     { queryKey: ["post", currentPage], queryFn: () => post() },
-    { queryKey: ["reply"], queryFn: () => reply() },
+    { queryKey: ["reply", currentPage], queryFn: () => reply() },
     { queryKey: ["scrab", currentPage], queryFn: () => scrab() },
   ]);
 
@@ -74,8 +74,8 @@ const Mypage = ({ type }) => {
   }
   // console.log("data", select, queries[select].isSuccess && queries[select].data.content);
   useEffect(() => {
-    // setCurrentPage(1);
-  }, []);
+    setCurrentPage(0);
+  }, [select]);
 
   useEffect(() => {
     switch (select) {
@@ -151,8 +151,9 @@ const Mypage = ({ type }) => {
   }, [auth.accessToken, navigate, select, userId]);
 
   // console.log("favorite", queries[0].isSuccess && queries[0].data);
-  // console.log("favorite", queries[1].isSuccess && queries[1].data);
-  console.log("favorite", queries[select].isSuccess && queries[select].data.content);
+  // console.log("favorite", queries[1].isSuccess && queries[1].data.content);
+  console.log("favorite", queries[2].isSuccess && queries[2].data.content);
+  // console.log("favorite", queries[select].isSuccess && queries[select].data.content);
   // console.log("favorite", queries[3].isSuccess && queries[3].data);
 
   return (

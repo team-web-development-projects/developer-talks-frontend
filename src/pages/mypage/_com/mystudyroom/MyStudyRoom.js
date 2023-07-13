@@ -116,7 +116,7 @@ const MyStudyRoom = () => {
     const isSubLeader = data.studyRoomUsers.filter(
       (item) => item.studyRoomLevel === "SUB_LEADER" && item.nickname === getNickname
     );
-    console.log('dd', isRoomLeader, isSubLeader, isNormal);
+    // console.log('dd', isRoomLeader, isSubLeader, isNormal);
     if (asigning.length === 1) {
       return <span className={mystudy.room_list_tag}>승인요청중</span>;
     }
@@ -130,8 +130,6 @@ const MyStudyRoom = () => {
       return <span className={`${mystudy.room_list_tag} ${mystudy.is_normal}`}>일반</span>;
     }
   };
-
-  console.log("마이페이지", myList);
 
   return (
     <>

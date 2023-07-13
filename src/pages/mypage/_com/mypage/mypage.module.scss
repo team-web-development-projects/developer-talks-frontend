@@ -42,7 +42,7 @@
 .userdata {
   display: flex;
   justify-content: space-between;
-  height: 80px;
+  min-height: 80px;
   box-sizing: border-box;
   border-bottom: 1px solid #d2d4d9;
 
@@ -89,4 +89,10 @@
   color: #585858;
   background: white;
   border: 1px solid #585858;
+}
+
+.secret {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

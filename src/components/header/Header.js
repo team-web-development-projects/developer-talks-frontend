@@ -77,7 +77,7 @@ const Header = () => {
               <span onClick={showPopover} ref={targetRef}>
                 <span className="bell">
                   {/* TODO: 알람이 있을때 표시하기 */}
-                  {noti.noti && <span className="point" />}
+                  {noti.noti && auth.accessToken !== null && <span className="point" />}
                   <TfiBell size={24} />
                 </span>
                 <Notification classname={popover ? "is_show" : ""} />
