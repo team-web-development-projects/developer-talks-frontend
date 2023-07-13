@@ -139,7 +139,7 @@ const RereplyItem = ({ rr, postId }) => {
               <p className={s.date}>{rr.modifiedDate}</p>
             </div>
             {rr.secret && <BsLock size={20} />}
-            {isSelf ? (
+            {(isSelf&&(!rr.remove)) ? (
               <div className={s.btn_wrap}>
                 <Button onClick={handleUpdateClick} size="small">
                   수정

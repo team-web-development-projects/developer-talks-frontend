@@ -151,7 +151,7 @@ const ReplyItem = ({ postId, reply }) => {
               <p className={s.date}>{reply.modifiedDate}</p>
             </div>
             {reply.secret && <BsLock size={20} />}
-            {isSelf ? (
+            {(isSelf&&(!reply.remove)) ? (
               <div className={s.btn_wrap}>
                 <Button onClick={handleUpdate} size="small">
                   수정
