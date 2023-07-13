@@ -3,7 +3,6 @@ import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
-import { randomProfile } from "hooks/useRandomProfile";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
