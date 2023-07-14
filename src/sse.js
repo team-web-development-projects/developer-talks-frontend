@@ -63,7 +63,7 @@ const Sse = () => {
           "X-AUTH-TOKEN": auth.accessToken,
           "Content-Type": "text/event-stream",
         },
-        heartbeatTimeout: 45000,
+        // heartbeatTimeout: 45000,
         // heartbeatTimeout: 4 * 60 * 1000,
         withCredentials: true,
       });
@@ -98,6 +98,7 @@ const Sse = () => {
           console.log("sse message");
           // queryClient.invalidateQueries("alertList");
         }
+        sse.close();
       });
 
       sse.addEventListener("error", (e) => {

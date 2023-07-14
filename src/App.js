@@ -23,7 +23,6 @@ import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
 import Sse from "sse";
-import Showuser from "pages/showuser/Showuser";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
@@ -68,8 +67,7 @@ function App() {
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
-          <Route path="mypage" element={<Index />} />
-          <Route path="/showuser/:postId" element={<Showuser />} />
+          <Route path="showuser" element={<Index />} />
 
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />

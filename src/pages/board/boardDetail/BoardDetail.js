@@ -119,9 +119,7 @@ const BoardDetail = ({ type }) => {
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <ShowUserInfo post={post} ninkname={post.userInfo.nickname}>
-                <span className={s.nick}>{post.userInfo.nickname}</span>
-              </ShowUserInfo>
+              <ShowUserInfo userinfo={post.userInfo} type="detail"/>
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
