@@ -30,7 +30,7 @@ const ShowUserInfo = ({ userinfo, type }) => {
         }
       })
       .catch((error) => {
-        console.log('error', error);
+        console.log("error", error);
         showToast("error", error.response.data.message);
       });
   };
@@ -74,7 +74,13 @@ const ShowUserInfo = ({ userinfo, type }) => {
         )}
       </span>
       {modal && (
-        <MessageModal setOnModal={() => setModal()}>
+        <MessageModal
+          setOnModal={() => setModal()}
+          dimClick={() => false}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <MessageForm setDatas={setDatas} userinfo={userinfo} setOnModal={() => setModal()} />
         </MessageModal>
       )}

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import s from "./messagemodal.module.scss";
 import ModalFrame from "../ModalFrame";
 
-const MessageModal = ({ setOnModal, children, dimClick, isDim = true, messageForm }) => {
+const MessageModal = ({ setOnModal, children, dimClick, isDim = true, messageForm, onClick }) => {
   const [showForm, setShowForm] = useState(false);
 
   const toggleForm = () => {
@@ -15,6 +15,7 @@ const MessageModal = ({ setOnModal, children, dimClick, isDim = true, messageFor
       classname={`${s.userinfowrap} basic-modal`}
       isDim={isDim}
       onClose
+      onClick={onClick}
       dimClick={dimClick}
     >
       {children}
