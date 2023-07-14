@@ -1,4 +1,7 @@
+@import 'assets/style/variable.scss';
+
 .contentwrap {
+
   .userdata {
     padding: 10px;
     border-bottom: 1px solid #ccc;
@@ -59,10 +62,12 @@
 .text_wrap {
   width: 100%;
   padding: 8px 0 10px 0;
+
   .content {
     position: relative;
     margin-top: 10px;
   }
+
   .img_wrap {
     position: absolute;
     right: 0;
@@ -73,6 +78,7 @@
     display: block;
     width: 40px;
     height: 40px;
+
     img {
       height: 100%;
       object-fit: cover;
@@ -91,8 +97,57 @@
   border: 1px solid #585858;
 }
 
-.secret {
-  position: absolute;
-  top: 0;
-  right: 0;
+// .secret {
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+// }
+
+.contentWrap {
+  margin: 0 auto;
+  width: 60%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  .userProfile {
+    display: grid;
+    place-items: center;
+    // margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-around;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+
+    li {
+      width: 100%;
+      text-align: center;
+      font-size: 17px;
+
+      button {
+        width: 60%;
+        background-color: white;
+        padding: 16px 20px;
+        font-weight: 700;
+
+        &:hover {
+          color: $primary;
+          border-bottom: 2px solid $primary;
+        }
+      }
+
+      .select {
+        color: $primary;
+        border-bottom: 2px solid $primary;
+      }
+    }
+  }
 }

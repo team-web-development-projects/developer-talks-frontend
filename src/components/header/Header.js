@@ -84,7 +84,7 @@ const Header = () => {
               </span>
             </li>
             <li className="header-user">
-              <Link to="/mypage">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" />}</Link>
+              <Link to="/showuser">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}</Link>
               {nickname && <span>{`${nickname}님`}</span>}
             </li>
           </ul>

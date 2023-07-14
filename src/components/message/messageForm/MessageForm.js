@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import s from "./messageform.module.scss";
 
-const MessageForm = ({ setDatas, recieverNick, setSendForm }) => {
+const MessageForm = ({ setDatas, userinfo, setOnModal }) => {
   const handleInputChange = (event) => {
     event.stopPropagation(); // 클릭 이벤트 전파 중지
   };
@@ -26,61 +26,59 @@ const MessageForm = ({ setDatas, recieverNick, setSendForm }) => {
         `${ROOT_API}/messages`,
         {
           senderNickname: parseJwt(auth.accessToken).nickname,
-          receiverNickname: recieverNick || watch().receiverNickname,
+          receiverNickname: userinfo.nickname || watch().receiverNickname,
           text: watch().text,
         },
         { headers: { "X-AUTH-TOKEN": auth.accessToken } }
       )
       .then((response) => {
-        showToast("success", "😎 쪽지가 발송되었습니다.");
-        setSendForm(false);
-        console.log("cc", response);
-        // setDatas((prevdatas) => [
-        //   ...prevdatas,
-        //   {
-        //     id: response.data,
-        //     senderNickname: parseJwt(auth.accessToken).nickname,
-        //     receiverNickname: recieverNick || watch().receiverNickname,
-        //     text: watch().text,
-        //   },
-        // ]);
+        showToast("success", "😎 쪽지가 발송되었었습니다.");
+        setOnModal(false);
+        setDatas((prevdatas) => [
+          ...prevdatas,
+          {
+            id: response.data,
+            senderNickname: parseJwt(auth.accessToken).nickname,
+            receiverNickname: watch().receiverNickname,
+            text: watch().text,
+          },
+        ]);
         reset();
       })
       .catch((error) => {
-        console.log("dd", error);
         showToast("error", "😎 정보를 다시 확인해주세요.");
       });
   };
 
   return (
-    <div className={s.messageForm}>
-      <form onSubmit={handleSubmit(onSubmit)} onClick={handleInputChange}>
-        <input
-          type="text"
-          className={s.messageInput}
-          placeholder="받는사람을 입력하세요"
-          id="receiverNickname"
-          tabIndex="2"
-          value={recieverNick ? recieverNick : watch().receiverNickname}
-          disabled={recieverNick}
-          {...register("receiverNickname", { required: recieverNick ? false : true })}
-        />
-        <input
-          type="text"
-          className={s.messageInput}
-          placeholder="메세지를 입력하세요"
-          id="text"
-          tabIndex="2"
-          {...register("text", { required: true })}
-        />
-        <div className="btn_wrap">
-          <button type="submit" className={s.messageButton} disabled={!isValid}>
-            전송
-          </button>
-          <button>취소</button>
-        </div>
-      </form>
-    </div>
+    <form className={s.messageForm} onSubmit={handleSubmit(onSubmit)}>
+      <input
+        type="text"
+        className={s.messageInput}
+        placeholder="받는사람을 입력하세요"
+        id="receiverNickname"
+        tabIndex="2"
+        disabled={userinfo.nickname}
+        value={userinfo.nickname ? userinfo.nickname : watch().receiverNickname}
+        {...register("receiverNickname", { required: userinfo.nickname ? false : true })}
+        onClick={handleInputChange}
+      />
+      <input
+        type="text"
+        className={s.messageInput}
+        placeholder="메세지를 입력하세요"
+        id="text"
+        tabIndex="2"
+        {...register("text", { required: true })}
+        onClick={handleInputChange}
+      />
+      <div className={s.btn_wrap}>
+        <button type="submit" className={s.messageButton} disabled={!isValid}>
+          전송
+        </button>
+        <button>취소</button>
+      </div>
+    </form>
   );
 };
 

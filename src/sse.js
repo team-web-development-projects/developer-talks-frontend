@@ -98,6 +98,7 @@ const Sse = () => {
           console.log("sse message");
           // queryClient.invalidateQueries("alertList");
         }
+        sse.close();
       });
 
       sse.addEventListener("error", (e) => {
