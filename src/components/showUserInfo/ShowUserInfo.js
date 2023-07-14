@@ -1,6 +1,6 @@
 import React from "react";
 import s from "./showuserinfo.module.scss";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DropDown from "components/dropdown/DropDown";
 import MessageForm from "components/message/messageForm/MessageForm";
 import classname from "classnames";
@@ -9,12 +9,14 @@ import { ROOT_API } from "constants/api";
 import { showToast } from "components/toast/showToast";
 import { useNavigate } from "react-router-dom";
 import MessageModal from "components/portalModal/messagemodal/MessageModal";
+import { useOutOfClick } from "hooks/useOutOfClick";
 // import { useGetPostUser } from "hooks/useGetPostUser";
 // import { useEffect } from "react";
 const ShowUserInfo = ({ userinfo, type }) => {
   const [datas, setDatas] = useState([]);
   const [modal, setModal] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const targetRef = useRef(null);
   let navigate = useNavigate();
 
   const viewUserInfo = async (e) => {
@@ -46,6 +48,9 @@ const ShowUserInfo = ({ userinfo, type }) => {
   // }, [Loading, postUserData, post]);
 
   // console.log("cc", nickname);
+  useOutOfClick(targetRef, () => {
+    setDropdown(false);
+  });
 
   return (
     <>
@@ -60,10 +65,12 @@ const ShowUserInfo = ({ userinfo, type }) => {
       >
         {userinfo.nickname}
         {dropdown && (
-          <DropDown>
-            <li onClick={viewUserInfo}>유저정보보기</li>
-            <li onClick={() => setModal(!modal)}>쪽지보내기</li>
-          </DropDown>
+          <div ref={targetRef}>
+            <DropDown>
+              <li onClick={viewUserInfo}>유저정보보기</li>
+              <li onClick={() => setModal(!modal)}>쪽지보내기</li>
+            </DropDown>
+          </div>
         )}
       </span>
       {modal && (

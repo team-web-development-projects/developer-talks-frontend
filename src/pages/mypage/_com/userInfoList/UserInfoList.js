@@ -90,6 +90,8 @@ const UserInfoList = ({ user }) => {
     }
   }, [nickname, currentPage, user, auth, select]);
 
+  console.log('data', data);
+
   const onSelect = (type) => {
     setSelect(type);
   };

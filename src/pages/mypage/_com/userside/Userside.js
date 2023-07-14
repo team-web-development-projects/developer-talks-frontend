@@ -20,6 +20,7 @@ const Userside = () => {
   const [isActive, setIsActive] = useState("mypage");
   const [viewSide, setViewSide] = useState(false);
   const location = useLocation();
+  const [temp, setTemp] = useState(location.state && location.state.nickname);
   // const [profileImgData, setProfileImgData] = useState({
   //   id: "",
   //   url: "",
@@ -29,29 +30,33 @@ const Userside = () => {
     setIsActive(value);
   };
 
-  console.log("사이드메뉴: ", viewSide);
-
   useEffect(() => {
-    if (location.state && location.state.nickname === parseJwt(auth.accessToken).nickname) {
-      // 닉네임 클릭
-      console.log("닉네임 클릭함");
+    // if (location.state && location.state.nickname === parseJwt(auth.accessToken).nickname) {
+    if (location.state && location.state.nickname !== null) {
+      if (location.state && location.state.nickname === parseJwt(auth.accessToken).nickname) {
+        setViewSide(true);
+      } else {
+        setViewSide(false);
+      }
+    }
+    // 
+    if (location.state && location.state.nickname == null) {
+      console.log("없음");
       setViewSide(true);
     }
-    if (location.state && location.state.nickname === null && parseJwt(auth.accessToken).nickname !== null) {
-      // 프로필 클릭
-      console.log("프로필 클릭함");
-      setViewSide(true);
-    }
-  }, [location.state]);
+  }, [auth.accessToken, location.state]);
 
-  console.log("닉: ", location.state && location.state.nickname, parseJwt(auth.accessToken).nickname);
+  // console.log("temp", location.state && location.state.nickname);
 
   return (
     <MypageContent>
-      {viewSide ? "true" : "false"}
       {
         // 게시글을 통해 들어온 닉네임과 내 닉네임이 같을때
+        ((location.state === parseJwt(auth.accessToken).nickname) ||
         // 게시글을 통해 들어오지 않을때
+        (location.state === null) || 
+        (viewSide)) && 
+        (
         <section className="side">
           <div className="imgwrap">
             <ProfileImg size="big" />
@@ -84,7 +89,7 @@ const Userside = () => {
           </ul>
           <Logout />
         </section>
-      }
+      )}
       <>{isActive === "mypage" && <UserInfoList user={location.state} />}</>
       <>{isActive === "my-studyroom" && <MyStudyRoom />}</>
       <>{isActive === "my-message" && <MyMessage />}</>

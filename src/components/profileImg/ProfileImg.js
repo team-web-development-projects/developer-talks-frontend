@@ -22,7 +22,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
-  // 초기 회원가입때는 프로필 이미지가 없으니 있으면안된다. 
+  // 초기 회원가입때는 프로필 이미지가 없으니 있으면안된다.
   const { data, isLoading: getLoading } = useQuery(
     ["profileImg"],
     async () => {
@@ -33,7 +33,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     },
     {
       // enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
-      enabled: localStorage.getItem("dtrtk") !== null
+      enabled: localStorage.getItem("dtrtk") !== null,
     }
   );
 
@@ -115,13 +115,15 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
           className={classNames("", { [s.is_select]: profileImgData.url })}
         />
       )}
-      <input
-        accept="image/*"
-        type="file"
-        name="프로필이미지 추가 및 변경"
-        onChange={auth.accessToken ? handleChangeProfileImage : handleChangeFirstProfileImage}
-        id="profile"
-      />
+      {type !== "header" && (
+        <input
+          accept="image/*"
+          type="file"
+          name="프로필이미지 추가 및 변경"
+          onChange={auth.accessToken ? handleChangeProfileImage : handleChangeFirstProfileImage}
+          id="profile"
+        />
+      )}
     </div>
   );
 };

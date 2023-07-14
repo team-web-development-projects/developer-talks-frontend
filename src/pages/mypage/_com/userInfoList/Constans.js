@@ -8,6 +8,18 @@ export const MyActivity = (item) => {
   // const dispatch = useDispatch();
   // /studyroom/${item.id}
   switch (item.type) {
+    case "ANSWER":
+      return (
+        <Link className={types.text_wrap}>
+          <div className={types.title}>
+            <div>
+              <span>{item.writer}</span>님의 <span>질문</span>글에 <span>댓글</span>을 달았습니다.
+            </div>
+            <div>{item.createDate}</div>
+          </div>
+          <div className={types.content}>{item.title}</div>
+        </Link>
+      );
     case "STUDY_CREATE":
       return (
         <Link
@@ -50,7 +62,7 @@ export const MyActivity = (item) => {
         <Link className={types.text_wrap}>
           <div className={types.title}>
             <div>
-              <span>{item.writer}</span>님의 글에 <span>댓글</span>을 달았습니다.
+              <span>{item.writer}</span>님의 <span>게시글</span>에 <span>댓글</span>을 달았습니다.
             </div>
             <div>{item.createDate}</div>
           </div>

@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 // import "./index.scss";
 // import './assets/style/index.scss';
-import { CookiesProvider } from "react-cookie";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
@@ -27,7 +26,6 @@ const queryClient = new QueryClient({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <CookiesProvider>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
@@ -36,7 +34,6 @@ root.render(
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>
-  </CookiesProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
