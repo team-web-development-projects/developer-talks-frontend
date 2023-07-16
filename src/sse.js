@@ -13,58 +13,17 @@ const Sse = () => {
   const queryClient = useQueryClient();
   const [getMessage, setGetMessage] = useState(false);
 
-  // const queries = useQueries([
-  //   {
-  //     queryKey: ["alaram"],
-  //     queryFn: () => alarmAll(),
-  //     enabled: auth.accessToken !== null,
-  //     // staleTime: Infinity,
-  //     // cacheTime: 2 * 60 * 1000,
-  //     // refetchInterval: 5000,
-  //   },
-  //   {
-  //     queryKey: ["alaramUnRead"],
-  //     queryFn: () => alarmUnRead(),
-  //     enabled: auth.accessToken !== null,
-  //     // staleTime: Infinity,
-  //     // cacheTime: 2 * 60 * 1000,
-  //     // refetchInterval: 5000,
-  //   },
-  // ]);
-
-  // console.log("sse: ", queries && queries[0]);
-
-  // async function alarmAll() {
-  //   const { data } = await axios.get(`${ROOT_API}/notifications/all`, {
-  //     headers: {
-  //       // "Content-Type": "application/json",
-  //       "Content-Type": "text/event-stream",
-  //       "X-AUTH-TOKEN": auth.accessToken,
-  //     },
-  //   });
-  //   return data;
-  // }
-
-  // async function alarmUnRead() {
-  //   const { data } = await axios.get(`${ROOT_API}/notifications/count`, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // "Content-Type": "text/event-stream",
-  //       "X-AUTH-TOKEN": auth.accessToken,
-  //     },
-  //   });
-  //   return data;
-  // }
-
   useEffect(() => {
     if (auth.accessToken) {
       const sse = new EventSource(`${ROOT_API}/notifications/subscribe`, {
+      // const sse = new EventSourcePolyfill(`${ROOT_API}/notifications/subscribe`, {
         headers: {
           "X-AUTH-TOKEN": auth.accessToken,
           "Content-Type": "text/event-stream",
         },
         // heartbeatTimeout: 45000,
         heartbeatTimeout: 4 * 60 * 1000,
+        // heartbeatTimeout: 30000,
         withCredentials: true,
       });
 
@@ -84,7 +43,7 @@ const Sse = () => {
           }
         };
         if (isJson(event.data)) {
-          console.log("노티");
+          console.log("sse 메시지 수신됨");
           queryClient.invalidateQueries(["alaram"]);
           queryClient.invalidateQueries(["alaramUnRead"]);
           dispatch(ON_NOTI());
@@ -92,22 +51,34 @@ const Sse = () => {
         }
       };
 
-      sse.addEventListener("message", (e) => {
-        if (e.type === "message" && e.data.startsWith("{")) {
-          // setNewAlert((prev) => [JSON.parse(e.data)]);
-          console.log("sse message");
-          // queryClient.invalidateQueries("alertList");
-        }
-        sse.close();
-      });
+      // NOTE: 메시지 추적?
+      // sse.addEventListener("message", (e) => {
+      //   if (e.type === "message" && e.data.startsWith("{")) {
+      //     // setNewAlert((prev) => [JSON.parse(e.data)]);
+      //   }
+      // });
 
-      sse.addEventListener("error", (e) => {
-        if (e) {
-          console.log("sse error", e);
-        }
-      });
+      // sse.onerror = (event) => {
+      //   if (sse !== undefined) {
+      //     sse.close();
+      //   }
+      // };
+
+      // sse.addEventListener("error", (e) => {
+      //   if (e) {
+      //     console.log("sse error", e);
+      //   }
+      // });
+
+      if (auth.accessToken === null) {
+        sse.close();
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     return (sse) => {
+      if (!auth.accessToken === null) {
+        sse.close();
+      }
+    }
   }, [auth.accessToken]);
 };
 

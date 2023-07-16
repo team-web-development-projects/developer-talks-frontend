@@ -22,7 +22,11 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
   const queryClient = useQueryClient();
 
   // 초기 회원가입때는 프로필 이미지가 없으니 있으면안된다.
-  const { data, isLoading: getLoading } = useQuery(
+  const {
+    data,
+    isLoading: getLoading,
+    error: getImgError,
+  } = useQuery(
     ["profileImg"],
     async () => {
       const res = await axios.get(`${ROOT_API}/users/profile/image`, {
@@ -33,6 +37,11 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     {
       // enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
       enabled: localStorage.getItem("dtrtk") !== null,
+      // onError: (error) => {
+      //   if (error.response?.status === 400) {
+      //     return null;
+      //   }
+      // },
     }
   );
 
