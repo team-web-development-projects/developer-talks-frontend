@@ -22,6 +22,7 @@ import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
+import "./assets/style/function.scss";
 import Sse from "sse";
 
 function App() {
