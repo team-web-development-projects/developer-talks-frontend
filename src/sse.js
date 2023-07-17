@@ -20,16 +20,17 @@ const Sse = () => {
         headers: {
           "X-AUTH-TOKEN": auth.accessToken,
           "Content-Type": "text/event-stream",
+          "Cache-control": 'no-cache'
         },
         // heartbeatTimeout: 45000,
-        heartbeatTimeout: 4 * 60 * 1000,
+        heartbeatTimeout: 21 * 60 * 1000,
         // heartbeatTimeout: 30000,
         withCredentials: true,
       });
 
       sse.onopen = (event) => {
         if (event.status === 200) {
-          // console.log("sse 연결됨");
+          console.log("sse 연결됨");
         }
       };
 
