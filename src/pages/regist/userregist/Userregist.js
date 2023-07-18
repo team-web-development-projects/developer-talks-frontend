@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
+import Tags from "components/tags/Tags";
 
 const Userregist = () => {
   const auth = useSelector((state) => state.authToken);
@@ -62,13 +63,7 @@ const Userregist = () => {
           },
         })
         .then((response) => {
-          console.log(response);
           setProfileImageId(response.data.id);
-          console.log(`
-      nickname: ${data.nickname},
-      skills: ${selectedTags.tags},
-      description: ${description},
-      profileImageId: ${profileImageId}`);
           axios
             .put(
               `${ROOT_API}/oauth/sign-up`,
@@ -76,7 +71,7 @@ const Userregist = () => {
                 nickname: data.nickname,
                 skills: selectedTags.tags,
                 description: description,
-                profileImageId:response.data.id,
+                profileImageId: response.data.id,
               },
               {
                 headers: {
@@ -111,17 +106,6 @@ const Userregist = () => {
     }
   }, [auth.accessToken, userEmail]);
 
-  const tags = [
-    //스킬오류
-    "DJANGO",
-    "SPRING",
-    "JAVASCRIPT",
-    "JAVA",
-    "PYTHON",
-    "CPP",
-    "REACT",
-    "AWS",
-  ];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
@@ -153,22 +137,6 @@ const Userregist = () => {
       .catch(() => {
         showToast("error", "😎 중복체크를 제대로 확인해주세요");
       });
-  };
-
-  const clickTag = (tag) => {
-    //NOTE 기술 테그/ok
-    if (selectedTags.tags.includes(tag)) {
-      setSelectedTags({
-        ...selectedTags,
-        tags: selectedTags.tags.filter((selectedTag) => selectedTag !== tag),
-      });
-    } else {
-      setSelectedTags({
-        ...selectedTags,
-        tags: [...selectedTags.tags, tag],
-      });
-    }
-    console.log("dd", selectedTags.tags, typeof selectedTags.tags);
   };
 
   return (
@@ -203,16 +171,8 @@ const Userregist = () => {
             </li>
           </ul>
         </div>
-        <label>관심있는 태그입력</label>
-        <div className={s.tagalign}>
-          <div className={s.tags}>
-            {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
+        <Tags setSelectedTags={setSelectedTags} selectedTags={selectedTags} text={"태그를 선택해주세요"} />
+
         <div className={s.description}>
           <label>한 줄 내소개</label>
           <input
