@@ -1,8 +1,10 @@
 const path = require("path");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
+
 const Dotenv = require("dotenv-webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("ExtractTextPlugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin"); // eslint 사용할 경우
 
@@ -28,6 +30,15 @@ const config = {
   },
   module: {
     rules: [
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: [
+          "style-loader", // creates style nodes from JS strings
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader", // compiles Sass to CSS, using Node Sass by default
+        ],
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,

@@ -33,7 +33,7 @@ function App() {
 
   useGoogleLoginAuth();
   useRefreshToken();
-  Sse();
+  // Sse();
 
   //  NOTE: 타이머로 재갱신 테스트 코드
   // useEffect(() => {
