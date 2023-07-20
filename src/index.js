@@ -3,13 +3,13 @@ import ReactDOM from "react-dom/client";
 // import { HashRouter } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-// import "./index.scss";
-// import './assets/style/index.scss';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
 import { isDev } from "util/Util";
 import reportWebVitals from "./reportWebVitals";
+import "./assets/style/function.scss";
+import "./assets/style/index.scss";
 import store from "./store";
 
 const queryClient = new QueryClient({
