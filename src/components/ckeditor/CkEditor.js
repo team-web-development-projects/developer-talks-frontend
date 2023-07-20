@@ -1,7 +1,6 @@
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import "./ckeditor.css";
-import { useState } from 'react';
 
 const CkEditor = ({ form, setForm, placeholder }) => {
   // let fileNum = 0;

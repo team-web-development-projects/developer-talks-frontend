@@ -45,7 +45,7 @@ const BoardItem = ({ data, type, currentPage }) => {
           {type !== "post" && (
             <div className={s.answerContainer}>
               <p>답변</p>
-              <p>0</p>
+              <p>{data.commentCount}</p>
             </div>
           )}
           <div className={s.boardInfo}>
@@ -80,9 +80,7 @@ const BoardItem = ({ data, type, currentPage }) => {
             <p className={s.title}>{data.title}</p>
             {/*NOTE 닉네임 클릭 시 유저정보 */}
             <ShowUserInfo userinfo={data.userInfo} />
-            {/*
-            <span className="nickname">{data.userInfo.nickname}</span>
-           */}
+            {/* <span className="nickname">{data.userInfo.nickname}</span> */}
             <span className={s.item}>
               <AiOutlineEye color="#444" size={14} />
               <span>{data.viewCount}</span>

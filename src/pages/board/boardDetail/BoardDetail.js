@@ -1,24 +1,21 @@
 import axios from "axios";
 import BoardCount from "components/boardCount/BoardCount";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import ReplyList from "pages/board/_com/replyList/ReplyList";
-import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
-import { useEffect, useState } from "react";
-import { AiOutlineStar } from "react-icons/ai";
-import { FiThumbsUp } from "react-icons/fi";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
-import { toast } from "react-toastify";
-import { useQuery } from "react-query";
-import Gravatar from "react-gravatar";
-import AnswerList from "../_com/answerList/AnswerList";
-import MessageModal from "components/portalModal/messagemodal/MessageModal";
+import { ROOT_API } from "constants/api";
 import { useOutOfClick } from "hooks/useOutOfClick";
-import { useRef } from "react";
+import { parseJwt } from "hooks/useParseJwt";
+import ReplyList from "pages/board/_com/replyList/ReplyList";
+import { useEffect, useRef, useState } from "react";
+import Gravatar from "react-gravatar";
+import { AiOutlineStar } from "react-icons/ai";
+import { FiThumbsUp } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import AnswerList from "../_com/answerList/AnswerList";
+import s from "./boardDetail.module.scss";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -32,7 +29,6 @@ const BoardDetail = ({ type }) => {
   });
   const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
-  const [modalD, setModalD] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(false);
 
   const fetchPost = async (type, postId, auth) => {
@@ -56,7 +52,7 @@ const BoardDetail = ({ type }) => {
     if (auth.accessToken !== null) {
       setNickName(parseJwt(auth.accessToken).nickname);
       axios
-        .get(`${ROOT_API}/post/check/status/${postId}`, {
+        .get(`${ROOT_API}/${type}/check/status/${postId}`, {
           headers: {
             "Content-Type": "application/json",
             "X-AUTH-TOKEN": auth.accessToken,
@@ -77,7 +73,7 @@ const BoardDetail = ({ type }) => {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then(() => setModalD(true))
+      .then(() => navigate(-1))
       .catch((error) => console.log(error));
   };
 
@@ -96,14 +92,6 @@ const BoardDetail = ({ type }) => {
 
   return (
     <>
-      {modalD && (
-        <BasicModal setOnModal={() => setModalD()}>
-          게시글이 삭제되었습니다.
-          <br />
-          <button onClick={() => navigate(-1)}>확인</button>
-          <br />
-        </BasicModal>
-      )}
       <div className={s.container}>
         <header>
           <div className={s.userInfoContainer}>
@@ -114,7 +102,7 @@ const BoardDetail = ({ type }) => {
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <ShowUserInfo userinfo={post.userInfo} type="detail"/>
+              <ShowUserInfo userinfo={post.userInfo} type="detail" />
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
@@ -127,8 +115,7 @@ const BoardDetail = ({ type }) => {
               <Button onClick={clickUpdate} size="small" theme="success">
                 수정
               </Button>
-              {/* TODO: qna commentCount로 수정되면 빼주기 */}
-              {post.commentCount === 0 || post.answerCount === 0 ? (
+              {post.commentCount === 0 ? (
                 <Button onClick={deletePost} size="small" theme="cancle">
                   삭제
                 </Button>
@@ -150,35 +137,34 @@ const BoardDetail = ({ type }) => {
           {/* TODO: content 내용 이슈 */}
           <div className={s.content} dangerouslySetInnerHTML={{ __html: post.imagedContent }}></div>
         </main>
-        {/* TODO: /post/check/status/{postId} 같은 api qna도 만들어지면 조건빼기 */}
-        {type === "post" && (
-          <div className={s.countContainer}>
-            <BoardCount
-              type={"favorite"}
-              token={auth.accessToken}
-              isOwner={nickname === post.userInfo.nickname}
-              checkStatus={checkStatus}
-              setCheckStatus={setCheckStatus}
-              postId={post.id}
-              setPost={setPost}
-            >
-              <AiOutlineStar />
-              <span>{post.favoriteCount}</span>
-            </BoardCount>
-            <BoardCount
-              type={"recommend"}
-              token={auth.accessToken}
-              isOwner={nickname === post.userInfo.nickname}
-              checkStatus={checkStatus}
-              setCheckStatus={setCheckStatus}
-              postId={post.id}
-              setPost={setPost}
-            >
-              <FiThumbsUp />
-              <span>{post.recommendCount}</span>
-            </BoardCount>
-          </div>
-        )}
+        <div className={s.countContainer}>
+          <BoardCount
+            ttype={type}
+            type={"favorite"}
+            token={auth.accessToken}
+            isOwner={nickname === post.userInfo.nickname}
+            checkStatus={checkStatus}
+            setCheckStatus={setCheckStatus}
+            postId={post.id}
+            setPost={setPost}
+          >
+            <AiOutlineStar />
+            <span>{post.favoriteCount}</span>
+          </BoardCount>
+          <BoardCount
+            ttype={type}
+            type={"recommend"}
+            token={auth.accessToken}
+            isOwner={nickname === post.userInfo.nickname}
+            checkStatus={checkStatus}
+            setCheckStatus={setCheckStatus}
+            postId={post.id}
+            setPost={setPost}
+          >
+            <FiThumbsUp />
+            <span>{post.recommendCount}</span>
+          </BoardCount>
+        </div>
 
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />

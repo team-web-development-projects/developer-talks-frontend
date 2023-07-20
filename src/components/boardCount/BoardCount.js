@@ -5,40 +5,12 @@ import { ROOT_API } from "constants/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import s from "./boardCount.module.scss";
-
-const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatus, postId, setPost }) => {
+// Q&A api명 scrap에서 favorite으로 변경해줘야 에러 안남
+const BoardCount = ({ ttype, type, children, token, isOwner, checkStatus, setCheckStatus, postId, setPost }) => {
   const isFavorite = type === "favorite";
   const checkButton= isFavorite ? checkStatus.favorite : checkStatus.recommend;
   const [modalL, setModalL] = useState(false);
   const [modalS, setModalS] = useState(false);
-  // async function postCount() {
-  //   await axios.post(
-  //     `${ROOT_API}/post/${type}/${postId}`,
-  //     {},
-  //     {
-  //       headers: {
-  //         "X-AUTH-TOKEN": token,
-  //       },
-  //     }
-  //   );
-  // }
-  // async function deleteCount() {
-  //   await axios.delete(`${ROOT_API}/post/${type}/${postId}`, {
-  //     params: {},
-  //     headers: {
-  //       "X-AUTH-TOKEN": token,
-  //     },
-  //   });
-  // }
-  // const handleCount = useMutation(postCount, {
-  //   onSuccess: () => {
-  //     console.log("post success");
-  //     setCheckStatus({ ...checkStatus, [type]: true });
-  //   },
-  //   onError: () => {
-  //     console.log("error");
-  //   },
-  // });
 
   const handleClick = async () => {
     console.log("isFavorite: ", isFavorite);
@@ -51,7 +23,7 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
       if (isFavorite ? !checkStatus.favorite : !checkStatus.recommend) {
         axios
           .post(
-            `${ROOT_API}/post/${type}/${postId}`,
+            `${ROOT_API}/${ttype}/${type}/${postId}`,
             {
               //요청데이터
             },
@@ -72,8 +44,6 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
                 });
           })
           .catch((error) => console.log(error));
-        // console.log(handleCount);
-        // handleCount.mutate();
       } else {
         handleClickCancle();
       }
@@ -81,7 +51,7 @@ const BoardCount = ({ type, children, token, isOwner, checkStatus, setCheckStatu
   };
   const handleClickCancle = async () => {
     axios
-      .delete(`${ROOT_API}/post/${type}/${postId}`, {
+      .delete(`${ROOT_API}/${ttype}/${type}/${postId}`, {
         headers: {
           "X-AUTH-TOKEN": token,
         },
