@@ -14,10 +14,11 @@ const ModalFrame = ({
   isDim,
   zindex,
   dimClick,
+  onClick
 }) => {
   return (
     <PortalModal>
-      <div className={classnames("modal")} style={{ zindex: zindex }}>
+      <div className={classnames("modal")} style={{ zindex: zindex }} onClick={onClick}>
         <div className={classnames("", classname)}>
           <div className="">
             {children}

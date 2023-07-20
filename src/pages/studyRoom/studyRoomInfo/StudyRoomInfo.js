@@ -40,14 +40,14 @@ const StudyRoomInfo = () => {
         }
       )
       .then(function (response) {
-        console.log("스터디 룸 정보 성공:", response);
+        // console.log("스터디 룸 정보 성공:", response);
         if (!data.autoJoin) {
           setSecretModal(false);
           alert("요청이 완료되었습니다.");
         }
       })
       .catch(function (error) {
-        console.log("스터디 룸 정보:실패 ", error.response);
+        // console.log("스터디 룸 정보:실패 ", error.response);
       });
   };
 

@@ -34,7 +34,6 @@ const BoardDetail = ({ type }) => {
   const [checkStatus, setCheckStatus] = useState([]);
   const [modalD, setModalD] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(false);
-  const [meesageModal, setMeesageModal] = useState(false);
 
   const fetchPost = async (type, postId, auth) => {
     const response = await axios.get(`${ROOT_API}/${type}/${postId}`, {
@@ -97,7 +96,6 @@ const BoardDetail = ({ type }) => {
 
   return (
     <>
-      {meesageModal && <MessageModal setOnModal={() => setMeesageModal()} recieverNick={post.userInfo.nickname} />}
       {modalD && (
         <BasicModal setOnModal={() => setModalD()}>
           게시글이 삭제되었습니다.
@@ -116,24 +114,7 @@ const BoardDetail = ({ type }) => {
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <span
-                className={`${s.nick} pointer`}
-                onClick={() => {
-                  setShowUserInfo(!showUserInfo);
-                }}
-              >
-                {post.userInfo.nickname}
-                {showUserInfo && (
-                  <div ref={targetRef}>
-                    <ShowUserInfo
-                      // ref={targetRef}
-                      recieverNick={post.userInfo.nickname}
-                      setShowUserInfo={setShowUserInfo}
-                      setMeesageModal={setMeesageModal}
-                    />
-                  </div>
-                )}
-              </span>
+              <ShowUserInfo userinfo={post.userInfo} type="detail"/>
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>

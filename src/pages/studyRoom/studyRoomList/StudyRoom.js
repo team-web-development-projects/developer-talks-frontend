@@ -42,7 +42,6 @@ const BoardList = ({ type }) => {
   };
 
   async function fetchProjects() {
-    console.log('aa', auth.accessToken)
     const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
       params: { page: currentPage - 1, size: 12 },
       headers: {
@@ -67,7 +66,7 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log('list', data);
+  // console.log('list', data);
 
   return (
     <>

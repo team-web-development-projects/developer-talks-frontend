@@ -22,7 +22,9 @@ import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import "./assets/style/index.scss";
+import "./assets/style/function.scss";
 import Sse from "sse";
+
 function App() {
   const auth = useSelector((state) => state.authToken);
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,7 @@ function App() {
 
   useGoogleLoginAuth();
   useRefreshToken();
-  Sse();
+  // Sse();
 
   //  NOTE: 타이머로 재갱신 테스트 코드
   // useEffect(() => {
@@ -66,7 +68,8 @@ function App() {
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
-          <Route path="mypage" element={<Index />} />
+          <Route path="showuser" element={<Index />} />
+
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
           <Route path="board/search/:keyword" element={<BoardList type="post" />} />

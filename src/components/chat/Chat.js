@@ -49,10 +49,12 @@ const Chat = ({ postId, setChatText }) => {
       });
     };
   }, []);
-
+  
   const click = (e) => {
     e.preventDefault();
+    console.log('text', text);
     // const body = JSON.stringify("Hello");
+    console.log('시도');
     stomp.send(
       `/pub/rooms/${postId}`,
       // `/pub/rooms/1`,
