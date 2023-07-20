@@ -55,37 +55,15 @@ const BoardItem = ({ data, type, currentPage }) => {
               ) : (
                 <Gravatar email={data.userInfo.nickname} className={s.userProfile} />
               )}
-            {/* <span className="nickname">{data.userInfo.nickname}</span>*/}
-              {/*NOTE 닉네임 클릭 시 유저정보 */}
-              {/* // <span
-                 className={s.nickname}
-                 onClick={(e) => {
-                   e.stopPropagation();
-                   setShowUserInfo(!showUserInfo);
-                 }}
-               >
-                 {data.userInfo.nickname}
-                 {showUserInfo && (
-                   <div ref={targetRef}>
-                     <ShowUserInfo recieverNick={data.userInfo.nickname} setShowUserInfo={setShowUserInfo} setMeesageModal={setMeesageModal} />
-                   </div>
-                 )}
-               </span>
-               <span className={s.item}>
-                 <AiOutlineEye color="#444" size={14} />
-                 <span>{data.viewCount}</span>
-               </span>
-               <span className={s.item}>{data.createDate}</span> */}
+              <ShowUserInfo userinfo={data.userInfo} />
+              {/* <span className="nickname">{data.userInfo.nickname}</span> */}
+              <span className={s.item}>
+                <AiOutlineEye color="#444" size={14} />
+                <span>{data.viewCount}</span>
+              </span>
+              <span className={s.item}>{data.createDate}</span>
             </div>
             <p className={s.title}>{data.title}</p>
-            {/*NOTE 닉네임 클릭 시 유저정보 */}
-            <ShowUserInfo userinfo={data.userInfo} />
-            {/* <span className="nickname">{data.userInfo.nickname}</span> */}
-            <span className={s.item}>
-              <AiOutlineEye color="#444" size={14} />
-              <span>{data.viewCount}</span>
-            </span>
-            <span className={s.item}>{data.createDate}</span>
           </div>
         </div>
         <div className={s.right}>
