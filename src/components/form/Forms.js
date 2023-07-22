@@ -1,47 +1,53 @@
 import axios from "axios";
 import Button from "../button/Button";
-// import Form from "../form/Form";
+import Form from "../form/Form";
 import Label from "../label/Label";
 import LineStyle from "../lineStyle/LineStyle";
 import BasicModal from "../portalModal/basicmodal/BasicModal";
+import Table from "../table/Table";
 import { showToast } from "../toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
-import { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
-import ProfileImg from "components/profileImg/ProfileImg";
-import Tags from "components/tags/Tags";
 import s from "./forms.module.scss";
+import ProfileImg from "../profileImg/ProfileImg";
+
 axios.defaults.withCredentials = true;
 
-const Regist = () => {
+const Forms = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [duplicateId, setDuplicateId] = useState("");
-  const [duplicateNickName, setDuplicateNickName] = useState("");
-  const [verityEmailcheck, setVerityEmailcheck] = useState(false);
-  const [compareEmailcheck, setCompareEmailcheck] = useState(false);
-  const [typetoggle, setTypetoggle] = useState("password");
-  const [code, setCode] = useState("");
+  const authlogins = "D-Talks";
+  const useridRef = useRef(null);
+  const nicknameRef = useRef(null);
   const [description, setDescription] = useState("");
-  const [modal, setModal] = useState(false);
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
     authJoin: true,
     joinableCount: 1,
   });
-  const authlogins = "D-Talks";
-
+  const [modal, setModal] = useState(false);
+  const [duplicateId, setDuplicateId] = useState("");
+  const [duplicateNickName, setDuplicateNickName] = useState("");
+  const [inputEmail, setInputEmail] = useState("");
+  const [verityEmailcheck, setVerityEmailcheck] = useState(false);
+  const [compareEmailcheck, setCompareEmailcheck] = useState(false);
+  const [typetoggle, setTypetoggle] = useState("password");
+  const [code, setCode] = useState("");
   const [profileImgData, setProfileImgData] = useState({
     id: "",
     url: "",
     inputName: "",
   });
-  useEffect(() => {
-    console.log(profileImgData);
-  }, [profileImgData]);
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
+  const savedescription = (e) => {
+    //NOTE 자기소개
+    setDescription(e.target.value);
+  };
+
   const {
     register,
     handleSubmit,
@@ -49,10 +55,7 @@ const Regist = () => {
     watch,
     formState: { isSubmitting, isDirty, errors },
   } = useForm({ mode: "onChange" });
-  const savedescription = (e) => {
-    //NOTE 자기소개
-    setDescription(e.target.value);
-  };
+
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
     if (verityEmailcheck && duplicateId === false && duplicateNickName === false) {
@@ -60,10 +63,10 @@ const Regist = () => {
         .post(
           `${ROOT_API}/sign-up`,
           {
-            email: watch().userEmail,
-            nickname: watch().nickname,
-            userid: watch().userid,
-            password: watch().password,
+            email: data.userEmail,
+            nickname: data.nickname,
+            userid: data.userid,
+            password: data.password,
             skills: selectedTags.tags,
             description: description,
             profileImageId: profileImgData.id,
@@ -72,7 +75,7 @@ const Regist = () => {
         )
         .then(() => {
           axios
-            .post(`${ROOT_API}/sign-in`, { userid: watch().userid, password: watch().password }, { headers: { API_HEADER } })
+            .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
             .then((response) => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
               localStorage.setItem("dtrtk", response.data.refreshToken);
@@ -101,6 +104,7 @@ const Regist = () => {
       .then(function (response) {
         if (type === "userid") {
           if (response.data.duplicated === true) {
+            //NOTE 중복체크 수정
             setDuplicateId(true);
             showToast("error", "😎 아이디가 중복되었습니다.");
           } else {
@@ -137,6 +141,7 @@ const Regist = () => {
               setVerityEmailcheck(true);
               setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
+              console.log(res.data.timer, "fdfddfd");
             })
             .catch(() => {
               showToast("error", "😎 이메일을 제대로 입력해주세요");
@@ -149,9 +154,10 @@ const Regist = () => {
   const verityEmailchecking = async (e) => {
     //NOTE 이메일 인증//ok
     e.preventDefault();
+    console.log("code", inputEmail);
     axios
       .get(`${ROOT_API}/email/verify`, {
-        params: { code: watch().inputEmail },
+        params: { code: inputEmail },
       })
       .then((res) => {
         setCompareEmailcheck(true);
@@ -160,6 +166,25 @@ const Regist = () => {
       .catch(() => {
         showToast("error", "인증을 정확히 확인해주세요");
       });
+  };
+
+  const handleInputChange = (e) => {
+    setInputEmail(e.target.value);
+  };
+
+  const clickTag = (tag) => {
+    //NOTE 기술 테그
+    if (selectedTags.tags.includes(tag)) {
+      setSelectedTags({
+        ...selectedTags,
+        tags: selectedTags.tags.filter((selectedTag) => selectedTag !== tag),
+      });
+    } else {
+      setSelectedTags({
+        ...selectedTags,
+        tags: [...selectedTags.tags, tag],
+      });
+    }
   };
 
   const typechange = () => {
@@ -180,226 +205,246 @@ const Regist = () => {
           <Button onClick={() => navigate("/")}>확인</Button>
         </BasicModal>
       )}
-      <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={s.formWrap}>
-          <div className={s.headername}>
-            <p>{authlogins} 계정 회원가입</p>
-            <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
-          </div>
-          <div className={s.gaider}>
-            <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
-          </div>
-          <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
-          <Tags setSelectedTags={setSelectedTags} selectedTags={selectedTags} text={"태그를 선택해주세요"} />
-          <div className={s.description}>
-            <label>한 줄 내소개</label>
-            <input
-              tabIndex="1"
-              type="description"
-              id="description"
-              value={description}
-              onChange={savedescription}
-              placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
-              maxLength={80}
-            />
-          </div>
-          <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
+      <Form White onSubmit={handleSubmit(onSubmit)}>
+        <legend>정보입력</legend>
+        <div className={s.headername}>
+          <p>{authlogins} 계정 회원가입</p>
+          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
         </div>
-        <ul>
-          <li>
-            <div>
-              <Label isRequire htmlFor="userEmail">
-                이메일
-              </Label>
-              <input
-                type="email"
-                id="userEmail"
-                placeholder="이메일을 입력해주세요"
-                tabIndex="2"
-                {...register("userEmail", {
-                  required: "이메일은 필수 입력입니다.",
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "이메일 형식에 맞지 않습니다.",
-                  },
-                })}
-              />
-              <Button onClick={verityEmail} tabIndex="3">
-                이메일인증
-              </Button>
-            </div>
-            {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
-          </li>
-          <li>
-            {" "}
-            <div>
-              <Label isRequire htmlFor="inputEmail">
-                이메일 인증
-              </Label>
-              <input tabIndex="4" type="text" id="inputEmail" placeholder="인증번호를 입력해주세요" {...register("inputEmail", { required: true })} />
-              <Button onClick={verityEmailchecking} tabIndex="5">
-                확인
-              </Button>
-            </div>
-          </li>
-          <li>
-            {" "}
-            <div>
-              <Label isRequire htmlFor="nickname">
-                닉네임
-              </Label>
-              <input
-                type="text"
-                id="nickname"
-                placeholder="닉네임을 입력해주세요"
-                tabIndex="6"
-                maxLength={15}
-                {...register("nickname", {
-                  required: "닉네임은 필수 입력입니다.",
-                  minLength: {
-                    value: 5,
-                    message: "5자리 이상 입력해주세요.",
-                  },
-                })}
-              />
-              <Button
-                tabIndex="7"
-                title="중복체크"
-                onClick={(e) => {
-                  e.preventDefault();
-                  validateDuplicate("nickname");
-                }}
-              >
-                중복체크
-              </Button>
-            </div>
-            {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className={s.alert}>중복된 닉네임입니다.</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
-              <small className={s.true}>사용할 수 있는 닉네임입니다.</small>
-            )}
-          </li>
-          <li>
-            {" "}
-            <div>
-              <Label isRequire htmlFor="userid">
-                아이디
-              </Label>
-              <input
-                type="text"
-                id="userid"
-                placeholder="아이디를 입력해주세요"
-                maxLength={15}
-                tabIndex="8"
-                {...register("userid", {
-                  required: "아이디는 필수 입력입니다.",
-                  minLength: {
-                    value: 5,
-                    message: "5자리 이상 아이디를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이하 아이디를 사용해주세요.",
-                  },
-                })}
-              />
-              <Button
-                tabIndex="9"
-                title="중복체크"
-                onClick={(e) => {
-                  e.preventDefault();
-                  validateDuplicate("userid");
-                }}
-              >
-                중복체크
-              </Button>
-            </div>
-            {errors.userid && <small role="alert">{errors.userid.message}</small>}
-            {duplicateId !== "" && duplicateId === true && <small className={s.alert}>중복된 아이디입니다.</small>}
-            {duplicateId !== "" && duplicateId === false && <small className={s.true}>사용할 수 있는 아이디입니다.</small>}
-          </li>
-          <li>
-            {" "}
-            <div>
-              <Label isRequire htmlFor="password">
-                비밀번호
-              </Label>
-              <input
-                type={typetoggle}
-                id="password"
-                placeholder="비밀번호 최소 1개의 특수문자를 포함해주세요"
-                maxLength={15}
-                tabIndex="10"
-                autoComplete="password"
-                {...register("password", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  minLength: {
-                    value: 8,
-                    message: "8자리 이상 비밀번호를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이히 비밀번호를 사용해주세요.",
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: "특수문자를 포함해주세요",
-                  },
-                })}
-              />
-            </div>
-            {errors.password && <small role="alert">{errors.password.message}</small>}
-          </li>
-          <li>
-            {" "}
-            <div>
-              <Label isRequire htmlFor="passwordChk">
-                비밀번호 확인
-              </Label>
-              <input
-                type={typetoggle}
-                id="passwordChk"
-                placeholder="비밀번호를 한 번 더 입력해주세요"
-                tabIndex="11"
-                maxLength={15}
-                autoComplete="password"
-                {...register("passwordChk", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  minLength: {
-                    value: 8,
-                    message: "8자리 이상 비밀번호를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이히 비밀번호를 사용해주세요.",
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: "특수문자를 포함해주세요",
-                  },
-                  validate: (val) => {
-                    if (watch("password") !== val) {
-                      return "비밀번호가 일치하지 않습니다.";
-                    }
-                  },
-                })}
-              />
-              <div type="typechange" onClick={typechange}>
-                👀
+        <div className={s.gaider}>
+          <ul>
+            <li>
+              <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
+            </li>
+          </ul>
+        </div>
+        <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
+
+        <label>관심있는 태그입력</label>
+        <div className={s.tagalign}>
+          <div className={s.tags}>
+            {tags.map((item, index) => (
+              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className={s.description}>
+          <label>한 줄 내소개</label>
+          <input
+            tabIndex="1"
+            type="description"
+            id="description"
+            value={description}
+            onChange={savedescription}
+            placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
+            maxLength={80}
+          />
+        </div>
+        <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
+        <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
+          {[
+            <React.Fragment key={1}>
+              <div>
+                <Label isRequire htmlFor="userEmail">
+                  이메일
+                </Label>
+                <input
+                  type="email"
+                  id="userEmail"
+                  placeholder="이메일을 입력해주세요"
+                  tabIndex="2"
+                  {...register("userEmail", {
+                    required: "이메일은 필수 입력입니다.",
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "이메일 형식에 맞지 않습니다.",
+                    },
+                  })}
+                />
+                <Button onClick={verityEmail} tabIndex="3">
+                  이메일인증
+                </Button>
               </div>
-            </div>
-            {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
-          </li>
-        </ul>
-        <div className={s.registSubmit}>
+              {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
+            </React.Fragment>,
+            <React.Fragment key={2}>
+              <div>
+                <Label isRequire htmlFor="inputEmail">
+                  이메일 인증
+                </Label>
+                <input
+                  tabIndex="4"
+                  type="text"
+                  id="inputEmail"
+                  value={inputEmail}
+                  placeholder="인증번호를 입력해주세요"
+                  {...register("inputEmail", { required: true })}
+                  onChange={handleInputChange}
+                />
+                <Button onClick={verityEmailchecking} tabIndex="5">
+                  확인
+                </Button>
+              </div>
+            </React.Fragment>,
+            <React.Fragment key={3}>
+              <div>
+                <Label isRequire htmlFor="nickname">
+                  닉네임
+                </Label>
+                <input
+                  type="text"
+                  id="nickname"
+                  placeholder="닉네임을 입력해주세요"
+                  tabIndex="6"
+                  ref={nicknameRef}
+                  maxLength={15}
+                  {...register("nickname", {
+                    required: "닉네임은 필수 입력입니다.",
+                    minLength: {
+                      value: 5,
+                      message: "5자리 이상 입력해주세요.",
+                    },
+                  })}
+                />
+                <Button
+                  tabIndex="7"
+                  title="중복체크"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    validateDuplicate("nickname");
+                  }}
+                >
+                  중복체크
+                </Button>
+              </div>
+              {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+                <small className="true">사용할 수 있는 닉네임입니다.</small>
+              )}
+            </React.Fragment>,
+            <React.Fragment key={4}>
+              <div>
+                <Label isRequire htmlFor="userid">
+                  아이디
+                </Label>
+                <input
+                  type="text"
+                  id="userid"
+                  placeholder="아이디를 입력해주세요"
+                  maxLength={15}
+                  ref={useridRef}
+                  tabIndex="8"
+                  {...register("userid", {
+                    required: "아이디는 필수 입력입니다.",
+                    minLength: {
+                      value: 5,
+                      message: "5자리 이상 아이디를 사용해주세요.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: "15자리 이하 아이디를 사용해주세요.",
+                    },
+                  })}
+                />
+                <Button
+                  tabIndex="9"
+                  title="중복체크"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    validateDuplicate("userid");
+                  }}
+                >
+                  중복체크
+                </Button>
+              </div>
+              {errors.userid && <small role="alert">{errors.userid.message}</small>}
+              {duplicateId !== "" && duplicateId === true && <small className="alert">중복된 아이디입니다.</small>}
+              {duplicateId !== "" && duplicateId === false && <small className="true">사용할 수 있는 아이디입니다.</small>}
+            </React.Fragment>,
+            <React.Fragment key={5}>
+              <div>
+                <Label isRequire htmlFor="password">
+                  비밀번호
+                </Label>
+                <input
+                  type={typetoggle}
+                  id="password"
+                  placeholder="최소 1개의 특수문자를 포함해주세요"
+                  maxLength={15}
+                  tabIndex="10"
+                  autoComplete="password"
+                  {...register("password", {
+                    required: "비밀번호는 필수 입력입니다.",
+                    minLength: {
+                      value: 8,
+                      message: "8자리 이상 비밀번호를 사용해주세요.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: "15자리 이히 비밀번호를 사용해주세요.",
+                    },
+                    pattern: {
+                      value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                      message: "특수문자를 포함해주세요",
+                    },
+                  })}
+                />
+              </div>
+              {errors.password && <small role="alert">{errors.password.message}</small>}
+            </React.Fragment>,
+            <React.Fragment key={6}>
+              <div>
+                <Label isRequire htmlFor="passwordChk">
+                  비밀번호 확인
+                </Label>
+                <input
+                  type={typetoggle}
+                  id="passwordChk"
+                  placeholder="비밀번호를 한 번 더 입력해주세요"
+                  tabIndex="11"
+                  maxLength={15}
+                  autoComplete="password"
+                  {...register("passwordChk", {
+                    required: "비밀번호는 필수 입력입니다.",
+                    minLength: {
+                      value: 8,
+                      message: "8자리 이상 비밀번호를 사용해주세요.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: "15자리 이히 비밀번호를 사용해주세요.",
+                    },
+                    pattern: {
+                      value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                      message: "특수문자를 포함해주세요",
+                    },
+                    validate: (val) => {
+                      if (watch("password") !== val) {
+                        return "비밀번호가 일치하지 않습니다.";
+                      }
+                    },
+                  })}
+                />
+                <div className={s.typechange} type="typechange" onClick={typechange}>
+                  👀
+                </div>
+              </div>
+              {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
+            </React.Fragment>,
+          ]}
+        </Table>
+        <div className="registSubmit">
           <Button FullWidth size="large" type="submit" tabIndex="12" disabled={isSubmitting}>
             {" "}
             가입하기
           </Button>
         </div>
-      </form>
+      </Form>
     </>
   );
 };
 
-export default Regist;
+export default Forms;
