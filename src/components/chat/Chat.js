@@ -28,8 +28,8 @@ const Chat = ({ postId, setChatText }) => {
         `/sub/rooms/${postId}`,
         (body) => {
           console.log("body: ", JSON.parse(body.body).message);
-          setText('');
-          setChatText(JSON.parse(body.body).message)
+          setText("");
+          setChatText(JSON.parse(body.body).message);
           //이후 처리
         },
         headers
@@ -49,10 +49,12 @@ const Chat = ({ postId, setChatText }) => {
       });
     };
   }, []);
-  
-  const click = (e) => {
+
+  const click = (e, text) => {
     e.preventDefault();
     // const body = JSON.stringify("Hello");
+    console.log("전송 text", text);
+    setText('');
     stomp.send(
       `/pub/rooms/${postId}`,
       {
@@ -60,17 +62,15 @@ const Chat = ({ postId, setChatText }) => {
       },
       JSON.stringify(text)
     );
-    console.log('text', text)
   };
 
   const onChange = (e) => {
     setText(e.target.value);
   };
-  
 
   return (
     <div>
-      <ChatInput setText={setText} />
+      <ChatInput setText={setText} onClick={click} text={text}/>
     </div>
   );
 };
