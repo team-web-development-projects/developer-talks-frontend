@@ -4,16 +4,17 @@ import Form from "components/form/Form";
 import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import ProfileImg from "components/profileImg/ProfileImg";
 import Table from "components/table/Table";
+import Tags from "components/tags/Tags";
 import { showToast } from "components/toast/showToast";
 import { API_HEADER, ROOT_API } from "constants/api";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
-import ProfileImg from "components/profileImg/ProfileImg";
 
 axios.defaults.withCredentials = true;
 
@@ -21,8 +22,6 @@ const Regist = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const authlogins = "D-Talks";
-  const useridRef = useRef(null);
-  const nicknameRef = useRef(null);
   const [description, setDescription] = useState("");
   const [selectedTags, setSelectedTags] = useState({
     tags: [],
@@ -32,17 +31,13 @@ const Regist = () => {
   const [modal, setModal] = useState(false);
   const [duplicateId, setDuplicateId] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
-  const [inputEmail, setInputEmail] = useState("");
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
-  const [compareEmailcheck, setCompareEmailcheck] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
-  const [code, setCode] = useState("");
   const [profileImgData, setProfileImgData] = useState({
     id: "",
     url: "",
     inputName: "",
   });
-  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
   const savedescription = (e) => {
     //NOTE 자기소개
     setDescription(e.target.value);
@@ -139,7 +134,6 @@ const Regist = () => {
             })
             .then((res) => {
               setVerityEmailcheck(true);
-              setCode(res.data.code);
               showToast("success", "😎 인증문자가 발송되었습니다");
               console.log(res.data.timer, "fdfddfd");
             })
@@ -154,37 +148,16 @@ const Regist = () => {
   const verityEmailchecking = async (e) => {
     //NOTE 이메일 인증//ok
     e.preventDefault();
-    console.log("code", inputEmail);
     axios
       .get(`${ROOT_API}/email/verify`, {
-        params: { code: inputEmail },
+        params: { code: watch().inputEmail },
       })
       .then((res) => {
-        setCompareEmailcheck(true);
         showToast("success", "😎 인증이 확인되었습니다");
       })
       .catch(() => {
         showToast("error", "인증을 정확히 확인해주세요");
       });
-  };
-
-  const handleInputChange = (e) => {
-    setInputEmail(e.target.value);
-  };
-
-  const clickTag = (tag) => {
-    //NOTE 기술 테그
-    if (selectedTags.tags.includes(tag)) {
-      setSelectedTags({
-        ...selectedTags,
-        tags: selectedTags.tags.filter((selectedTag) => selectedTag !== tag),
-      });
-    } else {
-      setSelectedTags({
-        ...selectedTags,
-        tags: [...selectedTags.tags, tag],
-      });
-    }
   };
 
   const typechange = () => {
@@ -219,17 +192,7 @@ const Regist = () => {
           </ul>
         </div>
         <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
-
-        <label>관심있는 태그입력</label>
-        <div className={s.tagalign}>
-          <div className={s.tags}>
-            {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
+        <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 테그입력"} />
         <div className={s.description}>
           <label>한 줄 내소개</label>
           <input
@@ -278,10 +241,8 @@ const Regist = () => {
                   tabIndex="4"
                   type="text"
                   id="inputEmail"
-                  value={inputEmail}
                   placeholder="인증번호를 입력해주세요"
                   {...register("inputEmail", { required: true })}
-                  onChange={handleInputChange}
                 />
                 <Button onClick={verityEmailchecking} tabIndex="5">
                   확인
@@ -298,7 +259,6 @@ const Regist = () => {
                   id="nickname"
                   placeholder="닉네임을 입력해주세요"
                   tabIndex="6"
-                  ref={nicknameRef}
                   maxLength={15}
                   {...register("nickname", {
                     required: "닉네임은 필수 입력입니다.",
@@ -335,7 +295,6 @@ const Regist = () => {
                   id="userid"
                   placeholder="아이디를 입력해주세요"
                   maxLength={15}
-                  ref={useridRef}
                   tabIndex="8"
                   {...register("userid", {
                     required: "아이디는 필수 입력입니다.",
