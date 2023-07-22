@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import ChatInput from "./ChatInput";
 
 const Chat = ({ postId, setChatText }) => {
   const auth = useSelector((state) => state.authToken);
@@ -18,7 +19,6 @@ const Chat = ({ postId, setChatText }) => {
 
   useEffect(() => {
     stomp.connect(headers, ({ temp }) => {
-      setConnec(true);
       console.log("소켓 연결됨");
       // try {
       //방 생성
@@ -52,29 +52,25 @@ const Chat = ({ postId, setChatText }) => {
   
   const click = (e) => {
     e.preventDefault();
-    console.log('text', text);
     // const body = JSON.stringify("Hello");
-    console.log('시도');
     stomp.send(
       `/pub/rooms/${postId}`,
-      // `/pub/rooms/1`,
       {
         "X-AUTH-TOKEN": auth.accessToken,
       },
       JSON.stringify(text)
     );
+    console.log('text', text)
   };
 
   const onChange = (e) => {
     setText(e.target.value);
   };
+  
 
   return (
     <div>
-      <form onSubmit={click}>
-        <input type="text" name="" id="" onChange={onChange} value={text}/>
-        <button>전송</button>
-      </form>
+      <ChatInput setText={setText} />
     </div>
   );
 };

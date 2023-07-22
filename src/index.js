@@ -26,7 +26,7 @@ const queryClient = new QueryClient({
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register("../firebase-messaging-sw.js")
+    .register("publlc/firebase-messaging-sw.js")
     .then(function (registration) {
       console.log("Registration successful, scope is:", registration.scope);
     })
