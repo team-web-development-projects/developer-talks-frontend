@@ -42,12 +42,12 @@ const Chat = ({ postId, setChatText }) => {
       // console.log("error: ", e);
       // }
     });
-    // return () => {
-    //   //연결 끊기
-    //   stomp.disconnect(() => {
-    //     console.log("socket연결 해제");
-    //   });
-    // };
+    return () => {
+      //연결 끊기
+      stomp.disconnect(() => {
+        console.log("socket연결 해제");
+      });
+    };
   }, []);
   
   const click = (e) => {
