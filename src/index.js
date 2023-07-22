@@ -24,16 +24,27 @@ const queryClient = new QueryClient({
   },
 });
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("../firebase-messaging-sw.js")
+    .then(function (registration) {
+      console.log("Registration successful, scope is:", registration.scope);
+    })
+    .catch(function (err) {
+      console.log("Service worker registration failed, error:", err);
+    });
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
-          <App />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </Provider>
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </BrowserRouter>
+    </QueryClientProvider>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
