@@ -22,7 +22,7 @@ const Best = () => {
     <section>
       <strong>추천수 베스트 5</strong>
       <ul>
-        {data &&
+        {data && data.length !== 0  ?
           data.map((item, index) => (
             <li key={index} onClick={() => naviate(`/board/${item.id}`)}>
               <div className="info">
@@ -35,7 +35,7 @@ const Best = () => {
               </div>
               <p>{item.title}</p>
             </li>
-          ))}
+          )) : <li>게시글이 없습니다.</li>}
       </ul>
     </section>
   );
