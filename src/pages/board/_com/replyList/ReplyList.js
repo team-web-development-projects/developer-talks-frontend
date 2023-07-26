@@ -95,6 +95,7 @@ const ReplyList = ({ nickname, replyCnt }) => {
                 value={form.content}
                 cols="50"
                 rows="7"
+                spellCheck="false"
                 onChange={(e) => {
                   setForm({ ...form, ["content"]: e.target.value });
                 }}
