@@ -13,6 +13,7 @@ import Gravatar from "react-gravatar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
+import TextArea from 'components/textarea/TextArea';
 
 const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
@@ -30,6 +31,20 @@ const ReplyItem = ({ postId, reply }) => {
   });
 
   const [isSelf, setIsSelf] = useState(false);
+
+  const handleSetTab = (e) => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      let val = e.target.value;
+      let start = e.target.selectionStart;
+      let end = e.target.selectionEnd;
+      e.target.value = val.substring(0, start) + "\t" + val.substring(end);
+      e.target.selectionStart = e.target.selectionEnd = start + 1;
+      setReForm({ ...reForm, ["content"]: e.target.value });
+      return false; //  prevent focus
+    }
+  };
+
   const handleReToggle = () => {
     setReForm({ ["content"]: "", ["secret"]: false });
     setIsPostToggle((prev) => !prev);
@@ -151,7 +166,7 @@ const ReplyItem = ({ postId, reply }) => {
               <p className={s.date}>{reply.modifiedDate}</p>
             </div>
             {reply.secret && <BsLock size={20} />}
-            {(isSelf&&(!reply.remove)) ? (
+            {isSelf && !reply.remove ? (
               <div className={s.btn_wrap}>
                 <Button onClick={handleUpdate} size="small">
                   수정
@@ -217,7 +232,8 @@ const ReplyItem = ({ postId, reply }) => {
               {ispostToggle && (
                 <form onSubmit={handleRePost}>
                   {/* <div> */}
-                  <CkEditor form={reForm} setForm={setReForm} />
+                  {/* <CkEditor form={reForm} setForm={setReForm} /> */}
+                  <TextArea form={reForm} setForm={setReForm}/>
                   <div className={s.btnRgn}>
                     <label className={s.secret}>
                       <input

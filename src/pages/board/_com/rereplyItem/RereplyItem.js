@@ -181,7 +181,8 @@ const RereplyItem = ({ rr, postId }) => {
               </div>
             </form>
           ) : (
-            <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }} onClick={handlePostClick}></div>
+            // <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }} onClick={handlePostClick}></div>
+            <div className={s.content} onClick={handlePostClick}>{rr.content}</div>
           )}
 
           {isPostToggle && !isUpdateToggle && (

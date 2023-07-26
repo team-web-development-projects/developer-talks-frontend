@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import s from "./replyList.module.scss";
+import TextArea from 'components/textarea/TextArea';
 
 const ReplyList = ({ nickname, replyCnt }) => {
   const auth = useSelector((state) => state.authToken);
@@ -24,18 +25,6 @@ const ReplyList = ({ nickname, replyCnt }) => {
   //     behavior: "smooth",
   //   });
   // };
-  const handleSetTab = (e) => {
-    if (e.keyCode === 9) {
-      e.preventDefault();
-      let val = e.target.value;
-      let start = e.target.selectionStart;
-      let end = e.target.selectionEnd;
-      e.target.value = val.substring(0, start) + "\t" + val.substring(end);
-      e.target.selectionStart = e.target.selectionEnd = start + 1;
-      setForm({ ...form, ["content"]: e.target.value });
-      return false; //  prevent focus
-    }
-  };
   const handleClick = () => {
     setIsToggle((prev) => !prev);
     setForm({ ["content"]: "", ["secret"]: false });
@@ -90,17 +79,7 @@ const ReplyList = ({ nickname, replyCnt }) => {
           <form onSubmit={handlePost}>
             <div className={s.inputTrue}>
               {/* <CkEditor form={form} setForm={setForm} placeholder="" /> */}
-              <textarea
-                className={s.textArea}
-                value={form.content}
-                cols="50"
-                rows="7"
-                spellCheck="false"
-                onChange={(e) => {
-                  setForm({ ...form, ["content"]: e.target.value });
-                }}
-                onKeyDown={(e) => handleSetTab(e)}
-              ></textarea>
+              <TextArea form={form} setForm={setForm} />
               <div className={s.btnRgn}>
                 <label className={s.secret}>
                   <input
