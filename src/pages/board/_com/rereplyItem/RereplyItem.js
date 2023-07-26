@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import s from "./rereplyItem.module.scss";
+import TextArea from "components/textarea/TextArea";
 
 const RereplyItem = ({ rr, postId }) => {
   const auth = useSelector((state) => state.authToken);
@@ -22,7 +23,7 @@ const RereplyItem = ({ rr, postId }) => {
     secret: rr.secret,
   });
   const [reForm, setReForm] = useState({
-    content: `@${rr.userInfo.nickname}`,
+    content: "",
     secret: false,
   });
 
@@ -68,7 +69,7 @@ const RereplyItem = ({ rr, postId }) => {
       }),
     {
       onSuccess: () => {
-        setReForm({ ["content"]: `@${rr.userInfo.nickname}`, ["secret"]: false });
+        setReForm({ ["content"]: "", ["secret"]: false });
         setIsPostToggle(false);
         queryClient.invalidateQueries(["replyList"]);
       },
@@ -112,7 +113,7 @@ const RereplyItem = ({ rr, postId }) => {
   };
 
   const handlePostCancle = () => {
-    setReForm({ ["content"]: `@${rr.userInfo.nickname}`, ["secret"]: false });
+    setReForm({ ["content"]: "", ["secret"]: false });
     setIsPostToggle(false);
   };
 
@@ -139,7 +140,7 @@ const RereplyItem = ({ rr, postId }) => {
               <p className={s.date}>{rr.modifiedDate}</p>
             </div>
             {rr.secret && <BsLock size={20} />}
-            {(isSelf&&(!rr.remove)) ? (
+            {isSelf && !rr.remove ? (
               <div className={s.btn_wrap}>
                 <Button onClick={handleUpdateClick} size="small">
                   수정
@@ -154,7 +155,8 @@ const RereplyItem = ({ rr, postId }) => {
           {isUpdateToggle ? (
             <form onSubmit={handleUpdatePost}>
               <div>
-                <CkEditor form={form} setForm={setForm} />
+                {/* <CkEditor form={form} setForm={setForm} /> */}
+                <TextArea form={form} setForm={setForm} />
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input
@@ -167,13 +169,7 @@ const RereplyItem = ({ rr, postId }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button
-                    classname={s.cancle}
-                    theme="outline"
-                    color="#9ca3af"
-                    size="medium"
-                    onClick={handleUpdateCancle}
-                  >
+                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -182,13 +178,20 @@ const RereplyItem = ({ rr, postId }) => {
             </form>
           ) : (
             // <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }} onClick={handlePostClick}></div>
-            <div className={s.content} onClick={handlePostClick}>{rr.content}</div>
+            <>
+              <div className={s.tagContentName}>@{rr.parentNickname}</div>
+              <div className={s.content} onClick={handlePostClick}>
+                {rr.content}
+              </div>
+            </>
           )}
 
           {isPostToggle && !isUpdateToggle && (
             <form onSubmit={handlePost}>
               <div className={s.postConatiner}>
-                <CkEditor form={reForm} setForm={setReForm} />
+                {/* <CkEditor form={reForm} setForm={setReForm} /> */}
+                <div className={s.tagName}>@{rr.userInfo.nickname}</div>
+                <TextArea form={reForm} setForm={setReForm} />
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input

@@ -180,7 +180,8 @@ const ReplyItem = ({ postId, reply }) => {
           {isUpdateToggle ? (
             <form onSubmit={handleUpdatePost}>
               <div>
-                <CkEditor form={form} setForm={setForm} />
+                {/* <CkEditor form={form} setForm={setForm} /> */}
+                <TextArea form={form} setForm={setForm}/>
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input
