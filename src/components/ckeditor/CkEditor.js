@@ -43,7 +43,7 @@ const CkEditor = ({ form, setForm, placeholder }) => {
           const data = editor.getData();
           setForm({ ...form, ["content"]: data });
           // setContent(data);
-          // console.log("data: ",data);
+          console.log("data: ",data);
         }}
       />
     </>

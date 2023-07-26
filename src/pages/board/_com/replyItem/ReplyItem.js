@@ -186,7 +186,8 @@ const ReplyItem = ({ postId, reply }) => {
               </div>
             </form>
           ) : (
-            <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
+            // <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
+            <div className={s.content}>{reply.content}</div>
           )}
           <div className={s.replyBtnContainer}>
             {reply.childrenList.length ? (

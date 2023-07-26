@@ -77,10 +77,12 @@ const BoardItem = ({ data, type, currentPage }) => {
                 <FiThumbsUp color="#444" size={12} />
                 <p>{data.recommendCount}</p>
               </div>
-              <div className={s.item}>
-                <AiOutlineComment color="#444" size={14} />
-                <p>{data.commentCount}</p>
-              </div>
+              {type == "post" && (
+                <div className={s.item}>
+                  <AiOutlineComment color="#444" size={14} />
+                  <p>{data.commentCount}</p>
+                </div>
+              )}
             </div>
           </div>
           {data.thumbnailUrl && (

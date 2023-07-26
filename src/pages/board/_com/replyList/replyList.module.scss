@@ -6,7 +6,7 @@
     font-size: 18px;
     font-weight: 600;
   }
-  .inputTrue{
+  .inputTrue {
     margin-bottom: 40px;
   }
   .inputFalse {
@@ -33,6 +33,12 @@
     max-height: 200px;
     // height: 60px;
   }
+  .textArea {
+    resize: none;
+    width:100%;
+    box-sizing: border-box;
+    font-size: 20px;
+  }
 }
 .btnRgn {
   display: flex;
@@ -40,12 +46,12 @@
   align-items: center;
   margin-top: 10px;
   background: #ffffff;
-  .secret{
+  .secret {
     margin-right: 10px;
     cursor: pointer;
     font-size: 17px;
   }
-  .cancle{
+  .cancle {
     margin: 0px 10px;
   }
 }

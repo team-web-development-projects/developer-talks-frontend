@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import s from "./replyList.module.scss";
 
-const ReplyList = ({ nickname, replyCnt}) => {
+const ReplyList = ({ nickname, replyCnt }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const { postId } = useParams();
@@ -24,6 +24,18 @@ const ReplyList = ({ nickname, replyCnt}) => {
   //     behavior: "smooth",
   //   });
   // };
+  const handleSetTab = (e) => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      let val = e.target.value;
+      let start = e.target.selectionStart;
+      let end = e.target.selectionEnd;
+      e.target.value = val.substring(0, start) + "\t" + val.substring(end);
+      e.target.selectionStart = e.target.selectionEnd = start + 1;
+      setForm({ ...form, ["content"]: e.target.value });
+      return false; //  prevent focus
+    }
+  };
   const handleClick = () => {
     setIsToggle((prev) => !prev);
     setForm({ ["content"]: "", ["secret"]: false });
@@ -43,7 +55,6 @@ const ReplyList = ({ nickname, replyCnt}) => {
         setForm({ ["content"]: "", ["secret"]: false });
         queryClient.invalidateQueries(["replyList"]);
         queryClient.invalidateQueries(["boardDetail"]);
-
       },
     }
   );
@@ -78,7 +89,17 @@ const ReplyList = ({ nickname, replyCnt}) => {
         {isToggle ? (
           <form onSubmit={handlePost}>
             <div className={s.inputTrue}>
-              <CkEditor form={form} setForm={setForm} placeholder="" />
+              {/* <CkEditor form={form} setForm={setForm} placeholder="" /> */}
+              <textarea
+                className={s.textArea}
+                value={form.content}
+                cols="50"
+                rows="7"
+                onChange={(e) => {
+                  setForm({ ...form, ["content"]: e.target.value });
+                }}
+                onKeyDown={(e) => handleSetTab(e)}
+              ></textarea>
               <div className={s.btnRgn}>
                 <label className={s.secret}>
                   <input
