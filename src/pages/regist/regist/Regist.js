@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
+import { emailCheck, getValidateDuplicate } from "api/user";
+import { useEmailCheck } from "hooks/useGetPostUser";
 
 axios.defaults.withCredentials = true;
 
@@ -90,35 +92,11 @@ const Regist = () => {
     }
   };
 
-  const validateDuplicate = (data) => {
-    //NOTE 중복체크 통신//ok
-    const type = data;
-    const value = watch(data);
-    axios
-      .get(`${ROOT_API}/users/check/${type}/${value}`)
-      .then(function (response) {
-        if (type === "userid") {
-          if (response.data.duplicated === true) {
-            //NOTE 중복체크 수정
-            setDuplicateId(true);
-            showToast("error", "😎 아이디가 중복되었습니다.");
-          } else {
-            setDuplicateId(false);
-          }
-        }
-        if (type === "nickname") {
-          if (response.data.duplicated === true) {
-            setDuplicateNickName(true);
-            showToast("error", "😎 닉네임이 중복되었습니다.");
-          } else {
-            setDuplicateNickName(false);
-          }
-        }
-      })
-      .catch(() => {
-        showToast("error", "😎 중복체크를 제대로 확인해주세요");
-      });
+  const onClickHandler = (fieldName) => (e) => {
+    e.preventDefault();
+    getValidateDuplicate(fieldName, watch(fieldName), setDuplicateId, setDuplicateNickName)
   };
+
 
   const verityEmail = (e) => {
     //NOTE 이메일 인증//ok
@@ -135,7 +113,6 @@ const Regist = () => {
             .then((res) => {
               setVerityEmailcheck(true);
               showToast("success", "😎 인증문자가 발송되었습니다");
-              console.log(res.data.timer, "fdfddfd");
             })
             .catch(() => {
               showToast("error", "😎 이메일을 제대로 입력해주세요");
@@ -145,23 +122,15 @@ const Regist = () => {
         }
       });
   };
+
+  const { emailCheckQuery, handleEmailCheck } = useEmailCheck(watch().inputEmail);
+
   const verityEmailchecking = async (e) => {
-    //NOTE 이메일 인증//ok
     e.preventDefault();
-    axios
-      .get(`${ROOT_API}/email/verify`, {
-        params: { code: watch().inputEmail },
-      })
-      .then((res) => {
-        showToast("success", "😎 인증이 확인되었습니다");
-      })
-      .catch(() => {
-        showToast("error", "인증을 정확히 확인해주세요");
-      });
+    handleEmailCheck(watch().inputEmail);
   };
 
   const typechange = () => {
-    //NOTE 비밀번호 토글//ok
     setTypetoggle("text");
 
     setTimeout(() => {
@@ -178,33 +147,32 @@ const Regist = () => {
           <Button onClick={() => navigate("/")}>확인</Button>
         </BasicModal>
       )}
+      <div className={s.headername}>
+        <p>{authlogins} 계정 회원가입</p>
+        <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
+      </div>
+      <div className={s.gaider}>
+        <ul>
+          <li>
+            <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
+          </li>
+        </ul>
+      </div>
+      <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
+      <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 테그입력"} />
+      <div className={s.description}>
+        <label>한 줄 내소개</label>
+        <input
+          tabIndex="1"
+          type="description"
+          id="description"
+          value={description}
+          onChange={savedescription}
+          placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
+          maxLength={80}
+        />
+      </div>
       <Form White onSubmit={handleSubmit(onSubmit)}>
-        <legend>정보입력</legend>
-        <div className={s.headername}>
-          <p>{authlogins} 계정 회원가입</p>
-          <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
-        </div>
-        <div className={s.gaider}>
-          <ul>
-            <li>
-              <span>프로필 이미지 변경</span>은 회원가입 이후에도 가능합니다.
-            </li>
-          </ul>
-        </div>
-        <ProfileImg profileImgData={profileImgData} setProfileImgData={setProfileImgData} type="regist" />
-        <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 테그입력"} />
-        <div className={s.description}>
-          <label>한 줄 내소개</label>
-          <input
-            tabIndex="1"
-            type="description"
-            id="description"
-            value={description}
-            onChange={savedescription}
-            placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
-            maxLength={80}
-          />
-        </div>
         <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           {[
@@ -244,7 +212,7 @@ const Regist = () => {
                   placeholder="인증번호를 입력해주세요"
                   {...register("inputEmail", { required: true })}
                 />
-                <Button onClick={verityEmailchecking} tabIndex="5">
+                <Button onClick={(verityEmailchecking)} tabIndex="5">
                   확인
                 </Button>
               </div>
@@ -268,14 +236,7 @@ const Regist = () => {
                     },
                   })}
                 />
-                <Button
-                  tabIndex="7"
-                  title="중복체크"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    validateDuplicate("nickname");
-                  }}
-                >
+                <Button tabIndex="7" title="중복체크" onClick={onClickHandler("nickname")}>
                   중복체크
                 </Button>
               </div>
@@ -308,14 +269,7 @@ const Regist = () => {
                     },
                   })}
                 />
-                <Button
-                  tabIndex="9"
-                  title="중복체크"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    validateDuplicate("userid");
-                  }}
-                >
+                <Button tabIndex="9" title="중복체크" onClick={onClickHandler("userid")}>
                   중복체크
                 </Button>
               </div>
