@@ -4,9 +4,15 @@ import Label from "components/label/Label";
 import Button from "components/button/Button";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { DELETE_TOKEN, SET_TOKEN } from "store/Auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Userid = ({ auth, ROOT_API, axios, disabled, userData, handleChange, showToast }) => {
   const [duplicateId, setDuplicateId] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -33,6 +39,11 @@ const Userid = ({ auth, ROOT_API, axios, disabled, userData, handleChange, showT
       .then((response) => {
         console.log(response);
         showToast("success", "😎 정보가 수정 되었습니다");
+        localStorage.removeItem("dtrtk");
+        dispatch(DELETE_TOKEN());
+        navigate("/")
+        // localStorage.setItem("dtrtk", response.data.refreshToken)
+        // dispatch(SET_TOKEN({ accessToken: response.data.accessToken }))
       })
       .catch((error) => console.log(error));
   };

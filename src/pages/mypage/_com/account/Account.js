@@ -68,10 +68,10 @@ function Account() {
       });
   }, [auth.accessToken]);
 
-  const { mutate: DeleteUser } = useDeleteUser(navigate, watch().password, auth.accessToken);
+  // const { mutate: DeleteUser } = useDeleteUser(navigate, watch().password, auth.accessToken);
 //요청 URL 수정 필요
   const onSubmits = (data) => {
-    DeleteUser();
+    // DeleteUser();
   };
 
   return (
