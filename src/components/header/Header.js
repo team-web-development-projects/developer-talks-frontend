@@ -21,9 +21,9 @@ const Header = () => {
   const targetRef = useRef(null);
   const location = useLocation();
   const [toggleShow, setToggleShow] = useState(false);
-    useEffect(() => {
-      setToggleShow(false);
-    }, [location]);
+  useEffect(() => {
+    setToggleShow(false);
+  }, [location]);
   const showPopover = () => {
     setPopover(!popover);
   };
@@ -60,44 +60,46 @@ const Header = () => {
   // console.log('헤더 노티 : ', noti)
 
   return (
-    <header className="header">
-      <Link className="logo" to="/">
-        Developer-Talks
-      </Link>
-      <ul className={`navBar ${toggleShow ? "open" : "notOpen"}`}>
-        {menuRouter.map((item, i) => (
-          <li key={i}>
-            <Link
-              to={item.link}
-              className={classNames("", {
-                "is-active": location.pathname.includes(item.link),
-              })}
-            >
-              {item.text}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <ul className="menuBar">
-        <li className="popover-link">
-          <span onClick={showPopover} ref={targetRef}>
-            <span className="bell">
-              {/* TODO: 알람이 있을때 표시하기 */}
-              {noti.noti && auth.accessToken !== null && <span className="point" />}
-              <TfiBell size={24} />
+    <div className="head">
+      <header className="header">
+        <Link className="logo" to="/">
+          Developer-Talks
+        </Link>
+        <ul className="menuBar">
+          <ul className={`navBar ${toggleShow ? "open" : "notOpen"}`}>
+            {menuRouter.map((item, i) => (
+              <li key={i}>
+                <Link
+                  to={item.link}
+                  className={classNames("", {
+                    "is-active": location.pathname.includes(item.link),
+                  })}
+                >
+                  {item.text}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <li className="popover-link">
+            <span onClick={showPopover} ref={targetRef}>
+              <span className="bell">
+                {/* TODO: 알람이 있을때 표시하기 */}
+                {noti.noti && auth.accessToken !== null && <span className="point" />}
+                <TfiBell size={24} />
+              </span>
+              <Notification classname={popover ? "is_show" : ""} />
             </span>
-            <Notification classname={popover ? "is_show" : ""} />
-          </span>
-        </li>
-        <li className="header-user">
-          <Link to="/showuser">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}</Link>
-          {nickname && <span>{`${nickname}님`}</span>}
-        </li>
-        <li className="display">
-          <AiOutlineMenu size={26} onClick={visible} className={`${toggleShow ? "showMenu" : "notShowMenu"}`} />
-        </li>
-      </ul>
-    </header>
+          </li>
+          <li className="header-user">
+            <Link to="/showuser">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}</Link>
+            {nickname && <span>{`${nickname}님`}</span>}
+          </li>
+          <li className="display">
+            <AiOutlineMenu size={26} onClick={visible} className={`${toggleShow ? "showMenu" : "notShowMenu"}`} />
+          </li>
+        </ul>
+      </header>
+    </div>
   );
 };
 export default Header;

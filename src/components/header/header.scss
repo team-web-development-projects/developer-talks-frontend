@@ -1,5 +1,10 @@
 @import 'assets/style/function.scss';
 
+.head {
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
 .header {
   margin: 0 auto;
   padding: 0 20px;
@@ -7,7 +12,6 @@
   font-weight: 600;
   height: 60px;
   color: #0c0c0c;
-  border-bottom: 1px solid #ccc;
   display: flex;
   max-width: 1180px;
   justify-content: space-between;
@@ -24,7 +28,7 @@
 
   .navBar {
     display: flex;
-    gap: 10%;
+    // gap: 10%;
     justify-content: center;
     flex: 7;
 
@@ -46,7 +50,7 @@
         width: 200px;
         background-color: #c1c8dc;
       }
-      
+
       &.notOpen {
         opacity: 0;
         width: 0;
@@ -58,7 +62,6 @@
     justify-content: right;
     align-items: center;
     display: flex;
-    padding-left: 30px;
     text-align: center;
     flex: 2;
 
@@ -95,14 +98,19 @@
     a {
       display: block;
       color: #444;
-      padding: 10px 20px;
+
+      @include media-mo {
+        padding: 10px 0;
+
+      }
 
       &:hover,
       &.is-active {
         color: #063eff;
+
         @include media-mo {
-            background-color: #dfe4ef;
-          }
+          background-color: #dfe4ef;
+        }
       }
     }
   }
