@@ -1,34 +1,111 @@
 @import 'assets/style/function.scss';
 
-.head {
-  width: 100%;
-  border-bottom: 1px solid #ccc;
-}
-
 .header {
-  margin: 0 auto;
   padding: 0 20px;
   font-size: 16px;
   font-weight: 600;
-  height: 60px;
   color: #0c0c0c;
-  display: flex;
-  max-width: 1180px;
-  justify-content: space-between;
-  align-items: center;
+  border-bottom: 1px solid #ccc;
+
+  @include media-ta {
+    justify-content: space-between;
+  }
+
+  .header-wrap {
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    align-items: center;
+    width: 100%;
+    max-width: $content-max-width;
+    margin: 0 auto;
+  }
 
   .logo {
-    flex: 3;
-    font-size: 20px;
     padding-left: 35px;
+    font-size: 20px;
     background: url(dt.svg);
     background-size: 30px;
     background-repeat: no-repeat;
   }
 
+  .right {
+    position: relative;
+  }
+
   .navBar {
-    display: flex;
-    // gap: 10%;
+    .right {
+      display: flex;
+      align-items: center;
+      align-items: space-between;
+
+      >li {
+        padding: 0 30px;
+
+        &.hidden {
+          @include media-mo {
+            display: none;
+          }
+        }
+
+        &.popover-link {
+          position: relative;
+          height: 30px;
+          cursor: pointer;
+        }
+
+        a {
+          display: block;
+          color: #444;
+
+          &:hover,
+          &.is-active {
+            color: #063eff;
+          }
+        }
+      }
+    }
+
+    .bell {
+      position: relative;
+
+      .point {
+        position: absolute;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        background: red;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .menuBar {
+    display: none;
+    padding: 20px;
+
+    @include media-mo {
+      display: block;
+    }
+  }
+
+  .header-user {
+    position: relative;
+    text-align: center;
+
+    span {
+      position: absolute;
+      width: max-content;
+      left: -1000%;
+      right: -1000%;
+      margin: auto;
+      font-size: 14px;
+      bottom: -13px;
+    }
+  }
+
+  .moBar {
+    display: none;
     justify-content: center;
     flex: 7;
 
@@ -55,89 +132,36 @@
         opacity: 0;
         width: 0;
       }
-    }
-  }
 
-  .menuBar {
-    justify-content: right;
-    align-items: center;
-    display: flex;
-    text-align: center;
-    flex: 2;
-
-    li {
-      flex: 1;
-    }
-  }
-
-  .header-user {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    span {
-      font-size: 9px;
-    }
-  }
-
-  .display {
-    display: none;
-
-    @include media-mo {
-      display: block;
-    }
-  }
-
-  li {
-    &.popover-link {
-      position: relative;
-      height: 30px;
-      cursor: pointer;
-    }
-
-    a {
-      display: block;
-      color: #444;
-
-      @include media-mo {
-        padding: 10px 0;
-
-      }
-
-      &:hover,
-      &.is-active {
-        color: #063eff;
+      a {
+        display: block;
+        color: #444;
 
         @include media-mo {
-          background-color: #dfe4ef;
+          padding: 10px;
+
+        }
+
+        &:hover,
+        &.is-active {
+          color: #063eff;
+
+          @include media-mo {
+            background-color: #dfe4ef;
+          }
         }
       }
     }
   }
-}
 
-
-
-.bell {
-  position: relative;
-
-  .point {
-    position: absolute;
-    right: 0;
-    width: 10px;
-    height: 10px;
-    background: red;
-    border-radius: 50%;
+  .notShowMenu {
+    cursor: pointer;
+    transition: all 0.4s;
   }
-}
 
-.notShowMenu {
-  cursor: pointer;
-  transition: all 0.4s;
-}
-
-.showMenu {
-  cursor: pointer;
-  transform: rotate(90deg);
-  transition: all 0.4s;
+  .showMenu {
+    cursor: pointer;
+    transform: rotate(90deg);
+    transition: all 0.4s;
+  }
 }

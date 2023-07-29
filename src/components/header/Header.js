@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
 import { useOutOfClick } from "hooks/useOutOfClick";
-import { AiOutlineMenu } from "react-icons/ai";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
@@ -60,15 +59,15 @@ const Header = () => {
   // console.log('헤더 노티 : ', noti)
 
   return (
-    <div className="head">
-      <header className="header">
+    <header className="header">
+      <div className="header-wrap">
         <Link className="logo" to="/">
           Developer-Talks
         </Link>
-        <ul className="menuBar">
-          <ul className={`navBar ${toggleShow ? "open" : "notOpen"}`}>
+        <nav className="navBar">
+          <ul className="right">
             {menuRouter.map((item, i) => (
-              <li key={i}>
+              <li key={i} className="hidden">
                 <Link
                   to={item.link}
                   className={classNames("", {
@@ -79,27 +78,42 @@ const Header = () => {
                 </Link>
               </li>
             ))}
-          </ul>
-          <li className="popover-link">
-            <span onClick={showPopover} ref={targetRef}>
-              <span className="bell">
-                {/* TODO: 알람이 있을때 표시하기 */}
-                {noti.noti && auth.accessToken !== null && <span className="point" />}
-                <TfiBell size={24} />
+            <li className="popover-link">
+              <span onClick={showPopover} ref={targetRef}>
+                <span className="bell">
+                  {/* TODO: 알람이 있을때 표시하기 */}
+                  {noti.noti && auth.accessToken !== null && <span className="point" />}
+                  <TfiBell size={24} />
+                </span>
+                <Notification classname={popover ? "is_show" : ""} />
               </span>
-              <Notification classname={popover ? "is_show" : ""} />
-            </span>
+            </li>
+            <li className="header-user">
+              <Link to="/showuser">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}</Link>
+              {nickname && <span>{`${nickname}님`}</span>}
+            </li>
+          </ul>
+        </nav>
+        <div className="menuBar">
+            <FiMenu size={24} onClick={visible} className={`${toggleShow ? "showMenu" : "notShowMenu"}`} />
+        </div>
+      </div>
+
+      <ul className={`moBar ${toggleShow ? "open" : "notOpen"}`}>
+        {menuRouter.map((item, i) => (
+          <li key={i}>
+            <Link
+              to={item.link}
+              className={classNames("", {
+                "is-active": location.pathname.includes(item.link),
+              })}
+            >
+              {item.text}
+            </Link>
           </li>
-          <li className="header-user">
-            <Link to="/showuser">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}</Link>
-            {nickname && <span>{`${nickname}님`}</span>}
-          </li>
-          <li className="display">
-            <AiOutlineMenu size={26} onClick={visible} className={`${toggleShow ? "showMenu" : "notShowMenu"}`} />
-          </li>
-        </ul>
-      </header>
-    </div>
+        ))}
+      </ul>
+    </header>
   );
 };
 export default Header;
