@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
 import { useOutOfClick } from "hooks/useOutOfClick";
-
+import { AiOutlineClose } from 'react-icons/ai';
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
   const noti = useSelector((state) => state.notification);
@@ -94,8 +94,8 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <div className="menuBar">
-            <FiMenu size={24} onClick={visible} className={`${toggleShow ? "showMenu" : "notShowMenu"}`} />
+        <div onClick={visible} className={`menuBar ${ toggleShow ? "showMenu" : "notShowMenu"}`} >
+          {toggleShow ? <FiMenu size={24} /> : <AiOutlineClose size={24} />}
         </div>
       </div>
 
