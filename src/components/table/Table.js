@@ -4,13 +4,9 @@ import s from "./table.module.scss";
 const Table = ({ children, tableTitle, tableText }) => {
   return (
     <div className={s.table}>
-      <h2>{tableTitle}</h2>
-      <p>{tableText}</p>
-      <ul className={s.userinfoTable}>
-        {children.map((child, index) => (
-          <li key={child.id || index}>{child}</li>
-        ))}
-      </ul>
+      {tableTitle && <h2>{tableTitle}</h2>}
+      {tableText && <p>{tableText}</p>}
+      <div className={s.userinfoTable}>{children}</div>
     </div>
   );
 };

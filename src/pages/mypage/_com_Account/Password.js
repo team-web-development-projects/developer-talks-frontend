@@ -49,7 +49,7 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
   return (
     <Form onSubmit={handleSubmit(onSubmitPassword)}>
       <Table>
-        {[
+        <div>
           <div>
             <Label isRequire htmlFor="oldPassword">
               기존 비밀번호
@@ -78,7 +78,9 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
                 },
               })}
             />
-          </div>,
+          </div>
+        </div>
+        <div>
           <div>
             <Label isRequire htmlFor="newPassword">
               새로운비밀번호
@@ -107,8 +109,10 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
                 },
               })}
             />
-            {errors.newPassword && <small role="alert">{errors.newPassword.message}</small>}
-          </div>,
+          </div>
+          {errors.newPassword && <small role="alert">{errors.newPassword.message}</small>}
+        </div>
+        <div>
           <div>
             <Label isRequire htmlFor="checkNewPassword">
               비밀번호 확인
@@ -142,14 +146,13 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
                 },
               })}
             />
-            {errors.checkNewPassword && <small role="alert">{errors.checkNewPassword.message}</small>}
-          </div>,
-        ]}
+            <span type="typechange" onClick={typechange}>
+              👀
+            </span>
+          </div>
+          {errors.checkNewPassword && <small role="alert">{errors.checkNewPassword.message}</small>}
+        </div>
       </Table>
-      <div type="typechange" onClick={typechange}>
-        👀
-      </div>
-      <br />
       <Button FullWidth size="large" type="submit" disabled={disabled}>
         저장
       </Button>

@@ -12,7 +12,7 @@ import Description from "pages/mypage/_com_Account/Description";
 import Email from "pages/mypage/_com_Account/Email";
 import Nickname from "pages/mypage/_com_Account/Nickname";
 import Password from "pages/mypage/_com_Account/Password";
-import Userid from "pages/mypage/_com_Account/Uerid";
+import Userid from "pages/mypage/_com_Account/Userid";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -66,10 +66,10 @@ function Account() {
         setUserData(data);
         setSelectedTags({ ...selectedTags, tags: data.skills });
       });
-  }, [auth.accessToken]);
+  }, []);
 
   // const { mutate: DeleteUser } = useDeleteUser(navigate, watch().password, auth.accessToken);
-//요청 URL 수정 필요
+  //요청 URL 수정 필요
   const onSubmits = (data) => {
     // DeleteUser();
   };
@@ -102,25 +102,9 @@ function Account() {
               setSelectedTags={setSelectedTags}
             />
             <LineStyle gray text={" 기본정보를 입력해주세요"} />
-            <Nickname auth={auth} ROOT_API={ROOT_API} axios={axios} userData={userData} showToast={showToast} handleChange={handleChange} />
-            <Email
-              auth={auth}
-              ROOT_API={ROOT_API}
-              axios={axios}
-              disabled={disabled}
-              showToast={showToast}
-              userData={userData}
-              handleChange={handleChange}
-            />
-            <Userid
-              auth={auth}
-              ROOT_API={ROOT_API}
-              axios={axios}
-              disabled={disabled}
-              userData={userData}
-              showToast={showToast}
-              handleChange={handleChange}
-            />
+            <Nickname userData={userData} handleChange={handleChange} />
+            <Email userData={userData} handleChange={handleChange} />
+            <Userid userData={userData} handleChange={handleChange} />
             <Password
               auth={auth}
               ROOT_API={ROOT_API}
@@ -135,13 +119,13 @@ function Account() {
         {select === 1 && (
           <Form onSubmit={handleSubmit(onSubmits)}>
             <div className={s.deletgaider}>
-              회원 탈퇴일로부터 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된 게시물은 삭제되지 않으며, 익명처리 후 디톡스로
-              소유권이 귀속됩니다.
+              회원 탈퇴일로부터 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된 게시물은 삭제되지
+              않으며, 익명처리 후 디톡스로 소유권이 귀속됩니다.
             </div>
             {/* <input type="checkbox" /> */}
             {/* <label>계정 삭제에 관한 정책을 읽고 이에 동의합니다</label> */}
             <Table>
-              {[
+              <div>
                 <div>
                   <Label isRequire htmlFor="password">
                     비밀번호
@@ -169,9 +153,9 @@ function Account() {
                       },
                     })}
                   />
-                  {errors.password && <small role="alert">{errors.password.message}</small>}
-                </div>,
-              ]}
+                </div>
+                {errors.password && <small role="alert">{errors.password.message}</small>}
+              </div>
             </Table>
             <br />
             <Button FullWidth size="large" type="submit">

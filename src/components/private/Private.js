@@ -16,18 +16,17 @@ const Private = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(status,"111")
-    axios
-      .get(`${ROOT_API}/users/private/${parseJwt(auth.accessToken).userid}`, {
-        headers: { "X-AUTH-TOKEN": auth.accessToken },
-      })
-      .then((response) => {
-        setStatus(response.data);
-        console.log(response,"ss")
-      });
-    console.log(status, "111ee");
+    if(auth.accessToken) {
+      axios
+        .get(`${ROOT_API}/users/private/${parseJwt(auth.accessToken).userid}`, {
+          headers: { "X-AUTH-TOKEN": auth.accessToken },
+        })
+        .then((response) => {
+          setStatus(response.data);
+        });
+    }
 
-  },[auth.accessToken, navigate]);
+  },[]);
 
   const handleClick = () => {
     const newStatus = !status;
