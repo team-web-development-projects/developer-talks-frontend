@@ -1,6 +1,7 @@
 @import 'assets/style/function.scss';
 
 .header {
+  position: relative;
   padding: 0 20px;
   font-size: 16px;
   font-weight: 600;
@@ -19,6 +20,11 @@
     width: 100%;
     max-width: $content-max-width;
     margin: 0 auto;
+
+    @include media-mo {
+      padding-right: 30px;
+      box-sizing: border-box;
+    }
   }
 
   .logo {
@@ -30,62 +36,73 @@
   }
 
   .right {
+    display: flex;
+    align-items: center;
     position: relative;
-  }
 
-  .navBar {
-    .right {
-      display: flex;
-      align-items: center;
-      align-items: space-between;
+    li {
+      padding: 0 30px;
 
-      >li {
-        padding: 0 30px;
+      @include media-mo {
+        padding: 0 10px;
+      }
 
-        &.hidden {
-          @include media-mo {
-            display: none;
-          }
-        }
-
-        &.popover-link {
-          position: relative;
-          height: 30px;
-          cursor: pointer;
-        }
-
-        a {
-          display: block;
-          color: #444;
-
-          &:hover,
-          &.is-active {
-            color: #063eff;
-          }
+      &:not(.popover-link) {
+        @include media-mo {
+          display: none;
         }
       }
-    }
 
-    .bell {
-      position: relative;
+      &.popover-link {
+        position: relative;
+        height: 30px;
+        cursor: pointer;
+      }
 
-      .point {
-        position: absolute;
-        right: 0;
-        width: 10px;
-        height: 10px;
-        background: red;
-        border-radius: 50%;
+      a {
+        display: block;
+        color: #444;
+
+        &:hover,
+        &.is-active {
+          color: #063eff;
+        }
       }
     }
   }
 
-  .menuBar {
+  .bell {
+    position: relative;
+
+    .point {
+      position: absolute;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+    }
+  }
+
+  .mobile-menu {
     display: none;
     padding: 20px;
 
     @include media-mo {
       display: block;
+      position: absolute;
+      right: 10px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      height: fit-content;
+      padding: 10px;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: all 0.4s;
+    }
+    &.is-show {
+      transform: rotate(360deg);
     }
   }
 
@@ -104,64 +121,49 @@
     }
   }
 
-  .moBar {
-    display: none;
-    justify-content: center;
-    flex: 7;
+  .mobile-nav {
+    position: absolute;
+    right: 0;
+    top: 61px;
+    display: block;
+    width: 0;
+    height: 100%;
+    padding: 10px;
+    // box-shadow: 4px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    overflow: hidden;
+    // transition: all 0.4s;
+    z-index: 100;
+    box-sizing: border-box;
 
-    @include media-mo {
+    &.is-open {
+      width: 100%;
+      height: calc(100vh - 61px);
+      background-color: #fafafa;
+    }
+
+    a {
       display: block;
-      position: absolute;
-      background-color: #ffffff;
-      box-shadow: 4px rgba(0, 0, 0, 0.2);
-      right: 0;
-      top: 61px;
-      width: 200px;
-      height: 100%;
-      overflow: hidden;
-      align-items: center;
-      transition: all 0.4s;
-      z-index: 99;
+      color: #444;
+      padding: 10px 14px;
+      border-radius: 6px;
 
-      &.open {
-        width: 200px;
-        background-color: #c1c8dc;
-      }
-
-      &.notOpen {
-        opacity: 0;
-        width: 0;
-      }
-
-      a {
-        display: block;
-        color: #444;
-
-        @include media-mo {
-          padding: 10px;
-
-        }
-
-        &:hover,
-        &.is-active {
-          color: #063eff;
-
-          @include media-mo {
-            background-color: #dfe4ef;
-          }
-        }
+      &:hover, &.is-active {
+        color: #063eff;
+        background-color: #dfe4ef;
       }
     }
-  }
-
-  .notShowMenu {
-    cursor: pointer;
-    transition: all 0.4s;
-  }
-
-  .showMenu {
-    cursor: pointer;
-    transform: rotate(360deg);
-    transition: all 0.4s;
+    .header-user {
+      width: 100px;
+      margin: 0 auto;
+      .profile {
+        display: inline-block;
+        margin-bottom: -10px;
+      }
+      span {
+        position: static;
+        font-size: 16px;
+      }
+    }
   }
 }
