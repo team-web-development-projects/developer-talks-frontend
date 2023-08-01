@@ -1,10 +1,10 @@
 import React from "react";
 import s from "./lineStyle.module.scss";
 
-const LineStyle = ({ text, gray }) => {
+const LineStyle = ({ children }) => {
   return (
     <div className={s.lineStyle}>
-      <span className={`${gray ? s.gray : ""}`}>{text}</span>
+      <span>{children}</span>
     </div>
   );
 };

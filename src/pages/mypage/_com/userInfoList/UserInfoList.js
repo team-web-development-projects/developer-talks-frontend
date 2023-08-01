@@ -130,7 +130,7 @@ const UserInfoList = ({ user }) => {
         */}
           {/*
            */}
-          {data &&
+          {data.length !== 0 ?
             data.map((item, index) => (
               <div key={index} className={s.userdata}>
                 {select === 0 && MyActivity(item)}
@@ -138,7 +138,9 @@ const UserInfoList = ({ user }) => {
                 {select === 2 && MyReply(item)}
                 {select === 3 && MyScrab(item)}
               </div>
-            ))}
+            ))
+            : <>내용이 없습니다.</>
+            }
         </div>
         {/*
         <Pagination

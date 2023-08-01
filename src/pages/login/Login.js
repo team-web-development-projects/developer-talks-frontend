@@ -146,8 +146,7 @@ const Login = () => {
           </Button>
         </fieldset>
         <br />
-        <LineStyle gray text={"SNS 로그인"} />
-
+        <LineStyle>SNS 로그인</LineStyle>
         <Snslogin>
           <LoginGoogle />
           <LoginNaver />
