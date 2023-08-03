@@ -36,7 +36,6 @@ self.addEventListener("push", function (e) {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-
 messaging.onBackgroundMessage(function (payload) {
   const notification = payload.notification;
 
