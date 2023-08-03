@@ -30,6 +30,7 @@ const Login = () => {
         {
           userid: data.userId,
           password: data.password,
+          fcmToken: localStorage.getItem("dtalksFcm"),
         },
         {
           headers: {

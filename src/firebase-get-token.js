@@ -26,7 +26,8 @@ export default function useGetToken() {
       .then((currentToken) => {
         if (currentToken) {
           console.log(currentToken);
-          alert("토큰: " + currentToken);
+          // alert("토큰: " + currentToken);
+          localStorage.setItem("dtalksFcm", currentToken);
           // 토큰을 서버에 전달...
         } else {
           // Show permission request UI
@@ -37,5 +38,10 @@ export default function useGetToken() {
         console.log("An error occurred while retrieving token. ", err);
         // ...
       });
+
+    firebaseMessage.onMessage((payload) => {
+      console.log(payload.notification.title);
+      console.log(payload.notification.body);
+    });
   }, []);
 }
