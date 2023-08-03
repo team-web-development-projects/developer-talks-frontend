@@ -15,17 +15,18 @@ import Password from "pages/mypage/_com_Account/Password";
 import Userid from "pages/mypage/_com_Account/Userid";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useMutation } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { DELETE_TOKEN } from "store/Auth";
 import s from "../../mypagecontent.module.scss";
 import account from "./account.module.scss";
-import { useDeleteUser } from "hooks/useDeleteUser";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
   const provider = parseJwt(auth.accessToken).provider;
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   let disabled;
   if (provider) {
     disabled = true;
@@ -68,10 +69,26 @@ function Account() {
       });
   }, []);
 
-  // const { mutate: DeleteUser } = useDeleteUser(navigate, watch().password, auth.accessToken);
-  //요청 URL 수정 필요
-  const onSubmits = (data) => {
-    // DeleteUser();
+
+  // 유저 삭제
+  const { isLoading: isLoadingIdDelete, mutate: idDelete } = useMutation(
+    ["deleteId"],
+    (data) =>
+      axios.delete(`${ROOT_API}/users`, {
+        headers: { "X-AUTH-TOKEN": auth.accessToken },
+        params: data
+      }),
+    {
+      onSuccess: (res) => {
+        showToast("success", "😎 삭제 되었습니다");
+        localStorage.removeItem("dtrtk");
+        dispatch(DELETE_TOKEN());
+        navigate("/");
+      },
+    }
+  );
+  const deleteId = (data) => {
+    idDelete(data);
   };
 
   return (
@@ -89,7 +106,6 @@ function Account() {
         {select === 0 && (
           <>
             <Private />
-            {/* <ProfileImg nickname={"aa"} size="big" profileImgData={profileImgData} setProfileImgData ={setProfileImgData}/> */}
             <Description
               auth={auth}
               ROOT_API={ROOT_API}
@@ -117,13 +133,10 @@ function Account() {
           </>
         )}
         {select === 1 && (
-          <Form onSubmit={handleSubmit(onSubmits)}>
+          <Form onSubmit={handleSubmit(deleteId)}>
             <div className={s.deletgaider}>
-              회원 탈퇴일로부터 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다. 작성된 게시물은 삭제되지
-              않으며, 익명처리 후 디톡스로 소유권이 귀속됩니다.
+              회원 탈퇴일로부터 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다.
             </div>
-            {/* <input type="checkbox" /> */}
-            {/* <label>계정 삭제에 관한 정책을 읽고 이에 동의합니다</label> */}
             <Table>
               <div>
                 <div>
