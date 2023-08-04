@@ -69,14 +69,13 @@ function Account() {
       });
   }, []);
 
-
   // 유저 삭제
   const { isLoading: isLoadingIdDelete, mutate: idDelete } = useMutation(
     ["deleteId"],
     (data) =>
       axios.delete(`${ROOT_API}/users`, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
-        params: data
+        params: data,
       }),
     {
       onSuccess: (res) => {
@@ -107,13 +106,9 @@ function Account() {
           <>
             <Private />
             <Description
-              auth={auth}
-              ROOT_API={ROOT_API}
-              axios={axios}
               userData={userData}
               handleChange={handleChange}
               account={account}
-              showToast={showToast}
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />
@@ -121,15 +116,7 @@ function Account() {
             <Nickname userData={userData} handleChange={handleChange} />
             <Email userData={userData} handleChange={handleChange} />
             <Userid userData={userData} handleChange={handleChange} />
-            <Password
-              auth={auth}
-              ROOT_API={ROOT_API}
-              axios={axios}
-              disabled={disabled}
-              showToast={showToast}
-              userData={userData}
-              handleChange={handleChange}
-            />
+            <Password disabled={disabled} handleChange={handleChange} />
           </>
         )}
         {select === 1 && (
