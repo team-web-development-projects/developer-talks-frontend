@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const ChatInput = ({ setText, onClick, text }) => {
+const ChatInput = ({ setText, onClick }) => {
   const [inputText, setInputText] = useState("");
 
   const click = (e) => {
@@ -13,23 +13,23 @@ const ChatInput = ({ setText, onClick, text }) => {
     //   },
     //   JSON.stringify(text)
     // );
-    setText(inputText)
+    setText(inputText);
+    setInputText("");
   };
 
   const onChange = (e) => {
     setInputText(e.target.value);
   };
 
-  useEffect(() => {
-    
-  }, [])
-
-  console.log('input 컴포넌트 : ', text)
-
   return (
     <div>
-      <form onSubmit={(e) => onClick(e, inputText)}>
-        <input type="text" name="" id="" onChange={onChange}  value={inputText}/>
+      <form
+        onSubmit={(e) => {
+          click(e, inputText);
+          onClick(e, inputText);
+        }}
+      >
+        <input type="text" name="" id="" onChange={onChange} value={inputText} />
         <button>전송</button>
       </form>
     </div>
