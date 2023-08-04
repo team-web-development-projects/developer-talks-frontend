@@ -1,13 +1,12 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import s from "./boardPost.module.scss";
-import { toast } from 'react-toastify';
 
 export default function BoardPost({ type }) {
   const [modal, setModal] = useState(false);
@@ -35,12 +34,12 @@ export default function BoardPost({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.title.trim() === '') {
-      toast.error('제목을 입력해주세요.');
+    if (form.title.trim() === "") {
+      toast.error("제목을 입력해주세요.");
       return;
     }
-    if (form.content.trim() === '') {
-      toast.error('내용을 입력해주세요.');
+    if (form.content.trim() === "") {
+      toast.error("내용을 입력해주세요.");
       return;
     }
     await new Promise((r) => setTimeout(r, 1000));
@@ -63,9 +62,8 @@ export default function BoardPost({ type }) {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then((response) => {
-        console.log(response);
-        setModal(true);
+      .then(() => {
+        navigate(`/${getType}`);
       })
       .catch((error) => console.log(error));
   };
@@ -77,13 +75,6 @@ export default function BoardPost({ type }) {
 
   return (
     <>
-      {modal && (
-        <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/${getType}`)}>
-          게시글이 정상적으로 등록되었습니다. <br />
-          확인을 눌러주세요.
-          <button onClick={() => navigate(`/${getType}`)}>확인</button>
-        </BasicModal>
-      )}
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
           <input className={s.title} type="text" name="title" value={form.title} placeholder="제목을 작성해주세요." onChange={handleChange} />

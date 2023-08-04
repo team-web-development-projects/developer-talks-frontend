@@ -1,18 +1,18 @@
-import Button from "components/button/Button";
-import s from "./rereplyItem.module.scss";
-import { useSelector } from "react-redux";
-import { useMutation, useQueryClient } from "react-query";
-import { BsLock } from "react-icons/bs";
-import { useState } from "react";
-import { parseJwt } from "hooks/useParseJwt";
-import { useEffect } from "react";
-import { ROOT_API } from "constants/api";
-import { toast } from "react-toastify";
-import Gravatar from "react-gravatar";
 import axios from "axios";
+import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
+import { ROOT_API } from "constants/api";
+import { parseJwt } from "hooks/useParseJwt";
+import { useEffect, useState } from "react";
+import Gravatar from "react-gravatar";
+import { BsLock } from "react-icons/bs";
+import { useMutation, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import s from "./rereplyItem.module.scss";
+import TextArea from "components/textarea/TextArea";
 
-const RereplyItem = ({ rr }) => {
+const RereplyItem = ({ rr, postId }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const [isSelf, setIsSelf] = useState(false);
@@ -23,9 +23,10 @@ const RereplyItem = ({ rr }) => {
     secret: rr.secret,
   });
   const [reForm, setReForm] = useState({
-    content: `@${rr.userInfo.nickname}`,
+    content: "",
     secret: false,
   });
+
   const updateCommentMutation = useMutation(
     (updatedComment) =>
       axios.put(`${ROOT_API}/comment/${rr.id}`, updatedComment, {
@@ -37,7 +38,7 @@ const RereplyItem = ({ rr }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["replyList"]);
-        setIsUpdateToggle((prev) => !prev);
+        setIsUpdateToggle(false);
       },
     }
   );
@@ -58,8 +59,26 @@ const RereplyItem = ({ rr }) => {
     }
   );
 
-  const handleUpdate = () => {
-    setIsUpdateToggle((prev) => !prev);
+  const postCommentMutation = useMutation(
+    (newComment) =>
+      axios.post(`${ROOT_API}/comment/${postId}/${rr.id}`, newComment, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      }),
+    {
+      onSuccess: () => {
+        setReForm({ ["content"]: "", ["secret"]: false });
+        setIsPostToggle(false);
+        queryClient.invalidateQueries(["replyList"]);
+      },
+    }
+  );
+
+  const handleUpdateClick = () => {
+    setIsUpdateToggle(true);
+    setIsPostToggle(false);
   };
 
   const handleUpdatePost = (e) => {
@@ -73,7 +92,8 @@ const RereplyItem = ({ rr }) => {
 
   const handleUpdateCancle = () => {
     setForm({ ["content"]: rr.content, ["secret"]: rr.secret });
-    setIsUpdateToggle((prev) => !prev);
+    setIsUpdateToggle(false);
+    setIsPostToggle(false);
   };
 
   const handleDelete = (e) => {
@@ -81,13 +101,22 @@ const RereplyItem = ({ rr }) => {
     deleteCommentMutation.mutate();
   };
   const handlePostClick = () => {
-    setIsPostToggle((prev) => !prev);
+    setIsPostToggle(true);
   };
-  const handlePost = () => {};
+  const handlePost = (e) => {
+    e.preventDefault();
+    const newComment = {
+      content: reForm.content,
+      secret: reForm.secret,
+    };
+    postCommentMutation.mutate(newComment);
+  };
+
   const handlePostCancle = () => {
-    setForm({ ["content"]: `@${rr.userInfo.nickname}`, ["secret"]: false });
-    setIsPostToggle((prev) => !prev);
+    setReForm({ ["content"]: "", ["secret"]: false });
+    setIsPostToggle(false);
   };
+
   useEffect(() => {
     if (auth.accessToken !== null) {
       const nickname = parseJwt(auth.accessToken).nickname;
@@ -99,7 +128,7 @@ const RereplyItem = ({ rr }) => {
   return (
     <>
       {(!rr.secret || (rr.secret && isSelf)) && (
-        <div className={s.container} onClick={handlePostClick}>
+        <div className={s.container}>
           <div className={s.info}>
             {rr.userInfo.userProfile !== null ? (
               <img className={s.profile} src={rr.userInfo.userProfile} alt="프로필 이미지" />
@@ -111,9 +140,9 @@ const RereplyItem = ({ rr }) => {
               <p className={s.date}>{rr.modifiedDate}</p>
             </div>
             {rr.secret && <BsLock size={20} />}
-            {isSelf ? (
+            {isSelf && !rr.remove ? (
               <div className={s.btn_wrap}>
-                <Button onClick={handleUpdate} size="small">
+                <Button onClick={handleUpdateClick} size="small">
                   수정
                 </Button>
                 <Button onClick={handleDelete} size="small" theme="cancle">
@@ -126,7 +155,8 @@ const RereplyItem = ({ rr }) => {
           {isUpdateToggle ? (
             <form onSubmit={handleUpdatePost}>
               <div>
-                <CkEditor form={form} setForm={setForm} />
+                {/* <CkEditor form={form} setForm={setForm} /> */}
+                <TextArea form={form} setForm={setForm} />
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input
@@ -139,13 +169,7 @@ const RereplyItem = ({ rr }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button
-                    classname={s.cancle}
-                    theme="outline"
-                    color="#9ca3af"
-                    size="medium"
-                    onClick={handleUpdateCancle}
-                  >
+                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -153,13 +177,21 @@ const RereplyItem = ({ rr }) => {
               </div>
             </form>
           ) : (
-            <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }}></div>
+            // <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }} onClick={handlePostClick}></div>
+            <>
+              <div className={s.tagContentName}>@{rr.parentNickname}</div>
+              <div className={s.content} onClick={handlePostClick}>
+                {rr.content}
+              </div>
+            </>
           )}
 
-          {/* {isPostToggle && (
+          {isPostToggle && !isUpdateToggle && (
             <form onSubmit={handlePost}>
               <div className={s.postConatiner}>
-                <CkEditor form={reForm} setForm={setReForm} />
+                {/* <CkEditor form={reForm} setForm={setReForm} /> */}
+                <div className={s.tagName}>@{rr.userInfo.nickname}</div>
+                <TextArea form={reForm} setForm={setReForm} />
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input
@@ -179,7 +211,7 @@ const RereplyItem = ({ rr }) => {
                 </div>
               </div>
             </form>
-          )} */}
+          )}
         </div>
       )}
     </>

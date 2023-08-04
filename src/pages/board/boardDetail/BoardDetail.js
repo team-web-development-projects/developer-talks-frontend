@@ -1,23 +1,21 @@
 import axios from "axios";
 import BoardCount from "components/boardCount/BoardCount";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import ReplyList from "pages/board/_com/replyList/ReplyList";
-import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
-import { useEffect, useState } from "react";
-import { AiOutlineStar } from "react-icons/ai";
-import { FiThumbsUp } from "react-icons/fi";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import s from "./boardDetail.module.scss";
 import Button from "components/button/Button";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
-import { toast } from "react-toastify";
-import { useQuery } from "react-query";
-import Gravatar from "react-gravatar";
-import MessageModal from "components/portalModal/messagemodal/MessageModal";
+import { ROOT_API } from "constants/api";
 import { useOutOfClick } from "hooks/useOutOfClick";
-import { useRef } from "react";
+import { parseJwt } from "hooks/useParseJwt";
+import ReplyList from "pages/board/_com/replyList/ReplyList";
+import { useEffect, useRef, useState } from "react";
+import Gravatar from "react-gravatar";
+import { AiOutlineStar } from "react-icons/ai";
+import { FiThumbsUp } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import AnswerList from "../_com/answerList/AnswerList";
+import s from "./boardDetail.module.scss";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -31,7 +29,6 @@ const BoardDetail = ({ type }) => {
   });
   const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
-  const [modalD, setModalD] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(false);
 
   const fetchPost = async (type, postId, auth) => {
@@ -46,31 +43,16 @@ const BoardDetail = ({ type }) => {
       return `<img src=${response.data.imageUrls[cnt++]} />`;
     });
     setPost(response.data);
+    console.log(response.data);
   };
 
   const { isLoading, isError } = useQuery(["boardDetail"], () => fetchPost(type, postId, auth));
 
   useEffect(() => {
-    // axios
-    //   .get(`${ROOT_API}/${type}/${postId}`, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "X-AUTH-TOKEN": auth.accessToken,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     let cnt = 0;
-    //     res.data.imagedContent = res.data.content.replace(/<img>/g, (match, capture) => {
-    //       return `<img src=${res.data.imageUrls[cnt++]} />`;
-    //     });
-    //     setPost(res.data);
-    //     console.log(res.data);
-    //   })
-    //   .catch((error) => console.log(error));
     if (auth.accessToken !== null) {
       setNickName(parseJwt(auth.accessToken).nickname);
       axios
-        .get(`${ROOT_API}/post/check/status/${postId}`, {
+        .get(`${ROOT_API}/${type}/check/status/${postId}`, {
           headers: {
             "Content-Type": "application/json",
             "X-AUTH-TOKEN": auth.accessToken,
@@ -91,7 +73,7 @@ const BoardDetail = ({ type }) => {
           "X-AUTH-TOKEN": auth.accessToken,
         },
       })
-      .then(() => setModalD(true))
+      .then(() => navigate(-1))
       .catch((error) => console.log(error));
   };
 
@@ -110,14 +92,6 @@ const BoardDetail = ({ type }) => {
 
   return (
     <>
-      {modalD && (
-        <BasicModal setOnModal={() => setModalD()}>
-          게시글이 삭제되었습니다.
-          <br />
-          <button onClick={() => navigate(-1)}>확인</button>
-          <br />
-        </BasicModal>
-      )}
       <div className={s.container}>
         <header>
           <div className={s.userInfoContainer}>
@@ -128,7 +102,7 @@ const BoardDetail = ({ type }) => {
             )}
             <div>
               {/*NOTE 닉네임 클릭 시 유저정보 */}
-              <ShowUserInfo userinfo={post.userInfo} type="detail"/>
+              <ShowUserInfo userinfo={post.userInfo} type="detail" />
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
@@ -165,6 +139,7 @@ const BoardDetail = ({ type }) => {
         </main>
         <div className={s.countContainer}>
           <BoardCount
+            ttype={type}
             type={"favorite"}
             token={auth.accessToken}
             isOwner={nickname === post.userInfo.nickname}
@@ -177,6 +152,7 @@ const BoardDetail = ({ type }) => {
             <span>{post.favoriteCount}</span>
           </BoardCount>
           <BoardCount
+            ttype={type}
             type={"recommend"}
             token={auth.accessToken}
             isOwner={nickname === post.userInfo.nickname}
@@ -189,7 +165,12 @@ const BoardDetail = ({ type }) => {
             <span>{post.recommendCount}</span>
           </BoardCount>
         </div>
-        <ReplyList nickname={nickname} />
+
+        {type === "post" ? (
+          <ReplyList nickname={nickname} replyCnt={post.commentCount} />
+        ) : (
+          <AnswerList nickname={nickname} answerCnt={post.commentCount} />
+        )}
       </div>
     </>
   );

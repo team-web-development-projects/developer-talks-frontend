@@ -31,8 +31,8 @@
   }
   .frontContainer {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    align-items: center;
   }
   .info_wrap {
     position: relative;
@@ -62,7 +62,6 @@
     }
   }
   .title {
-    padding-bottom: 10px;
     font-size: 30px;
     font-weight: 500;
     @include media-mo {
