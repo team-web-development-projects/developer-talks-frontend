@@ -1,10 +1,15 @@
+// @import '../../assets/style/function.scss';
 .label {
-    display: inline-block;
-    background-color: #ffffff;
-        font-weight: bolder;
-        min-width: 110px;
+  display: inline-block;
+  background-color: #ffffff;
+  font-weight: bolder;
+  min-width: 110px;
+  white-space: pre;
+  @media (max-width: 600px) {
+    display: none;
+  }
 }
 
 .isRequire {
-    color: #f11616;
-  }
+  color: #f11616;
+}

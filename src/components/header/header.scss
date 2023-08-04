@@ -1,15 +1,17 @@
 @import 'assets/style/function.scss';
 
 .header {
+  position: relative;
   padding: 0 20px;
   font-size: 16px;
   font-weight: 600;
   color: #0c0c0c;
   border-bottom: 1px solid #ccc;
-  
+
   @include media-ta {
     justify-content: space-between;
   }
+
   .header-wrap {
     display: flex;
     justify-content: space-between;
@@ -18,6 +20,11 @@
     width: 100%;
     max-width: $content-max-width;
     margin: 0 auto;
+
+    @include media-mo {
+      padding-right: 30px;
+      box-sizing: border-box;
+    }
   }
 
   .logo {
@@ -29,50 +36,80 @@
   }
 
   .right {
+    display: flex;
+    align-items: center;
     position: relative;
-  }
 
-  .navBar {
-    .right {
-      display: flex;
-      align-items: center;
-      align-items: space-between;
-      > li {
-        padding: 0 30px;
-        &.popover-link {
-          position: relative;
-          height: 30px;
-          cursor: pointer;
-        }
-        a {
-          display: block;
-          color: #444;
-          &:hover, &.is-active {
-            color: #063eff;
-          }
+    li {
+      padding: 0 30px;
+
+      @include media-mo {
+        padding: 0 10px;
+      }
+
+      &:not(.popover-link) {
+        @include media-mo {
+          display: none;
         }
       }
-    }
-    .bell {
-      position: relative;
-      .point {
-        position: absolute;
-        right: 0;
-        width: 10px;
-        height: 10px;
-        background: red;
-        border-radius: 50%;
+
+      &.popover-link {
+        position: relative;
+        height: 30px;
+        cursor: pointer;
+      }
+
+      a {
+        display: block;
+        color: #444;
+
+        &:hover,
+        &.is-active {
+          color: #063eff;
+        }
       }
     }
   }
 
-  .menuBar {
+  .bell {
+    position: relative;
+
+    .point {
+      position: absolute;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+    }
+  }
+
+  .mobile-menu {
     display: none;
     padding: 20px;
+
+    @include media-mo {
+      display: block;
+      position: absolute;
+      right: 10px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      height: fit-content;
+      padding: 10px;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: all 0.4s;
+    }
+    &.is-show {
+      transform: rotate(360deg);
+    }
   }
+
   .header-user {
     position: relative;
     text-align: center;
+
     span {
       position: absolute;
       width: max-content;
@@ -81,6 +118,52 @@
       margin: auto;
       font-size: 14px;
       bottom: -13px;
+    }
+  }
+
+  .mobile-nav {
+    position: absolute;
+    right: 0;
+    top: 61px;
+    display: block;
+    width: 0;
+    height: 100%;
+    padding: 10px;
+    // box-shadow: 4px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    overflow: hidden;
+    // transition: all 0.4s;
+    z-index: 100;
+    box-sizing: border-box;
+
+    &.is-open {
+      width: 100%;
+      height: calc(100vh - 61px);
+      background-color: #fafafa;
+    }
+
+    a {
+      display: block;
+      color: #444;
+      padding: 10px 14px;
+      border-radius: 6px;
+
+      &:hover, &.is-active {
+        color: #063eff;
+        background-color: #dfe4ef;
+      }
+    }
+    .header-user {
+      width: 100px;
+      margin: 0 auto;
+      .profile {
+        display: inline-block;
+        margin-bottom: -10px;
+      }
+      span {
+        position: static;
+        font-size: 16px;
+      }
     }
   }
 }

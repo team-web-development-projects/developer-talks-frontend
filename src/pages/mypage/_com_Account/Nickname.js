@@ -3,7 +3,13 @@ import Form from "components/form/Form";
 import Label from "components/label/Label";
 import Button from "components/button/Button";
 import { useState } from "react";
-const Nickname = ({ auth, ROOT_API, axios, userData, handleChange, showToast }) => {
+import { showToast } from "components/toast/showToast";
+import { ROOT_API } from "constants/api";
+import axios from "axios";
+import { useSelector } from "react-redux";
+
+const Nickname = ({ userData, handleChange }) => {
+  const auth = useSelector((state) => state.authToken);
   const [duplicateNickName, setDuplicateNickName] = useState("");
   const onSubmitNickname = async (e) => {
     e.preventDefault();
@@ -25,19 +31,18 @@ const Nickname = ({ auth, ROOT_API, axios, userData, handleChange, showToast }) 
         showToast("success", "😎 정보가 수정 되었습니다");
       })
       .catch((error) => console.log(error));
-  };  const validateDuplicate = (data) => {
-    const type = data;
+  };
+  const validateDuplicate = (data) => {
     axios
-      .get(`${ROOT_API}/users/check/${type}/${userData.nickname}`)
+      .get(`${ROOT_API}/users/check/${data}/${userData.nickname}`)
       .then(function (response) {
-        if (type === "nickname") {
+        if (data === "nickname") {
           if (response.data.duplicated === true) {
             setDuplicateNickName(true);
             showToast("error", "😎 닉네임이 중복되었습니다.");
           } else {
             setDuplicateNickName(false);
             showToast("success", "😎사용가능한 닉네임입니다.");
-
           }
         }
       })
@@ -47,13 +52,13 @@ const Nickname = ({ auth, ROOT_API, axios, userData, handleChange, showToast }) 
   };
   return (
     <Form onSubmit={onSubmitNickname}>
-      <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
-        {[
+      <Table>
+        <div>
           <div>
             <Label isRequire htmlFor="nickname">
               닉네임
             </Label>
-            <input id="nickname" name="nickname" value={userData.nickname} onChange={handleChange} type="text" />
+            <input id="nickname" name="nickname" defaultValue={userData?.nickname || ""} onChange={handleChange} type="text" />
             <Button
               onClick={(e) => {
                 e.preventDefault();
@@ -62,8 +67,8 @@ const Nickname = ({ auth, ROOT_API, axios, userData, handleChange, showToast }) 
             >
               중복체크
             </Button>
-          </div>,
-        ]}
+          </div>
+        </div>
       </Table>
       <Button type="submit" FullWidth size="large">
         저장

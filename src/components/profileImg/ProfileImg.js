@@ -17,7 +17,7 @@ import { parseJwt } from "hooks/useParseJwt";
  * @returns
  */
 
-const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nickname, border, type }) => {
+const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nickname, border, type, className }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
@@ -103,7 +103,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
 
   return (
     <div
-      className={classnames(s.img_wrap, {
+      className={classnames(s.img_wrap, className, {
         [s.is_big]: size === "big",
         [s.is_border]: border === "color",
         [s.regist_page]: type === "regist",

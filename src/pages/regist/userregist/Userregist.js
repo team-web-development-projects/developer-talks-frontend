@@ -76,7 +76,7 @@ const Userregist = () => {
                 nickname: data.nickname,
                 skills: selectedTags.tags,
                 description: description,
-                profileImageId:response.data.id,
+                profileImageId: response.data.id,
               },
               {
                 headers: {

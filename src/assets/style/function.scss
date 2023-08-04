@@ -3,6 +3,7 @@ $content-max-width: 1180px;
 $breakpoints-tablet: 1023;
 $breakpoints-mobile: 767;
 
+
 @mixin media-mo() {
   @media (max-width: ($breakpoints-mobile+'px')) {
     @content;

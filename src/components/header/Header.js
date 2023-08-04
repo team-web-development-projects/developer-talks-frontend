@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
 import { useOutOfClick } from "hooks/useOutOfClick";
-
+import { AiOutlineClose } from "react-icons/ai";
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
   const noti = useSelector((state) => state.notification);
@@ -19,7 +19,10 @@ const Header = () => {
   let nickname = "";
   const targetRef = useRef(null);
   const location = useLocation();
-
+  const [toggleShow, setToggleShow] = useState(false);
+  useEffect(() => {
+    setToggleShow(false);
+  }, [location]);
   const showPopover = () => {
     setPopover(!popover);
   };
@@ -50,7 +53,9 @@ const Header = () => {
   useOutOfClick(targetRef, () => {
     setPopover(false);
   });
-
+  const visible = () => {
+    setToggleShow(!toggleShow);
+  };
   // console.log('헤더 노티 : ', noti)
 
   return (
@@ -59,7 +64,7 @@ const Header = () => {
         <Link className="logo" to="/">
           Developer-Talks
         </Link>
-        <nav className="navBar">
+        <nav>
           <ul className="right">
             {menuRouter.map((item, i) => (
               <li key={i}>
@@ -84,16 +89,39 @@ const Header = () => {
               </span>
             </li>
             <li className="header-user">
-              <Link to="/showuser">{!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}</Link>
+              <Link to="/showuser">
+                {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}
+              </Link>
               {nickname && <span>{`${nickname}님`}</span>}
             </li>
           </ul>
         </nav>
-        <div className="menuBar">
-          <Link to="/">
-            <FiMenu size={24} />
-          </Link>
+        <div onClick={visible} className={`mobile-menu ${toggleShow && "is-show"}`}>
+          {toggleShow ? <AiOutlineClose size={24} /> : <FiMenu size={24} />}
         </div>
+      </div>
+
+      <div className={`mobile-nav ${toggleShow && "is-open"}`}>
+        <div className="header-user">
+          <Link to="/showuser">
+            {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" className="profile"/>}
+          </Link>
+          {nickname && <span>{`${nickname}님`}</span>}
+        </div>
+        <ul>
+          {menuRouter.map((item, i) => (
+            <li key={i}>
+              <Link
+                to={item.link}
+                className={classNames("", {
+                  "is-active": location.pathname.includes(item.link),
+                })}
+              >
+                {item.text}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </header>
   );

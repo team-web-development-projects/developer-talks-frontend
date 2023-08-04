@@ -3,8 +3,13 @@ import Form from "components/form/Form";
 import Label from "components/label/Label";
 import Button from "components/button/Button";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { ROOT_API } from "constants/api";
+import { showToast } from "components/toast/showToast";
+import { useSelector } from "react-redux";
 
-const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showToast }) => {
+const Email = ({ userData, handleChange }) => {
+  const auth = useSelector((state) => state.authToken);
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
   const [timer, setTimer] = useState(0);
 
@@ -76,6 +81,7 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
         showToast("error", "😎 인증을 제대로 입력해주세요");
       });
   };
+
   const startTimer = () => {
     const timer = setInterval(() => {
       setTimer((prevCount) => prevCount - 1);
@@ -91,29 +97,27 @@ const Email = ({ auth, ROOT_API, axios, userData, handleChange, disabled, showTo
   return (
     <Form onSubmit={onSubmitEmail}>
       <Table>
-        {[
+        <div>
           <div>
             <Label isRequire htmlFor="userEmail">
               이메일
             </Label>
-            <input id="userEmail" name="email" value={userData.email} disabled={disabled} onChange={handleChange} type="text" />
-            <Button disabled={disabled} onClick={verityEmail}>
-              이메일 인증
-            </Button>
-          </div>,
+            <input id="userEmail" name="email" defaultValue={userData?.email || ""} onChange={handleChange} type="text" />
+            <Button onClick={verityEmail}>이메일 인증</Button>
+          </div>
+        </div>
+        <div>
           <div>
             <Label isRequire htmlFor="userEmail">
               이메일 인증
             </Label>
-            <input id="inputEmail" name="inputEmail" value={userData.inputEmail} disabled={disabled} onChange={handleChange} type="text" />
-            <Button disabled={disabled} onClick={verityEmailchecking}>
-              확인
-            </Button>
-          </div>,
-        ]}
+            <input id="inputEmail" name="inputEmail" defaultValue={userData?.inputEmail || ""}  onChange={handleChange} type="text" />
+            <Button onClick={verityEmailchecking}>확인</Button>
+          </div>
+        </div>
       </Table>
       {timer}
-      <Button type="submit" disabled={disabled} onClick={onSubmitEmail} FullWidth size="large">
+      <Button type="submit" onClick={onSubmitEmail} FullWidth size="large">
         저장
       </Button>
     </Form>
