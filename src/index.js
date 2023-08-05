@@ -1,15 +1,13 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 // import { HashRouter } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import { isDev } from "util/Util";
-import reportWebVitals from "./reportWebVitals";
-import "./assets/style/function.scss";
+import App from "./App";
 import "./assets/style/index.scss";
+import reportWebVitals from "./reportWebVitals";
 import store from "./store";
 
 const queryClient = new QueryClient({

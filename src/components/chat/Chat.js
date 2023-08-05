@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { useQueryClient } from "react-query";
 import ChatInput from "./ChatInput";
 
 const Chat = ({ postId, setChat, setGetList, setChatStatus }) => {
   const auth = useSelector((state) => state.authToken);
+  const queryClient = useQueryClient();
   const [conec, setConnec] = useState(false);
   const [text, setText] = useState("");
   const [debouncedClick, setDebouncedClick] = useState(null);
@@ -30,7 +32,8 @@ const Chat = ({ postId, setChat, setGetList, setChatStatus }) => {
         (body) => {
           console.log("메시지 받음: ", JSON.parse(body.body).message);
           //이후 처리
-          setGetList(true);
+          // setGetList(true);
+          queryClient.invalidateQueries(["chatList"]);
         },
         headers
       );
@@ -53,25 +56,16 @@ const Chat = ({ postId, setChat, setGetList, setChatStatus }) => {
   const click = async (e, text) => {
     e.preventDefault();
     // NOTE: 같은 텍스트여도 전송되게
-    setChat(text);
-    setChatStatus(true);
+    // setChat(text);
+    // setChatStatus(true);
 
-    if (debouncedClick) {
-      clearTimeout(debouncedClick);
-    }
-    const timer = setTimeout(() => {
-      // 디바운스 로직을 작성합니다.
-      // console.log("클릭 이벤트가 발생했습니다. (딜레이 후 한 번만 실행됩니다.)");
-      stomp.send(
-        `/pub/rooms/${postId}`,
-        {
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-        JSON.stringify(text)
-      );
-    }, 1000); // 1초 딜레이
-
-    setDebouncedClick(timer);
+    stomp.send(
+      `/pub/rooms/${postId}`,
+      {
+        "X-AUTH-TOKEN": auth.accessToken,
+      },
+      JSON.stringify(text)
+    );
   };
 
   return (
