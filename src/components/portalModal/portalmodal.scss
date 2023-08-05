@@ -25,6 +25,19 @@
       max-width: 80%;
     }
   }
+  .modal-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .modal-buttons {
+    display: flex;
+    width: 100%;
+    margin-top: auto;
+    justify-content: right;
+    gap: 8px;
+  }
   .dim {
     width: 100%;
     height: 100%;

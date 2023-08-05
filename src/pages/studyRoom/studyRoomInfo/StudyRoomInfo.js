@@ -12,6 +12,8 @@ import "./studyroominfo.scss";
 import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
 import { useEffect } from "react";
 import { getUer } from "hooks/useAuth";
+import { Modal } from "components/portalModal/Modal";
+import Button from "components/button/Button";
 
 const StudyRoomInfo = () => {
   const { postId } = useParams();
@@ -106,18 +108,21 @@ const StudyRoomInfo = () => {
       )}
       {inModal && (
         <BasicModal setOnModal={() => setInModal()}>
-          생성자의 승인 없이 입장할 수 있는 스터디룸입니다.
-          <br />
-          바로 입장 하시겠나요?
-          <button
-            onClick={() => {
-              requestRoom();
-              navigate(`/studyroom/${postId}`);
-            }}
-          >
-            입장하기
-          </button>
-          <button onClick={() => setInModal(false)}>돌아가기</button>
+          <Modal.Content>생성자의 승인 없이 입장할 수 있는 스터디룸입니다.</Modal.Content>
+          <Modal.Buttons>
+            <Button
+              size="small"
+              onClick={() => {
+                requestRoom();
+                navigate(`/studyroom/${postId}`);
+              }}
+            >
+              입장하기
+            </Button>
+            <Button size="small" theme="cancle" onClick={() => setInModal(false)}>
+              돌아가기
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       {settingModal && (

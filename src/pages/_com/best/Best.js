@@ -35,7 +35,7 @@ const Best = () => {
               </div>
               <p>{item.title}</p>
             </li>
-          )) : <li>게시글이 없습니다.</li>}
+          )) : <li>7일내 작성된 추천글이 없습니다.</li>}
       </ul>
     </section>
   );

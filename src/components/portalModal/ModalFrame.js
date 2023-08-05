@@ -20,7 +20,7 @@ const ModalFrame = ({
     <PortalModal>
       <div className={classnames("modal")} style={{ zindex: zindex }} onClick={onClick}>
         <div className={classnames("", classname)}>
-          <div className="">
+          <div className="modal-container">
             {children}
             {onClose && (
               <div className="close" onClick={() => setOnModal(false)}>

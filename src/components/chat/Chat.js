@@ -5,12 +5,11 @@ import Stomp from "stompjs";
 import { useQueryClient } from "react-query";
 import ChatInput from "./ChatInput";
 
-const Chat = ({ postId, setChat, setGetList, setChatStatus }) => {
+const Chat = ({ postId }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const [conec, setConnec] = useState(false);
   const [text, setText] = useState("");
-  const [debouncedClick, setDebouncedClick] = useState(null);
 
   //socket 연결
   const headers = {
