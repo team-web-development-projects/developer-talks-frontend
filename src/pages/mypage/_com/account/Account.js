@@ -69,14 +69,13 @@ function Account() {
       });
   }, []);
 
-
   // 유저 삭제
   const { isLoading: isLoadingIdDelete, mutate: idDelete } = useMutation(
     ["deleteId"],
     (data) =>
       axios.delete(`${ROOT_API}/users`, {
         headers: { "X-AUTH-TOKEN": auth.accessToken },
-        params: data
+        params: data,
       }),
     {
       onSuccess: (res) => {
@@ -108,29 +107,17 @@ function Account() {
             개인정보 보호
             <Private />
             <Description
-              auth={auth}
-              ROOT_API={ROOT_API}
-              axios={axios}
               userData={userData}
               handleChange={handleChange}
               account={account}
-              showToast={showToast}
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />
-            <LineStyle gray text={" 기본정보를 입력해주세요"} />
+            {/* <LineStyle>기본정보를 입력해주세요</LineStyle> */}
             <Nickname userData={userData} handleChange={handleChange} />
             <Email userData={userData} handleChange={handleChange} />
             <Userid userData={userData} handleChange={handleChange} />
-            <Password
-              auth={auth}
-              ROOT_API={ROOT_API}
-              axios={axios}
-              disabled={disabled}
-              showToast={showToast}
-              userData={userData}
-              handleChange={handleChange}
-            />
+            <Password disabled={disabled} handleChange={handleChange} />
           </>
         )}
         {select === 1 && (

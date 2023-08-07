@@ -1,13 +1,13 @@
-import Button from "components/button/Button";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import s from "../boardPost/boardPost.module.scss";
-import CkEditor from "components/ckeditor/CkEditor";
 import axios from "axios";
+import Button from "components/button/Button";
+import CkEditor from "components/ckeditor/CkEditor";
+import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { ROOT_API } from "constants/api";
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import s from "../boardPost/boardPost.module.scss";
 
 const BoardUpdate = ({ type }) => {
   const [modalY, setModalY] = useState(false);
@@ -25,12 +25,12 @@ const BoardUpdate = ({ type }) => {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.title.trim() === '') {
-      toast.error('제목을 입력해주세요.');
+    if (form.title.trim() === "") {
+      toast.error("제목을 입력해주세요.");
       return;
     }
-    if (form.content.trim() === '') {
-      toast.error('내용을 입력해주세요.');
+    if (form.content.trim() === "") {
+      toast.error("내용을 입력해주세요.");
       return;
     }
     await new Promise((r) => setTimeout(r, 1000));
@@ -46,7 +46,7 @@ const BoardUpdate = ({ type }) => {
     if (form.imgUrls.length !== 0) {
       frm.append("imgUrls", form.imgUrls);
     }
-    
+
     axios
       .put(`${ROOT_API}/${type}/${postId}`, frm, {
         headers: {
@@ -79,7 +79,7 @@ const BoardUpdate = ({ type }) => {
           글 수정을 취소하시겠습니까?
           <br />
           수정된 내용은 저장되지 않습니다.
-          <button onClick={() => console.log(form)}>확인</button>
+          <button onClick={() => navigate(-1)}>확인</button>
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>

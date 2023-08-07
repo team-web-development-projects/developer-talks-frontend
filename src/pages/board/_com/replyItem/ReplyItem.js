@@ -13,6 +13,7 @@ import Gravatar from "react-gravatar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
+import TextArea from 'components/textarea/TextArea';
 
 const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
@@ -30,6 +31,20 @@ const ReplyItem = ({ postId, reply }) => {
   });
 
   const [isSelf, setIsSelf] = useState(false);
+
+  const handleSetTab = (e) => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      let val = e.target.value;
+      let start = e.target.selectionStart;
+      let end = e.target.selectionEnd;
+      e.target.value = val.substring(0, start) + "\t" + val.substring(end);
+      e.target.selectionStart = e.target.selectionEnd = start + 1;
+      setReForm({ ...reForm, ["content"]: e.target.value });
+      return false; //  prevent focus
+    }
+  };
+
   const handleReToggle = () => {
     setReForm({ ["content"]: "", ["secret"]: false });
     setIsPostToggle((prev) => !prev);
@@ -151,7 +166,7 @@ const ReplyItem = ({ postId, reply }) => {
               <p className={s.date}>{reply.modifiedDate}</p>
             </div>
             {reply.secret && <BsLock size={20} />}
-            {isSelf ? (
+            {isSelf && !reply.remove ? (
               <div className={s.btn_wrap}>
                 <Button onClick={handleUpdate} size="small">
                   수정
@@ -165,7 +180,8 @@ const ReplyItem = ({ postId, reply }) => {
           {isUpdateToggle ? (
             <form onSubmit={handleUpdatePost}>
               <div>
-                <CkEditor form={form} setForm={setForm} />
+                {/* <CkEditor form={form} setForm={setForm} /> */}
+                <TextArea form={form} setForm={setForm}/>
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input
@@ -178,13 +194,7 @@ const ReplyItem = ({ postId, reply }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button
-                    classname={s.cancle}
-                    theme="outline"
-                    color="#9ca3af"
-                    size="medium"
-                    onClick={handleUpdateCancle}
-                  >
+                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -192,7 +202,8 @@ const ReplyItem = ({ postId, reply }) => {
               </div>
             </form>
           ) : (
-            <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
+            // <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
+            <div className={s.content}>{reply.content}</div>
           )}
           <div className={s.replyBtnContainer}>
             {reply.childrenList.length ? (
@@ -222,7 +233,8 @@ const ReplyItem = ({ postId, reply }) => {
               {ispostToggle && (
                 <form onSubmit={handleRePost}>
                   {/* <div> */}
-                  <CkEditor form={reForm} setForm={setReForm} />
+                  {/* <CkEditor form={reForm} setForm={setReForm} /> */}
+                  <TextArea form={reForm} setForm={setReForm}/>
                   <div className={s.btnRgn}>
                     <label className={s.secret}>
                       <input
@@ -234,13 +246,7 @@ const ReplyItem = ({ postId, reply }) => {
                       />{" "}
                       시크릿 댓글
                     </label>
-                    <Button
-                      classname={s.cancle}
-                      theme="outline"
-                      color="#9ca3af"
-                      size="medium"
-                      onClick={handleRePostCancle}
-                    >
+                    <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
                       취소
                     </Button>
                     <Button size="medium">등록</Button>
@@ -248,9 +254,7 @@ const ReplyItem = ({ postId, reply }) => {
                   {/* </div> */}
                 </form>
               )}
-              <div>
-                {isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} />)}
-              </div>
+              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}</div>
             </div>
           </div>
         </div>

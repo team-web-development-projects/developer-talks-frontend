@@ -207,7 +207,11 @@ const Userregist = () => {
         <div className={s.tagalign}>
           <div className={s.tags}>
             {tags.map((item, index) => (
-              <span key={index} onClick={() => clickTag(item)} className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}>
+              <span
+                key={index}
+                onClick={() => clickTag(item)}
+                className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+              >
                 {item}
               </span>
             ))}
@@ -224,7 +228,7 @@ const Userregist = () => {
             maxLength={80}
           />
         </div>
-        <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
+        <LineStyle>회원가입에 필요한 기본정보를 입력해주세요(필수입니다)</LineStyle>
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           {[
             <div>
@@ -262,7 +266,9 @@ const Userregist = () => {
                 </Button>
               </div>
               {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+                <small className="alert">중복된 닉네임입니다.</small>
+              )}
               {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
                 <small className="true">사용할 수 있는 닉네임입니다.</small>
               )}

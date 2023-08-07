@@ -51,7 +51,7 @@ const Nickname = ({ userData, handleChange }) => {
   };
   return (
     <form onSubmit={onSubmitNickname}>
-      <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
+      <Table>
         <div>
           <div>
             <Label isRequire htmlFor="nickname">

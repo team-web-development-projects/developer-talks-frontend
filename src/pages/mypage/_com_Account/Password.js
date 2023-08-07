@@ -3,8 +3,14 @@ import Label from "components/label/Label";
 import Table from "components/table/Table";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { ROOT_API } from "constants/api";
+import { showToast } from "components/toast/showToast";
 
-const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
+const Password = ({ disabled }) => {
+  const auth = useSelector((state) => state.authToken);
+
   const [typetoggle, setTypetoggle] = useState("password");
   const {
     register,

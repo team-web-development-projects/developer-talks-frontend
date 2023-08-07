@@ -51,6 +51,7 @@ const Login = () => {
         //     },
         //   })
         //   .then((res) => console.log("test: ", res));
+        navigate("/");
         setModal(true);
         reset();
       })
@@ -79,13 +80,6 @@ const Login = () => {
 
   return (
     <>
-      {modal && (
-        <BasicModal setOnModal={() => setModal(false)} dimClick={() => navigate("/")}>
-          로그인이 완료되었습니다. <br />
-          확인을 누르시면 메인으로 이동합니다.
-          <button onClick={() => navigate("/")}>확인</button>
-        </BasicModal>
-      )}
       <Form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           <legend>로그인페이지</legend>
@@ -150,8 +144,7 @@ const Login = () => {
           </Button>
         </fieldset>
         <br />
-        <LineStyle gray text={"SNS 로그인"} />
-
+        <LineStyle>SNS 로그인</LineStyle>
         <Snslogin>
           <LoginGoogle />
           <LoginNaver />

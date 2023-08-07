@@ -205,7 +205,7 @@ const Regist = () => {
             maxLength={80}
           />
         </div>
-        <LineStyle text={"회원가입에 필요한 기본정보를 입력해주세요(필수입니다)"} />
+        <LineStyle>회원가입에 필요한 기본정보를 입력해주세요(필수입니다)</LineStyle>
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
           {[
             <React.Fragment key={1}>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import React from "react";
@@ -21,7 +22,7 @@ export default function useRefreshToken() {
       // atrk 가 없고, rtk가 있지만 rtk의 만료시간이 현재 시간보다 이전일때
       // console.log("현재날짜가 만료시간보다 큼", epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp));
       if (epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp)) {
-        console.log("토큰 만료");
+        showToast("error", "회원 정보가 만료되었습니다.");
         localStorage.removeItem("dtrtk");
         navigate("/login");
       }

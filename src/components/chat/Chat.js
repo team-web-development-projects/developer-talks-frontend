@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { useQueryClient } from "react-query";
+import ChatInput from "./ChatInput";
 
-const Chat = ({ postId, setChatText }) => {
+const Chat = ({ postId, setChat, setGetList, setChatStatus }) => {
   const auth = useSelector((state) => state.authToken);
+  const queryClient = useQueryClient();
   const [conec, setConnec] = useState(false);
   const [text, setText] = useState("");
+  const [debouncedClick, setDebouncedClick] = useState(null);
 
   //socket 연결
   const headers = {
@@ -18,7 +22,6 @@ const Chat = ({ postId, setChatText }) => {
 
   useEffect(() => {
     stomp.connect(headers, ({ temp }) => {
-      setConnec(true);
       console.log("소켓 연결됨");
       // try {
       //방 생성
@@ -27,18 +30,18 @@ const Chat = ({ postId, setChatText }) => {
       stomp.subscribe(
         `/sub/rooms/${postId}`,
         (body) => {
-          console.log("body: ", JSON.parse(body.body).message);
-          setText('');
-          setChatText(JSON.parse(body.body).message)
+          console.log("메시지 받음: ", JSON.parse(body.body).message);
           //이후 처리
+          // setGetList(true);
+          queryClient.invalidateQueries(["chatList"]);
         },
         headers
       );
 
       // } catch (e) {
-      //axios 예외처리
-      //axios는 기본적으로 200응답 외에는 에러를 던지므로
-      //방 생성 or 방 입장에 관한 api오류시 이곳에서 처리해야함
+      // axios 예외처리
+      // axios는 기본적으로 200응답 외에는 에러를 던지므로
+      // 방 생성 or 방 입장에 관한 api오류시 이곳에서 처리해야함
       // console.log("error: ", e);
       // }
     });
@@ -49,15 +52,15 @@ const Chat = ({ postId, setChatText }) => {
       });
     };
   }, []);
-  
-  const click = (e) => {
+
+  const click = async (e, text) => {
     e.preventDefault();
-    console.log('text', text);
-    // const body = JSON.stringify("Hello");
-    console.log('시도');
+    // NOTE: 같은 텍스트여도 전송되게
+    // setChat(text);
+    // setChatStatus(true);
+
     stomp.send(
       `/pub/rooms/${postId}`,
-      // `/pub/rooms/1`,
       {
         "X-AUTH-TOKEN": auth.accessToken,
       },
@@ -65,16 +68,9 @@ const Chat = ({ postId, setChatText }) => {
     );
   };
 
-  const onChange = (e) => {
-    setText(e.target.value);
-  };
-
   return (
     <div>
-      <form onSubmit={click}>
-        <input type="text" name="" id="" onChange={onChange} value={text}/>
-        <button>전송</button>
-      </form>
+      <ChatInput setText={setText} onClick={click} text={text} />
     </div>
   );
 };

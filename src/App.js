@@ -5,7 +5,7 @@ import BoardList from "pages/board/boardList/BoardList";
 import BoardPost from "pages/board/boardPost/BoardPost";
 import BoardUpdate from "pages/board/boardUpdate/BoardUpdate";
 import FindPassword from "pages/findpassword/FindPassword";
-import FindUser from 'pages/finduser/FindUser';
+import FindUser from "pages/finduser/FindUser";
 import Login from "pages/login/Login";
 import Main from "pages/main/Main";
 import Index from "pages/mypage";
@@ -21,49 +21,39 @@ import { Route, Routes } from "react-router-dom";
 import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
-import "./assets/style/index.scss";
-import "./assets/style/function.scss";
-// import Sse from "sse";
+import Sse from "sse";
+import { useEffect } from "react";
+
+// FCM 테스트
+// import "./firebase-get-token";
+// import { messaging } from "./firebase-get-token";
+// import { getToken } from "firebase/messaging";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
-  const [loading, setLoading] = useState(false);
+
+  // async function requestPermission() {
+  //   const permission = await Notification.requestPermission();
+  //   if (permission === "granted") {
+  //     const token = await getToken(messaging, {
+  //       vapidKey: "BOWbgLD10kyQ6zwV8RpnBg84oLQCD6Ll1t2u0AWjDxd1-u3sbTNy1DbKHEvJpvgLrUAhinaytkHIDakxn0HETaI",
+  //     });
+  //     console.log('token : ', token);
+  //   } else if (permission === "denied") {
+  //     console.log("denied");
+  //   }
+  // }
+  // useEffect(() => {
+  //   requestPermission();
+  // }, []);
 
   // console.log("auth", auth.accessToken);
 
   useGoogleLoginAuth();
   useRefreshToken();
   // Sse();
-
-  //  NOTE: 타이머로 재갱신 테스트 코드
-  // useEffect(() => {
-  //   let timer;
-
-  //   const startTimer = () => {
-  //     timer = setTimeout(performAction, 1500);
-  //   };
-
-  //   const stopTimer = () => {
-  //     clearTimeout(timer);
-  //   };
-
-  //   if (auth.accessToken === null) {
-  //     startTimer();
-  //   } else {
-  //     stopTimer();
-  //   }
-
-  //   return stopTimer;
-  // }, [auth.accessToken]);
-
-  // const performAction = () => {
-  //   return setLoading(true);
-  //   // 실행시 로딩중일때
-  // };
-
   return (
     <div className="App">
-      <ToastCont />
       <Routes>
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
@@ -79,7 +69,7 @@ function App() {
           <Route path="qna" element={<BoardList type="questions" />} />
           <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />
           <Route path="/qna/:postId" element={<BoardDetail type="questions" />} />
-          <Route path="*" element={<NotPage />} />
+          {/* <Route path="*" element={<NotPage />} /> */}
         </Route>
 
         <Route element={<NavigatePost />}>

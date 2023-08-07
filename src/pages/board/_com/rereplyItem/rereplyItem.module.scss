@@ -3,7 +3,6 @@
   list-style: none;
   width: 100%;
   border-bottom: solid 1px #cfcccc;
-  cursor: pointer;
   &:last-child {
     border-bottom: none;
   }
@@ -37,6 +36,8 @@
   }
   .content {
     font-size: 20px;
+    white-space: pre-wrap;
+    cursor: pointer;
   }
 }
 .btnRgn {
@@ -77,6 +78,18 @@
     margin-right: 5px;
   }
 }
-.postConatiner{
-  margin-top:30px;
+.postConatiner {
+  margin-top: 30px;
+}
+.tagName {
+  display: inline;
+  padding:10px;
+  font-size: 20px;
+  font-weight: 500;
+  border: 1px solid #cfcccc;
+  border-radius: 10px;
+}
+.tagContentName{
+  font-size: 20px;
+  font-weight: 500;
 }
