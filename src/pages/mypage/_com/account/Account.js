@@ -105,6 +105,7 @@ function Account() {
         </ul>
         {select === 0 && (
           <>
+            개인정보 보호
             <Private />
             <Description
               auth={auth}

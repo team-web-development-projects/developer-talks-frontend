@@ -1,8 +1,7 @@
-import Table from "components/table/Table";
-import Form from "components/form/Form";
-import Label from "components/label/Label";
 import Button from "components/button/Button";
-import { useEffect, useState } from "react";
+import Label from "components/label/Label";
+import Table from "components/table/Table";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
@@ -47,7 +46,7 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmitPassword)}>
+    <form onSubmit={handleSubmit(onSubmitPassword)}>
       <Table>
         <div>
           <div>
@@ -156,7 +155,7 @@ const Password = ({ auth, ROOT_API, axios, userData, disabled, showToast }) => {
       <Button FullWidth size="large" type="submit" disabled={disabled}>
         저장
       </Button>
-    </Form>
+    </form>
   );
 };
 export default Password;

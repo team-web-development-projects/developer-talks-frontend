@@ -1,11 +1,10 @@
-import Table from "components/table/Table";
-import Form from "components/form/Form";
-import Label from "components/label/Label";
+import axios from "axios";
 import Button from "components/button/Button";
-import { useState } from "react";
+import Label from "components/label/Label";
+import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
-import axios from "axios";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const Nickname = ({ userData, handleChange }) => {
@@ -51,7 +50,7 @@ const Nickname = ({ userData, handleChange }) => {
       });
   };
   return (
-    <Form onSubmit={onSubmitNickname}>
+    <form onSubmit={onSubmitNickname}>
       <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
         <div>
           <div>
@@ -73,7 +72,7 @@ const Nickname = ({ userData, handleChange }) => {
       <Button type="submit" FullWidth size="large">
         저장
       </Button>
-    </Form>
+    </form>
   );
 };
 export default Nickname;

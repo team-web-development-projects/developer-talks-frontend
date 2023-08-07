@@ -1,15 +1,14 @@
-import Table from "components/table/Table";
-import Form from "components/form/Form";
-import Label from "components/label/Label";
-import Button from "components/button/Button";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { DELETE_TOKEN, SET_TOKEN } from "store/Auth";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ROOT_API } from "constants/api";
 import axios from "axios";
+import Button from "components/button/Button";
+import Label from "components/label/Label";
+import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
+import { ROOT_API } from "constants/api";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { DELETE_TOKEN, SET_TOKEN } from "store/Auth";
 
 const Userid = ({ userData, handleChange }) => {
   const auth = useSelector((state) => state.authToken);
@@ -67,7 +66,7 @@ const Userid = ({ userData, handleChange }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmitUerid)}>
+    <form onSubmit={handleSubmit(onSubmitUerid)}>
       <Table>
         <div>
           <div>
@@ -104,7 +103,7 @@ const Userid = ({ userData, handleChange }) => {
       <Button type="submit" disabled={!watch().userid} FullWidth size="large">
         저장
       </Button>
-    </Form>
+    </form>
   );
 };
 export default Userid;

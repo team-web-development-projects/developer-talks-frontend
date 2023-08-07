@@ -1,4 +1,3 @@
-import Form from "components/form/Form";
 import Button from "components/button/Button";
 import Tags from "components/tags/Tags";
 
@@ -29,7 +28,7 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
       .catch((error) => console.log(error));
   };
   return (
-    <Form onSubmit={onSubmitDescription}>
+    <form onSubmit={onSubmitDescription}>
       <label>한 줄 내소개</label>
       <div className={account.description}>
         <input
@@ -38,7 +37,7 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
           name="description"
           defaultValue={userData.description || ""}
           placeholder="내 소개를 자유롭게 해보세요 80자까지 가능합니다."
-          maxLength={80}
+          maxLength={70}
           onChange={handleChange}
         />
       </div>
@@ -46,7 +45,7 @@ const Description = ({ auth, ROOT_API, axios, userData, handleChange, account, s
       <Button FullWidth size="large" type="submit">
         저장
       </Button>
-    </Form>
+    </form>
   );
 };
 export default Description;
