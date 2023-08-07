@@ -31,7 +31,9 @@ const Userregist = () => {
   const [userEmail, setUserEmail] = useState("");
   const [duplicateNickName, setDuplicateNickName] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
-  const [imageFile, setImageFile] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [imageFile, setImageFile] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+  );
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImageId, setProfileImageId] = useState("");
   const handleCheckboxChange = (event) => {
@@ -45,14 +47,14 @@ const Userregist = () => {
     showToast("success", "😎 이미지가 업로드 되었습니다");
   };
   const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
+    // await new Promise((r) => setTimeout(r, 1000));
     if (!selectedImage) {
       return;
     }
     console.log(selectedImage);
     const formData = new FormData();
     formData.append("file", selectedImage);
-
+    console.log("버튼 클릭");
     if (duplicateNickName === false) {
       axios
         .post(`${ROOT_API}/users/profile/image`, formData, {
@@ -230,50 +232,48 @@ const Userregist = () => {
         </div>
         <LineStyle>회원가입에 필요한 기본정보를 입력해주세요(필수입니다)</LineStyle>
         <Table tableTitle={"Developer-Talks 계정 만들기"} tableText={"*필수사항 입니다."}>
-          {[
+          <div>
             <div>
               <Label htmlFor="userEmail">이메일</Label>
               <input id="userEmail" className="disable" type="text" placeholder={userEmail} readOnly />
-            </div>,
-            <>
-              <div>
-                <Label isRequire htmlFor="nickname">
-                  닉네임
-                </Label>
-                <input
-                  type="text"
-                  id="nickname"
-                  placeholder="닉네임을 입력해주세요"
-                  tabIndex="2"
-                  ref={nicknameRef}
-                  maxLength={15}
-                  {...register("nickname", {
-                    required: "닉네임은 필수 입력입니다.",
-                    minLength: {
-                      value: 5,
-                      message: "5자리 이상 입력해주세요.",
-                    },
-                  })}
-                />
-                <Button
-                  title="중복체크"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    validateDuplicate("nickname");
-                  }}
-                >
-                  중복체크
-                </Button>
-              </div>
-              {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
-                <small className="alert">중복된 닉네임입니다.</small>
-              )}
-              {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
-                <small className="true">사용할 수 있는 닉네임입니다.</small>
-              )}
-            </>,
-          ]}
+            </div>
+            <div>
+              <Label isRequire htmlFor="nickname">
+                닉네임
+              </Label>
+              <input
+                type="text"
+                id="nickname"
+                placeholder="닉네임을 입력해주세요"
+                tabIndex="2"
+                ref={nicknameRef}
+                maxLength={15}
+                {...register("nickname", {
+                  required: "닉네임은 필수 입력입니다.",
+                  minLength: {
+                    value: 5,
+                    message: "5자리 이상 입력해주세요.",
+                  },
+                })}
+              />
+              <Button
+                // size="large"
+                onClick={(e) => {
+                  e.preventDefault();
+                  validateDuplicate("nickname");
+                }}
+              >
+                중복체크
+              </Button>
+            </div>
+          </div>
+          {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+            <small className="alert">중복된 닉네임입니다.</small>
+          )}
+          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+            <small className="true">사용할 수 있는 닉네임입니다.</small>
+          )}
         </Table>
         <div className="loginbutton">
           <label>자동로그인</label>
