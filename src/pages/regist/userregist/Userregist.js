@@ -266,14 +266,14 @@ const Userregist = () => {
                 중복체크
               </Button>
             </div>
+            {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
+              <small className="alert">중복된 닉네임입니다.</small>
+            )}
+            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+              <small className="true">사용할 수 있는 닉네임입니다.</small>
+            )}
           </div>
-          {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
-            <small className="alert">중복된 닉네임입니다.</small>
-          )}
-          {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
-            <small className="true">사용할 수 있는 닉네임입니다.</small>
-          )}
         </Table>
         <div className="loginbutton">
           <label>자동로그인</label>
