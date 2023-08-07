@@ -59,13 +59,58 @@ const Header = () => {
   // console.log('헤더 노티 : ', noti)
 
   return (
-    <header className="header">
-      <div className="header-wrap">
-        <Link className="logo" to="/">
-          Developer-Talks
-        </Link>
-        <nav>
-          <ul className="right">
+    <>
+      <div className={`${toggleShow && "mobile_wrap"}`}></div>
+      <header className="header">
+        <div className="header-wrap">
+          <Link className="logo" to="/">
+            Developer-Talks
+          </Link>
+          <nav>
+            <ul className="right">
+              {menuRouter.map((item, i) => (
+                <li key={i}>
+                  <Link
+                    to={item.link}
+                    className={classNames("", {
+                      "is-active": location.pathname.includes(item.link),
+                    })}
+                  >
+                    {item.text}
+                  </Link>
+                </li>
+              ))}
+              <li className="popover-link">
+                <span onClick={showPopover} ref={targetRef}>
+                  <span className="bell">
+                    {/* TODO: 알람이 있을때 표시하기 */}
+                    {noti.noti && auth.accessToken !== null && <span className="point" />}
+                    <TfiBell size={24} />
+                  </span>
+                  <Notification classname={popover ? "is_show" : ""} />
+                </span>
+              </li>
+              <li className="header-user">
+                <Link to="/showuser">
+                  {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}
+                </Link>
+                {nickname && <span>{`${nickname}님`}</span>}
+              </li>
+            </ul>
+          </nav>
+          <div onClick={visible} className={`mobile-menu ${toggleShow && "is-show"}`}>
+            {toggleShow ? <AiOutlineClose size={24} /> : <FiMenu size={24} />}
+          </div>
+        </div>
+
+        <div className={`mobile-nav ${toggleShow && "is-open"}`}>
+          <div className="header-user">
+            <Link to="/showuser">
+              {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" className="profile" />}
+            </Link>
+            {nickname && <span>{`${nickname}님`}</span>}
+          </div>
+          <ul>
             {menuRouter.map((item, i) => (
               <li key={i}>
                 <Link
@@ -78,52 +123,10 @@ const Header = () => {
                 </Link>
               </li>
             ))}
-            <li className="popover-link">
-              <span onClick={showPopover} ref={targetRef}>
-                <span className="bell">
-                  {/* TODO: 알람이 있을때 표시하기 */}
-                  {noti.noti && auth.accessToken !== null && <span className="point" />}
-                  <TfiBell size={24} />
-                </span>
-                <Notification classname={popover ? "is_show" : ""} />
-              </span>
-            </li>
-            <li className="header-user">
-              <Link to="/showuser">
-                {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" />}
-              </Link>
-              {nickname && <span>{`${nickname}님`}</span>}
-            </li>
           </ul>
-        </nav>
-        <div onClick={visible} className={`mobile-menu ${toggleShow && "is-show"}`}>
-          {toggleShow ? <AiOutlineClose size={24} /> : <FiMenu size={24} />}
         </div>
-      </div>
-
-      <div className={`mobile-nav ${toggleShow && "is-open"}`}>
-        <div className="header-user">
-          <Link to="/showuser">
-            {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" className="profile"/>}
-          </Link>
-          {nickname && <span>{`${nickname}님`}</span>}
-        </div>
-        <ul>
-          {menuRouter.map((item, i) => (
-            <li key={i}>
-              <Link
-                to={item.link}
-                className={classNames("", {
-                  "is-active": location.pathname.includes(item.link),
-                })}
-              >
-                {item.text}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 export default Header;
