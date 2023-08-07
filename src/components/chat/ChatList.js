@@ -1,11 +1,11 @@
 import axios from "axios";
+import classNames from "classnames";
 import { ROOT_API } from "constants/api";
-import React from "react";
+import { parseJwt } from "hooks/useParseJwt";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { dayChat } from "util/day";
 import "./chat.scss";
-import { parseJwt } from "hooks/useParseJwt";
-import classNames from "classnames";
 
 const ChatList = ({ postId }) => {
   const auth = useSelector((state) => state.authToken);
@@ -40,9 +40,9 @@ const ChatList = ({ postId }) => {
               "is-my": nickname === item.sender,
             })}
           >
+            <span className="createDate">{dayChat(item.createDate)}</span>
             {nickname !== item.sender && <span className="sender">{item.sender}&nbsp; : &nbsp;</span>}
             <span className="message">{item.message.replaceAll('"', "")}</span>
-            <span className="createDate">{item.createDate}</span>
           </div>
         ))}
     </div>

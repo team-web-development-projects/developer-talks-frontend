@@ -21,27 +21,30 @@ export default function useRefreshToken() {
     if (auth.accessToken === null && localStorage.getItem("dtrtk")) {
       // atrk 가 없고, rtk가 있지만 rtk의 만료시간이 현재 시간보다 이전일때
       // console.log("현재날짜가 만료시간보다 큼", epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp));
-      if (epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp)) {
-        showToast("error", "회원 정보가 만료되었습니다.");
-        localStorage.removeItem("dtrtk");
-        navigate("/login");
-      }
-      axios
-        .post(`${ROOT_API}/token/refresh`, {
-          refreshToken: localStorage.getItem("dtrtk"),
-          headers: {
-            accept: "*/*",
-            "Content-Type": "application/json",
-          },
-        })
-        .then(function (response) {
-          // console.log("재갱신 성공:", response);
-          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-          // setLoading(false); // app.js 의 '타이머로 재갱신 테스트 코드' 와 연결
-        })
-        .catch(function (error) {
-          console.log("재갱신 실패: ", error.response.data);
-        });
+
+      // NOTE: 일반로그인이고 토큰이 만료됬을때
+      // if (epochConvert(parseJwt(localStorage.getItem("dtrtk")).exp)) {
+      //   showToast("error", "회원 정보가 만료되었습니다.");
+      //   localStorage.removeItem("dtrtk");
+      //   navigate("/login");
+      // }
+      
+      // axios
+      //   .post(`${ROOT_API}/token/refresh`, {
+      //     refreshToken: localStorage.getItem("dtrtk"),
+      //     headers: {
+      //       accept: "*/*",
+      //       "Content-Type": "application/json",
+      //     },
+      //   })
+      //   .then(function (response) {
+      //     // console.log("재갱신 성공:", response);
+      //     dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+      //     // setLoading(false); // app.js 의 '타이머로 재갱신 테스트 코드' 와 연결
+      //   })
+      //   .catch(function (error) {
+      //     console.log("재갱신 실패: ", error.response.data);
+      //   });
     }
   }, [auth.accessToken, dispatch, location]);
 }

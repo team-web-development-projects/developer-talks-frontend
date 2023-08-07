@@ -6,6 +6,10 @@ export const day = (date) => {
   return dayjs(date).format("YY-MM-DD HH:mm:ss");
 };
 
+export const dayChat = (date) => {
+  return dayjs(date).format("YY-MM-DD HH:mm");
+};
+
 // n분전, n시간전, n일전, n달전, n년전
 // export const calcDay = (data) => {
 //
