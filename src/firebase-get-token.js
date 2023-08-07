@@ -40,6 +40,8 @@ export default function useGetToken() {
       });
 
     firebaseMessage.onMessage((payload) => {
+      console.log(payload)
+      console.log(payload.notification)
       console.log(payload.notification.title);
       console.log(payload.notification.body);
     });
