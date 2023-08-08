@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import s from "./anwerList.module.scss";
 import AnswerItem from '../answerItem/AnswerItem';
 
-const AnswerList = ({ nickname, answerCnt }) => {
+const AnswerList = ({ nickname, answerCnt, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const { postId } = useParams();
@@ -81,7 +81,7 @@ const AnswerList = ({ nickname, answerCnt }) => {
         ) : (
           <div className={s.inputFalse}>로그인 후, 답변을 달아주세요.</div>
         )}
-        {answerList ? answerList.map((answer) => <AnswerItem key={answer.id} answer={answer}/>) : <div>등록된 답변이 없습니다.</div>}
+        {answerList ? answerList.map((answer) => <AnswerItem key={answer.id} answer={answer} qnaNick={qnaNick} selectAnswer={selectAnswer}/>) : <div>등록된 답변이 없습니다.</div>}
       </div>
     </>
   );
