@@ -98,12 +98,12 @@ const Header = () => {
               </li>
             </ul>
           </nav>
-          <div onClick={visible} className={`mobile-menu ${toggleShow && "is-show"}`}>
+          <div onClick={visible} className={`mobile-menu ${toggleShow ? "is-show" : false}`}>
             {toggleShow ? <AiOutlineClose size={24} /> : <FiMenu size={24} />}
           </div>
         </div>
 
-        <div className={`mobile-nav ${toggleShow && "is-open"}`}>
+        <div className={`mobile-nav ${toggleShow ? "is-open" : false}`}>
           <div className="header-user">
             <Link to="/showuser">
               {!nickname ? <BsFillPersonFill size={24} /> : <ProfileImg border="color" type="header" className="profile" />}
