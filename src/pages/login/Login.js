@@ -56,8 +56,7 @@ const Login = () => {
         reset();
       })
       .catch(function (error) {
-        alert(error.response.data.message)
-        showToast("error", error.response.data.message); // NOTE alert는 가능, showToast는 불가능
+        showToast("error", error.response.data.message);
       });
   };
   const typechange = () => {
