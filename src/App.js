@@ -54,6 +54,7 @@ function App() {
   // Sse();
   return (
     <div className="App">
+      <ToastCont />
       <Routes>
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
