@@ -12,6 +12,9 @@ import ChatList from "components/chat/ChatList";
 
 const StudyRoomDetail = () => {
   const { postId } = useParams();
+  const [upText, setUpText] = useState([{}]);
+
+  // console.log("upText:", upText);
 
   return (
     <div className="room-detail">
@@ -26,8 +29,8 @@ const StudyRoomDetail = () => {
           </ul>
         </div>
         <div className="content">
-          <ChatList postId={postId} />
-          <Chat postId={postId} />
+          <ChatList postId={postId} upText={upText} />
+          <Chat postId={postId} setUpText={setUpText} upText={upText} />
         </div>
         <div className="right-menu">
           <ul>

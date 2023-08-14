@@ -99,7 +99,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //     });
     //   });
   };
-  // console.log('get image:', data)
+  // console.log('get image:', data.url)
 
   return (
     <div
@@ -109,10 +109,11 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
         [s.regist_page]: type === "regist",
       })}
     >
+      {/* <Gravatar email={parseJwt(auth.accessToken).nickname} /> */}
       {/* 마이페이지에 이미지가 있는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && !getLoading && data.url && <img src={data.url} alt="프로필이미지" />}
       {/* 마이페이지에 이미지가 없는 경우, 회원가입 페이지는 포함 안됨. */}
-      {auth.accessToken && data === undefined && (
+      {auth.accessToken && data && data.url === null && (
         // <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
         <Gravatar email={parseJwt(auth.accessToken).nickname} />
       )}

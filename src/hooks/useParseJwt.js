@@ -1,4 +1,5 @@
 export function parseJwt(token) {
+  // console.log('받은 토큰: ', token);
   if(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -10,7 +11,6 @@ export function parseJwt(token) {
         })
         .join('')
     );
+    return JSON.parse(jsonPayload);
   }
-
-  return JSON.parse(jsonPayload);
 }

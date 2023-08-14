@@ -29,7 +29,7 @@ const ChatInput = ({ setText, onClick }) => {
           onClick(e, inputText);
         }}
       >
-        <input type="text" name="" id="" onChange={onChange} value={inputText} />
+        <textarea type="text" name="" id="" onChange={onChange} value={inputText} />
         <button>전송</button>
       </form>
     </div>

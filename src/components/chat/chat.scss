@@ -1,14 +1,77 @@
+$left: -10px;
+$top: 3px;
+
 .chat_list {
-  // $my: ''; 
-
-
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  gap: 8px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+
+  height: 460px;
+  overflow: auto;
   .chat-item {
     display: flex;
+    align-items: center;
+    gap: 6px;
     &.is-my {
       justify-content: right;
+      .message {
+        margin-left: 0;
+        margin-right: 8px;
+        &:before {
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+          border-left: 10px solid white;
+          border-right: none;
+          right: $left + 2px;
+          left: auto;
+        }
+        &:after {
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+          border-left: 10px solid black;
+          border-right: none;
+          right: $left;
+          left: auto;
+        }
+      }
     }
+  }
+  .message {
+    position: relative;
+    margin-left: 8px;
+    padding: 0 4px;
+    border: 1px solid black;
+    border-radius: 6px;
+    white-space: pre;
+    &:before,
+    &:after {
+      position: absolute;
+      width: 0;
+      height: 0;
+      content: "";
+    }
+    &:before {
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 10px solid white;
+      left: $left + 2px;
+      top: $top;
+      z-index: 1;
+    }
+    &:after {
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 10px solid black;
+      left: $left;
+      top: $top;
+      z-index: -1;
+    }
+  }
+  .createDate {
+    font-size: 12px;
   }
 }
