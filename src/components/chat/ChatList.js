@@ -58,10 +58,10 @@ const ChatList = ({ postId, upText }) => {
     }
   };
 
-  const handleScroll = () => {
+  const handleScroll = (e) => {
     if (scroll.current) {
       const scrollContainer = scroll.current;
-      if (scrollContainer.scrollTop === 0) {
+      if (scrollContainer.scrollTop === 0 && e.deltaY < 0) {
         console.log("스크롤이 맨 위에 있습니다.");
         setAtTop(true);
         setDataPage((prevCount) => prevCount - 1);
@@ -74,7 +74,7 @@ const ChatList = ({ postId, upText }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [])
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -82,7 +82,7 @@ const ChatList = ({ postId, upText }) => {
 
   return (
     <>
-      <div className="chat_wrap" ref={scroll} onScroll={handleScroll}>
+      <div className="chat_wrap" ref={scroll} onWheel={(e) => handleScroll(e)}>
         <div className="chat_list">
           {isLoading && "로딩중.."}
           {/* 이전 대화리스트 */}
