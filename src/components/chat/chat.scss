@@ -1,17 +1,20 @@
 $left: -10px;
 $top: 3px;
 
+.chat_wrap {
+  height: 460px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .chat_list {
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
   gap: 8px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 
-  height: 460px;
-  overflow: auto;
   .chat-item {
     display: flex;
     align-items: center;
@@ -41,12 +44,13 @@ $top: 3px;
     }
   }
   .message {
+    display: inline-block;
     position: relative;
     margin-left: 8px;
     padding: 0 4px;
     border: 1px solid black;
     border-radius: 6px;
-    white-space: pre;
+    white-space: pre-line;
     &:before,
     &:after {
       position: absolute;
@@ -73,5 +77,11 @@ $top: 3px;
   }
   .createDate {
     font-size: 12px;
+  }
+}
+
+.chat_input {
+  textarea {
+    resize: none;
   }
 }

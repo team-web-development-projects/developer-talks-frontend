@@ -22,7 +22,7 @@ const StudyRoomInfo = () => {
   const [secretModal, setSecretModal] = useState(false);
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
-  const { getNickname } = getUer(auth.accessToken);
+  const nickname = auth && parseJwt(auth.accessToken).nickname;
   const queryClient = useQueryClient();
   const [getDeta, setGetData] = useState();
 
@@ -59,7 +59,7 @@ const StudyRoomInfo = () => {
       setInModal(true);
     }
     if (!data.autoJoin) {
-      if (getNickname === data.studyRoomUsers[0].nickname) {
+      if (nickname === data.studyRoomUsers[0].nickname) {
         // setInModal(true);
         // requestRoom();
         navigate(`/studyroom/${postId}`);

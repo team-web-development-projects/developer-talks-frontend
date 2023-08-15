@@ -65,7 +65,7 @@ function App() {
           <Route path="board" element={<BoardList type="post" />} />
           <Route path="board/search/:keyword" element={<BoardList type="post" />} />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
-          <Route path="/studyroom/info/:postId" element={<StudyRoomInfo />} />
+          <Route path="studyroom/info/:postId" element={<StudyRoomInfo />} />
           <Route path="/studyroom/:postId" element={<StudyRoomDetail />} />
           <Route path="qna" element={<BoardList type="questions" />} />
           <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />

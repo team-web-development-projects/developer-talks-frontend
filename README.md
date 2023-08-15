@@ -1,20 +1,39 @@
-# Getting Started with Create React App
+### 앱 설치
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+npm i
 
-## 로컬 디비 & 서버 실행
+### 앱 실행
 
-npm install -g json-server
-json-server --watch db.json --port 8000
+npm run start
 
-### `npm run start`
+### 앱 배포
 
-앱 실행
-
-### `npm run deploy`
+npm run deploy
 
 클라이언트 githubpage로 배포
 
 ### `npm run build`
 
 gihubpage가 아닌 그 외로 배포할때, 이 명령어를 친 후 public안의 파일들을 이동
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+### 채팅
+- 적용된 기능
+┗ 페이지네이션 데이터 기반으로 스크롤을 최상단으로 했을시 이전데이터 불러오기
+┗ 채팅 입력에서 shift + enter로 다음줄, enter 로 전송
+┗ 중복텍스트 전송 3초 이내 막기
+
+- 이슈
+┗ 최상단에서 스크롤을 위로 올리는것이 아닌 맨 위에 도착했을때만 이전데이터 불러오는 현상.
+┗ 이전데이터 불러올때 데이터의 움찔거림이 보이는 현상 - 백에서 데이터를 밑으로 쌓이게 보내주고 있음.
+
+
+### jwt 토큰
+- 적용된 기능
+┗ rtk는 로컬스토리지. atk는 내장 상태 - redux toolkit - 에 저장. 
+┗ 새로고침시 훅을 통하여 rtk의 정보를 가지고 atk 재발급
+
+- 이슈
+┗ 소셜 로그인(구글로그인)에서 쿠키에 넣은 rtk인식이 안되는거 같아 로컬스토리지에 넣게됨
+┗ 일부 페이지에서 rtk를 이용한 atk 재발급이 되지 않는 현상.

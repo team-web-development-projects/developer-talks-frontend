@@ -70,14 +70,13 @@ const Chat = ({ postId, upText, setUpText }) => {
 
   return (
     <div>
-      <button
+      {/* <button
         onClick={() => {
-          // setTemp([...temps, { id: 1 }]);
           dispatch(SEND_MESSAGE({ id: 1 }));
         }}
       >
         추가
-      </button>
+      </button> */}
       <ChatInput setText={setText} onClick={click} text={text} />
     </div>
   );

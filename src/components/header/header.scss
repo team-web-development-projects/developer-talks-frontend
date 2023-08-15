@@ -40,7 +40,7 @@
     align-items: center;
     position: relative;
 
-    li {
+    > li {
       padding: 0 30px;
 
       @include media-mo {
