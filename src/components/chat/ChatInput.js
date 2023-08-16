@@ -42,8 +42,10 @@ const ChatInput = ({ setText, onClick }) => {
       // } else if (keys[13]) {
     } else if (e.key === "Enter") {
       e.preventDefault();
-      click(e, inputText);
-      setInputText("");
+      if(inputText !== '') {
+        click(e, inputText);
+        setInputText("");
+      }
       // onClick(e, inputText);
     }
   };

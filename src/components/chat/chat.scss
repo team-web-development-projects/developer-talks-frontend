@@ -81,7 +81,24 @@ $top: 3px;
 }
 
 .chat_input {
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  &:focus-within {
+    border: 1px solid black;
+    // background: red;
+  }
+  form {
+    display: flex;
+    justify-content: space-between;
+  }
   textarea {
+    width: 100%;
     resize: none;
+    border: none;
+    &:focus-visible {
+      border: none;
+      outline: none;
+    }
   }
 }

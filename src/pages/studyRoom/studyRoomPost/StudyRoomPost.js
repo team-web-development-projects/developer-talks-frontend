@@ -31,31 +31,35 @@ const StudyRoomPost = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/study-rooms`,
-        {
-          title: form.title,
-          content: form.content,
-          skills: selectedTags.tags,
-          autoJoin: selectedTags.autoJoin,
-          joinableCount: selectedTags.joinableCount,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
+    if(form.title === null) {
+      showToast("error", '제목을 입력해주세요.');
+    }
+    if(form.title !== null) {
+      axios
+        .post(
+          `${ROOT_API}/study-rooms`,
+          {
+            title: form.title,
+            content: form.content,
+            skills: selectedTags.tags,
+            autoJoin: selectedTags.autoJoin,
+            joinableCount: selectedTags.joinableCount,
           },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        setModal(true);
-      })
-      .catch((error) => {
-        console.log('error', error);
-        showToast("error", '제목을 입력해주세요.');
-      });
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setModal(true);
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
   };
 
   const clickTag = (tag) => {

@@ -14,7 +14,7 @@ const ChatList = ({ postId, upText }) => {
   const nickname = auth && parseJwt(auth.accessToken).nickname;
   const [dataPage, setDataPage] = useState(0);
   const [dataSize, setDataSize] = useState(20);
-  const [atTop, setAtTop] = useState(true);
+  const [atBottom, setAtBottom] = useState(false);
 
   async function getChatList() {
     const { data } = await axios.get(`${ROOT_API}/${postId}/chats`, {
@@ -30,6 +30,7 @@ const ChatList = ({ postId, upText }) => {
   const { data, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["chatList", dataPage, dataSize],
     queryFn: getChatList,
+    enabled: atBottom,
   });
 
   console.log("data:", data && data);
@@ -62,18 +63,17 @@ const ChatList = ({ postId, upText }) => {
     if (scroll.current) {
       const scrollContainer = scroll.current;
       if (scrollContainer.scrollTop === 0 && e.deltaY < 0) {
-        console.log("스크롤이 맨 위에 있습니다.");
-        setAtTop(true);
+        // console.log("스크롤이 맨 위에 있습니다.");
         setDataPage((prevCount) => prevCount - 1);
         setDataSize((prevCount) => prevCount + 10);
       } else {
-        setAtTop(false);
       }
     }
   };
 
   useEffect(() => {
     scrollToBottom();
+    setAtBottom(true);
   }, []);
 
   useEffect(() => {
