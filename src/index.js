@@ -9,7 +9,6 @@ import App from "./App";
 import "./assets/style/index.scss";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-import ToastCont from "./components/toast/ToastCont"
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -39,7 +38,6 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
         <App />
-        <ToastCont/>
         <ReactQueryDevtools initialIsOpen={false} />
       </BrowserRouter>
     </QueryClientProvider>
