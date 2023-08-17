@@ -1,11 +1,12 @@
 import ReactDOM from "react-dom/client";
 // import { HashRouter } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // import { unstable_HistoryRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
+import history from "./hooks/useHistory";
 import { isDev } from "util/Util";
 import App from "./App";
 import "./assets/style/index.scss";
@@ -38,12 +39,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
-      {/* <Router history={history}> */}
-      <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
+      <Router history={history}>
+      {/* <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}> */}
         <App />
         <ReactQueryDevtools initialIsOpen={false} />
-      </BrowserRouter>
-      {/* </Router> */}
+      {/* </BrowserRouter> */}
+      </Router>
     </QueryClientProvider>
   </Provider>
 );
