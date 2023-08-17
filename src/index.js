@@ -9,7 +9,6 @@ import App from "./App";
 import "./assets/style/index.scss";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

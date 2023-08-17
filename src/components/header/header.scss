@@ -7,6 +7,7 @@
   font-weight: 600;
   color: #0c0c0c;
   border-bottom: 1px solid #ccc;
+  z-index: 2;
 
   @include media-ta {
     justify-content: space-between;
@@ -101,6 +102,7 @@
       cursor: pointer;
       transition: all 0.4s;
     }
+
     &.is-show {
       transform: rotate(360deg);
     }
@@ -122,19 +124,23 @@
   }
 
   .mobile-nav {
-    position: absolute;
-    right: 0;
-    top: 61px;
-    display: block;
-    width: 0;
-    height: 100%;
-    padding: 10px;
-    // box-shadow: 4px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff;
-    overflow: hidden;
-    // transition: all 0.4s;
-    z-index: 100;
-    box-sizing: border-box;
+    display: none;
+
+    @include media-mo {
+      position: absolute;
+      right: 0;
+      top: 61px;
+      display: block;
+      width: 0;
+      height: 100%;
+      padding: 10px;
+      // box-shadow: 4px rgba(0, 0, 0, 0.2);
+      background-color: #ffffff;
+      overflow: hidden;
+      // transition: all 0.4s;
+      z-index: 100;
+      box-sizing: border-box;
+    }
 
     &.is-open {
       width: 100%;
@@ -148,22 +154,42 @@
       padding: 10px 14px;
       border-radius: 6px;
 
-      &:hover, &.is-active {
+      &:hover,
+      &.is-active {
         color: #063eff;
         background-color: #dfe4ef;
       }
     }
+
     .header-user {
       width: 100px;
       margin: 0 auto;
+
       .profile {
         display: inline-block;
         margin-bottom: -10px;
       }
+
       span {
         position: static;
         font-size: 16px;
       }
     }
+  }
+
+}
+
+.mobile_wrap {
+  display: none;
+
+  @include media-mo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #fafafa;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 }

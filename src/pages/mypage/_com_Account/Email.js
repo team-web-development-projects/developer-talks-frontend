@@ -1,11 +1,10 @@
-import Table from "components/table/Table";
-import Form from "components/form/Form";
-import Label from "components/label/Label";
-import Button from "components/button/Button";
-import { useState, useEffect } from "react";
 import axios from "axios";
-import { ROOT_API } from "constants/api";
+import Button from "components/button/Button";
+import Label from "components/label/Label";
+import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
+import { ROOT_API } from "constants/api";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const Email = ({ userData, handleChange }) => {
@@ -95,7 +94,7 @@ const Email = ({ userData, handleChange }) => {
   }, [timer]);
 
   return (
-    <Form onSubmit={onSubmitEmail}>
+    <form onSubmit={onSubmitEmail}>
       <Table>
         <div>
           <div>
@@ -120,7 +119,7 @@ const Email = ({ userData, handleChange }) => {
       <Button type="submit" onClick={onSubmitEmail} FullWidth size="large">
         저장
       </Button>
-    </Form>
+    </form>
   );
 };
 export default Email;

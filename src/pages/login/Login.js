@@ -56,11 +56,7 @@ const Login = () => {
         reset();
       })
       .catch(function (error) {
-        showToast("error", () => (
-          <div>
-            😎 정보를 다시 입력해주세요 <br /> (회원정보가 없는 것일 수 있습니다.)
-          </div>
-        ));
+        showToast("error", error.response.data.message);
       });
   };
   const typechange = () => {

@@ -1,4 +1,3 @@
-import Form from "components/form/Form";
 import Button from "components/button/Button";
 import Tags from "components/tags/Tags";
 import { ROOT_API } from "constants/api";
@@ -34,7 +33,7 @@ const Description = ({ userData, handleChange, account, selectedTags, setSelecte
       .catch((error) => console.log(error));
   };
   return (
-    <Form onSubmit={onSubmitDescription}>
+    <form onSubmit={onSubmitDescription}>
       <Table>
         <div>
           <div>
@@ -56,7 +55,7 @@ const Description = ({ userData, handleChange, account, selectedTags, setSelecte
       </Button>
       <br />
       <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 태그설정"} />
-    </Form>
+    </form>
   );
 };
 export default Description;
