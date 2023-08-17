@@ -39,7 +39,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
-      <Router history={history}>
+      <Router>
       {/* <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}> */}
         <App />
         <ReactQueryDevtools initialIsOpen={false} />
