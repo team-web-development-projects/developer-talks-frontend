@@ -5,50 +5,12 @@ import { ROOT_API } from "constants/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import s from "./boardCount.module.scss";
-
-const BoardCount = ({
-  type,
-  children,
-  token,
-  isOwner,
-  checkStatus,
-  setCheckStatus,
-  postId,
-  setPost,
-}) => {
+// Q&A api명 scrap에서 favorite으로 변경해줘야 에러 안남
+const BoardCount = ({ ttype, type, children, token, isOwner, checkStatus, setCheckStatus, postId, setPost }) => {
   const isFavorite = type === "favorite";
+  const checkButton= isFavorite ? checkStatus.favorite : checkStatus.recommend;
   const [modalL, setModalL] = useState(false);
   const [modalS, setModalS] = useState(false);
-  const [modalF, setModalF] = useState(false);
-  const [modalR, setModalR] = useState(false);
-  // async function postCount() {
-  //   await axios.post(
-  //     `${ROOT_API}/post/${type}/${postId}`,
-  //     {},
-  //     {
-  //       headers: {
-  //         "X-AUTH-TOKEN": token,
-  //       },
-  //     }
-  //   );
-  // }
-  // async function deleteCount() {
-  //   await axios.delete(`${ROOT_API}/post/${type}/${postId}`, {
-  //     params: {},
-  //     headers: {
-  //       "X-AUTH-TOKEN": token,
-  //     },
-  //   });
-  // }
-  // const handleCount = useMutation(postCount, {
-  //   onSuccess: () => {
-  //     console.log("post success");
-  //     setCheckStatus({ ...checkStatus, [type]: true });
-  //   },
-  //   onError: () => {
-  //     console.log("error");
-  //   },
-  // });
 
   const handleClick = async () => {
     console.log("isFavorite: ", isFavorite);
@@ -59,10 +21,9 @@ const BoardCount = ({
       setModalS(true);
     } else {
       if (isFavorite ? !checkStatus.favorite : !checkStatus.recommend) {
-        await new Promise((r) => setTimeout(r, 1000));
         axios
           .post(
-            `${ROOT_API}/post/${type}/${postId}`,
+            `${ROOT_API}/${ttype}/${type}/${postId}`,
             {
               //요청데이터
             },
@@ -83,17 +44,14 @@ const BoardCount = ({
                 });
           })
           .catch((error) => console.log(error));
-        // console.log(handleCount);
-        // handleCount.mutate();
       } else {
-        isFavorite ? setModalF(true) : setModalR(true);
+        handleClickCancle();
       }
     }
   };
   const handleClickCancle = async () => {
-    await new Promise((r) => setTimeout(r, 1000));
     axios
-      .delete(`${ROOT_API}/post/${type}/${postId}`, {
+      .delete(`${ROOT_API}/${ttype}/${type}/${postId}`, {
         headers: {
           "X-AUTH-TOKEN": token,
         },
@@ -104,12 +62,10 @@ const BoardCount = ({
           setPost((prev) => {
             return { ...prev, favoriteCount: data };
           });
-          setModalF(false);
         } else {
           setPost((prev) => {
             return { ...prev, recommendCount: data };
           });
-          setModalR(false);
         }
       })
       .catch((error) => console.log(error));
@@ -130,23 +86,12 @@ const BoardCount = ({
           <br />
         </BasicModal>
       )}
-      {modalF && (
-        <BasicModal setOnModal={() => setModalF()}>
-          즐겨찾기를 취소하시겠습니까?
-          <br />
-          <button onClick={handleClickCancle}>확인</button>
-          <br />
-        </BasicModal>
-      )}
-      {modalR && (
-        <BasicModal setOnModal={() => setModalR()}>
-          추천을 취소하시겠습니까?
-          <br />
-          <button onClick={handleClickCancle}>확인</button>
-          <br />
-        </BasicModal>
-      )}
-      <Button classname={s.btn} onClick={() => handleClick(type)}>
+      <Button
+        theme="outline"
+        color={checkButton ? "#063eff" : "#9ca3af"}
+        size="medium"
+        onClick={() => handleClick(type)}
+      >
         {children}
       </Button>
     </>

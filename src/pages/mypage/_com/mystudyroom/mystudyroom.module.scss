@@ -1,0 +1,83 @@
+.mystudyroom {
+  padding-top: 20px;
+  section {
+    margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  h3 {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #000;
+  }
+
+  .list {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    .list_item {
+      min-height: 90px;
+      padding: 20px 8px 20px 8px;
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+      cursor: pointer;
+      &:hover {
+        background: #eee;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+      .room_title {
+        margin-bottom: 6px;
+      }
+      .user {
+        position: relative;
+        padding: 4px 14px;
+        display: inline-flex;
+        height: 26px;
+        align-items: center;
+        border-radius: 16px;
+        border: 1px solid #2f92ff;
+        color: #2f92ff;
+
+        &:hover {
+          background: #2f92ff;
+          color: #fff;
+        }
+      }
+      .count_wrap {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        &:hover {
+          background: #ccc;
+          border-radius: 16px;
+        }
+      }
+    }
+  }
+  .room_list_tag {
+    display: inline-flex;
+    margin-left: 10px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #6c757d;
+    color: #fff;
+    &.is_Leader {
+      background: #ffe000;
+      color: black;
+    }
+    &.is_subLeader {
+      background: #ff8f00;
+    }
+    &.is_normal {
+      background: #6ba5ef;
+      color: #fff;
+    }
+  }
+}

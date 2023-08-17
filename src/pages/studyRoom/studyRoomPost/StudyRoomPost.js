@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 import s from "./studyRoom.module.scss";
 import Select from "components/select/Select";
 import classNames from "classnames";
+import { toast } from "react-toastify";
+import { showToast } from "components/toast/showToast";
 
 const StudyRoomPost = ({ type }) => {
   const [modal, setModal] = useState(false);
@@ -24,50 +26,40 @@ const StudyRoomPost = ({ type }) => {
     joinableCount: 1,
   });
 
-  const tags = [
-    "DJANGO",
-    "SPRING",
-    "JAVASCRIPT",
-    "JAVA",
-    "PYTHON",
-    "CPP",
-    "REACT",
-    "AWS",
-  ];
+  const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
-    console.log(
-      `title: ${form.title}
-        content: ${form.content}
-        skills: ${selectedTags.tags}
-        autoJoin: ${selectedTags.autoJoin}
-        joinableCount: ${selectedTags.joinableCount}
-      `
-    );
-    axios
-      .post(
-        `${ROOT_API}/study-room`,
-        {
-          title: form.title,
-          content: form.content,
-          skills: selectedTags.tags,
-          autoJoin: selectedTags.autoJoin,
-          joinableCount: selectedTags.joinableCount,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
+    if(form.title === null) {
+      showToast("error", '제목을 입력해주세요.');
+    }
+    if(form.title !== null) {
+      axios
+        .post(
+          `${ROOT_API}/study-rooms`,
+          {
+            title: form.title,
+            content: form.content,
+            skills: selectedTags.tags,
+            autoJoin: selectedTags.autoJoin,
+            joinableCount: selectedTags.joinableCount,
           },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        setModal(true);
-      })
-      .catch((error) => console.log(error));
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": auth.accessToken,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setModal(true);
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
   };
 
   const clickTag = (tag) => {
@@ -110,10 +102,7 @@ const StudyRoomPost = ({ type }) => {
   return (
     <>
       {modal && (
-        <BasicModal
-          setOnModal={() => setModal()}
-          dimClick={() => navigate(`/studyroom`)}
-        >
+        <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/studyroom`)}>
           게시글이 정상적으로 등록되었습니다. <br />
           확인을 눌러주세요.
           <button onClick={() => navigate(`/studyroom`)}>확인</button>
@@ -134,12 +123,7 @@ const StudyRoomPost = ({ type }) => {
               <div>
                 <label htmlFor="chk">
                   <span>참여 제한</span>
-                  <input
-                    type="checkbox"
-                    name="chk"
-                    id="chk"
-                    onChange={clickautoJoin}
-                  />
+                  <input type="checkbox" name="chk" id="chk" onChange={clickautoJoin} />
                 </label>
               </div>
               <div>
@@ -162,20 +146,14 @@ const StudyRoomPost = ({ type }) => {
                 <span
                   key={index}
                   onClick={() => clickTag(item)}
-                  className={`tag ${
-                    selectedTags.tags.includes(item) ? [s.is_select] : ""
-                  }`}
+                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
                 >
                   {item}
                 </span>
               ))}
             </div>
             <div className={s.editor}>
-              <CkEditor
-                form={form}
-                setForm={setForm}
-                placeholder={"내용을 입력해주세요."}
-              />
+              <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
             </div>
             <div className={s.btnRgn}>
               <Link to="/studyroom" className={s.cancel}>

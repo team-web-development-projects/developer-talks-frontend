@@ -1,0 +1,39 @@
+  //테이블 스타일
+
+  // small {
+  //   display: block;
+  //   font-size: 13px;
+  //   color: #f40b0b;
+
+  //   &.true {
+  //     color: #7ac40c;
+  //   }
+  // }
+
+
+  .description {
+    margin: 0 auto;
+    input {
+      margin-bottom: 20px;
+      width: calc(100% - 10px);
+      height: 50px;
+      // padding: 10px;
+    }
+  }
+
+  .typechange {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .delete {
+    .deletgaider {
+      margin: 50px auto;
+      padding: 30px;
+      // width: 350px;
+      border-radius: 10px;
+      background: #ececec;
+      box-sizing: border-box;
+      font-size: 12px;
+    }
+  }

@@ -1,15 +1,87 @@
+@import "assets/style/variable.scss";
+@import "assets/style/function.scss";
+
 .boardContainer {
-  margin: 0px 20px;
-  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 130px;
+  padding: 14px 0 9px 0;
   border-bottom: solid 1px #cfcccc;
+  box-sizing: border-box;
+  @include media-mo {
+    height: auto;
+  }
   &:hover {
-    background: #eeeeee;
     cursor: pointer;
+    .title {
+      color: $primary;
+    }
+  }
+  .selectAnswerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #11a318;
+    border-radius: 10px;
+    width: 70px;
+    height: 70px;
+    margin-right: 20px;
+    p{
+      color: #11a318;
+    }
+  }
+  .answerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cfcccc;
+    border-radius: 10px;
+    width: 70px;
+    height: 70px;
+    margin-right: 20px;
+  }
+  .frontContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .info_wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    @include media-mo {
+      font-size: 14px;
+    }
+    .icons {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .userProfile {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    @include media-mo {
+      max-width: 20px;
+      width: 100%;
+      max-height: 20px;
+      height: 100%;
+    }
   }
   .title {
-    margin-bottom: 10px;
     font-size: 30px;
     font-weight: 500;
+    @include media-mo {
+      padding-bottom: 0;
+      font-size: 18px;
+    }
   }
   .content {
     margin-bottom: 10px;
@@ -21,23 +93,54 @@
   .nickname {
     color: #797979;
   }
-  .bottomInfo{
-    display:flex;
+  .right {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+  .bottomInfo {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-  .countInfo{
-    display:flex;
-    flex-direction: row;
-    .item{
-      display:flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left:15px;
-      color:#797979;
+    margin-top: 10px;
+    align-items: flex-end;
+    @include media-mo {
+      margin-top: 0;
     }
-    p{
-      margin-left: 7px;
+  }
+  .countInfo {
+    display: flex;
+    flex-direction: row;
+  }
+  .nickname {
+    position: relative;
+  }
+  .item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 15px;
+    color: #797979;
+    gap: 3px;
+    &:first-child {
+      margin-left: 0px;
+    }
+  }
+  .img {
+    display: flex;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    border: 1px solid #cfcccc;
+    border-radius: 10px;
+    overflow: hidden;
+    @include media-mo {
+      width: 50px;
+      height: 50px;
+    }
+    img {
+      height: 100%;
+      object-fit: cover;
     }
   }
 }

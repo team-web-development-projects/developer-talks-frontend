@@ -1,6 +1,7 @@
 @import 'assets/style/function.scss';
 
 .basic-modal {
+  display: flex;
   width: 400px;
   height: fit-content;
   padding: 20px 24px 30px 24px;

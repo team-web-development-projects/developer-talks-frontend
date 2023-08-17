@@ -1,7 +1,13 @@
+@import 'assets/style/function.scss';
 
-/*NOTE 아래 테그 입니다 */
-footer {
+.footer {
   text-align: center;
+  border-top: 1px solid #ccc;
+  @include media-mo {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
   .copy {
     padding: 38px 0;
     color: #595959;

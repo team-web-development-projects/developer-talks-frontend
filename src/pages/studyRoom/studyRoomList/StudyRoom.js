@@ -14,6 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
 import { parseJwt } from "hooks/useParseJwt";
 import classNames from "classnames";
+import BoardBanner from "components/boardBanner/BoardBanner";
+import SearchInput from "components/searchInput/SearchInput";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -53,6 +55,7 @@ const BoardList = ({ type }) => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
     queryFn: fetchProjects,
+    enabled: auth.accessToken != null
   });
   refetchQuery.current = refetch;
 
@@ -63,7 +66,7 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("data", data);
+  // console.log('list', data);
 
   return (
     <>
@@ -77,18 +80,17 @@ const BoardList = ({ type }) => {
               <br />
             </BasicModal>
           )}
-          <div className={s.banner}>
-            <p>⭐스터디룸⭐</p>
+          <BoardBanner className={s.banner}>
+            <p>스터디룸</p>
             <p>공부방</p>
-          </div>
+          </BoardBanner>
           <div className={s.header}>
-            <form className={s.search} onSubmit={handleSearch}>
-              <BiSearch />
-              <input type="text" placeholder="원하는 내용을 검색해보세요~!" />
-            </form>
+            <SearchInput type={type} />
             <div className={s.bottom}>
               <Select init="최신순" options={["최신순", "조회순"]} />
-              <Button onClick={handleClick}>✏️룸 만들기</Button>
+              <Button onClick={handleClick} size="small">
+                룸 만들기
+              </Button>
             </div>
           </div>
           <ul
@@ -98,11 +100,7 @@ const BoardList = ({ type }) => {
           >
             {data && data.content.length !== 0 ? (
               data.content.map((item, index) => (
-                <li
-                  key={index}
-                  className={s.card_list}
-                  onClick={() => joinRoomClick(item.id)}
-                >
+                <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <div className={s.tag}>
                     {item.skills.map((items, indexs) => (
@@ -110,9 +108,7 @@ const BoardList = ({ type }) => {
                     ))}
                   </div>
                   <div className={s.info}>
-                    <div className={s.maker}>
-                      {item.studyRoomUsers[0].nickname}
-                    </div>
+                    <div className={s.maker}>{item.studyRoomUsers[0].nickname}</div>
                     <div className={s.icon}>
                       <BsFillPeopleFill size={16} />
                       <span>{item.studyRoomUsers.filter((item) => item.status).length}</span>/
@@ -126,13 +122,15 @@ const BoardList = ({ type }) => {
             )}
           </ul>
 
-          <div className={s.pageContainer}>
-            <Pagination
-              currentPage={data.pageable.pageNumber + 1}
-              totalPage={data.totalPages}
-              paginate={setCurrentPage}
-            />
-          </div>
+          {data && (
+            <div className={s.pageContainer}>
+              <Pagination
+                currentPage={data.pageable.pageNumber + 1}
+                totalPage={data.totalPages}
+                paginate={setCurrentPage}
+              />
+            </div>
+          )}
           <Scrolltop />
         </div>
       ) : (

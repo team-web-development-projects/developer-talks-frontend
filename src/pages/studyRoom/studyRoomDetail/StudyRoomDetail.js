@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./studyroomdetail.scss";
 // import { io } from "socket.io-client";
@@ -6,51 +6,20 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 import { ROOT_API } from "constants/api";
+import { useInfiniteQuery, useQuery } from "react-query";
+import Chat from "components/chat/Chat";
+import ChatList from "components/chat/ChatList";
 
-const StudyRoomDetqil = () => {
+const StudyRoomDetail = () => {
   const { postId } = useParams();
-  const auth = useSelector((state) => state.authToken);
-  // const socket = io("https://dtalks-api.site", {
-  //   cors: {
-  //     origin: "*",
-  //   },
-  // });
+  const [upText, setUpText] = useState([{}]);
 
-  // socket.on("test", (socket) => {
-  //   console.log(socket);
-  // });
-
-  const handleRequestSocket = () => {
-    // socket.emit("test", {
-    //   data: "test socket on client",
-    // });
-  };
-
-  function handleChange() {
-    console.log("change handle");
-  }
-
-  useEffect(() => {
-    axios
-      .get(
-        `${ROOT_API}/study-room/${postId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("로그인 성공:", response);
-      })
-      .catch(function (error) {
-        console.log("로그인 실패: ", error.response);
-      });
-  }, [auth.accessToken, postId]);
+  // console.log("upText:", upText);
 
   return (
     <div className="room-detail">
+      {/* <button onClick={() => res.hasNextPage && res.fetchNextPage()}>다음</button>
+      <button onClick={() => res.hasPreviousPage && res.fetchPreviousPage()}>이전</button> */}
       <div>설정</div>
       <div className="menu">
         <div className="left-menu">
@@ -60,9 +29,8 @@ const StudyRoomDetqil = () => {
           </ul>
         </div>
         <div className="content">
-          컨텐츠 test socket connection
-          <button onClick={handleRequestSocket}>Request</button>
-          <input type="text" onChange={handleChange} />
+          <ChatList postId={postId} upText={upText} />
+          <Chat postId={postId} setUpText={setUpText} upText={upText} />
         </div>
         <div className="right-menu">
           <ul>
@@ -75,4 +43,4 @@ const StudyRoomDetqil = () => {
   );
 };
 
-export default StudyRoomDetqil;
+export default StudyRoomDetail;

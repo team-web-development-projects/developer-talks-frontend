@@ -1,0 +1,12 @@
+.userinfowrap {
+    position: relative;
+}
+
+.nick {
+  position: relative;
+  cursor: pointer;
+  &.is_detail {
+    font-size: 25px;
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,16 @@
+.lineStyle {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+
+  &:before,
+  &:after {
+    background: #a4a4a4;
+    margin: 0px 16px;
+    flex-grow: 1;
+    content: "";
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+  }
+}
