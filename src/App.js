@@ -16,14 +16,18 @@ import StudyRoomInfo from "pages/studyRoom/studyRoomInfo/StudyRoomInfo";
 import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Route, Routes, useLocation, Outlet } from "react-router-dom";
 import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import Sse from "sse";
 import { useEffect } from "react";
 import useGetToken from "firebase-get-token";
+import Header from "components/header/Header";
+import classnames from "classnames";
+import Footer from "components/footer/Footer";
+import { SET_ROUTER } from "store/PageRouter";
 
 // FCM 테스트
 // import "./firebase-get-token";
@@ -60,7 +64,7 @@ function App() {
         <Routes>
           <Route path="/" element={<NavigateMain />}>
             <Route index element={<Main />} />
-            <Route path="developer-talks-frontend" element={<Main />} />
+            {/* <Route path="developer-talks-frontend" element={<Main />} /> */}
             {/* <Route exact path="/" element={<Main />} /> */}
             <Route path="showuser" element={<Index />} />
 
@@ -94,5 +98,47 @@ function App() {
     </div>
   );
 }
+
+// const NavigateMain = () => {
+//   const dispatch = useDispatch();
+//   const location = useLocation();
+//   const pageRouter = useSelector((state) => state.pageRouter);
+//   const mypage = ["/mypage", "/my-studyroom", "/account"];
+
+//   useEffect(() => {
+//     if (mypage.includes(location.pathname)) {
+//       dispatch(SET_ROUTER({ state: "mypage" }));
+//     } else {
+//       dispatch(SET_ROUTER({ state: null }));
+//     }
+//   }, [location, dispatch]);
+
+//   return (
+//     <>
+//       <Header />
+//       <div
+//         className={classnames("page", {
+//           "is-mypage": pageRouter.state === "mypage",
+//         })}
+//       >
+//         <Outlet />
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// };
+
+// // 헤더 미포함
+// const NavigatePost = () => {
+//   return (
+//     <>
+//       <div className="page">
+//         <Outlet />
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// };
+
 
 export default App;
