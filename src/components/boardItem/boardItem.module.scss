@@ -1,8 +1,8 @@
-@import 'assets/style/variable.scss';
-@import 'assets/style/function.scss';
+@import "assets/style/variable.scss";
+@import "assets/style/function.scss";
 
 .boardContainer {
-  display:flex;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   height: 130px;
@@ -18,14 +18,28 @@
       color: $primary;
     }
   }
+  .selectAnswerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #11a318;
+    border-radius: 10px;
+    width: 70px;
+    height: 70px;
+    margin-right: 20px;
+    p{
+      color: #11a318;
+    }
+  }
   .answerContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border:1px solid #cfcccc;
+    border: 1px solid #cfcccc;
     border-radius: 10px;
-    width:70px;
+    width: 70px;
     height: 70px;
     margin-right: 20px;
   }
@@ -48,8 +62,8 @@
     }
   }
   .userProfile {
-    width:30px;
-    height:30px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-right: 5px;
     border: 1px solid #ccc;
@@ -85,7 +99,7 @@
     align-items: flex-end;
   }
   .bottomInfo {
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 10px;
@@ -95,7 +109,7 @@
     }
   }
   .countInfo {
-    display:flex;
+    display: flex;
     flex-direction: row;
   }
   .nickname {
@@ -115,7 +129,7 @@
   .img {
     display: flex;
     align-items: center;
-    width:70px;
+    width: 70px;
     height: 70px;
     border: 1px solid #cfcccc;
     border-radius: 10px;
