@@ -60,7 +60,7 @@ function App() {
         <Routes>
           <Route path="/" element={<NavigateMain />}>
             <Route index element={<Main />} />
-            <Route path="developer-talks-frontend" element={<Main />} />
+            {/* <Route path="developer-talks-frontend" element={<Main />} /> */}
             {/* <Route exact path="/" element={<Main />} /> */}
             <Route path="showuser" element={<Index />} />
 
