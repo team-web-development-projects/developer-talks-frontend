@@ -22,9 +22,8 @@ const StudyRoomInfo = () => {
   const [secretModal, setSecretModal] = useState(false);
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
-  const { getNickname } = getUer(auth.accessToken);
-  const queryClient = useQueryClient();
   const [getDeta, setGetData] = useState();
+  const [data, setData] = useState();
 
   // 스터디룸 가입요청
   const requestRoom = () => {
@@ -59,7 +58,7 @@ const StudyRoomInfo = () => {
       setInModal(true);
     }
     if (!data.autoJoin) {
-      if (getNickname === data.studyRoomUsers[0].nickname) {
+      if (parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname) {
         // setInModal(true);
         // requestRoom();
         navigate(`/studyroom/${postId}`);
@@ -69,22 +68,20 @@ const StudyRoomInfo = () => {
     }
   };
 
-  async function getInfo() {
-    const { data } = await axios.get(`${ROOT_API}/study-rooms/${postId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
-  }
-
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [""],
-    queryFn: getInfo,
-  });
-
-  if (isLoading) return <div>Loading...</div>;
+  useEffect(() => {
+    if (auth.accessToken !== null) {
+      axios
+        .get(`${ROOT_API}/study-rooms/${postId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        })
+        .then((res) => {
+          setData(res.data);
+        });
+    }
+  }, [auth]);
 
   const lockIcon = () => {
     if (getDeta) {
@@ -96,79 +93,85 @@ const StudyRoomInfo = () => {
   };
 
   return (
-    <div className="study-room-info">
-      {secretModal && (
-        <BasicModal setOnModal={() => setSecretModal()}>
-          생성자의 승인 후 입장할 수 있는 스터디룸입니다.
-          <br />
-          승인 요청 하시겠나요?
-          <button onClick={requestRoom}>요청하기</button>
-          <button onClick={() => setSecretModal(false)}>돌아가기</button>
-        </BasicModal>
-      )}
-      {inModal && (
-        <BasicModal setOnModal={() => setInModal()}>
-          <Modal.Content>생성자의 승인 없이 입장할 수 있는 스터디룸입니다.</Modal.Content>
-          <Modal.Buttons>
-            <Button
-              size="small"
-              onClick={() => {
-                requestRoom();
-                navigate(`/studyroom/${postId}`);
-              }}
-            >
-              입장하기
-            </Button>
-            <Button size="small" theme="cancle" onClick={() => setInModal(false)}>
-              돌아가기
-            </Button>
-          </Modal.Buttons>
-        </BasicModal>
-      )}
-      {settingModal && (
-        <StudyRoomSettingModal
-          setOnModal={() => setSettingModal()}
-          data={data && data}
-          id={postId}
-          setGetData={setGetData}
-          dimClick={() => setSettingModal()}
-        />
-      )}
-      {data && (
-        <>
-          {parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname && (
-            <div className="setting" onClick={() => setSettingModal(true)}>
-              <BsGearFill size={22} />
-            </div>
+    <>
+      {auth.accessToken !== null && (
+        <div className="study-room-info">
+          {secretModal && (
+            <BasicModal setOnModal={() => setSecretModal()}>
+              생성자의 승인 후 입장할 수 있는 스터디룸입니다.
+              <br />
+              승인 요청 하시겠나요?
+              <button onClick={requestRoom}>요청하기</button>
+              <button onClick={() => setSecretModal(false)}>돌아가기</button>
+            </BasicModal>
           )}
-          <div className="title">
-            {getDeta ? getDeta.title : data.title}
-            <div className="autojoin">
-              {lockIcon()}
-              <span onClick={InRoom}>참여하기</span>
-            </div>
-          </div>
-          <div className="maker">{getDeta ? getDeta.studyRoomUsers[0].nickname : data.studyRoomUsers[0].nickname}</div>
-          <div className="tag">
-            {getDeta
-              ? getDeta.skills.map((item, index) => (
-                  <Tag className="tags" key={index}>
-                    {item}
-                  </Tag>
-                ))
-              : data.skills.map((item, index) => (
-                  <Tag className="tags" key={index}>
-                    {item}
-                  </Tag>
-                ))}
-          </div>
-          <div className="content">
-            <div className="desc">스터디 소개</div>
-            <div dangerouslySetInnerHTML={{ __html: getDeta ? getDeta.title : data.content }}></div>
-          </div>
-        </>
+          {inModal && (
+            <BasicModal setOnModal={() => setInModal()}>
+              <Modal.Content>생성자의 승인 없이 입장할 수 있는 스터디룸입니다.</Modal.Content>
+              <Modal.Buttons>
+                <Button
+                  size="small"
+                  onClick={() => {
+                    requestRoom();
+                    navigate(`/studyroom/${postId}`);
+                  }}
+                >
+                  입장하기
+                </Button>
+                <Button size="small" theme="cancle" onClick={() => setInModal(false)}>
+                  돌아가기
+                </Button>
+              </Modal.Buttons>
+            </BasicModal>
+          )}
+          {settingModal && (
+            <StudyRoomSettingModal
+              setOnModal={() => setSettingModal()}
+              data={data && data}
+              id={postId}
+              setGetData={setGetData}
+              dimClick={() => setSettingModal()}
+            />
+          )}
+          {data && (
+            <>
+              {parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname && (
+                <div className="setting" onClick={() => setSettingModal(true)}>
+                  <BsGearFill size={22} />
+                </div>
+              )}
+              <div className="title">
+                {getDeta ? getDeta.title : data.title}
+                <div className="autojoin">
+                  {lockIcon()}
+                  <span onClick={InRoom}>참여하기</span>
+                </div>
+              </div>
+              <div className="maker">
+                {getDeta ? getDeta.studyRoomUsers[0].nickname : data.studyRoomUsers[0].nickname}
+              </div>
+              <div className="tag">
+                {getDeta
+                  ? getDeta.skills.map((item, index) => (
+                      <Tag className="tags" key={index}>
+                        {item}
+                      </Tag>
+                    ))
+                  : data.skills.map((item, index) => (
+                      <Tag className="tags" key={index}>
+                        {item}
+                      </Tag>
+                    ))}
+              </div>
+              <div className="content">
+                <div className="desc">스터디 소개</div>
+                <div dangerouslySetInnerHTML={{ __html: getDeta ? getDeta.title : data.content }}></div>
+              </div>
+            </>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

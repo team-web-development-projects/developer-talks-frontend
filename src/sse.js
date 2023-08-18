@@ -23,7 +23,7 @@ const Sse = () => {
           "Cache-control": 'no-cache'
         },
         // heartbeatTimeout: 45000,
-        heartbeatTimeout: 21 * 60 * 1000,
+        heartbeatTimeout: 21 * 60 * 1000, // NOTE: 백보단 시간 짧게
         // heartbeatTimeout: 30000,
         withCredentials: true,
       });

@@ -12,6 +12,8 @@ import BasicModal from "../basicmodal/BasicModal";
 import CkEditor from "components/ckeditor/CkEditor";
 import classnames from "classnames";
 import Button from "components/button/Button";
+import { showToast } from "components/toast/showToast";
+import { Modal } from "../Modal";
 
 const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
   const auth = useSelector((state) => state.authToken);
@@ -30,7 +32,9 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
       })
       .then(() => {
         setModals(false);
-      });
+        navigate("/studyroom/");
+      })
+      .catch((error) => showToast("error", "본인 이외의 스터디원이 있으면 삭제가 불가능합니다."));
   };
 
   const handleSubmit = async (e) => {
@@ -63,7 +67,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
   };
 
   const clickTag = (tag) => {
-    console.log('get', tag);
+    console.log("get", tag);
     if (indata.skills.includes(tag)) {
       setIndata({
         ...indata,
@@ -77,7 +81,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
     }
   };
 
-  console.log('tags', indata.skills);
+  console.log("tags", indata.skills);
 
   const handleTitle = (e) => {
     const title = e.target.value;
@@ -105,75 +109,81 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
     <>
       {modals && (
         <BasicModal setOnModal={() => setModals()} isDim={false}>
-          정말 삭제할까요??
-          <br />
-          <button
-            onClick={() => {
-              deleteRoom();
-              navigate("/studyroom/");
-            }}
-          >
-            네
-          </button>
-          <br />
-          <button onClick={() => setModals(false)}>아니오</button>
+          <Modal.Content>정말 삭제할까요??</Modal.Content>
+          <Modal.Buttons>
+            <Button
+              size="small"
+              onClick={() => {
+                deleteRoom();
+              }}
+            >
+              네
+            </Button>
+            <Button size="small" theme="cancle" onClick={() => setModals(false)}>
+              아니오
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       <ModalFrame setOnModal={setOnModal} classname="basic-modal studyroom-setting-modal" onClose isDim>
-        <div>수정</div>
-        <form onSubmit={handleSubmit}>
-          <div className="seetring-title">
-            제목
-            <input type="text" name="title" value={indata.title} onChange={handleTitle} />
-          </div>
-          <div>
-            <label htmlFor="chk">
-              <span>참여 제한</span>
+        <Modal.Content>
+          <div>수정</div>
+          <form onSubmit={handleSubmit}>
+            <div className="seetring-title">
+              제목
+              <input type="text" name="title" value={indata.title} onChange={handleTitle} />
+            </div>
+            <div>
+              <label htmlFor="chk">
+                <span>참여 제한</span>
+                <input
+                  type="checkbox"
+                  name="chk"
+                  id="chk"
+                  checked={!indata.autoJoin}
+                  onChange={() => clickautoJoin(indata.autoJoin)}
+                />
+              </label>
+            </div>
+            <div className="joinableCount">
+              참여인원 수
               <input
-                type="checkbox"
-                name="chk"
-                id="chk"
-                checked={!indata.autoJoin}
-                onChange={() => clickautoJoin(indata.autoJoin)}
+                type="number"
+                name=""
+                id=""
+                min="0"
+                max="100"
+                value={indata.joinableCount}
+                onChange={chnageJoinableCount}
+                placeholder="100명까지 가능합니다"
               />
-            </label>
-          </div>
-          <div className="joinableCount">
-            참여인원 수
-            <input
-              type="number"
-              name=""
-              id=""
-              min="0"
-              max="100"
-              value={indata.joinableCount}
-              onChange={chnageJoinableCount}
-              placeholder="100명까지 가능합니다"
-            />
-          </div>
-          <div className="tags">
-            {tags.map((item, index) => (
-              <span
-                key={index}
-                onClick={() => clickTag(item)}
-                className={classnames("tag", {
-                  "is-select": indata.skills.includes(item),
-                })}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-          <div className="content">
-            <CkEditor form={indata} setForm={setIndata} placeholder={"내용을 입력해주세요."} />
-          </div>
-        </form>
-        <Button size="small" theme="submit" onClick={handleSubmit}>
-          저장
-        </Button>
-        <Button size="small" theme="cancle" onClick={() => setModals(true)}>
-          삭제
-        </Button>
+            </div>
+            <div className="tags">
+              {tags.map((item, index) => (
+                <span
+                  key={index}
+                  onClick={() => clickTag(item)}
+                  className={classnames("tag", {
+                    "is-select": indata.skills.includes(item),
+                  })}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+            <div className="content">
+              <CkEditor form={indata} setForm={setIndata} placeholder={"내용을 입력해주세요."} />
+            </div>
+          </form>
+        </Modal.Content>
+        <Modal.Buttons>
+          <Button size="small" theme="submit" onClick={handleSubmit}>
+            저장
+          </Button>
+          <Button size="small" theme="cancle" onClick={() => setModals(true)}>
+            삭제
+          </Button>
+        </Modal.Buttons>
       </ModalFrame>
     </>
   );

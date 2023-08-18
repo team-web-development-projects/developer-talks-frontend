@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useQueryClient } from "react-query";
 import ChatInput from "./ChatInput";
+import { INIT_MESSAGE, SEND_MESSAGE } from "store/ChatStore";
 
-const Chat = ({ postId }) => {
+const Chat = ({ postId, upText, setUpText }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
-  const [conec, setConnec] = useState(false);
   const [text, setText] = useState("");
+  const dispatch = useDispatch();
+  const [temps, setTemp] = useState([{}]);
 
   //socket 연결
   const headers = {
@@ -29,25 +31,24 @@ const Chat = ({ postId }) => {
       stomp.subscribe(
         `/sub/rooms/${postId}`,
         (body) => {
-          console.log("메시지 받음: ", JSON.parse(body.body).message);
-          //이후 처리
-          // setGetList(true);
-          queryClient.invalidateQueries(["chatList"]);
+          console.log("메시지 받음: ", JSON.parse(body.body));
+          // console.log("메시지 받음: ", body.body);
+          // setUpText([...upText, JSON.parse(body.body)]);
+          dispatch(SEND_MESSAGE(JSON.parse(body.body)));
+          // queryClient.invalidateQueries(["chatList"]);
         },
         headers
       );
-
-      // } catch (e) {
-      // axios 예외처리
-      // axios는 기본적으로 200응답 외에는 에러를 던지므로
-      // 방 생성 or 방 입장에 관한 api오류시 이곳에서 처리해야함
-      // console.log("error: ", e);
-      // }
     });
+  }, []);
+
+  useEffect(() => {
     return () => {
       //연결 끊기
       stomp.disconnect(() => {
         console.log("socket연결 해제");
+        // NOTE: 소켓 끊어질때 store에 있는거 다 제거하기
+        dispatch(INIT_MESSAGE());
       });
     };
   }, []);
@@ -69,6 +70,13 @@ const Chat = ({ postId }) => {
 
   return (
     <div>
+      {/* <button
+        onClick={() => {
+          dispatch(SEND_MESSAGE({ id: 1 }));
+        }}
+      >
+        추가
+      </button> */}
       <ChatInput setText={setText} onClick={click} text={text} />
     </div>
   );
