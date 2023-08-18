@@ -22,12 +22,11 @@ const BoardDetail = ({ type }) => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const targetRef = useRef(null);
-
+  let nickname;
   const [post, setPost] = useState({
     userInfo: {},
     imageUrls: [],
   });
-  const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
   const [showUserInfo, setShowUserInfo] = useState(false);
 
@@ -48,9 +47,12 @@ const BoardDetail = ({ type }) => {
 
   const { isLoading, isError } = useQuery(["boardDetail"], () => fetchPost(type, postId, auth));
 
+  if (auth.accessToken !== null) {
+    nickname = parseJwt(auth.accessToken).nickname;
+  }
+
   useEffect(() => {
     if (auth.accessToken !== null) {
-      setNickName(parseJwt(auth.accessToken).nickname);
       axios
         .get(`${ROOT_API}/${type}/check/status/${postId}`, {
           headers: {
@@ -169,7 +171,7 @@ const BoardDetail = ({ type }) => {
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />
         ) : (
-          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer}/>
+          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer} />
         )}
       </div>
     </>

@@ -2,14 +2,15 @@ import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import s from "./anwerList.module.scss";
-import AnswerItem from '../answerItem/AnswerItem';
+import AnswerItem from "../answerItem/AnswerItem";
+import { parseJwt } from "hooks/useParseJwt";
 
-const AnswerList = ({ nickname, answerCnt, qnaNick, selectAnswer }) => {
+const AnswerList = ({nickname, answerCnt, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const { postId } = useParams();
@@ -57,7 +58,6 @@ const AnswerList = ({ nickname, answerCnt, qnaNick, selectAnswer }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   return (
     <>
       <div className={s.notice_reply}>
@@ -81,7 +81,11 @@ const AnswerList = ({ nickname, answerCnt, qnaNick, selectAnswer }) => {
         ) : (
           <div className={s.inputFalse}>로그인 후, 답변을 달아주세요.</div>
         )}
-        {answerList ? answerList.map((answer) => <AnswerItem key={answer.id} answer={answer} qnaNick={qnaNick} selectAnswer={selectAnswer}/>) : <div>등록된 답변이 없습니다.</div>}
+        {answerList ? (
+          answerList.map((answer) => <AnswerItem key={answer.id} answer={answer} qnaNick={qnaNick} selectAnswer={selectAnswer} />)
+        ) : (
+          <div>등록된 답변이 없습니다.</div>
+        )}
       </div>
     </>
   );
