@@ -2,7 +2,7 @@
 
 .container {
   position: relative;
-  width: 100px;
+  width: 114px;
   border-radius: 6px;
   background-color: #ffffff;
   align-self: center;
@@ -11,9 +11,10 @@
     border-radius: 6px 6px 0 0;
   }
   .selectedText {
-    padding: 8px 10px;
+    padding: 8px 30px 8px 10px;
     font-size: 14px;
     margin-left: 5px;
+    white-space: pre;
     cursor: pointer;
   }
   .icon{

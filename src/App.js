@@ -43,7 +43,7 @@ function App() {
   //     const token = await getToken(messaging, {
   //       vapidKey: "BOWbgLD10kyQ6zwV8RpnBg84oLQCD6Ll1t2u0AWjDxd1-u3sbTNy1DbKHEvJpvgLrUAhinaytkHIDakxn0HETaI",
   //     });
-  //     console.log('token : ', token);
+      console.log("token : ", auth.accessToken);
   //   } else if (permission === "denied") {
   //     console.log("denied");
   //   }
