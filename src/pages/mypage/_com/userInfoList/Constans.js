@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import types from "./userinfolist.module.scss";
+import { useMemo } from "react";
 
 // import { TAB_ROUTER } from "store/PageRouter";
 // import { useDispatch } from "react-redux";
@@ -8,6 +9,18 @@ export const MyActivity = (item) => {
   // const dispatch = useDispatch();
   // /studyroom/${item.id}
   switch (item.type) {
+    case "QUESTION":
+      return (
+        <Link className={types.text_wrap}>
+          <div className={types.title}>
+            <div>
+              <span>질문글</span>을 생성하였습니다.
+            </div>
+            <div>{item.createDate}</div>
+          </div>
+          <div className={types.content}>{item.title}</div>
+        </Link>
+      );
     case "ANSWER":
       return (
         <Link className={types.text_wrap}>

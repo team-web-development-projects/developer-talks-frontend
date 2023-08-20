@@ -10,7 +10,6 @@ import { showToast } from "components/toast/showToast";
 import { useNavigate } from "react-router-dom";
 import MessageModal from "components/portalModal/messagemodal/MessageModal";
 import { useOutOfClick } from "hooks/useOutOfClick";
-// import { useGetPostUser } from "hooks/useGetPostUser";
 // import { useEffect } from "react";
 const ShowUserInfo = ({ userinfo, type }) => {
   const [datas, setDatas] = useState([]);
@@ -34,18 +33,6 @@ const ShowUserInfo = ({ userinfo, type }) => {
         showToast("error", error.response.data.message);
       });
   };
-
-  // const { isLoading: Loading, data: postUserData } = useGetPostUser();
-  // useEffect(() => {
-  //   if (!Loading && postUserData) {
-  //     const postUser = postUserData.content.find((item) => item.id === post.id);
-  //     if (postUser) {
-  //       console.log(postUser);
-  //     } else {
-  //       console.log("id 값이 userPostId인 객체를 찾을 수 없습니다.");
-  //     }
-  //   }
-  // }, [Loading, postUserData, post]);
 
   // console.log("cc", nickname);
   useOutOfClick(targetRef, () => {

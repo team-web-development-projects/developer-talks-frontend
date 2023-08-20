@@ -66,6 +66,9 @@ function Account() {
       .then(({ data }) => {
         setUserData(data);
         setSelectedTags({ ...selectedTags, tags: data.skills });
+      })
+      .catch((error) => {
+        console.log("error", error);
       });
   }, []);
 

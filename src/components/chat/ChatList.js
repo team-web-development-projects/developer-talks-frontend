@@ -33,11 +33,11 @@ const ChatList = ({ postId, upText }) => {
     enabled: atBottom,
   });
 
-  console.log("data:", data && data);
+  // console.log("data:", data && data);
   const reversedList = data && [...data.content].reverse();
-  console.log("c", reversedList);
+  // console.log("c", reversedList);
   const message = useSelector((state) => state.chatStore);
-  console.log("upText", message.data);
+  // console.log("upText", message.data);
 
   const lineConverter = (text) => {
     return (
