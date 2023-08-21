@@ -21,3 +21,8 @@ export const dayChat = (date) => {
     return dayjs(date).format("YY-MM-DD HH:mm");
   }
 };
+
+// 게시판 용
+export const boardDay = (date) => {
+  return dayjs(date).format("YY-MM-DD HH:mm");
+}

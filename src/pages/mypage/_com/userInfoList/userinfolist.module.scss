@@ -65,6 +65,9 @@
 
   .content {
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
     margin-top: 10px;
   }
 

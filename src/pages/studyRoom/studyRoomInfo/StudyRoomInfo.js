@@ -11,7 +11,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./studyroominfo.scss";
 import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
 import { useEffect } from "react";
-import { getUer } from "hooks/useAuth";
 import { Modal } from "components/portalModal/Modal";
 import Button from "components/button/Button";
 

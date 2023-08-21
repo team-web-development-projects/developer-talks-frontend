@@ -76,9 +76,11 @@
     }
   }
   .title {
+    margin-top: 22px;
     font-size: 30px;
     font-weight: 500;
     @include media-mo {
+      margin-top: 12px;
       padding-bottom: 0;
       font-size: 18px;
     }
