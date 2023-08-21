@@ -31,6 +31,7 @@ const UserInfoList = ({ user }) => {
 
   useEffect(() => {
     console.log('user', user, parseJwt(auth.accessToken).nickname)
+
     async function activity() {
       const { data } = await axios.get(
         `${ROOT_API}/users/recent/activity/${user ? user.nickname : parseJwt(auth.accessToken).nickname}`,
@@ -85,7 +86,8 @@ const UserInfoList = ({ user }) => {
         scrab().then((res) => setData(res.content));
         break;
       default:
-        activity().then((res) => setData(res.content));
+        // activity().then((error) => console.log('error', error));
+        // activity().then((res) => setData(res.content));
         break;
     }
   }, [nickname, currentPage, user, auth, select]);

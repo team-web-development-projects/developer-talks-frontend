@@ -2,7 +2,7 @@ import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ export default function BoardPost({ type }) {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
+  const inputRef = useRef();
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -31,6 +32,10 @@ export default function BoardPost({ type }) {
         setGetType("");
     }
   }, [type]);
+
+  useEffect(()=> {
+    inputRef.current.focus();
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +82,15 @@ export default function BoardPost({ type }) {
     <>
       <form onSubmit={handleSubmit}>
         <div className={s.container}>
-          <input className={s.title} type="text" name="title" value={form.title} placeholder="제목을 작성해주세요." onChange={handleChange} />
+          <input
+            className={s.title}
+            type="text"
+            name="title"
+            value={form.title}
+            placeholder="제목을 작성해주세요."
+            onChange={handleChange}
+            ref={inputRef}
+          />
           <div className={s.editor}>
             {/* TODO: CKEditor 이텔릭체 안먹힘 등의 이슈 해결하기 */}
             <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />

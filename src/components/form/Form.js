@@ -3,7 +3,7 @@ import "./form.scss";
 
 const Form = ({ children, onSubmit, White }) => {
   return (
-      <form onSubmit={onSubmit} className={`form ${White ? '' : 'gray'}`}>
+      <form onSubmit={onSubmit} className="form">
         {children}
       </form>
   );
