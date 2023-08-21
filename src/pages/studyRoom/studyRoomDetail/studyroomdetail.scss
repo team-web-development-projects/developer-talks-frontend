@@ -1,12 +1,15 @@
 .room-detail {
   .menu {
     display: flex;
+    gap: 16px;
   }
-  .left-menu, .right-menu {
-    min-width: 100px;
-    max-width: 200px;
+  .board {
+    display: flex;
+    flex-grow: 5;
   }
   .content {
-    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
   }
 }

@@ -71,10 +71,16 @@ const ChatList = ({ postId, upText }) => {
     }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-    setAtBottom(true);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     scrollToBottom();
+  //   }, 200);
+  //   setAtBottom(true);
+  // }, []);
+
+  data && isSuccess && scrollToBottom();
+
+  console.log("cc", isSuccess && data, reversedList);
 
   useEffect(() => {
     scrollToBottom();
