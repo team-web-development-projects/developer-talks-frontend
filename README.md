@@ -1,5 +1,5 @@
 # developer-talks v1.0
-> **프론트 3명, 백엔드 3명** <br/> **개발기간: 2023.04 ~ **
+> **프론트 3명, 백엔드 3명** <br/> **개발기간: 2023.04 ~** <br/> 내부 코드 수정 진행중이며, 어드민이 별도로 진행중에 있습니다.
 
 ## 배포 주소
 
@@ -54,12 +54,11 @@ $ npm run start
 
 ---
 ## 화면 구성 📺
-메인페이지, 게시글 목록, 마이페이지, 스터디룸
 
 | 메인 페이지  |  게시글 목록   |
 | :-------------------------------------------: | :------------: |
 |  <img width="329" src="https://i.postimg.cc/rmRD7hMm/image.jpg"/> |  <img width="329" src="https://i.postimg.cc/W43FwNy0/image.jpg"/>|  
-| 스터디룸   |  마이페이지   |  
+| **스터디룸**  |  **마이페이지** |  
 | <img width="329" src="https://i.postimg.cc/gj9xpv2K/image.jpg"/>   |  <img width="329" src="https://i.postimg.cc/BvV8YWWk/image.jpg"/>     |
 
 ---
@@ -67,22 +66,31 @@ $ npm run start
 
 ## 주요 기능 📦
 
-### ⭐️ 로그인, 회원가입
+### 로그인, 회원가입
 - jwt을 사용하여 refreshToken은 localStorage에서 관리. accessToken은 redux-toolkit을 이용한 클라이언트에서 관리.
 
-### ⭐️ 게시글
-- 게시글의 crud 기능
+### 게시글
+- ckeditor를 활용한 crud 기능
 - 작성시 이미지 첨부 가능
 - 대댓글 기능
 
-### ⭐️ 스터디룸
+### 스터디룸
 - 스터디룸 입장시 소켓통신을 이용한 채팅 기능
 
-### ⭐️ 알림, 쪽지
+##### 아쉬운 점
+- 이전 데이터를 가져올시 페이징 처리가 아닌 다른 처리가 있지 않을까
+
+### 알림, 쪽지
 - sse처리로 시작하였으나 console에 주기적으로 나오는 알림이 있어 fcm으로 변경.
 
-### ⭐️ 사용자 정보 컨트롤
+##### 아쉬운 점
+- sse의 기능 구현은 잘됬으나 console에서 주기적으로 오는 에러를 해결 못함
+
+### 사용자 정보 컨트롤
 - 로그인, 회원가입, 유저정보찾기, 유저정보수정등 여러개의 input이벤트가 포함된곳에 react-hook-form을 이용한 validate를 사용.
+
+##### 아쉬운 점
+- react-hook-form의 validation 관리를 yup으로 하면 컴포넌트 분할이 되지 않았을까.
 
 
 ---
