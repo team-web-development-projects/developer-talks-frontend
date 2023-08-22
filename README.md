@@ -47,6 +47,10 @@ $ npm run start
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
+### state management 
+![redux](https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white)
+![reactquery](https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
+
 ### Communication
 ![Discord](https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
@@ -69,14 +73,15 @@ $ npm run start
 ### 로그인, 회원가입
 - jwt을 사용하여 refreshToken은 localStorage에서 관리. accessToken은 redux-toolkit을 이용한 클라이언트에서 관리.
 
-
 <br/>
+
 ### 게시글
 - ckeditor를 활용한 crud 기능
 - 작성시 이미지 첨부 가능
 - 대댓글 기능
-  
+
 <br/>
+
 ### 스터디룸
 - 스터디룸 입장시 소켓통신을 이용한 채팅 기능
 
@@ -84,6 +89,7 @@ $ npm run start
 - 이전 데이터를 가져올시 페이징 처리가 아닌 다른 처리가 있지 않을까
 
 <br/>
+
 ### 알림, 쪽지
 - sse처리로 시작하였으나 console에 주기적으로 나오는 알림이 있어 fcm으로 변경.
 
@@ -91,6 +97,7 @@ $ npm run start
 - sse의 기능 구현은 잘됬으나 console에서 주기적으로 오는 에러를 해결 못함
 
 <br/>
+
 ### 사용자 정보 컨트롤
 - 로그인, 회원가입, 유저정보찾기, 유저정보수정등 여러개의 input이벤트가 포함된곳에 react-hook-form을 이용한 validate를 사용.
 
