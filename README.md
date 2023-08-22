@@ -15,8 +15,8 @@
 
 ## 프로젝트 소개
 
-developer-talks는 okky.kr 와 비슷한 성격의 개발자 커뮤니티 입니다.
-기본적으로 게시판 crud, 구글 로그인과 jwt을 이용한 토큰 관리, 사용자 정보 컨트롤을 가지고 있고, 
+developer-talks는 okky.kr 와 비슷한 성격의 개발자 커뮤니티 입니다. <br/>
+기본적으로 게시판 crud, 구글 로그인과 jwt을 이용한 토큰 관리, react-hook-form을 이용한 사용자 정보 컨트롤을 가지고 있고, <br/>
 소켓, see, fcm등의 lib가 사용되었습니다.
 
 ## 시작 가이드
@@ -28,7 +28,7 @@ developer-talks는 okky.kr 와 비슷한 성격의 개발자 커뮤니티 입니
 ### 설치
 ``` bash
 $ git clone https://github.com/team-web-development-projects/developer-talks-frontend.git
-$ cd Voluntain-2nd
+$ cd developer-talks-frontend
 $ npm install 
 $ npm run start
 ```
