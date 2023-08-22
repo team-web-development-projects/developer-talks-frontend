@@ -1,120 +1,142 @@
-### 앱 설치
+# developer-talks v1.0
+> **프론트 3명, 백엔드 3명** <br/> **개발기간: 2023.04 ~ **
 
-npm i
+## 배포 주소
 
-### 앱 실행
+> **개발 버전** : [https://developer-talks-frontend.vercel.app/](https://developer-talks-frontend.vercel.app/) <br>
 
-npm run start
+## 프론트 구성원
 
-### 앱 배포
-
-npm run deploy
-
-클라이언트 githubpage로 배포
-
-### `npm run build`
-
-gihubpage가 아닌 그 외로 배포할때, 이 명령어를 친 후 public안의 파일들을 이동
-
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-### 채팅
-**적용된 기능**
-- 페이지네이션 데이터 기반으로 스크롤을 최상단으로 했을시 이전데이터 불러오기
-- 채팅 입력에서 shift + enter로 다음줄, enter 로 전송
-- 중복텍스트 전송 3초 이내 막기
-
-**이슈**
-- 이전데이터 불러올때 데이터의 움찔거림이 보이는 현상 - 백에서 데이터를 밑으로 쌓이게 보내주고 있음.
+|      이경주       |          유희선         |       김시연         |
+| :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | 
+|   <img width="160px" src="https://avatars.githubusercontent.com/u/24261724?v=4" />    |                      <img width="160px" src="https://avatars.githubusercontent.com/u/84820008?v=4" />    |                   <img width="160px" src="https://avatars.githubusercontent.com/u/122216298?v=4"/>   |
+|   [@jiimy](https://github.com/jiimy)   |    [@hsgh085](https://github.com/hsgh085)  | [@rlatldus](https://github.com/rlatldus)  |
 
 
-### jwt 토큰
-**적용된 기능**
-- rtk는 로컬스토리지. atk는 내장 상태 - redux toolkit - 에 저장. 
-- 새로고침시 훅을 통하여 rtk의 정보를 가지고 atk 재발급
+## 프로젝트 소개
 
-**이슈**
-- 소셜 로그인(구글로그인)에서 쿠키에 넣은 rtk인식이 안되는거 같아 로컬스토리지에 넣게됨
-- 일부 페이지에서 rtk를 이용한 atk 재발급이 되지 않는 현상.
+developer-talks는 okky.kr 와 비슷한 성격의 개발자 커뮤니티 입니다.
+기본적으로 게시판 crud, 구글 로그인과 jwt을 이용한 토큰 관리, 사용자 정보 컨트롤을 가지고 있고, 
+소켓, see, fcm등의 lib가 사용되었습니다.
 
+## 시작 가이드
+### 작업환경
 
+- [Node.js 18.14.2](https://nodejs.org/ca/blog/release/v18.14.2/)
+- [Npm 9.5.0](https://www.npmjs.com/package/npm/v/9.5.0)
 
-### 로그인
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 아이디와 비밀번호를 입력하면 로그인이 가능. 로그인 시와 미로그인 시 UI가 변경 됨.
+### 설치
+``` bash
+$ git clone https://github.com/team-web-development-projects/developer-talks-frontend.git
+$ cd Voluntain-2nd
+$ npm install 
+$ npm run start
+```
 
-**이슈**
-- react-hook-form을 사용하여 작성했더니 코드가 아주 길어짐.
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
+---
 
+## Stacks 🐈
 
-
-### 회원가입
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 이메일, 닉네임, 아이디, 비밀번호, 스킬, 자기소개, 프로필 이미지 정보 입력, 중복체크, 이메일 인증, 비밀번호 토글의 기능을 가지고 있음.
-- 쇼설로그인 시 간편 로그인으로 일부만 입력 가능.
-
-**이슈**
-- react-hook-form을 사용하여 작성했더니 코드가 아주 길어짐.
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
+### Environment
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)             
 
 
-### 회원정보수정
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 이메일, 닉네임, 아이디, 비밀번호, 스킬, 자기소개, 프로필 이미지 정보 입력, 중복체크, 이메일 인증, 비밀번호 토글의 기능을 가지고 있음.
-- 버튼 스위치로 회원 활동 내역을 숨길 수 있음.
+### Development
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-**이슈**
-- react-hook-form을 사용하여 작성. 컴포넌트로 분리했으나 중복된 코드,
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
+### Communication
+![Discord](https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
 
 
+---
+## 화면 구성 📺
+메인페이지, 게시글 목록, 마이페이지, 스터디룸
 
-### 회원정보찾기
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 이메일을 인증하고 새 비밀호를 발급받을 수 있음.
-- 이메일을 입력하면 그 이메일로 아이디를 찾을 수 있음.
+| 메인 페이지  |  게시글 목록   |
+| :-------------------------------------------: | :------------: |
+|  <img width="329" src="https://i.postimg.cc/rmRD7hMm/image.jpg"/> |  <img width="329" src="https://i.postimg.cc/W43FwNy0/image.jpg"/>|  
+| 스터디룸   |  마이페이지   |  
+| <img width="329" src="https://i.postimg.cc/gj9xpv2K/image.jpg"/>   |  <img width="329" src="https://i.postimg.cc/BvV8YWWk/image.jpg"/>     |
 
-**이슈**
-- react-hook-form을 사용하여 작성. 컴포넌트로 분리했으나 중복된 코드,
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
+---
+그 외 게시글 상세, 게시글 작성, 스터디룸 상세, 유저 관련 페이지등 총 9 페이지
 
+## 주요 기능 📦
 
+### ⭐️ 로그인, 회원가입
+- jwt을 사용하여 refreshToken은 localStorage에서 관리. accessToken은 redux-toolkit을 이용한 클라이언트에서 관리.
 
-### 회원탈퇴
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 비밀번호를 입력하면, 탈퇴 할 수 있음
+### ⭐️ 게시글
+- 게시글의 crud 기능
+- 작성시 이미지 첨부 가능
+- 대댓글 기능
 
-**이슈**
-- react-hook-form을 사용하여 작성. 컴포넌트로 분리했으나 중복된 코드,
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
+### ⭐️ 스터디룸
+- 스터디룸 입장시 소켓통신을 이용한 채팅 기능
 
+### ⭐️ 알림, 쪽지
+- sse처리로 시작하였으나 console에 주기적으로 나오는 알림이 있어 fcm으로 변경.
 
-### 쪽지보내기
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 닉네임 클릭 시 쪽지를 보낼 수 있음. 마이페이지에서 다른 유저에게 쪽지를 보낼 수 있음.
-
-**이슈**
-- react-hook-form을 사용하여 작성. 컴포넌트로 분리했으나 중복된 코드,
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
-
-
-
-### 마이페이지 활동내역
-**적용된 기능**
-- react-hook-form. redux를 사용하여 토큰을 store에 dispatch 및 저장. 
-- 최근활동, 내가 쓴 글, 댓글, 스크랩한 활동 내역을 텝하면 볼 수 있음.
-- 내용이 없을 시 '내용이 없습니다.'가 입력되어 있음.
-
-**이슈**
-- 새로고침 시 로그인이 풀리는 현상이 있었음. 
-- 회원가입 시 중복체크 후 수정해도 회원가입이 오류 없이 가능함.
+### ⭐️ 사용자 정보 컨트롤
+- 로그인, 회원가입, 유저정보찾기, 유저정보수정등 여러개의 input이벤트가 포함된곳에 react-hook-form을 이용한 validate를 사용.
 
 
-<!-- 테스트 -->
+---
+## 아키텍쳐
+
+### 디렉토리 구조
+```bash
+├── README.md
+├── package-lock.json
+├── package.json
+├── jsconfig.json
+├── .env
+├── .env.development
+├── .env.production
+├── public
+│   ├── 404.html
+│   ├── firebase-messaging-sw.js
+│   ├── index.html
+│   └── favicon.ico
+└── src
+    ├── assets
+    │   ├── font.scss
+    │   ├── function.scss
+    │   ├── index.scss
+    │   ├── reset.scss
+    │   ├── variable.scss
+    │   └── common.scss
+    ├── components
+    │   └── ...// button이나 editor처럼 작은것부터 시작하여 modal까지 약 30개 정도의 컴포넌트가 있습니다.
+    ├── constants
+    │   └── api.js // 루트 도메인 기본 정의
+    ├── hooks
+    │   ├── useOutOfClick.js
+    │   ├── useParseJwt.js // accessToken을 디코딩하여 유저 데이터 추출
+    │   └── useAuth.js
+    ├── pages
+    │   └──  ...   // 잘못된 url로 접속했을때 NotPage를 포함하여 약 8개의 페이지가 있습니다.
+    ├── store
+    │   ├── Auth.js // jwt 토큰 저장
+    │   ├── ChatStore.js // 채팅 입력시 데이터 임시 저장
+    │   ├── index.js 
+    │   ├── Notification.js // 알림, 쪽지 관련 데이터 저장
+    │   └── PageRouter.js // url 판별 데이터 임시 저장
+    ├── util
+    │   ├── day.js // dayjs를 이용한 날짜 포맷
+    │   ├── epochConverter.js // 날짜 비교
+    │   ├── IsLogin.js 
+    │   └── Util.js // isDev와 isPrd로 dev 와 prd환경 정의
+    ├── App.js
+    ├── firebase-get-token.js
+    ├── sse.js
+    ├── useGoogleLoginAuth.js
+    ├── useRefreshToken.js
+    └── index.js
+
+```
+
