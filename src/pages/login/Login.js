@@ -80,10 +80,10 @@ const Login = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           <legend>로그인페이지</legend>
-          <p className={s.title}>
+          <h2>
             Developer-Talks 가입으로
             <br /> 다양한 사람들을 만나보세요!
-          </p>
+          </h2>
           <Table tableTitle={"Developer-Talks"} tableText={"계정로그인"}>
             <div>
               <div>

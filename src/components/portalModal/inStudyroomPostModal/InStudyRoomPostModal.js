@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import ModalFrame from "../ModalFrame";
 
 const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
+  const [selectedOption, setSelectedOption] = useState("NORMAL"); // 기본 선택 값을 설정합니다
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
@@ -55,6 +56,10 @@ const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
     setForm({ ...form, [name]: value });
   };
 
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
   return (
     <ModalFrame setOnModal={setOnModal} onClose isDim classname="basic-modal">
       {type === "post" && (
@@ -66,15 +71,15 @@ const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
             placeholder="제목을 작성해주세요."
             onChange={handleChange}
           />
-          <div>
-            <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
-          </div>
-          <Button>저장</Button>
+          <select value={selectedOption} onChange={handleOptionChange}>
+            <option value="NOTICE">공지</option>
+            <option value="NORMAL">일반글</option>
+          </select>
+          <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
+          <Button size="small">저장</Button>
         </form>
       )}
-      {
-        type === 'detail' && <>detail</>
-      }
+      {type === "detail" && <>detail</>}
     </ModalFrame>
   );
 };
