@@ -29,7 +29,7 @@ const InStudyRoomBoard = ({ postId }) => {
     queryKey: ["getInStudyRoomPost"],
     queryFn: fetchProjects,
   });
-  console.log("dta", postId, data && data.content.length);
+  console.log("dta", postId, data && data.content);
 
   return (
     <div className="board-wrap">
