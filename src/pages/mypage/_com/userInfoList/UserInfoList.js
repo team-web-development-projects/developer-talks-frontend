@@ -86,8 +86,9 @@ const UserInfoList = ({ user }) => {
         scrab().then((res) => setData(res.content));
         break;
       default:
+        // BUG: 자신의 개인정보가 비공개일때 자신의 활동내역도 안보임.
+        activity().then((res) => setData(res.content));
         // activity().then((error) => console.log('error', error));
-        // activity().then((res) => setData(res.content));
         break;
     }
   }, [nickname, currentPage, user, auth, select]);
