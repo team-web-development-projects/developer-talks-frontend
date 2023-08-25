@@ -12,10 +12,11 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
-import { parseJwt } from "hooks/useParseJwt";
+// import { parseJwt } from "hooks/useParseJwt";
 import classNames from "classnames";
 import BoardBanner from "components/boardBanner/BoardBanner";
 import SearchInput from "components/searchInput/SearchInput";
+import apiInstance from "module/useInterceptor";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -43,20 +44,21 @@ const BoardList = ({ type }) => {
   };
 
   async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
+    // const { data } = await apiInstance.get(`${ROOT_API}/study-rooms`, {
+    const res = await apiInstance.get(`/study-rooms`, {
       params: { page: currentPage - 1, size: 12, sort: selectText },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
     });
-    return data;
+    return res;
   }
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
-    queryFn: fetchProjects,
-    enabled: auth.accessToken != null,
+    queryFn: () => fetchProjects(),
+    // refetchInterval: 60 * 60 * 1000, // 1시간
+    // refetchIntervalInBackground: true,
+    // keepPreviousData: true,
+    // staleTime: 60 * 60 * 1000, // 테스트코드
+    // cacheTime: 60 * 60 * 1000, // 테스트코드
   });
   refetchQuery.current = refetch;
 
@@ -67,7 +69,7 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  // console.log('list', data);
+  console.log("list", data);
 
   return (
     <>
@@ -86,7 +88,7 @@ const BoardList = ({ type }) => {
             <p>공부방</p>
           </BoardBanner>
           <div className={s.header}>
-            <SearchInput type="studyroom" placeholder="스터디룸 이름 검색"/>
+            <SearchInput type="studyroom" placeholder="스터디룸 이름 검색" />
             <div className={s.bottom}>
               <Select init="최신순" options={["최신순", "참여인원순"]} sendText={setSelectText} />
               <Button onClick={handleClick} size="small">

@@ -28,6 +28,7 @@ import Header from "components/header/Header";
 import classnames from "classnames";
 import Footer from "components/footer/Footer";
 import { SET_ROUTER } from "store/PageRouter";
+// import createAxiosInstance from "./module/useInterceptor";
 
 // FCM 테스트
 // import "./firebase-get-token";
@@ -36,6 +37,7 @@ import { SET_ROUTER } from "store/PageRouter";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
+  // createAxiosInstance();
 
   // async function requestPermission() {
   //   const permission = await Notification.requestPermission();
@@ -56,7 +58,8 @@ function App() {
   // 배포 테스트 커밋
 
   useGoogleLoginAuth();
-  useRefreshToken();
+  // useInterceptor();
+  // useRefreshToken();
   useGetToken();
   // Sse();
   return (

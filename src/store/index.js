@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tokenReducer from "./Auth";
 import pageRouterReducer from "./PageRouter";
-import notificationReducer from './Notification';
+import notificationReducer from "./Notification";
 import chatStoreReducer from "./ChatStore";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     authToken: tokenReducer,
     pageRouter: pageRouterReducer,
@@ -12,3 +12,4 @@ export default configureStore({
     chatStore: chatStoreReducer,
   },
 });
+export default store;
