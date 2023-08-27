@@ -2,13 +2,9 @@
 import axios from "axios";
 import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
-import { useDispatch, useSelector } from "react-redux";
 import store from "store";
 import { SET_TOKEN, refreshAccessToken, tokenSlice } from "store/Auth";
-// import store
-// import tokenSlice from ''
 
-// const createAxiosInstance = () => {
 const apiInstance = axios.create({
   baseURL: "https://dtalks-api.site",
   headers: {
@@ -62,8 +58,6 @@ apiInstance.interceptors.response.use(
         },
       });
 
-      // console.log("data", data.data.accessToken);
-
       // store 갱신
       store.dispatch(
         SET_TOKEN({
@@ -79,7 +73,6 @@ apiInstance.interceptors.response.use(
 
       // 재요청
       const originalResponse = await axios.request(err.config);
-      console.log("dd", originalResponse);
       return originalResponse.data;
     }
     return Promise.reject(err);
