@@ -24,7 +24,7 @@ const Login = () => {
   const [typetoggle, setTypetoggle] = useState("password");
 
   const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
+    // await new Promise((r) => setTimeout(r, 1000));
     apiInstance
       .post(`/sign-in`, {
         userid: data.userId,
@@ -34,8 +34,8 @@ const Login = () => {
       .then((res) => {
         console.log("로그인 성공:", res);
         // setRefreshToken({ refreshToken: response.data.refreshToken });
-        localStorage.setItem("dtrtk", res.data.refreshToken);
-        dispatch(SET_TOKEN({ accessToken: res.data.accessToken }));
+        localStorage.setItem("dtrtk", res.refreshToken);
+        dispatch(SET_TOKEN({ accessToken: res.accessToken }));
         // NOTE: SSE를 위한 코드
         // axios
         //   .get(`${ROOT_API}/notifications/subscribe`, {

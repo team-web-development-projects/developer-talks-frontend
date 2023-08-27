@@ -17,7 +17,7 @@ const apiInstance = axios.create({
   timeout: 5000,
 });
 
-// 모든 요청하기전에?
+// 요청하기전에?
 apiInstance.interceptors.request.use(
   async (config) => {
     const accessToken = store.getState().authToken.accessToken;
@@ -38,7 +38,7 @@ apiInstance.interceptors.request.use(
   }
 );
 
-// 모든 요청이 완료된후
+// 요청이 완료된후
 apiInstance.interceptors.response.use(
   (response) => {
     console.log("인터셉터 re", response.data);

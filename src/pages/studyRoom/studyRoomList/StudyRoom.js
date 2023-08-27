@@ -1,22 +1,18 @@
-import axios from "axios";
+import { getStudyroomList } from "api/studyroom";
+import classNames from "classnames";
+import BoardBanner from "components/boardBanner/BoardBanner";
 import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
+import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
-import { ROOT_API } from "constants/api";
 import { useEffect, useRef, useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import { BsFillPeopleFill, BsLock, BsUnlock } from "react-icons/bs";
+import { BsFillPeopleFill } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
-// import { parseJwt } from "hooks/useParseJwt";
-import classNames from "classnames";
-import BoardBanner from "components/boardBanner/BoardBanner";
-import SearchInput from "components/searchInput/SearchInput";
-import apiInstance from "module/useInterceptor";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -43,22 +39,9 @@ const BoardList = ({ type }) => {
     }
   };
 
-  async function fetchProjects() {
-    // const { data } = await apiInstance.get(`${ROOT_API}/study-rooms`, {
-    const res = await apiInstance.get(`/study-rooms`, {
-      params: { page: currentPage - 1, size: 12, sort: selectText },
-    });
-    return res;
-  }
-
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
-    queryFn: () => fetchProjects(),
-    // refetchInterval: 60 * 60 * 1000, // 1시간
-    // refetchIntervalInBackground: true,
-    // keepPreviousData: true,
-    // staleTime: 60 * 60 * 1000, // 테스트코드
-    // cacheTime: 60 * 60 * 1000, // 테스트코드
+    queryFn: () => getStudyroomList(currentPage, selectText),
   });
   refetchQuery.current = refetch;
 
@@ -69,7 +52,7 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("list", data);
+  console.log("list", data.res);
 
   return (
     <>
@@ -98,11 +81,11 @@ const BoardList = ({ type }) => {
           </div>
           <ul
             className={classNames(s.list, {
-              [s.is_not_list]: data && data.content.length === 0,
+              [s.is_not_list]: data && data.res.content.length === 0,
             })}
           >
-            {data && data.content.length !== 0 ? (
-              data.content.map((item, index) => (
+            {data && data.res.content.length !== 0 ? (
+              data.res.content.map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <div className={s.tag}>
@@ -128,8 +111,8 @@ const BoardList = ({ type }) => {
           {data && (
             <div className={s.pageContainer}>
               <Pagination
-                currentPage={data.pageable.pageNumber + 1}
-                totalPage={data.totalPages}
+                currentPage={data.res.pageable.pageNumber + 1}
+                totalPage={data.res.totalPages}
                 paginate={setCurrentPage}
               />
             </div>
