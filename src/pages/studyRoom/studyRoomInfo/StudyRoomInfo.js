@@ -38,11 +38,11 @@ const StudyRoomInfo = () => {
 
   const InRoom = () => {
     // 자동참여일때,
-    if (data.res.autoJoin) {
+    if (data.autoJoin) {
       setInModal(true);
     }
-    if (!data.res.autoJoin) {
-      if (parseJwt(auth.accessToken).nickname === data.res.studyRoomUsers[0].nickname) {
+    if (!data.autoJoin) {
+      if (parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname) {
         navigate(`/studyroom/${postId}`);
       } else {
         setSecretModal(true);
@@ -57,12 +57,14 @@ const StudyRoomInfo = () => {
 
   const lockIcon = () => {
     if (data) {
-      return data.res.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
+      return data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
     }
     if (data) {
-      return data.res.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
+      return data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
     }
   };
+
+  console.log('data', data);
 
   return (
     <>
@@ -107,29 +109,29 @@ const StudyRoomInfo = () => {
           {settingModal && (
             <StudyRoomSettingModal
               setOnModal={() => setSettingModal()}
-              data={data && data.res}
+              data={data && data.content}
               id={postId}
-              setGetData={data.res}
+              setGetData={data.content}
               dimClick={() => setSettingModal()}
             />
           )}
           {data && (
             <>
-              {parseJwt(auth.accessToken).nickname === data.res.studyRoomUsers[0].nickname && (
+              {parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname && (
                 <div className="setting" onClick={() => setSettingModal(true)}>
                   <BsGearFill size={22} />
                 </div>
               )}
               <div className="title">
-                {data.res.title}
+                {data.title}
                 <div className="autojoin">
                   {lockIcon()}
                   <span onClick={InRoom}>참여하기</span>
                 </div>
               </div>
-              <div className="maker">{data.res.studyRoomUsers[0].nickname}</div>
+              <div className="maker">{data.studyRoomUsers[0].nickname}</div>
               <div className="tag">
-                {data.res.skills.map((item, index) => (
+                {data.skills.map((item, index) => (
                   <Tag className="tags" key={index}>
                     {item}
                   </Tag>
@@ -137,7 +139,7 @@ const StudyRoomInfo = () => {
               </div>
               <div className="content">
                 <div className="desc">스터디 소개</div>
-                <div dangerouslySetInnerHTML={{ __html: data.res.content }}></div>
+                <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
               </div>
             </>
           )}

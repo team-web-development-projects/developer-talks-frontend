@@ -52,7 +52,7 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("list", data.res);
+  // console.log("list", data);
 
   return (
     <>
@@ -81,11 +81,11 @@ const BoardList = ({ type }) => {
           </div>
           <ul
             className={classNames(s.list, {
-              [s.is_not_list]: data && data.res.content.length === 0,
+              [s.is_not_list]: data && data.content.length === 0,
             })}
           >
-            {data && data.res.content.length !== 0 ? (
-              data.res.content.map((item, index) => (
+            {data && data.content.length !== 0 ? (
+              data.content.map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <div className={s.tag}>
@@ -111,8 +111,8 @@ const BoardList = ({ type }) => {
           {data && (
             <div className={s.pageContainer}>
               <Pagination
-                currentPage={data.res.pageable.pageNumber + 1}
-                totalPage={data.res.totalPages}
+                currentPage={data.pageable.pageNumber + 1}
+                totalPage={data.totalPages}
                 paginate={setCurrentPage}
               />
             </div>

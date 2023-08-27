@@ -27,10 +27,10 @@ apiInstance.interceptors.request.use(
       config.headers["X-AUTH-TOKEN"] = `${accessToken}`;
       return config;
     }
-    if (!accessToken && refreshToken) {
-      showToast("error", "회원 정보가 만료되었습니다.");
-      return config;
-    }
+    // if (!accessToken && refreshToken) {
+    //   showToast("error", "회원 정보가 만료되었습니다.");
+    //   return config;
+    // }
     return config;
   },
   (error) => {
@@ -41,7 +41,7 @@ apiInstance.interceptors.request.use(
 // 요청이 완료된후
 apiInstance.interceptors.response.use(
   (response) => {
-    console.log("인터셉터 re", response.data);
+    // console.log("인터셉터 re", response.data);
     // if (response.status === 200) {
     //   console.log("Request succeeded!");
     // }

@@ -87,7 +87,7 @@ const UserInfoList = ({ user }) => {
         break;
       default:
         // activity().then((error) => console.log('error', error));
-        // activity().then((res) => setData(res.content));
+        activity().then((res) => setData(res.content));
         break;
     }
   }, [nickname, currentPage, user, auth, select]);

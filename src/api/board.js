@@ -1,19 +1,16 @@
-import axios from "axios";
-import { ROOT_API } from "constants/api";
-import { useGetAuth } from "hooks/useAuth";
-import { useSelector } from "react-redux";
+const { default: apiInstance } = require("module/useInterceptor");
 
-const getBoardList = async () => {
-  // const auth = useSelector((state) => state.authToken);
-  // const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
-  //   params: { page: currentPage - 1, size: 10, sort: selectText },
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "X-AUTH-TOKEN": useGetAuth(),
-  //   },
-  // });
-  // return data;
-};
-
-
-export default getBoardList
+// 전체 게시글 목록 - 검색
+export async function getBoardList(currentPage, selectText, type, keyword) {
+  if (keyword) {
+    const res = await apiInstance.get(`${type}/search`, {
+      params: { keyword: keyword, page: currentPage - 1, size: 10, sort: selectText },
+    });
+    return res;
+  } else {
+    const res = await apiInstance.get(`${type}/all`, {
+      params: { page: currentPage - 1, size: 10, sort: selectText },
+    });
+    return res;
+  }
+}

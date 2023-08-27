@@ -13,6 +13,7 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardList.module.scss";
+import { getBoardList } from "api/board";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -27,31 +28,9 @@ const BoardList = ({ type }) => {
     auth && auth.accessToken ? navigate(`/${type === "post" ? "board" : "qna"}/post`) : setModal(true);
   };
 
-  async function getBoardList() {
-    if (keyword) {
-      const { data } = await axios.get(`${ROOT_API}/${type}/search`, {
-        params: { keyword: keyword, page: currentPage - 1, size: 10, sort: selectText },
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      });
-      return data;
-    } else {
-      const { data } = await axios.get(`${ROOT_API}/${type}/all`, {
-        params: { page: currentPage - 1, size: 10, sort: selectText },
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      });
-      return data;
-    }
-  }
-
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
-    queryFn: getBoardList,
+    queryFn: () => getBoardList(currentPage, selectText, type, keyword),
   });
   refetchQuery.current = refetch;
 
@@ -61,9 +40,7 @@ const BoardList = ({ type }) => {
   }, [keyword, type, selectText]);
 
   if (isLoading) return <div>Loading...</div>;
-  console.log('data', data);
-
-  console.log('boarlist', type);
+  // console.log('data', data);
 
   return (
     <>
