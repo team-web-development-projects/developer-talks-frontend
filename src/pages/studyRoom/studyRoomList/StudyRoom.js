@@ -13,15 +13,15 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./studyroom.module.scss";
+import { getJoinedStudyroomList } from "api/auth";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
-  const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const [secretModal, setecretModal] = useState(false);
   const navigate = useNavigate();
   const refetchQuery = useRef();
-  const [selectText, setSelectText] = useState("");
+  const [selectText, setSelectText] = useState("id");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -34,9 +34,16 @@ const BoardList = ({ type }) => {
   };
 
   const joinRoomClick = (id) => {
-    if (auth && auth.accessToken) {
-      navigate(`/studyroom/info/${id}`);
-    }
+    const data = getJoinedStudyroomList();
+    data.then((res) => {
+      // 이미 방에 참여중이면 방정보 소개 페이지 패스
+      const find = res.content.find((item) => item.id === id);
+      if(find === undefined) {
+        navigate(`/studyroom/info/${id}`);
+      } else {
+        navigate(`/studyroom/${id}`);
+      }
+    });
   };
 
   const { data, isLoading, refetch } = useQuery({
@@ -51,8 +58,6 @@ const BoardList = ({ type }) => {
   }, []);
 
   if (isLoading) return <div>Loading...</div>;
-
-  // console.log("list", data);
 
   return (
     <>

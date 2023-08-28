@@ -64,7 +64,7 @@ const StudyRoomInfo = () => {
     }
   };
 
-  console.log('data', data);
+  // console.log('data', data);
 
   return (
     <>
@@ -109,9 +109,9 @@ const StudyRoomInfo = () => {
           {settingModal && (
             <StudyRoomSettingModal
               setOnModal={() => setSettingModal()}
-              data={data && data.content}
+              data={data && data}
               id={postId}
-              setGetData={data.content}
+              setGetData={data}
               dimClick={() => setSettingModal()}
             />
           )}

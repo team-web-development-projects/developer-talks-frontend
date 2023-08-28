@@ -22,3 +22,21 @@ export async function getStudyroomInfoList(postId) {
   const res = await apiInstance.get(`/study-rooms/${postId}`, {});
   return res;
 }
+
+// 스터디룸 내에 게시글 전체 보기
+export async function getInStudyRoomBoard(currentPage, postId) {
+  const res = await apiInstance.get(`/study-rooms/posts/${postId}`, {
+    params: { page: currentPage - 1, size: 10 },
+  });
+  return res;
+}
+
+// 스터디룸 내에 게시글 작성
+export async function postInStudyRoomBoard(postId, form) {
+  const res = await apiInstance.post(`/study-rooms/posts/${postId}`, {
+    title: form.title,
+    content: form.content,
+    category: "NORMAL",
+  });
+  return res;
+}

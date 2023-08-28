@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
 import apiInstance from "module/useInterceptor";
+import { getJoinedStudyroomList, login } from "api/auth";
+import { SET_JOIN_STUDYROOMLIST } from "store/User";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -25,12 +27,8 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
-    apiInstance
-      .post(`/sign-in`, {
-        userid: data.userId,
-        password: data.password,
-        fcmToken: localStorage.getItem("dtalksFcm"),
-      })
+    const res = login(data);
+    res
       .then((res) => {
         console.log("로그인 성공:", res);
         // setRefreshToken({ refreshToken: response.data.refreshToken });
@@ -139,8 +137,8 @@ const Login = () => {
         <LineStyle>SNS 로그인</LineStyle>
         <Snslogin>
           <LoginGoogle />
-          <LoginNaver />
-          <LoginKakao />
+          {/* <LoginNaver /> */}
+          {/* <LoginKakao /> */}
         </Snslogin>
       </Form>
       <FormUserGuide />
