@@ -1,13 +1,15 @@
+import Button from "components/button/Button";
 import MessageForm from "components/message/messageForm/MessageForm";
-import MessageInbox from "components/message/messageInputBox/MessageInputBox";
+import MessageList from "components/message/messageList/MessageList";
 import MessageSearch from "components/message/messageSearch/MessageSearch";
 import { useState } from "react";
 import s from "../../mypagecontent.module.scss";
+import message from "./mymessage.module.scss";
 
 const MyMessage = () => {
   const [select, setSelect] = useState(0);
-  const [datas, setDatas] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  
   const onSelect = (type) => {
     setSelect(type);
   };
@@ -23,6 +25,7 @@ const MyMessage = () => {
   } else {
     type = "received";
   }
+  
   return (
     <section className={s.contentWrap}>
       <ul className={s.nav}>
@@ -35,12 +38,12 @@ const MyMessage = () => {
         ))}
       </ul>
       <div className={s.messageContainer}>
-        <button className={s.showFormButton} onClick={toggleForm}>
+        <Button onClick={toggleForm} size="small" classname={message.message_button}>
           쪽지 작성하기
-        </button>
-        {showForm && <MessageForm setDatas={setDatas} />}
+        </Button>
+        {showForm && <MessageForm setOnModal={setShowForm} />}
         <MessageSearch />
-        <MessageInbox datas={datas} setDatas={setDatas} type={type} />
+        <MessageList type={type} />
       </div>
     </section>
   );
