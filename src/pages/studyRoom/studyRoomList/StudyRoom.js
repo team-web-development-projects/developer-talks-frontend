@@ -10,7 +10,7 @@ import { BiSearch } from "react-icons/bi";
 import { BsFillPeopleFill, BsLock, BsUnlock } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./studyroom.module.scss";
 import { parseJwt } from "hooks/useParseJwt";
 import classNames from "classnames";
@@ -19,6 +19,7 @@ import SearchInput from "components/searchInput/SearchInput";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
+  const { keyword } = useParams();
   const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
   const [secretModal, setecretModal] = useState(false);
@@ -43,14 +44,18 @@ const BoardList = ({ type }) => {
   };
 
   async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
-      params: { page: currentPage - 1, size: 12, sort: selectText },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
+    if (keyword) {
+      
+    } else {
+      const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
+        params: { page: currentPage - 1, size: 12, sort: selectText },
+        headers: {
+          "Content-Type": "application/json",
+          "X-AUTH-TOKEN": auth.accessToken,
+        },
+      });
+      return data;
+    }
   }
 
   const { data, isLoading, refetch } = useQuery({
@@ -63,7 +68,7 @@ const BoardList = ({ type }) => {
   useEffect(() => {
     setCurrentPage(1);
     refetchQuery.current();
-  }, []);
+  }, [keyword]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -86,7 +91,7 @@ const BoardList = ({ type }) => {
             <p>공부방</p>
           </BoardBanner>
           <div className={s.header}>
-            <SearchInput type="studyroom" placeholder="스터디룸 이름 검색"/>
+            <SearchInput type="studyroom" placeholder="스터디룸 이름 검색" />
             <div className={s.bottom}>
               <Select init="최신순" options={["최신순", "참여인원순"]} sendText={setSelectText} />
               <Button onClick={handleClick} size="small">
