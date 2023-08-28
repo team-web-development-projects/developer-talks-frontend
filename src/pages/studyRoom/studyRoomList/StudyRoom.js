@@ -1,21 +1,19 @@
-import axios from "axios";
+import { getStudyroomList } from "api/studyroom";
+import classNames from "classnames";
+import BoardBanner from "components/boardBanner/BoardBanner";
 import Button from "components/button/Button";
 import Pagination from "components/pagination/Pagination";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
+import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
-import { ROOT_API } from "constants/api";
 import { useEffect, useRef, useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import { BsFillPeopleFill, BsLock, BsUnlock } from "react-icons/bs";
+import { BsFillPeopleFill } from "react-icons/bs";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./studyroom.module.scss";
-import { parseJwt } from "hooks/useParseJwt";
-import classNames from "classnames";
-import BoardBanner from "components/boardBanner/BoardBanner";
-import SearchInput from "components/searchInput/SearchInput";
+import { getJoinedStudyroomList } from "api/auth";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
@@ -25,7 +23,7 @@ const BoardList = ({ type }) => {
   const [secretModal, setecretModal] = useState(false);
   const navigate = useNavigate();
   const refetchQuery = useRef();
-  const [selectText, setSelectText] = useState("");
+  const [selectText, setSelectText] = useState("id");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -38,30 +36,21 @@ const BoardList = ({ type }) => {
   };
 
   const joinRoomClick = (id) => {
-    if (auth && auth.accessToken) {
+    const data = getJoinedStudyroomList();
+    data.then((res) => {
+      // 이미 방에 참여중이면 방정보 소개 페이지 패스
+      const find = res.content.find((item) => item.id === id);
       navigate(`/studyroom/info/${id}`);
-    }
+      if (find === undefined) {
+      } else {
+        navigate(`/studyroom/${id}`);
+      }
+    });
   };
-
-  async function fetchProjects() {
-    if (keyword) {
-      
-    } else {
-      const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
-        params: { page: currentPage - 1, size: 12, sort: selectText },
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      });
-      return data;
-    }
-  }
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
-    queryFn: fetchProjects,
-    enabled: auth.accessToken != null,
+    queryFn: () => getStudyroomList(currentPage, selectText),
   });
   refetchQuery.current = refetch;
 
@@ -71,8 +60,6 @@ const BoardList = ({ type }) => {
   }, [keyword]);
 
   if (isLoading) return <div>Loading...</div>;
-
-  // console.log('list', data);
 
   return (
     <>

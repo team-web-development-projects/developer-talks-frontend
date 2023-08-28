@@ -8,6 +8,7 @@ import "./instudyroomboard.scss";
 import InStudyRoomPostModal from "components/portalModal/inStudyroomPostModal/InStudyRoomPostModal";
 import { boardDay } from "util/day";
 import classNames from "classnames";
+import { getInStudyRoomBoard } from "api/studyroom";
 
 const InStudyRoomBoard = ({ postId }) => {
   const auth = useSelector((state) => state.authToken);
@@ -15,20 +16,9 @@ const InStudyRoomBoard = ({ postId }) => {
   const [showmodal, setShowmodal] = useState(false);
   const [postType, setPostType] = useState("");
 
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/study-rooms/posts/${postId}`, {
-      params: { page: currentPage - 1, size: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
-  }
-
   const { data, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["getInStudyRoomPost"],
-    queryFn: fetchProjects,
+    queryFn: () => getInStudyRoomBoard(currentPage, postId),
   });
   // console.log("dta", postId, data && data.content);
 

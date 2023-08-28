@@ -13,7 +13,8 @@ import Gravatar from "react-gravatar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
-import TextArea from 'components/textarea/TextArea';
+import TextArea from "components/textarea/TextArea";
+import { deleteReply, postReply, putReply } from "api/board";
 
 const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
@@ -40,13 +41,13 @@ const ReplyItem = ({ postId, reply }) => {
       let end = e.target.selectionEnd;
       e.target.value = val.substring(0, start) + "\t" + val.substring(end);
       e.target.selectionStart = e.target.selectionEnd = start + 1;
-      setReForm({ ...reForm, ["content"]: e.target.value });
+      setReForm({ ...reForm, content: e.target.value });
       return false; //  prevent focus
     }
   };
 
   const handleReToggle = () => {
-    setReForm({ ["content"]: "", ["secret"]: false });
+    setReForm({ content: "", secret: false });
     setIsPostToggle((prev) => !prev);
   };
 
@@ -54,55 +55,28 @@ const ReplyItem = ({ postId, reply }) => {
     setIsGetToggle((prev) => !prev);
   };
 
-  const postCommentMutation = useMutation(
-    (newComment) =>
-      axios.post(`${ROOT_API}/comment/${postId}/${reply.id}`, newComment, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: () => {
-        setReForm({ ["content"]: "", ["secret"]: false });
-        setIsPostToggle((prev) => !prev);
-        queryClient.invalidateQueries(["replyList"]);
-      },
-    }
-  );
+  const postCommentMutation = useMutation((newComment) => postReply(postId, reply.id, newComment), {
+    onSuccess: () => {
+      setReForm({ content: "", secret: false });
+      setIsPostToggle((prev) => !prev);
+      queryClient.invalidateQueries(["replyList"]);
+    },
+  });
 
-  const updateCommentMutation = useMutation(
-    (updatedComment) =>
-      axios.put(`${ROOT_API}/comment/${reply.id}`, updatedComment, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["replyList"]);
-        setIsUpdateToggle((prev) => !prev);
-      },
-    }
-  );
+  const updateCommentMutation = useMutation((updatedComment) => putReply(reply.id, updatedComment), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["replyList"]);
+      setIsUpdateToggle((prev) => !prev);
+    },
+  });
 
-  const deleteCommentMutation = useMutation(
-    () =>
-      axios.delete(`${ROOT_API}/comment/${reply.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["replyList"]);
-        queryClient.invalidateQueries(["boardDetail"]);
-        toast.success("댓글이 삭제되었습니다.");
-      },
-    }
-  );
+  const deleteCommentMutation = useMutation(() => deleteReply(reply.id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["replyList"]);
+      queryClient.invalidateQueries(["boardDetail"]);
+      toast.success("댓글이 삭제되었습니다.");
+    },
+  });
 
   const handleRePost = (e) => {
     e.preventDefault();
@@ -114,13 +88,13 @@ const ReplyItem = ({ postId, reply }) => {
   };
 
   const handleRePostCancle = () => {
-    setReForm({ ["content"]: "", ["secret"]: false });
+    setReForm({ content: "", secret: false });
     setIsPostToggle((prev) => !prev);
   };
 
   const handleUpdate = () => {
     setIsUpdateToggle((prev) => !prev);
-    setForm({ ...form, ["content"]: reply.content });
+    setForm({ ...form, content: reply.content });
   };
 
   const handleUpdatePost = (e) => {
@@ -133,7 +107,7 @@ const ReplyItem = ({ postId, reply }) => {
   };
 
   const handleUpdateCancle = () => {
-    setForm({ ["content"]: reply.content, ["secret"]: reply.secret });
+    setForm({ content: reply.content, secret: reply.secret });
     setIsUpdateToggle((prev) => !prev);
   };
 
@@ -181,7 +155,7 @@ const ReplyItem = ({ postId, reply }) => {
             <form onSubmit={handleUpdatePost}>
               <div>
                 {/* <CkEditor form={form} setForm={setForm} /> */}
-                <TextArea form={form} setForm={setForm}/>
+                <TextArea form={form} setForm={setForm} />
                 <div className={s.btnRgn}>
                   <label className={s.secret}>
                     <input
@@ -189,12 +163,18 @@ const ReplyItem = ({ postId, reply }) => {
                       name="secret"
                       checked={form.secret}
                       onChange={() => {
-                        setForm({ ...form, ["secret"]: !form.secret });
+                        setForm({ ...form, secret: !form.secret });
                       }}
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
+                  <Button
+                    classname={s.cancle}
+                    theme="outline"
+                    color="#9ca3af"
+                    size="medium"
+                    onClick={handleUpdateCancle}
+                  >
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -202,8 +182,8 @@ const ReplyItem = ({ postId, reply }) => {
               </div>
             </form>
           ) : (
-            // <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
-            <div className={s.content}>{reply.content}</div>
+            <div className={s.content} dangerouslySetInnerHTML={{ __html: reply.content }}></div>
+            // <div className={s.content}>{reply.content}</div>
           )}
           <div className={s.replyBtnContainer}>
             {reply.childrenList.length ? (
@@ -234,19 +214,25 @@ const ReplyItem = ({ postId, reply }) => {
                 <form onSubmit={handleRePost}>
                   {/* <div> */}
                   {/* <CkEditor form={reForm} setForm={setReForm} /> */}
-                  <TextArea form={reForm} setForm={setReForm}/>
+                  <TextArea form={reForm} setForm={setReForm} />
                   <div className={s.btnRgn}>
                     <label className={s.secret}>
                       <input
                         type="checkbox"
                         name="secret"
                         onChange={() => {
-                          setReForm({ ...reForm, ["secret"]: !reForm.secret });
+                          setReForm({ ...reForm, secret: !reForm.secret });
                         }}
                       />{" "}
                       시크릿 댓글
                     </label>
-                    <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
+                    <Button
+                      classname={s.cancle}
+                      theme="outline"
+                      color="#9ca3af"
+                      size="medium"
+                      onClick={handleRePostCancle}
+                    >
                       취소
                     </Button>
                     <Button size="medium">등록</Button>
@@ -254,7 +240,10 @@ const ReplyItem = ({ postId, reply }) => {
                   {/* </div> */}
                 </form>
               )}
-              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}</div>
+              <div>
+                {isgetToggle &&
+                  reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}
+              </div>
             </div>
           </div>
         </div>

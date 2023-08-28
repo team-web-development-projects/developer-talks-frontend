@@ -13,6 +13,8 @@ import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/
 import { useEffect } from "react";
 import { Modal } from "components/portalModal/Modal";
 import Button from "components/button/Button";
+import apiInstance from "module/useInterceptor";
+import { getStudyroomInfoList, joinStudyroom } from "api/studyroom";
 
 const StudyRoomInfo = () => {
   const { postId } = useParams();
@@ -21,34 +23,17 @@ const StudyRoomInfo = () => {
   const [secretModal, setSecretModal] = useState(false);
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
-  const [getDeta, setGetData] = useState();
-  const [data, setData] = useState();
 
   // 스터디룸 가입요청
   const requestRoom = () => {
-    axios
-      .post(
-        `${ROOT_API}/study-rooms/join/${postId}`,
-        {
-          id: postId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
-      .then(function (response) {
-        // console.log("스터디 룸 정보 성공:", response);
-        if (!data.autoJoin) {
-          setSecretModal(false);
-          alert("요청이 완료되었습니다.");
-        }
-      })
-      .catch(function (error) {
-        // console.log("스터디 룸 정보:실패 ", error.response);
-      });
+    const join = joinStudyroom(postId);
+    join.then((res) => {
+      console.log("cc");
+      if (!data.autoJoin) {
+        setSecretModal(false);
+        alert("요청이 완료되었습니다.");
+      }
+    });
   };
 
   const InRoom = () => {
@@ -58,8 +43,6 @@ const StudyRoomInfo = () => {
     }
     if (!data.autoJoin) {
       if (parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname) {
-        // setInModal(true);
-        // requestRoom();
         navigate(`/studyroom/${postId}`);
       } else {
         setSecretModal(true);
@@ -67,29 +50,21 @@ const StudyRoomInfo = () => {
     }
   };
 
-  useEffect(() => {
-    if (auth.accessToken !== null) {
-      axios
-        .get(`${ROOT_API}/study-rooms/${postId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        })
-        .then((res) => {
-          setData(res.data);
-        });
-    }
-  }, [auth]);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["getStudyroomInfoList"],
+    queryFn: () => getStudyroomInfoList(postId),
+  });
 
   const lockIcon = () => {
-    if (getDeta) {
-      return getDeta.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
+    if (data) {
+      return data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
     }
     if (data) {
       return data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
     }
   };
+
+  // console.log('data', data);
 
   return (
     <>
@@ -97,11 +72,19 @@ const StudyRoomInfo = () => {
         <div className="study-room-info">
           {secretModal && (
             <BasicModal setOnModal={() => setSecretModal()}>
-              생성자의 승인 후 입장할 수 있는 스터디룸입니다.
-              <br />
-              승인 요청 하시겠나요?
-              <button onClick={requestRoom}>요청하기</button>
-              <button onClick={() => setSecretModal(false)}>돌아가기</button>
+              <Modal.Content>
+                생성자의 승인 후 입장할 수 있는 스터디룸입니다.
+                <br />
+                승인 요청 하시겠나요?
+              </Modal.Content>
+              <Modal.Buttons>
+                <Button onClick={requestRoom} size="small">
+                  요청하기
+                </Button>
+                <Button onClick={() => setSecretModal(false)} size="small" theme="cancle">
+                  돌아가기
+                </Button>
+              </Modal.Buttons>
             </BasicModal>
           )}
           {inModal && (
@@ -128,7 +111,7 @@ const StudyRoomInfo = () => {
               setOnModal={() => setSettingModal()}
               data={data && data}
               id={postId}
-              setGetData={setGetData}
+              setGetData={data}
               dimClick={() => setSettingModal()}
             />
           )}
@@ -140,31 +123,23 @@ const StudyRoomInfo = () => {
                 </div>
               )}
               <div className="title">
-                {getDeta ? getDeta.title : data.title}
+                {data.title}
                 <div className="autojoin">
                   {lockIcon()}
                   <span onClick={InRoom}>참여하기</span>
                 </div>
               </div>
-              <div className="maker">
-                {getDeta ? getDeta.studyRoomUsers[0].nickname : data.studyRoomUsers[0].nickname}
-              </div>
+              <div className="maker">{data.studyRoomUsers[0].nickname}</div>
               <div className="tag">
-                {getDeta
-                  ? getDeta.skills.map((item, index) => (
-                      <Tag className="tags" key={index}>
-                        {item}
-                      </Tag>
-                    ))
-                  : data.skills.map((item, index) => (
-                      <Tag className="tags" key={index}>
-                        {item}
-                      </Tag>
-                    ))}
+                {data.skills.map((item, index) => (
+                  <Tag className="tags" key={index}>
+                    {item}
+                  </Tag>
+                ))}
               </div>
               <div className="content">
                 <div className="desc">스터디 소개</div>
-                <div dangerouslySetInnerHTML={{ __html: getDeta ? getDeta.title : data.content }}></div>
+                <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
               </div>
             </>
           )}

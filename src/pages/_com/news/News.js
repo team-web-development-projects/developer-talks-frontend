@@ -2,16 +2,18 @@ import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { useQuery } from "react-query";
 import s from "./news.module.scss";
+import apiInstance from "module/useInterceptor";
+import { useEffect } from "react";
 
 const News = () => {
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/news`);
-    return data;
-  }
+  const fetchData = async () => {
+    const response = await apiInstance.get("/news");
+    return response;
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["news"],
-    queryFn: () => fetchProjects(),
+    queryFn: () => fetchData(),
     refetchInterval: 60 * 60 * 1000, // 1시간
     refetchIntervalInBackground: true,
     keepPreviousData: true,
