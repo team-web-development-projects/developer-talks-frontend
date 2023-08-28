@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 import s from "./notification.module.scss";
-import Service from "api";
 import { useEffect } from "react";
 import { OFF_NOTI, ON_NOTI } from "store/Notification";
 

@@ -13,8 +13,9 @@ import { useNavigate } from "react-router-dom";
 
 const FindPassword = () => {
   const navigate = useNavigate();
-
   const [token, setToken] = useState("");
+  const [btnState, setBtnState] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -23,6 +24,7 @@ const FindPassword = () => {
   } = useForm({
     mode: "onChange",
   });
+
   const findUsercode = async (type) => {
     await new Promise((r) => setTimeout(r, 1000));
     if (type === "post") {
@@ -31,21 +33,23 @@ const FindPassword = () => {
           email: watch().userEmail,
         })
         .then((response) => {
-          showToast("success", "😎 해당 이메일로 인증코드가 발송되었었습니다.");
+          showToast("success", "해당 이메일로 인증코드가 발송되었습니다.");
+          setBtnState("send");
         })
         .catch((error) => {
           console.log(error);
-          showToast("error", "😎 정보를 다시 확인해주세요.");
+          showToast("error", "정보를 다시 확인해주세요.");
         });
     } else if (type === "get") {
       axios
         .get(`${ROOT_API}/email/password/verify?code=${watch().inputEmail}`)
         .then((response) => {
-          showToast("success", "😎 확인되었습니다. 새 비밀번호를 입력하세요.");
+          showToast("success", "확인되었습니다. 새 비밀번호를 입력하세요.");
           setToken(response.data.accessToken);
+          setBtnState("passwordset");
         })
         .catch((error) => {
-          showToast("error", "😎 정보를 다시 확인해주세요.");
+          showToast("error", "정보를 다시 확인해주세요.");
         });
     }
   };
@@ -62,56 +66,62 @@ const FindPassword = () => {
         { headers: { "X-AUTH-TOKEN": token } }
       )
       .then((response) => {
-        showToast("success", "😎 비밀번호가 변경되었습니다.");
+        showToast("success", "비밀번호가 변경되었습니다.");
         navigate("/");
       })
       .catch((error) => {
-        showToast("success", "😎 잘못된 정보입니다.");
+        showToast("success", "잘못된 정보입니다.");
       });
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <p className={s.title}>회원정보 찾기 이메일입력하시면 비밀번호를 찾을 수 있어요</p>
-      <Table tableTitle={"Developer-Talks"} tableText={"회원정보찾기"}>
-        {[
-          <React.Fragment key={1}>
-            <div>
-              <Label isRequire htmlFor="userEmail">
-                이메일
-              </Label>
-              <input
-                type="email"
-                id="userEmail"
-                placeholder="이메일을 입력해주세요"
-                tabIndex="2"
-                {...register("userEmail", {
-                  required: "이메일은 필수 입력입니다.",
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "이메일 형식에 맞지 않습니다.",
-                  },
-                })}
-              />
-              <Button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  findUsercode("post");
-                }}
-                tabIndex="3"
-              >
-                이메일인증
-              </Button>
-            </div>
-            {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
-          </React.Fragment>,
-          <React.Fragment key={2}>
+      <h2>비밀번호 찾기</h2>
+      <Table>
+        <div>
+          <div>
+            <Label isRequire htmlFor="userEmail">
+              이메일
+            </Label>
+            <input
+              type="email"
+              id="userEmail"
+              placeholder="이메일을 입력해주세요"
+              tabIndex="2"
+              {...register("userEmail", {
+                required: "이메일은 필수 입력입니다.",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "이메일 형식에 맞지 않습니다.",
+                },
+              })}
+            />
+            <Button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                findUsercode("post");
+              }}
+              tabIndex="3"
+            >
+              이메일인증
+            </Button>
+          </div>
+          {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
+        </div>
+        {btnState === "send" && (
+          <div>
             <div>
               <Label isRequire htmlFor="inputEmail">
                 이메일 인증
               </Label>
-              <input tabIndex="4" type="text" id="inputEmail" placeholder="인증번호를 입력해주세요" {...register("inputEmail", { required: true })} />
+              <input
+                tabIndex="4"
+                type="text"
+                id="inputEmail"
+                placeholder="인증번호를 입력해주세요"
+                {...register("inputEmail", { required: true })}
+              />
               <Button
                 type="button"
                 onClick={(e) => {
@@ -123,8 +133,10 @@ const FindPassword = () => {
                 확인
               </Button>
             </div>
-          </React.Fragment>,
-          <React.Fragment key={5}>
+          </div>
+        )}
+        {btnState === "passwordset" && (
+          <div>
             <div>
               <Label isRequire htmlFor="password">
                 새 비밀번호
@@ -153,45 +165,44 @@ const FindPassword = () => {
               />
             </div>
             {errors.password && <small role="alert">{errors.password.message}</small>}
-          </React.Fragment>,
-          <React.Fragment key={6}>
-            <div>
-              <Label isRequire htmlFor="passwordChk">
-                비밀번호 확인
-              </Label>
-              <input
-                id="passwordChk"
-                placeholder="비밀번호를 한 번 더 입력해주세요"
-                tabIndex="11"
-                maxLength={15}
-                autoComplete="password"
-                {...register("passwordChk", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  minLength: {
-                    value: 8,
-                    message: "8자리 이상 비밀번호를 사용해주세요.",
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: "15자리 이히 비밀번호를 사용해주세요.",
-                  },
-                  pattern: {
-                    value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
-                    message: "특수문자를 포함해주세요",
-                  },
-                  validate: (val) => {
-                    if (watch("password") !== val) {
-                      return "비밀번호가 일치하지 않습니다.";
-                    }
-                  },
-                })}
-              />
-            </div>
-            {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
-          </React.Fragment>,
-        ]}
+          </div>
+        )}
+        <div>
+          <div>
+            <Label isRequire htmlFor="passwordChk">
+              비밀번호 확인
+            </Label>
+            <input
+              id="passwordChk"
+              placeholder="비밀번호를 한 번 더 입력해주세요"
+              tabIndex="11"
+              maxLength={15}
+              autoComplete="password"
+              {...register("passwordChk", {
+                required: "비밀번호는 필수 입력입니다.",
+                minLength: {
+                  value: 8,
+                  message: "8자리 이상 비밀번호를 사용해주세요.",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "15자리 이히 비밀번호를 사용해주세요.",
+                },
+                pattern: {
+                  value: /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*/,
+                  message: "특수문자를 포함해주세요",
+                },
+                validate: (val) => {
+                  if (watch("password") !== val) {
+                    return "비밀번호가 일치하지 않습니다.";
+                  }
+                },
+              })}
+            />
+          </div>
+          {errors.passwordChk && <small role="alert">{errors.passwordChk.message}</small>}
+        </div>
       </Table>
-      {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
       <Button FullWidth size="large" type="submit" tabIndex="3" disabled={!isValid}>
         {" "}
         비밀번호 변경하기

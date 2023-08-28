@@ -3,7 +3,7 @@ import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { ROOT_API } from "constants/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import s from "./studyRoom.module.scss";
@@ -12,10 +12,11 @@ import classNames from "classnames";
 import { toast } from "react-toastify";
 import { showToast } from "components/toast/showToast";
 
-const StudyRoomPost = ({ type }) => {
+const StudyRoomPost = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
+  const inputRef = useRef();
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -26,15 +27,19 @@ const StudyRoomPost = ({ type }) => {
     joinableCount: 1,
   });
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [])
+
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await new Promise((r) => setTimeout(r, 1000));
-    if(form.title === null) {
-      showToast("error", '제목을 입력해주세요.');
+    if (form.title === null) {
+      showToast("error", "제목을 입력해주세요.");
     }
-    if(form.title !== null) {
+    if (form.title !== null) {
       axios
         .post(
           `${ROOT_API}/study-rooms`,
@@ -57,7 +62,7 @@ const StudyRoomPost = ({ type }) => {
           setModal(true);
         })
         .catch((error) => {
-          console.log('error', error);
+          console.log("error", error);
         });
     }
   };
@@ -118,39 +123,42 @@ const StudyRoomPost = ({ type }) => {
               value={form.title}
               placeholder="제목을 작성해주세요."
               onChange={handleTitle}
+              ref={inputRef}
             />
-            <div className={s.control_wrap}>
-              <div>
-                <label htmlFor="chk">
-                  <span>참여 제한</span>
-                  <input type="checkbox" name="chk" id="chk" onChange={clickautoJoin} />
-                </label>
+            <div className={s.wrap}>
+              <div className={s.control_wrap}>
+                <div>
+                  <label htmlFor="chk">
+                    <span>참여 제한</span>
+                    <input type="checkbox" name="chk" id="chk" onChange={clickautoJoin} />
+                  </label>
+                </div>
+                <div>
+                  <span>참여인원 수</span>
+                  <input
+                    type="number"
+                    name=""
+                    id=""
+                    min="0"
+                    max="100"
+                    value={selectedTags.joinableCount}
+                    onChange={chnageJoinableCount}
+                    placeholder="100명까지 가능합니다"
+                  />
+                </div>
               </div>
-              <div>
-                <span>참여인원 수</span>
-                <input
-                  type="number"
-                  name=""
-                  id=""
-                  min="0"
-                  max="100"
-                  value={selectedTags.joinableCount}
-                  onChange={chnageJoinableCount}
-                  placeholder="100명까지 가능합니다"
-                />
+              <div className={s.tags}>
+                태그 선택
+                {tags.map((item, index) => (
+                  <span
+                    key={index}
+                    onClick={() => clickTag(item)}
+                    className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
-            </div>
-            <div className={s.tags}>
-              태그 선택
-              {tags.map((item, index) => (
-                <span
-                  key={index}
-                  onClick={() => clickTag(item)}
-                  className={`tag ${selectedTags.tags.includes(item) ? [s.is_select] : ""}`}
-                >
-                  {item}
-                </span>
-              ))}
             </div>
             <div className={s.editor}>
               <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />

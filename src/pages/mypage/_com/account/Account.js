@@ -66,6 +66,9 @@ function Account() {
       .then(({ data }) => {
         setUserData(data);
         setSelectedTags({ ...selectedTags, tags: data.skills });
+      })
+      .catch((error) => {
+        console.log("error", error);
       });
   }, []);
 
@@ -104,7 +107,7 @@ function Account() {
         </ul>
         {select === 0 && (
           <>
-            개인정보 보호
+            비공개 설정
             <Private />
             <Description
               userData={userData}

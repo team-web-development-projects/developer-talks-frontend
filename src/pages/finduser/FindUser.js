@@ -36,24 +36,25 @@ const FindUser = () => {
   };
   return (
     <Form onSubmit={handleSubmit(findUserId)}>
-      <p className={s.title}>회원정보 찾기</p>
-      <Table tableTitle={"Developer-Talks"} tableText={"회원정보찾기"}>
-        <Label isRequire htmlFor="userEmail">
-          이메일입력하시면 아이디를 찾을 수 있어요
-        </Label>
-        <input
-          type="email"
-          id="userEmail"
-          placeholder="이메일을 입력해주세요"
-          tabIndex="2"
-          {...register("userEmail", {
-            required: "이메일은 필수 입력입니다.",
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: "이메일 형식에 맞지 않습니다.",
-            },
-          })}
-        />
+      <h2 className={s.title}>아이디 찾기</h2>
+      <Table>
+        <div>
+          <div>
+            <input
+              type="email"
+              id="userEmail"
+              placeholder="이메일을 입력해주세요"
+              tabIndex="2"
+              {...register("userEmail", {
+                required: "이메일은 필수 입력입니다.",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "이메일 형식에 맞지 않습니다.",
+                },
+              })}
+            />
+          </div>
+        </div>
       </Table>
       {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
       <Button FullWidth size="large" type="submit" tabIndex="3" disabled={!isValid}>

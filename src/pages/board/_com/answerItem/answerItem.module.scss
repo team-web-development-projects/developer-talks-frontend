@@ -1,3 +1,5 @@
+@import 'assets/style/function.scss';
+
 .container {
   list-style: none;
   border-bottom: solid 1px #cfcccc;
@@ -65,6 +67,9 @@
   .content {
     font-size: 20px;
     margin-bottom:20px;
+    @include media-mo {
+      font-size: 16px;
+    }
   }
 }
 .rereplyContainer {

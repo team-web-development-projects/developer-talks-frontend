@@ -24,6 +24,7 @@ const BoardList = ({ type }) => {
   const [secretModal, setecretModal] = useState(false);
   const navigate = useNavigate();
   const refetchQuery = useRef();
+  const [selectText, setSelectText] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,7 +44,7 @@ const BoardList = ({ type }) => {
 
   async function fetchProjects() {
     const { data } = await axios.get(`${ROOT_API}/study-rooms`, {
-      params: { page: currentPage - 1, size: 12 },
+      params: { page: currentPage - 1, size: 12, sort: selectText },
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,
@@ -55,7 +56,7 @@ const BoardList = ({ type }) => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: [type, currentPage],
     queryFn: fetchProjects,
-    enabled: auth.accessToken != null
+    enabled: auth.accessToken != null,
   });
   refetchQuery.current = refetch;
 
@@ -85,9 +86,9 @@ const BoardList = ({ type }) => {
             <p>공부방</p>
           </BoardBanner>
           <div className={s.header}>
-            <SearchInput type={type} />
+            <SearchInput type="studyroom" placeholder="스터디룸 이름 검색"/>
             <div className={s.bottom}>
-              <Select init="최신순" options={["최신순", "조회순"]} />
+              <Select init="최신순" options={["최신순", "참여인원순"]} sendText={setSelectText} />
               <Button onClick={handleClick} size="small">
                 룸 만들기
               </Button>

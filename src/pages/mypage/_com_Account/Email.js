@@ -6,11 +6,21 @@ import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 const Email = ({ userData, handleChange }) => {
   const auth = useSelector((state) => state.authToken);
   const [verityEmailcheck, setVerityEmailcheck] = useState(false);
   const [timer, setTimer] = useState(0);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+  });
 
   const onSubmitEmail = async (e) => {
     e.preventDefault();
@@ -94,23 +104,42 @@ const Email = ({ userData, handleChange }) => {
   }, [timer]);
 
   return (
-    <form onSubmit={onSubmitEmail}>
+    <form onSubmit={handleSubmit(onSubmitEmail)}>
       <Table>
         <div>
           <div>
             <Label isRequire htmlFor="userEmail">
               이메일
             </Label>
-            <input id="userEmail" name="email" defaultValue={userData?.email || ""} onChange={handleChange} type="text" />
+            <input
+              id="userEmail"
+              name="email"
+              defaultValue={userData?.email || ""}
+              onChange={handleChange}
+              type="text"
+              {...register("userEmail", {
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "이메일 형식에 맞지 않습니다.",
+                },
+              })}
+            />
             <Button onClick={verityEmail}>이메일 인증</Button>
           </div>
+          {errors.userEmail && <small role="alert">{errors.userEmail.message}</small>}
         </div>
         <div>
           <div>
             <Label isRequire htmlFor="userEmail">
               이메일 인증
             </Label>
-            <input id="inputEmail" name="inputEmail" defaultValue={userData?.inputEmail || ""}  onChange={handleChange} type="text" />
+            <input
+              id="inputEmail"
+              name="inputEmail"
+              defaultValue={userData?.inputEmail || ""}
+              onChange={handleChange}
+              type="text"
+            />
             <Button onClick={verityEmailchecking}>확인</Button>
           </div>
         </div>

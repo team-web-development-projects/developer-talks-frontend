@@ -33,11 +33,11 @@ const ChatList = ({ postId, upText }) => {
     enabled: atBottom,
   });
 
-  console.log("data:", data && data);
+  // console.log("data:", data && data);
   const reversedList = data && [...data.content].reverse();
-  console.log("c", reversedList);
+  // console.log("c", reversedList);
   const message = useSelector((state) => state.chatStore);
-  console.log("upText", message.data);
+  // console.log("upText", message.data);
 
   const lineConverter = (text) => {
     return (
@@ -71,10 +71,16 @@ const ChatList = ({ postId, upText }) => {
     }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-    setAtBottom(true);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     scrollToBottom();
+  //   }, 200);
+  //   setAtBottom(true);
+  // }, []);
+
+  data && isSuccess && scrollToBottom();
+
+  console.log("cc", isSuccess && data, reversedList);
 
   useEffect(() => {
     scrollToBottom();

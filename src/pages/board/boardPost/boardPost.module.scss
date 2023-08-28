@@ -11,6 +11,7 @@
     width: 80%;
     font-size:30px;
     border:none;
+    box-sizing: border-box;
     &:focus{
       outline:2px solid #000000;
     }
