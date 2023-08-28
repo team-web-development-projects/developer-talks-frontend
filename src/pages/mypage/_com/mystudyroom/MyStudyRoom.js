@@ -41,6 +41,7 @@ const MyStudyRoom = () => {
       })
       .then(function (response) {
         setAsignList(response.data);
+        console.log('신청 리스트', response);
       });
 
     // 참여중인 스터디룸 리스트

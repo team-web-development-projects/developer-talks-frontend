@@ -1,7 +1,6 @@
-import axios from "axios";
+import { deleteRereply, postRereply, putRereply } from "api/board";
 import Button from "components/button/Button";
-import CkEditor from "components/ckeditor/CkEditor";
-import { ROOT_API } from "constants/api";
+import TextArea from "components/textarea/TextArea";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import Gravatar from "react-gravatar";
@@ -10,7 +9,6 @@ import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import s from "./rereplyItem.module.scss";
-import TextArea from "components/textarea/TextArea";
 
 const RereplyItem = ({ rr, postId }) => {
   const auth = useSelector((state) => state.authToken);
@@ -27,54 +25,27 @@ const RereplyItem = ({ rr, postId }) => {
     secret: false,
   });
 
-  const updateCommentMutation = useMutation(
-    (updatedComment) =>
-      axios.put(`${ROOT_API}/comment/${rr.id}`, updatedComment, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["replyList"]);
-        setIsUpdateToggle(false);
-      },
-    }
-  );
+  const updateCommentMutation = useMutation((updatedComment) => putRereply(rr.id, updatedComment), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["replyList"]);
+      setIsUpdateToggle(false);
+    },
+  });
 
-  const deleteCommentMutation = useMutation(
-    () =>
-      axios.delete(`${ROOT_API}/comment/${rr.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["replyList"]);
-        toast.success("댓글이 삭제되었습니다.");
-      },
-    }
-  );
+  const deleteCommentMutation = useMutation(() => deleteRereply(rr.id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["replyList"]);
+      toast.success("댓글이 삭제되었습니다.");
+    },
+  });
 
-  const postCommentMutation = useMutation(
-    (newComment) =>
-      axios.post(`${ROOT_API}/comment/${postId}/${rr.id}`, newComment, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
-    {
-      onSuccess: () => {
-        setReForm({ ["content"]: "", ["secret"]: false });
-        setIsPostToggle(false);
-        queryClient.invalidateQueries(["replyList"]);
-      },
-    }
-  );
+  const postCommentMutation = useMutation((newComment) => postRereply(postId, rr.id, newComment), {
+    onSuccess: () => {
+      setReForm({ content: "", secret: false });
+      setIsPostToggle(false);
+      queryClient.invalidateQueries(["replyList"]);
+    },
+  });
 
   const handleUpdateClick = () => {
     setIsUpdateToggle(true);
@@ -91,7 +62,7 @@ const RereplyItem = ({ rr, postId }) => {
   };
 
   const handleUpdateCancle = () => {
-    setForm({ ["content"]: rr.content, ["secret"]: rr.secret });
+    setForm({ content: rr.content, secret: rr.secret });
     setIsUpdateToggle(false);
     setIsPostToggle(false);
   };
@@ -113,7 +84,7 @@ const RereplyItem = ({ rr, postId }) => {
   };
 
   const handlePostCancle = () => {
-    setReForm({ ["content"]: "", ["secret"]: false });
+    setReForm({ content: "", secret: false });
     setIsPostToggle(false);
   };
 
@@ -164,12 +135,18 @@ const RereplyItem = ({ rr, postId }) => {
                       name="secret"
                       checked={form.secret}
                       onChange={() => {
-                        setForm({ ...form, ["secret"]: !form.secret });
+                        setForm({ ...form, secret: !form.secret });
                       }}
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
+                  <Button
+                    classname={s.cancle}
+                    theme="outline"
+                    color="#9ca3af"
+                    size="medium"
+                    onClick={handleUpdateCancle}
+                  >
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -177,12 +154,16 @@ const RereplyItem = ({ rr, postId }) => {
               </div>
             </form>
           ) : (
-            // <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }} onClick={handlePostClick}></div>
             <>
               <div className={s.tagContentName}>@{rr.parentNickname}</div>
-              <div className={s.content} onClick={handlePostClick}>
+              {/* <div className={s.content} onClick={handlePostClick}>
                 {rr.content}
-              </div>
+              </div> */}
+              <div
+                className={s.content}
+                dangerouslySetInnerHTML={{ __html: rr.content }}
+                onClick={handlePostClick}
+              ></div>
             </>
           )}
 
@@ -199,7 +180,7 @@ const RereplyItem = ({ rr, postId }) => {
                       name="secret"
                       checked={reForm.secret}
                       onChange={() => {
-                        setForm({ ...reForm, ["secret"]: !reForm.secret });
+                        setForm({ ...reForm, secret: !reForm.secret });
                       }}
                     />{" "}
                     시크릿 댓글
