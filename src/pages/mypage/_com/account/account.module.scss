@@ -1,16 +1,3 @@
-  //테이블 스타일
-
-  // small {
-  //   display: block;
-  //   font-size: 13px;
-  //   color: #f40b0b;
-
-  //   &.true {
-  //     color: #7ac40c;
-  //   }
-  // }
-
-
   .description {
     margin: 0 auto;
     input {
@@ -35,5 +22,18 @@
       background: #ececec;
       box-sizing: border-box;
       font-size: 12px;
+    }
+  }
+
+  .private {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 18p;
+    gap: 8px;
+    + p {
+      text-align: center;
+      color: #848484;
+      font-size: 14px;
     }
   }

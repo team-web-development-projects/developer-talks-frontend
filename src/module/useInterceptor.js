@@ -2,6 +2,7 @@
 import axios from "axios";
 import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
+import { useNavigate } from "react-router-dom";
 import store from "store";
 import { SET_TOKEN, refreshAccessToken, tokenSlice } from "store/Auth";
 
@@ -16,6 +17,7 @@ const apiInstance = axios.create({
 // 요청하기전에?
 apiInstance.interceptors.request.use(
   async (config) => {
+    // console.log('요청', config);
     const accessToken = store.getState().authToken.accessToken;
     const refreshToken = localStorage.getItem("dtrtk");
 
@@ -63,6 +65,14 @@ apiInstance.interceptors.response.use(
       // 재요청
       const originalResponse = await axios.request(err.config);
       return originalResponse.data;
+    }
+
+    // 유효하지 않은 토큰
+    if (err.response && err.response.status === 400) {
+      console.log('err', err);
+      const navigate = useNavigate();
+      navigate('/');
+
     }
 
     // 인증실패

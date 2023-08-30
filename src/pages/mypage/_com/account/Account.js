@@ -107,8 +107,11 @@ function Account() {
         </ul>
         {select === 0 && (
           <>
-            비공개 설정
-            <Private />
+            <div className={account.private}>
+              <span>내 정보 비공개</span>
+              <Private />
+            </div>
+            <p>정보 비공개 상태로 변경시 로그아웃 됩니다.</p>
             <Description
               userData={userData}
               handleChange={handleChange}

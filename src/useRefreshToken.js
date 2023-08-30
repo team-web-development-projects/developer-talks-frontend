@@ -44,6 +44,9 @@ export default function useRefreshToken() {
           })
           .catch(function (error) {
             console.log("재갱신 실패: ", error.response.data);
+            if(error.response.data.status === 400) {
+              localStorage.removeItem('dtrtk');
+            }
           });
       }
 
