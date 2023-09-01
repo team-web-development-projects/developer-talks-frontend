@@ -1,12 +1,16 @@
-import axios from "axios";
+import { sendMessage } from "api/user";
+import classNames from "classnames";
+import Button from "components/button/Button";
+import { Modal } from "components/portalModal/Modal";
 import { showToast } from "components/toast/showToast";
-import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import s from "./messageform.module.scss";
 
-const MessageForm = ({ setDatas, userinfo, setOnModal }) => {
+const MessageForm = ({ userinfo, setOnModal, type }) => {
+  const queryClient = useQueryClient();
   const handleInputChange = (event) => {
     event.stopPropagation(); // 클릭 이벤트 전파 중지
   };
@@ -20,47 +24,40 @@ const MessageForm = ({ setDatas, userinfo, setOnModal }) => {
   } = useForm({
     mode: "onChange",
   });
-  const onSubmit = async (e) => {
-    axios
-      .post(
-        `${ROOT_API}/messages`,
-        {
-          senderNickname: parseJwt(auth.accessToken).nickname,
-          receiverNickname: userinfo.nickname || watch().receiverNickname,
-          text: watch().text,
-        },
-        { headers: { "X-AUTH-TOKEN": auth.accessToken } }
-      )
-      .then((response) => {
-        showToast("success", "😎 쪽지가 발송되었었습니다.");
+
+  const sendMessageMutation = useMutation(
+    () =>
+      sendMessage(parseJwt(auth.accessToken).nickname, userinfo?.nickname || watch().receiverNickname, watch().text),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["getMessageList"]);
+        showToast("success", "쪽지가 발송되었습니다.");
         setOnModal(false);
-        setDatas((prevdatas) => [
-          ...prevdatas,
-          {
-            id: response.data,
-            senderNickname: parseJwt(auth.accessToken).nickname,
-            receiverNickname: watch().receiverNickname,
-            text: watch().text,
-          },
-        ]);
         reset();
-      })
-      .catch((error) => {
-        showToast("error", "😎 정보를 다시 확인해주세요.");
-      });
+      },
+    }
+  );
+
+  const onSubmit = async (e) => {
+    sendMessageMutation.mutate();
   };
 
   return (
-    <form className={s.messageForm} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={classNames(s.messageForm, {
+        [s.is_modal]: type === "message-in-modal",
+      })}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <input
         type="text"
         className={s.messageInput}
         placeholder="받는사람을 입력하세요"
         id="receiverNickname"
         tabIndex="2"
-        disabled={userinfo.nickname}
-        value={userinfo.nickname ? userinfo.nickname : watch().receiverNickname}
-        {...register("receiverNickname", { required: userinfo.nickname ? false : true })}
+        disabled={userinfo?.nickname}
+        value={userinfo?.nickname ? userinfo.nickname : watch().receiverNickname}
+        {...register("receiverNickname", { required: userinfo?.nickname ? false : true })}
         onClick={handleInputChange}
       />
       <input
@@ -72,12 +69,14 @@ const MessageForm = ({ setDatas, userinfo, setOnModal }) => {
         {...register("text", { required: true })}
         onClick={handleInputChange}
       />
-      <div className={s.btn_wrap}>
-        <button type="submit" className={s.messageButton} disabled={!isValid}>
+      <Modal.Buttons>
+        <Button type="submit" disabled={!isValid} size="small">
           전송
-        </button>
-        <button>취소</button>
-      </div>
+        </Button>
+        <Button size="small" theme="cancle" onClick={() => setOnModal(false)}>
+          취소
+        </Button>
+      </Modal.Buttons>
     </form>
   );
 };

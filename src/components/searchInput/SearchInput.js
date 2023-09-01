@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 const SearchInput = ({ type, placeholder = "글 제목, 글 내용 검색" }) => {
-  console.log("type", type);
+  // console.log("type", type);
   // const t = type === "post" ? "board" : "qna";
   const [getType, setGetType] = useState("");
   const { keyword } = useParams();

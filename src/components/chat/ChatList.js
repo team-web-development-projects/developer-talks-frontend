@@ -30,7 +30,6 @@ const ChatList = ({ postId, upText }) => {
   const { data, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["chatList", dataPage, dataSize],
     queryFn: getChatList,
-    enabled: atBottom,
   });
 
   // console.log("data:", data && data);
@@ -71,12 +70,12 @@ const ChatList = ({ postId, upText }) => {
     }
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     scrollToBottom();
-  //   }, 200);
-  //   setAtBottom(true);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      scrollToBottom();
+    }, 200);
+    setAtBottom(true);
+  }, []);
 
   data && isSuccess && scrollToBottom();
 

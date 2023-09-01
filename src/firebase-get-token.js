@@ -25,7 +25,7 @@ export default function useGetToken() {
       })
       .then((currentToken) => {
         if (currentToken) {
-          console.log(currentToken);
+          // console.log('fcm-token: ', currentToken);
           // alert("토큰: " + currentToken);
           localStorage.setItem("dtalksFcm", currentToken);
           // 토큰을 서버에 전달...

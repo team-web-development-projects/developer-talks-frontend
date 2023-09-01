@@ -10,6 +10,8 @@ import { showToast } from "components/toast/showToast";
 import { useNavigate } from "react-router-dom";
 import MessageModal from "components/portalModal/messagemodal/MessageModal";
 import { useOutOfClick } from "hooks/useOutOfClick";
+import { Modal } from "components/portalModal/Modal";
+import { getUserInfo } from "api/user";
 // import { useEffect } from "react";
 const ShowUserInfo = ({ userinfo, type }) => {
   const [datas, setDatas] = useState([]);
@@ -19,8 +21,8 @@ const ShowUserInfo = ({ userinfo, type }) => {
   let navigate = useNavigate();
 
   const viewUserInfo = async (e) => {
-    axios
-      .get(`${ROOT_API}/users/private/${userinfo.nickname}`)
+    const res = getUserInfo(userinfo.nickname);
+    res
       .then((response) => {
         if (response.data) {
           showToast("success", "😎 유저가 비공개인 상태입니다.");
@@ -29,7 +31,6 @@ const ShowUserInfo = ({ userinfo, type }) => {
         }
       })
       .catch((error) => {
-        console.log("error", error);
         showToast("error", error.response.data.message);
       });
   };
@@ -68,7 +69,9 @@ const ShowUserInfo = ({ userinfo, type }) => {
             e.stopPropagation();
           }}
         >
-          <MessageForm setDatas={setDatas} userinfo={userinfo} setOnModal={() => setModal()} />
+          <Modal.Content>
+            <MessageForm setDatas={setDatas} userinfo={userinfo} setOnModal={() => setModal()} type="message-in-modal"/>
+          </Modal.Content>
         </MessageModal>
       )}
     </>

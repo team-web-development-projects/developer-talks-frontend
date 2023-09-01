@@ -1,4 +1,4 @@
-@import 'assets/style/function.scss';
+@import "assets/style/function.scss";
 
 .modal {
   position: fixed;
@@ -29,17 +29,11 @@
     flex-direction: column;
     align-items: stretch;
   }
-  .modal-buttons {
-    display: flex;
-    width: 100%;
-    margin-top: auto;
-    justify-content: right;
-    gap: 8px;
-  }
+
   .dim {
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
   }
   .close {
     position: absolute;
@@ -48,4 +42,12 @@
     display: inline-flex;
     cursor: pointer;
   }
+}
+
+.modal-buttons {
+  display: flex;
+  width: 100%;
+  margin-top: auto;
+  justify-content: right;
+  gap: 8px;
 }

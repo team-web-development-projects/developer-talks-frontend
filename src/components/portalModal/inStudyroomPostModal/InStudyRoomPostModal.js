@@ -7,8 +7,7 @@ import { useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ModalFrame from "../ModalFrame";
-import { parseJwt } from "hooks/useParseJwt";
-import s from "./instudyroompostmodal.module.scss";
+import { postInStudyRoomBoard } from "api/studyroom";
 
 const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
   const [selectedOption, setSelectedOption] = useState("NORMAL");
@@ -22,6 +21,7 @@ const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
   });
 
   const handleSubmit = async (e) => {
+    // await new Promise((r) => setTimeout(r, 1000));
     e.preventDefault();
     if (form.title.trim() === "") {
       toast.error("제목을 입력해주세요.");
@@ -31,24 +31,11 @@ const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
       toast.error("내용을 입력해주세요.");
       return;
     }
-    await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/study-rooms/posts/${postId}`,
-        {
-          title: form.title,
-          content: form.content,
-          category: selectedOption || "NORMAL",
-        },
-        {
-          headers: {
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+
+    const data = postInStudyRoomBoard(postId, form);
+    data
       .then((res) => {
         setOnModal("false");
-        console.log("res", res);
         queryClient.invalidateQueries(["getInStudyRoomPost"]);
       })
       .catch((error) => console.log(error));

@@ -7,6 +7,8 @@ import Button from "components/button/Button";
 import "./instudyroomboard.scss";
 import InStudyRoomPostModal from "components/portalModal/inStudyroomPostModal/InStudyRoomPostModal";
 import { boardDay } from "util/day";
+import classNames from "classnames";
+import { getInStudyRoomBoard } from "api/studyroom";
 
 const InStudyRoomBoard = ({ postId }) => {
   const auth = useSelector((state) => state.authToken);
@@ -15,22 +17,11 @@ const InStudyRoomBoard = ({ postId }) => {
   const [postType, setPostType] = useState("");
   const [boardId, setBoardId] = useState();
 
-  async function fetchProjects() {
-    const { data } = await axios.get(`${ROOT_API}/study-rooms/posts/${postId}`, {
-      params: { page: currentPage - 1, size: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": auth.accessToken,
-      },
-    });
-    return data;
-  }
-
   const { data, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["getInStudyRoomPost"],
-    queryFn: fetchProjects,
+    queryFn: () => getInStudyRoomBoard(currentPage, postId),
   });
-  console.log("dta", postId, data && data.content);
+  // console.log("dta", postId, data && data.content);
 
   return (
     <div className="board-wrap">
@@ -48,7 +39,9 @@ const InStudyRoomBoard = ({ postId }) => {
           작성
         </Button>
       </div>
-      <div className="instudyroom-board">
+      <div className={classNames("instudyroom-board", {
+        'is-no-list': data.content.length <= 0
+      })}>
         {isSuccess && data.content.length > 0 ? (
           data.content.map((item, i) => (
             <div
