@@ -41,8 +41,9 @@ self.addEventListener("push", function (e) {
     tag: resultData.tag,
   };
 
+  // NOTE: 아래 코드가 실제 알람을 보여주는 코드
   // eslint-disable-next-line no-restricted-globals
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 messaging.onBackgroundMessage(function (payload) {
@@ -56,6 +57,7 @@ messaging.onBackgroundMessage(function (payload) {
     icon: "/firebase-logo.png", // 루트 경로 기준으로 접근
   };
 
+  // NOTE: 아래 코드가 실제 알람을 보여주는 코드
   // eslint-disable-next-line no-restricted-globals
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });

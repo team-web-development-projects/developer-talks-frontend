@@ -7,6 +7,7 @@ import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
 import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
+import { BsLock, BsUnlock } from "react-icons/bs";
 import { useEffect, useRef, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { useQuery } from "react-query";
@@ -40,10 +41,11 @@ const BoardList = ({ type }) => {
     data.then((res) => {
       // 이미 방에 참여중이면 방정보 소개 페이지 패스
       const find = res.content.find((item) => item.id === id);
+      console.log("re", res, find);
       navigate(`/studyroom/info/${id}`);
       if (find === undefined) {
       } else {
-        navigate(`/studyroom/${id}`);
+        // navigate(`/studyroom/${id}`);
       }
     });
   };
@@ -60,6 +62,8 @@ const BoardList = ({ type }) => {
   }, [keyword]);
 
   if (isLoading) return <div>Loading...</div>;
+
+  console.log("스터디룸 목록", data);
 
   return (
     <>
@@ -95,6 +99,7 @@ const BoardList = ({ type }) => {
               data.content.map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
+                  <span className={s.lock}>{item.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}</span>
                   <div className={s.tag}>
                     {item.skills.map((items, indexs) => (
                       <span key={indexs}>{items}</span>

@@ -20,7 +20,7 @@ const InStudyRoomBoard = ({ postId }) => {
     queryKey: ["getInStudyRoomPost"],
     queryFn: () => getInStudyRoomBoard(currentPage, postId),
   });
-  // console.log("dta", postId, data && data.content);
+  console.log("dta", postId, data);
 
   return (
     <div className="board-wrap">
@@ -37,31 +37,36 @@ const InStudyRoomBoard = ({ postId }) => {
         </Button>
       </div>
       <div className={classNames("instudyroom-board", {
-        'is-no-list': data.content.length <= 0
+        // 'is-no-list': data.content.length <= 0
       })}>
-        {isSuccess && data.content.length > 0 ? (
-          data.content.map((item, i) => (
-            <div
-              key={i}
-              className="item"
-              onClick={() => {
-                setShowmodal(true);
-                setPostType("detail");
-              }}
-            >
-              <div className="title_wrap">
-                <div className="title">{item.title}</div>
-                {/* <div className="category">{item.category}</div> */}
-              </div>
-              <div className="etc_wrap">
-                <div className="viewCount">{item.viewCount}</div>
-                <div className="createDate">{boardDay(item.createDate)}</div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <>게시글이 없습니다.</>
-        )}
+        {
+        // isSuccess && data.content.length > 0 ? (
+        //   data.content.map((item, i) => (
+        //     <div
+        //       key={i}
+        //       className="item"
+        //       onClick={() => {
+        //         setShowmodal(true);
+        //         setPostType("detail");
+        //         setBoardId(item.id);
+        //       }}
+        //     >
+        //       <div className="title_wrap">
+        //         {item.category === "NOTICE" && <span className="category">공지</span>}
+        //         <div className="title">{item.title}</div>
+        //       </div>
+        //       <div className="etc_wrap">
+        //         {/* <div className="viewCount">{item.viewCount}</div> */}
+        //         <div className="writer">{item.writer}</div>
+        //         <div className="createDate">{boardDay(item.createDate)}</div>
+        //       </div>
+        //     </div>
+        //   ))
+        // ) : (
+        //   <>게시글이 없습니다.</>
+        // )
+        }
+
       </div>
     </div>
   );
