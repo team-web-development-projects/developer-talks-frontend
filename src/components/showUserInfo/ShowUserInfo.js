@@ -21,10 +21,12 @@ const ShowUserInfo = ({ userinfo, type }) => {
   let navigate = useNavigate();
 
   const viewUserInfo = async (e) => {
+    console.log('nick', userinfo.nickname)
     const res = getUserInfo(userinfo.nickname);
     res
       .then((response) => {
-        if (response.data) {
+        console.log('cc', response);
+        if (response) {
           showToast("success", "😎 유저가 비공개인 상태입니다.");
         } else {
           navigate(`/showuser`, { state: userinfo });

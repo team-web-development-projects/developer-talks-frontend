@@ -14,13 +14,38 @@
   }
 }
 
+.instudyroom-board {
+  margin-top: 10px;
+}
+
+
 .item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
+  padding: 8px 0;
   border-bottom: 1px solid #ccc;
+  cursor: pointer;
   &:last-child {
     border-bottom: none;
+  }
+}
+
+.category {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  background: #53820a;
+}
+
+.etc_wrap {
+  display: flex;
+  gap: 10px;
+  .createDate {
+    width: 60px;
+    text-align: right;
   }
 }

@@ -1,32 +1,27 @@
-import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
 import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { LoginGoogle, LoginKakao, LoginNaver, Snslogin } from "components/snsLogin/Snslogin";
 import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
-import { API_HEADER, ROOT_API } from "constants/api";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
-import apiInstance from "module/useInterceptor";
-import { getJoinedStudyroomList, login } from "api/auth";
-import { SET_JOIN_STUDYROOMLIST } from "store/User";
+import { login } from "api/auth";
 
 const Login = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [modal, setModal] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
+    // setFormData(data);
     const res = login(data);
     res
       .then((res) => {
@@ -45,11 +40,10 @@ const Login = () => {
         //   })
         //   .then((res) => console.log("test: ", res));
         navigate("/");
-        setModal(true);
         reset();
       })
-      .catch(function (error) {
-        showToast("error", error.response);
+      .catch((error) => {
+        showToast("error", '회원 정보를 다시한번 확인해주세요');
       });
   };
 

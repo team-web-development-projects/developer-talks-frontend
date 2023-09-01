@@ -9,6 +9,7 @@ import s from "./profileimg.module.scss";
 import classNames from "classnames";
 import Gravatar from "react-gravatar";
 import { parseJwt } from "hooks/useParseJwt";
+import { getUserImage } from "api/user";
 
 /**
  *
@@ -26,24 +27,12 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     data,
     isLoading: getLoading,
     error: getImgError,
-  } = useQuery(
-    ["profileImg"],
-    async () => {
-      const res = await axios.get(`${ROOT_API}/users/profile/image`, {
-        headers: { "X-AUTH-TOKEN": auth.accessToken },
-      });
-      return res.data;
-    },
-    {
-      // enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
-      enabled: localStorage.getItem("dtrtk") !== null,
-      // onError: (error) => {
-      //   if (error.response?.status === 400) {
-      //     return null;
-      //   }
-      // },
-    }
-  );
+  } = useQuery({
+    queryKey: ["profileImg"],
+    queryFn: getUserImage,
+    // enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
+    enabled: localStorage.getItem("dtrtk") !== null,
+  });
 
   const handleChangeFirstProfileImage = async (event) => {
     const file = event.target.files[0];

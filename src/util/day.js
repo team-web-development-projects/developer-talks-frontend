@@ -24,5 +24,14 @@ export const dayChat = (date) => {
 
 // 게시판 용
 export const boardDay = (date) => {
-  return dayjs(date).format("YY-MM-DD HH:mm");
+  const today = dayjs();
+  
+  // 날짜와 연이 같을 때
+  if (today.isSame(date, "day")) {
+    // console.log("오늘과 같은 날짜입니다.");
+    return dayjs(date).format("HH:mm");
+  } else {
+    // console.log("오늘보다 나중 날짜입니다.");
+    return dayjs(date).format("YY.MM.DD");
+  }
 }

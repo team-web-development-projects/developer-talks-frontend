@@ -15,6 +15,7 @@ const InStudyRoomBoard = ({ postId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showmodal, setShowmodal] = useState(false);
   const [postType, setPostType] = useState("");
+  const [boardId, setBoardId] = useState();
 
   const { data, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["getInStudyRoomPost"],
@@ -24,7 +25,9 @@ const InStudyRoomBoard = ({ postId }) => {
 
   return (
     <div className="board-wrap">
-      {showmodal && <InStudyRoomPostModal setOnModal={() => setShowmodal()} postId={postId} type={postType} />}
+      {showmodal && (
+        <InStudyRoomPostModal setOnModal={() => setShowmodal()} postId={postId} type={postType} boardId={boardId} />
+      )}
       <div>
         <Button
           size="small"
@@ -47,14 +50,16 @@ const InStudyRoomBoard = ({ postId }) => {
               onClick={() => {
                 setShowmodal(true);
                 setPostType("detail");
+                setBoardId(item.id);
               }}
             >
               <div className="title_wrap">
+                {item.category === "NOTICE" && <span className="category">공지</span>}
                 <div className="title">{item.title}</div>
-                {/* <div className="category">{item.category}</div> */}
               </div>
               <div className="etc_wrap">
-                <div className="viewCount">{item.viewCount}</div>
+                {/* <div className="viewCount">{item.viewCount}</div> */}
+                <div className="writer">{item.writer}</div>
                 <div className="createDate">{boardDay(item.createDate)}</div>
               </div>
             </div>
