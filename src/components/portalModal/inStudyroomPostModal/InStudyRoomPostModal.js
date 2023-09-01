@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ModalFrame from "../ModalFrame";
 import { postInStudyRoomBoard } from "api/studyroom";
+import { parseJwt } from "hooks/useParseJwt";
+import s from './instudyroompostmodal.module.scss';
 
 const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
   const [selectedOption, setSelectedOption] = useState("NORMAL");
