@@ -48,7 +48,7 @@ const Userregist = () => {
   };
   const onSubmit = async (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
-    console.log('dat', data);
+    console.log("dat", data);
     if (!selectedImage) {
       return;
     }
@@ -57,6 +57,37 @@ const Userregist = () => {
     formData.append("file", selectedImage);
     console.log("버튼 클릭");
     if (duplicateNickName === false) {
+      axios
+        .put(
+          `${ROOT_API}/oauth/sign-up`,
+          {
+            nickname: data.nickname,
+            skills: selectedTags.tags,
+            description: description,
+            profileImageId: profileImageId,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
+            },
+          }
+        )
+        .then((response) => {
+          setModal(true);
+          // if (autoLogin) {
+          //NOTE 자동로그인
+          localStorage.removeItem("authAtk");
+          localStorage.setItem("dtrtk", response.data.refreshToken);
+          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+          navigate("/");
+          reset();
+          // }
+        })
+        .catch(() => {
+          showToast("error", "😎 로그인 실패되었어요");
+        });
+
       axios
         .post(`${ROOT_API}/users/profile/image`, formData, {
           headers: {
@@ -72,36 +103,6 @@ const Userregist = () => {
       skills: ${selectedTags.tags},
       description: ${description},
       profileImageId: ${profileImageId}`);
-          axios
-            .put(
-              `${ROOT_API}/oauth/sign-up`,
-              {
-                nickname: data.nickname,
-                skills: selectedTags.tags,
-                description: description,
-                profileImageId: response.data.id,
-              },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
-                },
-              }
-            )
-            .then((response) => {
-              setModal(true);
-              // if (autoLogin) {
-              //NOTE 자동로그인
-              localStorage.removeItem("authAtk");
-              localStorage.setItem("dtrtk", response.data.refreshToken);
-              dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              navigate("/");
-              reset();
-              // }
-            })
-            .catch(() => {
-              showToast("error", "😎 로그인 실패되었어요");
-            });
         });
     } else {
       showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
