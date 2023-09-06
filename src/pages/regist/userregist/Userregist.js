@@ -46,15 +46,16 @@ const Userregist = () => {
     setImageFile(imageUrl);
     showToast("success", "😎 이미지가 업로드 되었습니다");
   };
-  const submit = async (data) => {
+
+  const submit = (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
     console.log("버튼 클릭", duplicateNickName);
-    if (!selectedImage) {
-      return;
-    }
-    console.log(selectedImage);
+    // if (!selectedImage) {
+    //   return;
+    // }
     const formData = new FormData();
     formData.append("file", selectedImage);
+
     if (duplicateNickName === false) {
       console.log("dat", data);
       axios
@@ -89,24 +90,21 @@ const Userregist = () => {
           showToast("error", "😎 로그인 실패되었어요");
         });
 
-      axios
-        .post(`${ROOT_API}/users/profile/image`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            accept: "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          setProfileImageId(response.data.id);
-          console.log(`
-      nickname: ${data.nickname},
-      skills: ${selectedTags.tags},
-      description: ${description},
-      profileImageId: ${profileImageId}`);
-        });
+      if (selectedImage) {
+        axios
+          .post(`${ROOT_API}/users/profile/image`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              accept: "application/json",
+            },
+          })
+          .then((response) => {
+            console.log(response);
+            setProfileImageId(response.data.id);
+          });
+      }
     } else {
-      showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
+      showToast("error", "중복체크 확인을 해주세요");
     }
   };
   useEffect(() => {
@@ -270,9 +268,7 @@ const Userregist = () => {
               </Button>
             </div>
             {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName === true && (
-              <small className="alert">중복된 닉네임입니다.</small>
-            )}
+            {!errors.nickname && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
             {!errors.nickname && duplicateNickName === false && (
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
