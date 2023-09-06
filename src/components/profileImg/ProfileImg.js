@@ -89,6 +89,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     //   });
   };
   // console.log('get image:', data.url)
+  console.log("구글로그인시 프로필 이미지 체크", parseJwt(auth.accessToken));
 
   return (
     <div

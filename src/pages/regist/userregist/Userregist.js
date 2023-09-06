@@ -48,16 +48,10 @@ const Userregist = () => {
   };
 
   const submit = (data) => {
-    // await new Promise((r) => setTimeout(r, 1000));
-    console.log("버튼 클릭", duplicateNickName);
-    // if (!selectedImage) {
-    //   return;
-    // }
     const formData = new FormData();
     formData.append("file", selectedImage);
 
     if (duplicateNickName === false) {
-      console.log("dat", data);
       axios
         .put(
           `${ROOT_API}/oauth/sign-up`,
@@ -75,19 +69,15 @@ const Userregist = () => {
           }
         )
         .then((response) => {
-          console.log("로그인체크", response);
           setModal(true);
-          // if (autoLogin) {
-          //NOTE 자동로그인
           localStorage.removeItem("authAtk");
           localStorage.setItem("dtrtk", response.data.refreshToken);
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
           navigate("/");
           reset();
-          // }
         })
         .catch(() => {
-          showToast("error", "😎 로그인 실패되었어요");
+          showToast("error", "로그인 실패");
         });
 
       if (selectedImage) {
