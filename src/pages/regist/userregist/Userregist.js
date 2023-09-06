@@ -46,15 +46,15 @@ const Userregist = () => {
     setImageFile(imageUrl);
     showToast("success", "😎 이미지가 업로드 되었습니다");
   };
-  const onSubmit = async (data) => {
+  const submit = async (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
+    console.log("버튼 클릭");
     if (!selectedImage) {
       return;
     }
     console.log(selectedImage);
     const formData = new FormData();
     formData.append("file", selectedImage);
-    console.log("버튼 클릭");
     if (duplicateNickName === false) {
       console.log("dat", data);
       axios
@@ -74,7 +74,7 @@ const Userregist = () => {
           }
         )
         .then((response) => {
-          console.log('로그인체크', response)
+          console.log("로그인체크", response);
           setModal(true);
           // if (autoLogin) {
           //NOTE 자동로그인
@@ -185,7 +185,7 @@ const Userregist = () => {
           <button onClick={() => navigate("/")}>확인</button>
         </BasicModal>
       )}
-      <Form White className="registIDform" onSubmit={handleSubmit(onSubmit)}>
+      <Form White className="registIDform" onSubmit={handleSubmit(submit)}>
         <div className={s.headername}>
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
