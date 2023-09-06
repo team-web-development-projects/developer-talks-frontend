@@ -28,6 +28,7 @@ import Header from "components/header/Header";
 import classnames from "classnames";
 import Footer from "components/footer/Footer";
 import { SET_ROUTER } from "store/PageRouter";
+// import createAxiosInstance from "./module/useInterceptor";
 
 // FCM 테스트
 // import "./firebase-get-token";
@@ -36,6 +37,7 @@ import { SET_ROUTER } from "store/PageRouter";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
+  // createAxiosInstance();
 
   // async function requestPermission() {
   //   const permission = await Notification.requestPermission();
@@ -43,7 +45,7 @@ function App() {
   //     const token = await getToken(messaging, {
   //       vapidKey: "BOWbgLD10kyQ6zwV8RpnBg84oLQCD6Ll1t2u0AWjDxd1-u3sbTNy1DbKHEvJpvgLrUAhinaytkHIDakxn0HETaI",
   //     });
-      // console.log("token : ", auth.accessToken);
+      console.log("token : ", auth.accessToken);
   //   } else if (permission === "denied") {
   //     console.log("denied");
   //   }
@@ -53,9 +55,9 @@ function App() {
   // }, []);
 
   // console.log("auth", auth.accessToken);
-  // 배포 테스트 커밋
 
   useGoogleLoginAuth();
+  // useInterceptor();
   useRefreshToken();
   useGetToken();
   // Sse();

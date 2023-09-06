@@ -10,6 +10,7 @@ import { useQueries, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import Gravatar from "react-gravatar";
 import Pagination from "components/pagination/Pagination";
+import { getInStudyRoomBoard, getUserActivity, getUserPost, getUserReply, getUserScrab } from "api/user";
 
 const UserInfoList = ({ user }) => {
   const auth = useSelector((state) => state.authToken);
@@ -24,84 +25,52 @@ const UserInfoList = ({ user }) => {
   const getUserProfile = location.state && location.state.userProfile;
   const [nickname, setNickName] = useState("");
   const [data, setData] = useState([]);
+  const [pageData, setPageData] = useState();
 
   useEffect(() => {
     setNickName(user ? user.nickname : parseJwt(auth.accessToken).nickname);
   }, [auth, user]);
 
   useEffect(() => {
-    console.log('user', user, parseJwt(auth.accessToken).nickname)
-
-    async function activity() {
-      const { data } = await axios.get(
-        `${ROOT_API}/users/recent/activity/${user ? user.nickname : parseJwt(auth.accessToken).nickname}`,
-        {
-          params: { page: currentPage - 1, size: 10 },
-        }
-      );
-      return data;
-    }
-
-    async function post() {
-      const { data } = await axios.get(
-        `${ROOT_API}/post/list/user/${user ? user.nickname : parseJwt(auth.accessToken).nickname}`,
-        {
-          params: { page: currentPage - 1, size: 10 },
-          headers: {
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      );
-      return data;
-    }
-
-    async function reply() {
-      const { data } = await axios.get(`${ROOT_API}/comment/list/user/${nickname}`, {
-        params: { page: currentPage - 1, size: 10 },
-        headers: {
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      });
-      return data;
-    }
-
-    async function scrab() {
-      const { data } = await axios.get(`${ROOT_API}/post/list/favorite/${nickname}`, {
-        params: { page: currentPage - 1, size: 10 },
-        headers: {
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      });
-      return data;
-    }
+    const getuser = user ? user.nickname : parseJwt(auth.accessToken).nickname;
+    console.log("get", getuser);
 
     switch (select) {
       case 1:
-        post().then((res) => setData(res.content));
+        getUserPost(currentPage, getuser).then((res) => {
+          setPageData(res);
+          setData(res.content);
+        });
         break;
       case 2:
-        reply().then((res) => setData(res.content));
+        getUserReply(currentPage, getuser).then((res) => {
+          setPageData(res);
+          setData(res.content);
+        });
         break;
       case 3:
-        scrab().then((res) => setData(res.content));
+        getUserScrab(currentPage, getuser).then((res) => {
+          setPageData(res);
+          setData(res.content);
+        });
         break;
       default:
+        // BUG: 자신의 개인정보가 비공개일때 자신의 활동내역도 안보임.
         // activity().then((error) => console.log('error', error));
-        // activity().then((res) => setData(res.content));
+        getUserActivity(currentPage, getuser).then((res) => {
+          setPageData(res);
+          setData(res.content);
+        });
         break;
     }
   }, [nickname, currentPage, user, auth, select]);
-
-  console.log("data", data);
 
   const onSelect = (type) => {
     setSelect(type);
   };
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
-  // console.log("nickname", queries[select].data.content);
-  // console.log("data", queries[select].data.content);
-  // console.log("favorite", queries[select].isSuccess && queries[select].data.content);
+  console.log("data", data);
 
   return (
     <>
@@ -111,8 +80,7 @@ const UserInfoList = ({ user }) => {
             {getUserProfile ? (
               <img className={s.userProfile} src={getUserProfile} alt="프로필 이미지" />
             ) : (
-              // <Gravatar email={getNickname} className={s.userProfile} />
-              <div>{getNickname}</div>
+              <Gravatar email={getNickname} className={s.userProfile} />
             )}
             {getNickname}
           </div>
@@ -132,7 +100,7 @@ const UserInfoList = ({ user }) => {
         */}
           {/*
            */}
-          {data.length !== 0 ?
+          {data.length !== 0 ? (
             data.map((item, index) => (
               <div key={index} className={s.userdata}>
                 {select === 0 && MyActivity(item)}
@@ -141,16 +109,16 @@ const UserInfoList = ({ user }) => {
                 {select === 3 && MyScrab(item)}
               </div>
             ))
-            : <>내용이 없습니다.</>
-            }
+          ) : (
+            <>내용이 없습니다.</>
+          )}
         </div>
-        {/*
+
         <Pagination
-          currentPage={queries[select].isSuccess && queries[select].data.pageable.pageNumber + 1}
-          totalPage={queries[select].isSuccess && queries[select].data.totalPages}
+          currentPage={pageData && pageData.pageable.pageNumber + 1}
+          totalPage={pageData && pageData.totalPages}
           paginate={setCurrentPage}
         />
-       */}
       </section>
     </>
   );

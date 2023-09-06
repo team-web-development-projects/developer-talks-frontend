@@ -2,14 +2,18 @@ import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ModalFrame from "../ModalFrame";
+import { postInStudyRoomBoard } from "api/studyroom";
+import { parseJwt } from "hooks/useParseJwt";
+import s from './instudyroompostmodal.module.scss';
 
-const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
-  const [selectedOption, setSelectedOption] = useState("NORMAL"); // 기본 선택 값을 설정합니다
+const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
+  const [selectedOption, setSelectedOption] = useState("NORMAL");
+  const [boardDetail, setBoardDetail] = useState();
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
 
@@ -19,6 +23,7 @@ const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
   });
 
   const handleSubmit = async (e) => {
+    // await new Promise((r) => setTimeout(r, 1000));
     e.preventDefault();
     if (form.title.trim() === "") {
       toast.error("제목을 입력해주세요.");
@@ -28,24 +33,11 @@ const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
       toast.error("내용을 입력해주세요.");
       return;
     }
-    await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/study-rooms/posts/${postId}`,
-        {
-          title: form.title,
-          content: form.content,
-          category: "NORMAL",
-        },
-        {
-          headers: {
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        }
-      )
+
+    const data = postInStudyRoomBoard(postId, form);
+    data
       .then((res) => {
         setOnModal("false");
-        console.log("res", res);
         queryClient.invalidateQueries(["getInStudyRoomPost"]);
       })
       .catch((error) => console.log(error));
@@ -59,6 +51,21 @@ const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
+
+  useEffect(() => {
+    if (type === "detail") {
+      axios
+        .get(`${ROOT_API}/study-rooms/posts/${postId}/${boardId}`, {
+          headers: {
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        })
+        .then((res) => {
+          console.log("상세정보", res.data);
+          setBoardDetail(res.data);
+        });
+    }
+  }, [type]);
 
   return (
     <ModalFrame setOnModal={setOnModal} onClose isDim classname="basic-modal">
@@ -79,7 +86,24 @@ const InStudyRoomPostModal = ({ setOnModal, postId, type }) => {
           <Button size="small">저장</Button>
         </form>
       )}
-      {type === "detail" && <>detail</>}
+      {type === "detail" && boardDetail && (
+        <>
+          {parseJwt(auth.accessToken).nickname === boardDetail.writer && (
+            <div className={s.btn_wrap}>
+              <Button size="small">수정</Button>
+              <Button size="small" theme="cancle">
+                삭제
+              </Button>
+            </div>
+          )}
+          <div>
+            <div>제목: {boardDetail.title}</div>
+            <div>작성자: {boardDetail.writer}</div>
+            <div>작성일: {boardDetail.title}</div>
+            <div>내용: {boardDetail.content}</div>
+          </div>
+        </>
+      )}
     </ModalFrame>
   );
 };

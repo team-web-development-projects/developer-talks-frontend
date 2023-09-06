@@ -1,48 +1,35 @@
-import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
 import Label from "components/label/Label";
 import LineStyle from "components/lineStyle/LineStyle";
-import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { LoginGoogle, LoginKakao, LoginNaver, Snslogin } from "components/snsLogin/Snslogin";
 import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
-import { API_HEADER, ROOT_API } from "constants/api";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
+import { login } from "api/auth";
 
 const Login = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [modal, setModal] = useState(false);
   const [typetoggle, setTypetoggle] = useState("password");
 
-  const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    axios
-      .post(
-        `${ROOT_API}/sign-in`,
-        {
-          userid: data.userId,
-          password: data.password,
-          fcmToken: localStorage.getItem("dtalksFcm"),
-        },
-        {
-          headers: {
-            API_HEADER,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("로그인 성공:", response);
+  const onSubmit = (data) => {
+    // await new Promise((r) => setTimeout(r, 1000));
+    // setFormData(data);
+    const res = login(data);
+    res
+      .then((res) => {
+        console.log("로그인 성공:", res);
         // setRefreshToken({ refreshToken: response.data.refreshToken });
-        localStorage.setItem("dtrtk", response.data.refreshToken);
-        dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+        localStorage.setItem("dtrtk", res.refreshToken);
+        dispatch(SET_TOKEN({ accessToken: res.accessToken }));
+        // NOTE: SSE를 위한 코드
         // axios
         //   .get(`${ROOT_API}/notifications/subscribe`, {
         //     headers: {
@@ -53,13 +40,13 @@ const Login = () => {
         //   })
         //   .then((res) => console.log("test: ", res));
         navigate("/");
-        setModal(true);
         reset();
       })
-      .catch(function (error) {
-        showToast("error", error.response.data.message);
+      .catch((error) => {
+        showToast("error", '회원 정보를 다시한번 확인해주세요');
       });
   };
+
   const typechange = () => {
     //NOTE 비밀번호 토글//ok
     setTypetoggle("text");
@@ -144,8 +131,8 @@ const Login = () => {
         <LineStyle>SNS 로그인</LineStyle>
         <Snslogin>
           <LoginGoogle />
-          <LoginNaver />
-          <LoginKakao />
+          {/* <LoginNaver /> */}
+          {/* <LoginKakao /> */}
         </Snslogin>
       </Form>
       <FormUserGuide />

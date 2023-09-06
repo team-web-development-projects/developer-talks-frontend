@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import s from "./boardPost.module.scss";
+import { postBoard } from "api/board";
 
 export default function BoardPost({ type }) {
   const [modal, setModal] = useState(false);
@@ -33,9 +34,9 @@ export default function BoardPost({ type }) {
     }
   }, [type]);
 
-  useEffect(()=> {
+  useEffect(() => {
     inputRef.current.focus();
-  },[])
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,12 +62,16 @@ export default function BoardPost({ type }) {
     }
     frm.append("title", form.title);
     frm.append("content", form.content);
-    axios
-      .post(`${ROOT_API}/${type}`, frm, {
-        headers: {
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
+
+    const res = postBoard(type, frm);
+    res
+
+    // axios
+    //   .post(`${ROOT_API}/${type}`, frm, {
+    //     headers: {
+    //       "X-AUTH-TOKEN": auth.accessToken,
+    //     },
+    //   })
       .then(() => {
         navigate(`/${getType}`);
       })

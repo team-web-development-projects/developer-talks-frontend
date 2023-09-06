@@ -16,13 +16,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import AnswerList from "../_com/answerList/AnswerList";
 import s from "./boardDetail.module.scss";
+import { getReply } from "api/board";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const targetRef = useRef(null);
-  let nickname;
+  const [nickname, setNickName] = useState("");
   const [post, setPost] = useState({
     userInfo: {},
     imageUrls: [],
@@ -47,22 +48,14 @@ const BoardDetail = ({ type }) => {
 
   const { isLoading, isError } = useQuery(["boardDetail"], () => fetchPost(type, postId, auth));
 
-  if (auth.accessToken !== null) {
-    nickname = parseJwt(auth.accessToken).nickname;
-  }
-
   useEffect(() => {
     if (auth.accessToken !== null) {
-      axios
-        .get(`${ROOT_API}/${type}/check/status/${postId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            "X-AUTH-TOKEN": auth.accessToken,
-          },
-        })
-        .then(({ data }) => {
-          setCheckStatus(data);
-          console.log(data);
+      setNickName(auth && parseJwt(auth.accessToken).nickname);
+      const res = getReply(type, postId);
+      res
+        .then((res) => {
+          setCheckStatus(res);
+          console.log(res);
         })
         .catch((error) => console.log(error));
     }
@@ -171,7 +164,12 @@ const BoardDetail = ({ type }) => {
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />
         ) : (
-          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer} />
+          <AnswerList
+            nickname={nickname}
+            answerCnt={post.commentCount}
+            qnaNick={post.userInfo.nickname}
+            selectAnswer={post.selectAnswer}
+          />
         )}
       </div>
     </>
