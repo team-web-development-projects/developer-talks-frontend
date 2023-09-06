@@ -48,7 +48,6 @@ const Userregist = () => {
   };
   const onSubmit = async (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
-    console.log("dat", data);
     if (!selectedImage) {
       return;
     }
@@ -57,6 +56,7 @@ const Userregist = () => {
     formData.append("file", selectedImage);
     console.log("버튼 클릭");
     if (duplicateNickName === false) {
+      console.log("dat", data);
       axios
         .put(
           `${ROOT_API}/oauth/sign-up`,
@@ -74,6 +74,7 @@ const Userregist = () => {
           }
         )
         .then((response) => {
+          console.log('로그인체크', response)
           setModal(true);
           // if (autoLogin) {
           //NOTE 자동로그인
