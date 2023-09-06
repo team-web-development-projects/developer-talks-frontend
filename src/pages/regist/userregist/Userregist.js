@@ -48,7 +48,7 @@ const Userregist = () => {
   };
   const submit = async (data) => {
     // await new Promise((r) => setTimeout(r, 1000));
-    console.log("버튼 클릭");
+    console.log("버튼 클릭", duplicateNickName);
     if (!selectedImage) {
       return;
     }
