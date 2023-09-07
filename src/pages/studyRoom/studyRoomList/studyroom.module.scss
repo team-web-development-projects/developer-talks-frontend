@@ -1,4 +1,4 @@
-@import 'assets/style/function.scss';
+@import "assets/style/function.scss";
 
 .header {
   margin-top: 30px;
@@ -12,10 +12,10 @@
   }
 }
 
-.boardContainer{
-  .title{
+.boardContainer {
+  .title {
     margin-bottom: 10px;
-    font-size:30px;
+    font-size: 30px;
     font-weight: 500;
   }
   .content {
@@ -25,16 +25,15 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .nickname{
-    color:#797979;
+  .nickname {
+    color: #797979;
   }
 }
-.pageContainer{
+.pageContainer {
   display: flex;
   justify-content: center;
   margin: 20px 0px;
 }
-
 
 .studyroom {
   .list {
@@ -102,4 +101,10 @@
       }
     }
   }
+}
+
+.lock {
+  position: absolute;
+  right: 20px;
+  top: 30px;
 }
