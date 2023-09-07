@@ -92,6 +92,8 @@ const Notification = ({ unRead, classname }) => {
       return getAlarmAll.data;
     });
 
+  console.log(";d", renderData);
+
   return (
     <div
       className={classnames(s.noti, {
@@ -154,7 +156,7 @@ const Notification = ({ unRead, classname }) => {
 
       <ul>
         {getAlarmAll.isLoading && <li>로딩중입니다..</li>}
-        {getAlarmAll.data ? (
+        {renderData.length > 0 ? (
           renderData.map((item, i) => (
             <li
               key={i}

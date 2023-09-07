@@ -73,7 +73,7 @@ const ChatList = ({ postId, upText }) => {
   useEffect(() => {
     setTimeout(() => {
       scrollToBottom();
-    }, 200);
+    }, 500);
     setAtBottom(true);
   }, []);
 

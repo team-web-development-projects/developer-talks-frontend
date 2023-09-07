@@ -42,10 +42,10 @@ const BoardList = ({ type }) => {
       // 이미 방에 참여중이면 방정보 소개 페이지 패스
       const find = res.content.find((item) => item.id === id);
       console.log("re", res, find);
-      navigate(`/studyroom/info/${id}`);
       if (find === undefined) {
+        navigate(`/studyroom/info/${id}`);
       } else {
-        // navigate(`/studyroom/${id}`);
+        navigate(`/studyroom/${id}`);
       }
     });
   };

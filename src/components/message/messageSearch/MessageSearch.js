@@ -14,7 +14,10 @@ const Search = () => {
       .then((res) => {
         console.log("cc");
       })
-      .catch((err) => showToast("error", err.response.data.message));
+      .catch((err) => {
+        showToast("error", '존재하지 않은 회원입니다');
+        console.log(err);
+      });
   };
 
   const onChange = (e) => {
