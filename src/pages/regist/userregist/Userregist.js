@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
+import { setCookie } from "util/authCookie";
 
 const Userregist = () => {
   const auth = useSelector((state) => state.authToken);
@@ -71,7 +72,10 @@ const Userregist = () => {
         .then((response) => {
           setModal(true);
           localStorage.removeItem("authAtk");
-          localStorage.setItem("dtrtk", response.data.refreshToken);
+          setCookie("dtrtk", response.data.refreshToken, {
+            path: "/",
+            secure: "/",
+          });
           dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
           navigate("/");
           reset();

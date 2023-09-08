@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
+import { setCookie } from "util/authCookie";
 
 const useGoogleLoginAuth = () => {
   const auth = useSelector((state) => state.authToken);
@@ -28,7 +29,10 @@ const useGoogleLoginAuth = () => {
         navigate("/userregist", { replace: true });
       }
       dispatch(SET_TOKEN({ accessToken: accessToken }));
-      localStorage.setItem("dtrtk", refreshToken);
+      setCookie("dtrtk", refreshToken, {
+        path: "/",
+        secure: "/",
+      });
     }
   }, [dispatch, navigate, location, auth.accessToken]);
 };

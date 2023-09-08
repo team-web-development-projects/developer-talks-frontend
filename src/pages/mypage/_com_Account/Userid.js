@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { DELETE_TOKEN, SET_TOKEN } from "store/Auth";
+import { removeCookie, setCookie } from "util/authCookie";
 
 const Userid = ({ userData, handleChange }) => {
   const auth = useSelector((state) => state.authToken);
@@ -43,9 +44,12 @@ const Userid = ({ userData, handleChange }) => {
         showToast("success", "😎 정보가 수정 되었습니다");
         navigate("/");
         console.log("res", response);
-        localStorage.removeItem("dtrtk");
+        removeCookie("dtrtk", { path: "/" });
         dispatch(DELETE_TOKEN());
-        localStorage.setItem("dtrtk", response.data.refreshToken);
+        setCookie("dtrtk", response.data.refreshToken, {
+          path: "/",
+          secure: "/",
+        });
         dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
       })
       .catch((error) => console.log(error));

@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getUserInfo, putPrivate } from "api/user";
 import classNames from "classnames";
 import { DELETE_TOKEN } from "store/Auth";
+import { removeCookie } from "util/authCookie";
 
 const Private = () => {
   const auth = useSelector((state) => state.authToken);
@@ -44,13 +45,12 @@ const Private = () => {
     //     headers: { "X-AUTH-TOKEN": auth.accessToken },
     //   })
       .then((response) => {
-        console.log("ㅇㅇ", response, status);
-        console.log('a', auth.accessToken)
         setStatus(!status);
+        // NOTE: 토큰관리가 수정될때까지 변경시 로그아웃처리
+        removeCookie('dtrtk', {path:'/'});
+        dispatch(DELETE_TOKEN());
         if (status === false) {
           // navigate("/");
-          localStorage.removeItem("dtrtk");
-          dispatch(DELETE_TOKEN());
         }
       });
   };

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
 import { login } from "api/auth";
+import { setCookie } from "util/authCookie";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -27,7 +28,14 @@ const Login = () => {
       .then((res) => {
         console.log("로그인 성공:", res);
         // setRefreshToken({ refreshToken: response.data.refreshToken });
-        localStorage.setItem("dtrtk", res.refreshToken);
+        const today = new Date(); //추가
+        today.setDate(today.getDate() + 7);
+
+        setCookie("dtrtk", res.refreshToken, {
+          path: "/",
+          secure: "/",
+          expires: today,
+        });
         dispatch(SET_TOKEN({ accessToken: res.accessToken }));
         // NOTE: SSE를 위한 코드
         // axios
@@ -43,7 +51,8 @@ const Login = () => {
         reset();
       })
       .catch((error) => {
-        showToast("error", '회원 정보를 다시한번 확인해주세요');
+        console.log("ee", error);
+        showToast("error", "회원 정보를 다시한번 확인해주세요");
       });
   };
 
