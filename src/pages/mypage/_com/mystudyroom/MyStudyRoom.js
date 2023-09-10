@@ -12,51 +12,32 @@ import { useNavigate } from "react-router-dom";
 import MypageContent from "../../MyPageContent";
 import s from "../../mypagecontent.module.scss";
 import mystudy from "./mystudyroom.module.scss";
+import { QueryClient, useQueries, useQuery } from "react-query";
+import { asignJoinUserApi, getJoinedUser, getJoinedUserApi, getRequestsRoomApi } from "api/user";
 
 const MyStudyRoom = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const { getNickname } = getUer(auth.accessToken);
   const [personModal, setPerseonModal] = useState(false);
-  const [modalUserData, setModalUserData] = useState();
   const [roomid, setRoomid] = useState();
   const [drop, setDrop] = useState({
     index: -1,
     state: false,
   });
-  const [asignList, setAsignList] = useState();
-  const [myList, setMyList] = useState([]);
   const [currentMyListPage, setCurrentMyListPage] = useState(1);
   const [currentAsignPage, setCurrentAsignPage] = useState(1);
 
-  useEffect(() => {
-    // 참여요청 리스트
-    axios
-      .get(`${ROOT_API}/study-rooms/requests`, {
-        params: { page: currentAsignPage - 1, size: 6 },
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then(function (response) {
-        setAsignList(response.data);
-        console.log('신청 리스트', response);
-      });
-
+  const queries = useQueries([
+    // 참여요청 스터디룸 리스트
+    { queryKey: ["getRequestRoom", currentAsignPage], queryFn: () => getRequestsRoomApi(currentAsignPage) },
     // 참여중인 스터디룸 리스트
-    axios
-      .get(`${ROOT_API}/study-rooms/users`, {
-        params: { page: currentMyListPage - 1, size: 6 },
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then(function (response) {
-        setMyList(response.data);
-      });
-  }, [currentAsignPage, currentMyListPage]);
+    { queryKey: ["getMyJoindRoom", currentMyListPage], queryFn: () => getJoinedUserApi(currentMyListPage) },
+  ]);
+  const requestRoom = queries[0].data;
+  const myJoindRoom = queries[1].data;
+
+  // console.log("request", requestRoom, "myjoind", myJoindRoom);
 
   const asignJoin = () => {
     console.log("가입승인");
@@ -73,28 +54,11 @@ const MyStudyRoom = () => {
 
   // 가입승인
   const asignUser = (studyRoomId, studyRoomUserId) => {
-    axios
-      .post(`${ROOT_API}/study-rooms/accept/${studyRoomId}/${studyRoomUserId}`, {
-        params: { status: true },
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      })
-      .then(function (response) {
-        alert("승인 되었습니다.");
-        axios
-          .get(`${ROOT_API}/study-rooms/requests`, {
-            params: { page: currentAsignPage - 1, size: 6 },
-            headers: {
-              "Content-Type": "application/json",
-              "X-AUTH-TOKEN": auth.accessToken,
-            },
-          })
-          .then(function (response) {
-            setAsignList(response.data);
-          });
-      });
+    const res = asignJoinUserApi(studyRoomId, studyRoomUserId);
+    res.then(function (response) {
+      alert("승인 되었습니다.");
+      QueryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+    });
   };
 
   const infoUser = () => {
@@ -134,14 +98,18 @@ const MyStudyRoom = () => {
   return (
     <>
       {personModal && (
-        <StudyRoomPersonModal setOnModal={() => setPerseonModal()} modalUserData={modalUserData} roomId={roomid} />
+        <StudyRoomPersonModal
+          setOnModal={() => setPerseonModal()}
+          roomId={roomid}
+          currentMyListPage={currentMyListPage}
+        />
       )}
       <div className={classNames([s.contentWrap], [mystudy.mystudyroom])}>
         <section>
           <h3>스터디룸 신청 리스트</h3>
           <ul className={mystudy.list}>
-            {asignList && asignList.content.length !== 0 ? (
-              asignList.content.map((item, index) => (
+            {requestRoom && requestRoom.content.length !== 0 ? (
+              requestRoom.content.map((item, index) => (
                 <li onClick={asignJoin} key={index} className={mystudy.list_item}>
                   <div className={mystudy.room_title}>{item.title}</div>
                   <span className={mystudy.user} onClick={(e) => clickUser(e, index)}>
@@ -159,11 +127,11 @@ const MyStudyRoom = () => {
               <>리스트가 없습니다.</>
             )}
           </ul>
-          {asignList && asignList.length !== 0 && (
+          {requestRoom && requestRoom.length !== 0 && (
             <div className={mystudy.pageContainer}>
               <Pagination
-                currentPage={asignList.pageable.pageNumber + 1}
-                totalPage={asignList.totalPages}
+                currentPage={requestRoom.pageable.pageNumber + 1}
+                totalPage={requestRoom.totalPages}
                 paginate={setCurrentMyListPage}
               />
             </div>
@@ -173,8 +141,8 @@ const MyStudyRoom = () => {
         <section>
           <h3>참여중 스터디룸</h3>
           <ul className={mystudy.list}>
-            {myList && myList.length !== 0 ? (
-              myList.content.map((item, index) => (
+            {myJoindRoom && myJoindRoom.length !== 0 ? (
+              myJoindRoom.content.map((item, index) => (
                 <li
                   key={index}
                   className={mystudy.list_item}
@@ -199,7 +167,6 @@ const MyStudyRoom = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         setPerseonModal(true);
-                        setModalUserData(myList.content[index].studyRoomUsers);
                         setRoomid(item.id);
                       }}
                     >
@@ -215,11 +182,11 @@ const MyStudyRoom = () => {
               <>리스트가 없습니다.</>
             )}
           </ul>
-          {myList && myList.length !== 0 && (
+          {myJoindRoom && myJoindRoom.length !== 0 && (
             <div className={mystudy.pageContainer}>
               <Pagination
-                currentPage={myList.pageable.pageNumber + 1}
-                totalPage={myList.totalPages}
+                currentPage={myJoindRoom.pageable.pageNumber + 1}
+                totalPage={myJoindRoom.totalPages}
                 paginate={setCurrentMyListPage}
               />
             </div>
