@@ -21,7 +21,7 @@ const InStudyRoomBoard = ({ postId }) => {
     queryKey: ["getInStudyRoomPost"],
     queryFn: () => getInStudyRoomBoard(currentPage, postId),
   });
-  // console.log("dta", postId, data && data.content);
+  console.log("dta", postId, data);
 
   return (
     <div className="board-wrap">
@@ -39,9 +39,11 @@ const InStudyRoomBoard = ({ postId }) => {
           작성
         </Button>
       </div>
-      <div className={classNames("instudyroom-board", {
-        'is-no-list': data.content.length <= 0
-      })}>
+      <div
+        className={classNames("instudyroom-board", {
+          // 'is-no-list': data.content.length <= 0
+        })}
+      >
         {isSuccess && data.content.length > 0 ? (
           data.content.map((item, i) => (
             <div

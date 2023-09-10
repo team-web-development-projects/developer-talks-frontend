@@ -3,7 +3,7 @@ const { default: apiInstance } = require("module/useInterceptor");
 // *-----쪽지
 // 쪽지 검색
 export async function searchMessage(id) {
-  const res = await apiInstance.get(`/messages/${id}`, {});
+  const res = await apiInstance.get(`/messages/byNickname/${id}`, {});
   return res;
 }
 
@@ -15,6 +15,7 @@ export async function getMessage(type) {
 
 // 쪽지 삭제
 export async function deleteMessage(type, id) {
+  console.log('삭제', type, id);
   const res = await apiInstance.delete(`/messages/${type}/${id}`, {});
   return res;
 }

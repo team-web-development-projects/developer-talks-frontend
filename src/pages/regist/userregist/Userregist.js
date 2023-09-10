@@ -29,7 +29,7 @@ const Userregist = () => {
   const [modal, setModal] = useState(false);
   const [description, setDescription] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [duplicateNickName, setDuplicateNickName] = useState("");
+  const [duplicateNickName, setDuplicateNickName] = useState();
   const [autoLogin, setAutoLogin] = useState(false);
   const [imageFile, setImageFile] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -46,64 +46,55 @@ const Userregist = () => {
     setImageFile(imageUrl);
     showToast("success", "😎 이미지가 업로드 되었습니다");
   };
-  const onSubmit = async (data) => {
-    // await new Promise((r) => setTimeout(r, 1000));
-    if (!selectedImage) {
-      return;
-    }
-    console.log(selectedImage);
+
+  const submit = (data) => {
     const formData = new FormData();
     formData.append("file", selectedImage);
-    console.log("버튼 클릭");
+
     if (duplicateNickName === false) {
       axios
-        .post(`${ROOT_API}/users/profile/image`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            accept: "application/json",
+        .put(
+          `${ROOT_API}/oauth/sign-up`,
+          {
+            nickname: data.nickname,
+            skills: selectedTags.tags,
+            description: description,
+            profileImageId: profileImageId,
           },
-        })
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
+            },
+          }
+        )
         .then((response) => {
-          console.log(response);
-          setProfileImageId(response.data.id);
-          console.log(`
-      nickname: ${data.nickname},
-      skills: ${selectedTags.tags},
-      description: ${description},
-      profileImageId: ${profileImageId}`);
-          axios
-            .put(
-              `${ROOT_API}/oauth/sign-up`,
-              {
-                nickname: data.nickname,
-                skills: selectedTags.tags,
-                description: description,
-                profileImageId: response.data.id,
-              },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-AUTH-TOKEN": localStorage.getItem("authAtk"),
-                },
-              }
-            )
-            .then((response) => {
-              setModal(true);
-              // if (autoLogin) {
-              //NOTE 자동로그인
-              localStorage.removeItem("authAtk");
-              localStorage.setItem("dtrtk", response.data.refreshToken);
-              dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              navigate("/");
-              reset();
-              // }
-            })
-            .catch(() => {
-              showToast("error", "😎 로그인 실패되었어요");
-            });
+          setModal(true);
+          localStorage.removeItem("authAtk");
+          localStorage.setItem("dtrtk", response.data.refreshToken);
+          dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
+          navigate("/");
+          reset();
+        })
+        .catch(() => {
+          showToast("error", "로그인 실패");
         });
+
+      if (selectedImage) {
+        axios
+          .post(`${ROOT_API}/users/profile/image`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              accept: "application/json",
+            },
+          })
+          .then((response) => {
+            console.log(response);
+            setProfileImageId(response.data.id);
+          });
+      }
     } else {
-      showToast("error", "😎 모든 버튼을 클릭하지 않았어요");
+      showToast("error", "중복체크 확인을 해주세요");
     }
   };
   useEffect(() => {
@@ -182,7 +173,7 @@ const Userregist = () => {
           <button onClick={() => navigate("/")}>확인</button>
         </BasicModal>
       )}
-      <Form White className="registIDform" onSubmit={handleSubmit(onSubmit)}>
+      <Form White className="registIDform" onSubmit={handleSubmit(submit)}>
         <div className={s.headername}>
           <p>{authlogins} 계정 회원가입</p>
           <span>Developer-Talks는 소프트웨어 개발자를 위한 지식공유 플렛폼입니다.</span>
@@ -267,10 +258,8 @@ const Userregist = () => {
               </Button>
             </div>
             {errors.nickname && <small role="alert">{errors.nickname.message}</small>}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === true && (
-              <small className="alert">중복된 닉네임입니다.</small>
-            )}
-            {!errors.nickname && duplicateNickName !== "" && duplicateNickName === false && (
+            {!errors.nickname && duplicateNickName === true && <small className="alert">중복된 닉네임입니다.</small>}
+            {!errors.nickname && duplicateNickName === false && (
               <small className="true">사용할 수 있는 닉네임입니다.</small>
             )}
           </div>
