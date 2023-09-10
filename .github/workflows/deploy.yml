@@ -1,0 +1,39 @@
+name: aws live deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # npm 초기화.
+      - name: Npm init
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      # node modules 캐싱
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-master-build-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      # build
+      - name: Build
+        run: npm run build
+      
+      # s3 배포
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}} 
+        run: |
+          aws s3 sync --region ap-northeast-2 ./build s3://developer-talks.com --delete
+
+
