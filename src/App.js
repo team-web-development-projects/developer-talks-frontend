@@ -29,7 +29,6 @@ import classnames from "classnames";
 import Footer from "components/footer/Footer";
 import { SET_ROUTER } from "store/PageRouter";
 // import createAxiosInstance from "./module/useInterceptor";
-//테스트
 
 // FCM 테스트
 // import "./firebase-get-token";
@@ -56,7 +55,6 @@ function App() {
   // }, []);
 
   // console.log("auth", auth.accessToken);
-  // 깃헙 액션 테스트 2 
 
   useGoogleLoginAuth();
   // useInterceptor();
