@@ -104,8 +104,9 @@ export async function getJoinedUserApi(currentMyListPage) {
 
 // 스터디룸 가입승인
 export async function asignJoinUserApi(roomId, userId, sendStatus = true) {
-  const res = await apiInstance.delete(`/study-rooms/accept/${roomId}/${userId}`, {
-    params: { status: sendStatus },
+  console.log("status", sendStatus);
+  const res = await apiInstance.post(`/study-rooms/accept/${roomId}/${userId}?status=${sendStatus}`, {
+    // params: { status: sendStatus },
   });
   return res;
 }

@@ -12,12 +12,13 @@ import { useNavigate } from "react-router-dom";
 import MypageContent from "../../MyPageContent";
 import s from "../../mypagecontent.module.scss";
 import mystudy from "./mystudyroom.module.scss";
-import { QueryClient, useQueries, useQuery } from "react-query";
+import { useQueries, useQuery, useQueryClient } from "react-query";
 import { asignJoinUserApi, getJoinedUser, getJoinedUserApi, getRequestsRoomApi } from "api/user";
 
 const MyStudyRoom = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
+  const queryClient = useQueryClient();
   const { getNickname } = getUer(auth.accessToken);
   const [personModal, setPerseonModal] = useState(false);
   const [roomid, setRoomid] = useState();
@@ -37,8 +38,6 @@ const MyStudyRoom = () => {
   const requestRoom = queries[0].data;
   const myJoindRoom = queries[1].data;
 
-  // console.log("request", requestRoom, "myjoind", myJoindRoom);
-
   const asignJoin = () => {
     console.log("가입승인");
   };
@@ -57,7 +56,7 @@ const MyStudyRoom = () => {
     const res = asignJoinUserApi(studyRoomId, studyRoomUserId);
     res.then(function (response) {
       alert("승인 되었습니다.");
-      QueryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+      queryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
     });
   };
 
@@ -101,7 +100,6 @@ const MyStudyRoom = () => {
         <StudyRoomPersonModal
           setOnModal={() => setPerseonModal()}
           roomId={roomid}
-          currentMyListPage={currentMyListPage}
         />
       )}
       <div className={classNames([s.contentWrap], [mystudy.mystudyroom])}>

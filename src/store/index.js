@@ -3,6 +3,7 @@ import tokenReducer from "./Auth";
 import pageRouterReducer from "./PageRouter";
 import notificationReducer from "./Notification";
 import chatStoreReducer from "./ChatStore";
+import paginationStoreReducer from "./PagiNation";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     pageRouter: pageRouterReducer,
     notification: notificationReducer,
     chatStore: chatStoreReducer,
+    paginationStore: paginationStoreReducer,
   },
 });
 export default store;

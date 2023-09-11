@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// 라우터마다 다른 처리를 위한 스토어
 export const pageRouterSlice = createSlice({
   name: "pageRouter",
   initialState: {

@@ -8,23 +8,18 @@ import { useSelector } from "react-redux";
 import ModalFrame from "../ModalFrame";
 import "./studyroompersonmodal.scss";
 import { asignJoinUserApi, deleteUser, getJoinedUserApi, roomAuthApi, selfRoomOutApi } from "api/user";
-import { QueryClient, useQuery } from "react-query";
+import { useQueryClient, useQuery } from "react-query";
+import { getStudyroomInfoList } from "api/studyroom";
 
-const StudyRoomPersonModal = ({ setOnModal, roomId, currentMyListPage }) => {
+const StudyRoomPersonModal = ({ setOnModal, roomId }) => {
   const auth = useSelector((state) => state.authToken);
+  const queryClient = useQueryClient();
   const { getNickname } = getUer(auth.accessToken);
 
   const { data, isSuccess } = useQuery({
     queryKey: ["joinedRoomPersons"],
-    queryFn: () => getJoinedUserApi(currentMyListPage),
+    queryFn: () => getStudyroomInfoList(roomId),
   });
-
-  // console.log(
-  //   "data",
-  //   data.content.filter((item) => item.id === roomId)[0].studyRoomUsers
-  // );
-
-  const JoinedUserList = data && isSuccess && data.content.filter((item) => item.id === roomId)[0].studyRoomUsers;
 
   // 내보내기
   const getOut = (nickname) => {
@@ -33,7 +28,7 @@ const StudyRoomPersonModal = ({ setOnModal, roomId, currentMyListPage }) => {
     res
       .then((response) => {
         alert("강퇴되었습니다.");
-        QueryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+        queryClient.invalidateQueries(["joinedRoomPersons"]);
       })
       .catch((error) => console.log(error));
   };
@@ -44,7 +39,7 @@ const StudyRoomPersonModal = ({ setOnModal, roomId, currentMyListPage }) => {
     res
       .then((response) => {
         alert("방을 나갔습니다.");
-        QueryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+        queryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
       })
       .catch((error) => console.log(error));
   };
@@ -55,7 +50,7 @@ const StudyRoomPersonModal = ({ setOnModal, roomId, currentMyListPage }) => {
     const res = asignJoinUserApi(roomId, userId, status);
     res
       .then((response) => {
-        QueryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+        queryClient.invalidateQueries(["joinedRoomPersons"]);
       })
       .catch((error) => console.log(error));
   };
@@ -66,7 +61,7 @@ const StudyRoomPersonModal = ({ setOnModal, roomId, currentMyListPage }) => {
     res
       .then((response) => {
         alert("권한이 변경되었습니다");
-        QueryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+        queryClient.invalidateQueries(["joinedRoomPersons"]);
       })
       .catch((error) => console.log(error));
   };
@@ -121,25 +116,26 @@ const StudyRoomPersonModal = ({ setOnModal, roomId, currentMyListPage }) => {
     <ModalFrame setOnModal={setOnModal} classname="basic-modal studyroom-user-modal" onClose isDim>
       인원 관리
       <ul>
-        {isSuccess && JoinedUserList.map((item, index) => (
-          <li key={index} className="user-list">
-            <div>
-              {item.nickname} {item.nickname === getNickname && <span className="me">나</span>}
-            </div>
-            <div
-              className={classNames("btn-wrap", {
-                "is-my": item.nickname === getNickname,
-              })}
-            >
-              {buttonType(JoinedUserList, index)}
-              {item.nickname === getNickname && (
-                <Button classname="btn-outroom" size="small" onClick={selfOut}>
-                  나가기
-                </Button>
-              )}
-            </div>
-          </li>
-        ))}
+        {isSuccess &&
+          data.studyRoomUsers.map((item, index) => (
+            <li key={index} className="user-list">
+              <div>
+                {item.nickname} {item.nickname === getNickname && <span className="me">나</span>}
+              </div>
+              <div
+                className={classNames("btn-wrap", {
+                  "is-my": item.nickname === getNickname,
+                })}
+              >
+                {buttonType(data.studyRoomUsers, index)}
+                {item.nickname === getNickname && (
+                  <Button classname="btn-outroom" size="small" onClick={selfOut}>
+                    나가기
+                  </Button>
+                )}
+              </div>
+            </li>
+          ))}
       </ul>
     </ModalFrame>
   );
