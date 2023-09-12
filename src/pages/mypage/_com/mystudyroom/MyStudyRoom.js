@@ -5,7 +5,7 @@ import Pagination from "components/pagination/Pagination";
 import StudyRoomPersonModal from "components/portalModal/studyRoomPersonModal/StudyRoomPersonModal";
 import { ROOT_API } from "constants/api";
 import { getUer } from "hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,11 +13,15 @@ import MypageContent from "../../MyPageContent";
 import s from "../../mypagecontent.module.scss";
 import mystudy from "./mystudyroom.module.scss";
 import { useQueries, useQuery, useQueryClient } from "react-query";
-import { asignJoinUserApi, getJoinedUser, getJoinedUserApi, getRequestsRoomApi } from "api/user";
+import { asignJoinUserApi, getJoinedUser, getJoinedUserApi, getRequestsRoomApi, getUserInfo } from "api/user";
+import { useOutOfClick } from "hooks/useOutOfClick";
+import { showToast } from "components/toast/showToast";
 
 const MyStudyRoom = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
+  const pageNumber = useSelector((state) => state.paginationStore);
+  const targetRef = useRef(null);
   const queryClient = useQueryClient();
   const { getNickname } = getUer(auth.accessToken);
   const [personModal, setPerseonModal] = useState(false);
@@ -26,21 +30,21 @@ const MyStudyRoom = () => {
     index: -1,
     state: false,
   });
-  const [currentMyListPage, setCurrentMyListPage] = useState(1);
-  const [currentAsignPage, setCurrentAsignPage] = useState(1);
 
   const queries = useQueries([
     // 참여요청 스터디룸 리스트
-    { queryKey: ["getRequestRoom", currentAsignPage], queryFn: () => getRequestsRoomApi(currentAsignPage) },
+    {
+      queryKey: ["getRequestRoom", pageNumber["mystudyroom_request"].item],
+      queryFn: () => getRequestsRoomApi(pageNumber["mystudyroom_request"].item),
+    },
     // 참여중인 스터디룸 리스트
-    { queryKey: ["getMyJoindRoom", currentMyListPage], queryFn: () => getJoinedUserApi(currentMyListPage) },
+    {
+      queryKey: ["getMyJoindRoom", pageNumber["mystudyroom_joined"].item],
+      queryFn: () => getJoinedUserApi(pageNumber["mystudyroom_joined"].item),
+    },
   ]);
   const requestRoom = queries[0].data;
   const myJoindRoom = queries[1].data;
-
-  const asignJoin = () => {
-    console.log("가입승인");
-  };
 
   const clickUser = (e, key) => {
     e.stopPropagation();
@@ -51,6 +55,10 @@ const MyStudyRoom = () => {
     }
   };
 
+  useOutOfClick(targetRef, () => {
+    setDrop({ ...drop, state: false });
+  });
+
   // 가입승인
   const asignUser = (studyRoomId, studyRoomUserId) => {
     const res = asignJoinUserApi(studyRoomId, studyRoomUserId);
@@ -60,14 +68,24 @@ const MyStudyRoom = () => {
     });
   };
 
-  const infoUser = () => {
-    console.log("유저정보보기");
+  // 유저정보보기
+  const infoUser = (nickname) => {
+    const res = getUserInfo(nickname);
+    res
+      .then((response) => {
+        console.log("res", response);
+        if (response) {
+          showToast("success", "😎 유저가 비공개인 상태입니다.");
+        } else {
+          navigate(`/showuser`);
+        }
+      })
+      .catch((error) => {
+        showToast("error", error.response.data.message);
+      });
   };
 
-  useEffect(() => {
-    setCurrentMyListPage(1);
-    setCurrentAsignPage(1);
-  }, []);
+  // console.log("zxcv", requestRoom);
 
   const roomUserInfo = (data) => {
     const asigning = data.studyRoomUsers.filter((item) => item.status === false && item.nickname === getNickname);
@@ -96,26 +114,21 @@ const MyStudyRoom = () => {
 
   return (
     <>
-      {personModal && (
-        <StudyRoomPersonModal
-          setOnModal={() => setPerseonModal()}
-          roomId={roomid}
-        />
-      )}
+      {personModal && <StudyRoomPersonModal setOnModal={() => setPerseonModal()} roomId={roomid} />}
       <div className={classNames([s.contentWrap], [mystudy.mystudyroom])}>
         <section>
           <h3>스터디룸 신청 리스트</h3>
           <ul className={mystudy.list}>
             {requestRoom && requestRoom.content.length !== 0 ? (
               requestRoom.content.map((item, index) => (
-                <li onClick={asignJoin} key={index} className={mystudy.list_item}>
+                <li key={index} className={mystudy.list_item}>
                   <div className={mystudy.room_title}>{item.title}</div>
-                  <span className={mystudy.user} onClick={(e) => clickUser(e, index)}>
+                  <span className={mystudy.user} onClick={(e) => clickUser(e, index)} ref={targetRef}>
                     {item.nickname}
                     {drop.index === index && drop.state && (
                       <DropDown>
                         <li onClick={() => asignUser(item.studyRoomId, item.studyRoomUserId)}>승인하기</li>
-                        <li>유저정보보기</li>
+                        <li onClick={() => infoUser(item.nickname)}>유저정보보기</li>
                       </DropDown>
                     )}
                   </span>
@@ -127,11 +140,7 @@ const MyStudyRoom = () => {
           </ul>
           {requestRoom && requestRoom.length !== 0 && (
             <div className={mystudy.pageContainer}>
-              <Pagination
-                currentPage={requestRoom.pageable.pageNumber + 1}
-                totalPage={requestRoom.totalPages}
-                paginate={setCurrentMyListPage}
-              />
+              <Pagination totalPage={requestRoom.totalPages} name="mystudyroom_request" />
             </div>
           )}
         </section>
@@ -182,11 +191,7 @@ const MyStudyRoom = () => {
           </ul>
           {myJoindRoom && myJoindRoom.length !== 0 && (
             <div className={mystudy.pageContainer}>
-              <Pagination
-                currentPage={myJoindRoom.pageable.pageNumber + 1}
-                totalPage={myJoindRoom.totalPages}
-                paginate={setCurrentMyListPage}
-              />
+              <Pagination totalPage={myJoindRoom.totalPages} name="mystudyroom_joined" />
             </div>
           )}
         </section>

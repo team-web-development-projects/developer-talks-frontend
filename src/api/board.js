@@ -9,7 +9,7 @@ export async function getBoardList(currentPage, selectText, type, keyword) {
     return res;
   } else {
     const res = await apiInstance.get(`${type}/all`, {
-      params: { page: currentPage - 1, size: 10, sort: selectText },
+      params: { page: currentPage - 1, size: 3, sort: selectText },
     });
     return res;
   }

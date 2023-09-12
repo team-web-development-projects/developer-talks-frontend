@@ -2,7 +2,7 @@ import axios from "axios";
 import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { MyActivity, MyPost, MyReply, MyScrab } from "./Constans";
 import s from "./userinfolist.module.scss";
@@ -11,15 +11,17 @@ import { useParams } from "react-router-dom";
 import Gravatar from "react-gravatar";
 import Pagination from "components/pagination/Pagination";
 import { getInStudyRoomBoard, getUserActivity, getUserPost, getUserReply, getUserScrab } from "api/user";
+import { INIT_PAGING } from "store/PagiNation";
 
 const UserInfoList = ({ user }) => {
   const auth = useSelector((state) => state.authToken);
+  const pageNumber = useSelector((state) => state.paginationStore);
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [select, setSelect] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const getNickname = location.state && location.state.nickname;
   const getUserProfile = location.state && location.state.userProfile;
@@ -33,23 +35,22 @@ const UserInfoList = ({ user }) => {
 
   useEffect(() => {
     const getuser = user ? user.nickname : parseJwt(auth.accessToken).nickname;
-    console.log("get", getuser);
 
     switch (select) {
       case 1:
-        getUserPost(currentPage, getuser).then((res) => {
+        getUserPost(pageNumber["userinfo"].item, getuser).then((res) => {
           setPageData(res);
           setData(res.content);
         });
         break;
       case 2:
-        getUserReply(currentPage, getuser).then((res) => {
+        getUserReply(pageNumber["userinfo"].item, getuser).then((res) => {
           setPageData(res);
           setData(res.content);
         });
         break;
       case 3:
-        getUserScrab(currentPage, getuser).then((res) => {
+        getUserScrab(pageNumber["userinfo"].item, getuser).then((res) => {
           setPageData(res);
           setData(res.content);
         });
@@ -57,13 +58,13 @@ const UserInfoList = ({ user }) => {
       default:
         // BUG: 자신의 개인정보가 비공개일때 자신의 활동내역도 안보임.
         // activity().then((error) => console.log('error', error));
-        getUserActivity(currentPage, getuser).then((res) => {
+        getUserActivity(pageNumber["userinfo"].item, getuser).then((res) => {
           setPageData(res);
           setData(res.content);
         });
         break;
     }
-  }, [nickname, currentPage, user, auth, select]);
+  }, [nickname, pageNumber, user, auth, select]);
 
   const onSelect = (type) => {
     setSelect(type);
@@ -86,7 +87,13 @@ const UserInfoList = ({ user }) => {
         <ul className={s.nav}>
           {contacts.map((contact, index) => (
             <li key={index}>
-              <button onClick={() => onSelect(index)} className={`${select === index ? `${s.select}` : ""}`}>
+              <button
+                onClick={() => {
+                  onSelect(index);
+                  dispatch(INIT_PAGING({ name: "userinfo" }));
+                }}
+                className={`${select === index ? `${s.select}` : ""}`}
+              >
                 {contact}
               </button>
             </li>
@@ -112,11 +119,7 @@ const UserInfoList = ({ user }) => {
           )}
         </div>
 
-        <Pagination
-          currentPage={pageData && pageData.pageable.pageNumber + 1}
-          totalPage={pageData && pageData.totalPages}
-          paginate={setCurrentPage}
-        />
+        <Pagination totalPage={pageData && pageData.totalPages} name="userinfo" />
       </section>
     </>
   );

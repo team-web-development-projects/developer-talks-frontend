@@ -42,8 +42,6 @@ const StudyRoomDetail = () => {
         </div>
       )}
       <div className="room-detail">
-        {/* <button onClick={() => res.hasNextPage && res.fetchNextPage()}>다음</button>
-      <button onClick={() => res.hasPreviousPage && res.fetchPreviousPage()}>이전</button> */}
         <div className="menu">
           <div className="board">
             <InStudyRoomBoard postId={postId} />

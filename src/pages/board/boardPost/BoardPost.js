@@ -49,11 +49,11 @@ export default function BoardPost({ type }) {
       return;
     }
     await new Promise((r) => setTimeout(r, 1000));
-    console.log(`
-            제목: ${form.title}
-            내용: ${form.content}
-            이미지 : ${form.files}
-        `);
+    // console.log(`
+    //         제목: ${form.title}
+    //         내용: ${form.content}
+    //         이미지 : ${form.files}
+    //     `);
     const frm = new FormData();
     if (form.files.length !== 0) {
       form.files.forEach((file) => {

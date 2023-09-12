@@ -1,20 +1,16 @@
-import axios from "axios";
+import { getStudyroomInfoList, joinStudyroom } from "api/studyroom";
+import Button from "components/button/Button";
+import { Modal } from "components/portalModal/Modal";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
+import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
 import Tag from "components/tag/Tag";
-import { ROOT_API } from "constants/api";
 import { parseJwt } from "hooks/useParseJwt";
 import { useState } from "react";
 import { BsGearFill, BsLock, BsUnlock } from "react-icons/bs";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./studyroominfo.scss";
-import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
-import { useEffect } from "react";
-import { Modal } from "components/portalModal/Modal";
-import Button from "components/button/Button";
-import apiInstance from "module/useInterceptor";
-import { getStudyroomInfoList, joinStudyroom } from "api/studyroom";
 
 const StudyRoomInfo = () => {
   const { postId } = useParams();
@@ -28,7 +24,6 @@ const StudyRoomInfo = () => {
   const requestRoom = () => {
     const join = joinStudyroom(postId);
     join.then((res) => {
-      console.log("cc");
       if (!data.autoJoin) {
         setSecretModal(false);
         alert("요청이 완료되었습니다.");
@@ -63,8 +58,6 @@ const StudyRoomInfo = () => {
       return data.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />;
     }
   };
-
-  // console.log('data', data);
 
   return (
     <>

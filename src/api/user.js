@@ -34,6 +34,7 @@ export async function sendMessage(senderNickname, receiverNickname, text) {
 // *---------유저정보
 // 다른 유저 정보 보기
 export async function getUserInfo(nickname) {
+  console.log('받은', nickname);
   const res = await apiInstance.get(`/users/private/${nickname}`, {});
   return res;
 }

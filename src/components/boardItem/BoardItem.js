@@ -7,10 +7,9 @@ import { AiOutlineComment, AiOutlineEye, AiOutlineStar, AiFillCheckCircle } from
 import { FiThumbsUp } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { SET_ROUTER } from "store/PageRouter";
 import s from "./boardItem.module.scss";
 
-const BoardItem = ({ data, type, currentPage }) => {
+const BoardItem = ({ data, type }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const [showUserInfo, setShowUserInfo] = useState(false);
@@ -25,7 +24,6 @@ const BoardItem = ({ data, type, currentPage }) => {
     } else {
       navigate(`/qna/${id}`);
     }
-    dispatch(SET_ROUTER({ state: currentPage }));
   };
 
   useOutOfClick(targetRef, () => {
