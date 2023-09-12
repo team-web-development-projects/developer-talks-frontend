@@ -3,13 +3,18 @@ import Button from "components/button/Button";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { boardDay } from "util/day";
 import s from "./messagelist.module.scss";
+import axios from "axios";
+import { ROOT_API } from "constants/api";
+import { useSelector } from "react-redux";
 
 const MessageInputBox = ({ type }) => {
   const queryClient = useQueryClient();
+  const auth = useSelector((state) => state.authToken);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["getMessageList", type],
     queryFn: () => getMessage(type),
+    initialData: {},
   });
 
   const deleteMessageMutation = useMutation((id) => deleteMessage(type, id), {
@@ -22,10 +27,16 @@ const MessageInputBox = ({ type }) => {
   });
 
   const clickDeleteMessage = (id) => {
+    console.log("cc", auth.accessToken);
     deleteMessageMutation.mutate(id);
+    // axios.delete(`${ROOT_API}/messages/${type}/${id}`, {
+    //   headers: {
+    //     "X-AUTH-TOKEN": auth.accessToken,
+    //   },
+    // });
   };
 
-  console.log('dd', type, data)
+  console.log("dd", type, data);
 
   return (
     <div className={s.message_box}>

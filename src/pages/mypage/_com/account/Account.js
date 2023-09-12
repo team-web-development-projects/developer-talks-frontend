@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { DELETE_TOKEN } from "store/Auth";
 import s from "../../mypagecontent.module.scss";
 import account from "./account.module.scss";
+import { removeCookie } from "util/authCookie";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
@@ -83,7 +84,7 @@ function Account() {
     {
       onSuccess: (res) => {
         showToast("success", "😎 삭제 되었습니다");
-        localStorage.removeItem("dtrtk");
+        removeCookie('dtrtk', {path:'/'});
         dispatch(DELETE_TOKEN());
         navigate("/");
       },
@@ -111,7 +112,7 @@ function Account() {
               <span>내 정보 비공개</span>
               <Private />
             </div>
-            <p>정보 비공개 상태로 변경시 로그아웃 됩니다.</p>
+            <p>상태 변경시 로그아웃 됩니다.</p>
             <Description
               userData={userData}
               handleChange={handleChange}

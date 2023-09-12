@@ -7,6 +7,7 @@ import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
 import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
+import { BsLock, BsUnlock } from "react-icons/bs";
 import { useEffect, useRef, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { useQuery } from "react-query";
@@ -17,6 +18,7 @@ import { getJoinedStudyroomList } from "api/auth";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
+  const pageNumber = useSelector((state) => state.paginationStore);
   const { keyword } = useParams();
   const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
@@ -24,8 +26,6 @@ const BoardList = ({ type }) => {
   const navigate = useNavigate();
   const refetchQuery = useRef();
   const [selectText, setSelectText] = useState("id");
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearch = () => {
     console.log("search");
@@ -40,8 +40,9 @@ const BoardList = ({ type }) => {
     data.then((res) => {
       // 이미 방에 참여중이면 방정보 소개 페이지 패스
       const find = res.content.find((item) => item.id === id);
-      navigate(`/studyroom/info/${id}`);
+      console.log("re", res, find);
       if (find === undefined) {
+        navigate(`/studyroom/info/${id}`);
       } else {
         navigate(`/studyroom/${id}`);
       }
@@ -49,17 +50,18 @@ const BoardList = ({ type }) => {
   };
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [type, currentPage],
-    queryFn: () => getStudyroomList(currentPage, selectText),
+    queryKey: [type, pageNumber["studyroomlist"].item],
+    queryFn: () => getStudyroomList(pageNumber["studyroomlist"].item, selectText),
   });
   refetchQuery.current = refetch;
 
   useEffect(() => {
-    setCurrentPage(1);
     refetchQuery.current();
   }, [keyword]);
 
   if (isLoading) return <div>Loading...</div>;
+
+  console.log("스터디룸 목록", data);
 
   return (
     <>
@@ -95,6 +97,7 @@ const BoardList = ({ type }) => {
               data.content.map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
+                  <span className={s.lock}>{item.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}</span>
                   <div className={s.tag}>
                     {item.skills.map((items, indexs) => (
                       <span key={indexs}>{items}</span>
@@ -118,9 +121,8 @@ const BoardList = ({ type }) => {
           {data && (
             <div className={s.pageContainer}>
               <Pagination
-                currentPage={data.pageable.pageNumber + 1}
                 totalPage={data.totalPages}
-                paginate={setCurrentPage}
+                name='studyroomlist'
               />
             </div>
           )}

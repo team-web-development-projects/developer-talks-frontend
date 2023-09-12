@@ -1,4 +1,4 @@
-import axios from "axios";
+import { getBoardList } from "api/board";
 import BoardBanner from "components/boardBanner/BoardBanner";
 import BoardItem from "components/boardItem/BoardItem";
 import Button from "components/button/Button";
@@ -7,21 +7,19 @@ import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import Scrolltop from "components/scrolltop/Scrolltop";
 import SearchInput from "components/searchInput/SearchInput";
 import Select from "components/select/Select";
-import { ROOT_API } from "constants/api";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import s from "./boardList.module.scss";
-import { getBoardList } from "api/board";
 
 const BoardList = ({ type }) => {
-  const auth = useSelector((state) => state.authToken);
   const { keyword } = useParams();
+  const auth = useSelector((state) => state.authToken);
+  const pageNumber = useSelector((state) => state.paginationStore);
+  const navigate = useNavigate();
   const refetchQuery = useRef();
   const [modal, setModal] = useState(false);
-  const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectText, setSelectText] = useState("");
 
   const handleClickPost = () => {
@@ -29,18 +27,16 @@ const BoardList = ({ type }) => {
   };
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [type, currentPage],
-    queryFn: () => getBoardList(currentPage, selectText, type, keyword),
+    queryKey: [type, pageNumber["boardlist"].item],
+    queryFn: () => getBoardList(pageNumber["boardlist"].item, selectText, type, keyword),
   });
   refetchQuery.current = refetch;
 
   useEffect(() => {
-    setCurrentPage(1);
     refetchQuery.current();
   }, [keyword, type, selectText]);
 
   if (isLoading) return <div>Loading...</div>;
-  // console.log('data', data);
 
   return (
     <>
@@ -71,16 +67,14 @@ const BoardList = ({ type }) => {
       </div>
       <ul>
         {data.totalElements ? (
-          data.content.map((board, index) => (
-            <BoardItem key={index} data={board} type={type} currentPage={currentPage} />
-          ))
+          data.content.map((board, index) => <BoardItem key={index} data={board} type={type} />)
         ) : (
           <li className={s.notlist}>등록된 게시글이 없습니다.</li>
         )}
       </ul>
 
       <div className={s.pageContainer}>
-        <Pagination currentPage={data.pageable.pageNumber + 1} totalPage={data.totalPages} paginate={setCurrentPage} />
+        <Pagination totalPage={data.totalPages} name={type === "post" ? 'boardlist': 'qnalist'} />
       </div>
       <Scrolltop />
     </>
