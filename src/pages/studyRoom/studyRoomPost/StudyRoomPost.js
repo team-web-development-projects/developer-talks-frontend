@@ -11,6 +11,7 @@ import Select from "components/select/Select";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import { showToast } from "components/toast/showToast";
+import { Modal } from "components/portalModal/Modal";
 
 const StudyRoomPost = () => {
   const [modal, setModal] = useState(false);
@@ -29,7 +30,7 @@ const StudyRoomPost = () => {
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [])
+  }, []);
 
   const tags = ["DJANGO", "SPRING", "JAVASCRIPT", "JAVA", "PYTHON", "CPP", "REACT", "AWS"];
 
@@ -108,9 +109,15 @@ const StudyRoomPost = () => {
     <>
       {modal && (
         <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/studyroom`)}>
-          게시글이 정상적으로 등록되었습니다. <br />
-          확인을 눌러주세요.
-          <button onClick={() => navigate(`/studyroom`)}>확인</button>
+          <Modal.Content>
+            게시글이 정상적으로 등록되었습니다. <br />
+            확인을 눌러주세요.
+          </Modal.Content>
+          <Modal.Buttons>
+            <Button onClick={() => navigate(`/studyroom`)} theme="success" size="small">
+              확인
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       <div className="board-page">

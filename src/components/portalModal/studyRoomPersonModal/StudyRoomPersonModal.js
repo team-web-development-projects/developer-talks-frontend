@@ -39,7 +39,9 @@ const StudyRoomPersonModal = ({ setOnModal, roomId }) => {
     res
       .then((response) => {
         alert("방을 나갔습니다.");
-        queryClient.invalidateQueries(["getRequestRoom", "getMyJoindRoom"]);
+        queryClient.invalidateQueries(["joinedRoomPersons"]);
+        queryClient.invalidateQueries(["getMyJoindRoom"]);
+        setOnModal(false);
       })
       .catch((error) => console.log(error));
   };
@@ -66,12 +68,7 @@ const StudyRoomPersonModal = ({ setOnModal, roomId }) => {
       .catch((error) => console.log(error));
   };
 
-  const selectList = ["NORMAL", "SUB_LEADER"];
-  const [Selected, setSelected] = useState("");
-
   const handleSelect = (e, id) => {
-    // setSelected(e.target.value);
-    console.log("e", e.target.value);
     roomAuth(id, e.target.value);
   };
 

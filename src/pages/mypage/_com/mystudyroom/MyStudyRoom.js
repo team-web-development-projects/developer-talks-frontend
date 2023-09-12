@@ -148,7 +148,7 @@ const MyStudyRoom = () => {
         <section>
           <h3>참여중 스터디룸</h3>
           <ul className={mystudy.list}>
-            {myJoindRoom && myJoindRoom.length !== 0 ? (
+            {myJoindRoom && myJoindRoom.content.length !== 0 ? (
               myJoindRoom.content.map((item, index) => (
                 <li
                   key={index}
