@@ -28,8 +28,8 @@ import Header from "components/header/Header";
 import classnames from "classnames";
 import Footer from "components/footer/Footer";
 import { SET_ROUTER } from "store/PageRouter";
+import { getCookie } from "util/authCookie";
 // import createAxiosInstance from "./module/useInterceptor";
-//테스트
 
 // FCM 테스트
 // import "./firebase-get-token";
@@ -38,6 +38,7 @@ import { SET_ROUTER } from "store/PageRouter";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
+  console.log("쿠키", getCookie("dtrtk"));
   // createAxiosInstance();
 
   // async function requestPermission() {
@@ -46,7 +47,7 @@ function App() {
   //     const token = await getToken(messaging, {
   //       vapidKey: "BOWbgLD10kyQ6zwV8RpnBg84oLQCD6Ll1t2u0AWjDxd1-u3sbTNy1DbKHEvJpvgLrUAhinaytkHIDakxn0HETaI",
   //     });
-      console.log("token : ", auth.accessToken);
+  // console.log("token : ", auth.accessToken);
   //   } else if (permission === "denied") {
   //     console.log("denied");
   //   }
@@ -56,7 +57,6 @@ function App() {
   // }, []);
 
   // console.log("auth", auth.accessToken);
-  // 깃헙 액션 테스트 2 
 
   useGoogleLoginAuth();
   // useInterceptor();
@@ -66,40 +66,40 @@ function App() {
   return (
     <div className="App">
       <ToastCont />
-        <Routes>
-          <Route path="/" element={<NavigateMain />}>
-            <Route index element={<Main />} />
-            {/* <Route path="developer-talks-frontend" element={<Main />} /> */}
-            {/* <Route exact path="/" element={<Main />} /> */}
-            <Route path="showuser" element={<Index />} />
+      <Routes>
+        <Route path="/" element={<NavigateMain />}>
+          <Route index element={<Main />} />
+          {/* <Route path="developer-talks-frontend" element={<Main />} /> */}
+          {/* <Route exact path="/" element={<Main />} /> */}
+          <Route path="showuser" element={<Index />} />
 
-            <Route path="studyroom" element={<StudyRoom />} />
-            <Route path="board" element={<BoardList type="post" />} />
-            <Route path="board/search/:keyword" element={<BoardList type="post" />} />
-            <Route path="/board/:postId" element={<BoardDetail type="post" />} />
-            <Route path="studyroom/info/:postId" element={<StudyRoomInfo />} />
-            <Route path="/studyroom/:postId" element={<StudyRoomDetail />} />
-            <Route path="qna" element={<BoardList type="questions" />} />
-            <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />
-            <Route path="/qna/:postId" element={<BoardDetail type="questions" />} />
-            {/* <Route path="*" element={<NotPage />} /> */}
-          </Route>
+          <Route path="studyroom" element={<StudyRoom />} />
+          <Route path="board" element={<BoardList type="post" />} />
+          <Route path="board/search/:keyword" element={<BoardList type="post" />} />
+          <Route path="/board/:postId" element={<BoardDetail type="post" />} />
+          <Route path="studyroom/info/:postId" element={<StudyRoomInfo />} />
+          <Route path="/studyroom/:postId" element={<StudyRoomDetail />} />
+          <Route path="qna" element={<BoardList type="questions" />} />
+          <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />
+          <Route path="/qna/:postId" element={<BoardDetail type="questions" />} />
+          {/* <Route path="*" element={<NotPage />} /> */}
+        </Route>
 
-          <Route element={<NavigatePost />}>
-            <Route path="studyroom/post" element={<StudyRoomPost type="studyroom" />} />
-            <Route path="/board/post" element={<BoardPost type="post" />} />
-            <Route path="/qna/post" element={<BoardPost type="questions" />} />
-            <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/finduser" element={<FindUser />} />
-            <Route path="/findpassword" element={<FindPassword />} />
+        <Route element={<NavigatePost />}>
+          <Route path="studyroom/post" element={<StudyRoomPost type="studyroom" />} />
+          <Route path="/board/post" element={<BoardPost type="post" />} />
+          <Route path="/qna/post" element={<BoardPost type="questions" />} />
+          <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/finduser" element={<FindUser />} />
+          <Route path="/findpassword" element={<FindPassword />} />
 
-            <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
-            <Route path="/regist" element={<Regist />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/userregist" element={<Userregist />} />
-          </Route>
-        </Routes>
+          <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
+          <Route path="/regist" element={<Regist />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/userregist" element={<Userregist />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
@@ -144,6 +144,5 @@ function App() {
 //     </>
 //   );
 // };
-
 
 export default App;

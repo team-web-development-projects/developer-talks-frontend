@@ -18,6 +18,7 @@ import { getJoinedStudyroomList } from "api/auth";
 
 const BoardList = ({ type }) => {
   const auth = useSelector((state) => state.authToken);
+  const pageNumber = useSelector((state) => state.paginationStore);
   const { keyword } = useParams();
   const pageRouter = useSelector((state) => state.pageRouter);
   const [modal, setModal] = useState(false);
@@ -25,8 +26,6 @@ const BoardList = ({ type }) => {
   const navigate = useNavigate();
   const refetchQuery = useRef();
   const [selectText, setSelectText] = useState("id");
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearch = () => {
     console.log("search");
@@ -51,13 +50,12 @@ const BoardList = ({ type }) => {
   };
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [type, currentPage],
-    queryFn: () => getStudyroomList(currentPage, selectText),
+    queryKey: [type, pageNumber["studyroomlist"].item],
+    queryFn: () => getStudyroomList(pageNumber["studyroomlist"].item, selectText),
   });
   refetchQuery.current = refetch;
 
   useEffect(() => {
-    setCurrentPage(1);
     refetchQuery.current();
   }, [keyword]);
 
@@ -123,9 +121,8 @@ const BoardList = ({ type }) => {
           {data && (
             <div className={s.pageContainer}>
               <Pagination
-                currentPage={data.pageable.pageNumber + 1}
                 totalPage={data.totalPages}
-                paginate={setCurrentPage}
+                name='studyroomlist'
               />
             </div>
           )}

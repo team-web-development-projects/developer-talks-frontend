@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "../regist.module.scss";
+import { setCookie } from "util/authCookie";
 
 axios.defaults.withCredentials = true;
 
@@ -73,7 +74,10 @@ const Regist = () => {
             .post(`${ROOT_API}/sign-in`, { userid: data.userid, password: data.password }, { headers: { API_HEADER } })
             .then((response) => {
               dispatch(SET_TOKEN({ accessToken: response.data.accessToken }));
-              localStorage.setItem("dtrtk", response.data.refreshToken);
+              setCookie("dtrtk", response.data.refreshToken, {
+                path: "/",
+                secure: "/",
+              });
               setModal(true);
               navigate("/");
               reset();

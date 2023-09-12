@@ -15,7 +15,7 @@ export async function getMessage(type) {
 
 // 쪽지 삭제
 export async function deleteMessage(type, id) {
-  console.log('삭제', type, id);
+  console.log("삭제", type, id);
   const res = await apiInstance.delete(`/messages/${type}/${id}`, {});
   return res;
 }
@@ -34,6 +34,7 @@ export async function sendMessage(senderNickname, receiverNickname, text) {
 // *---------유저정보
 // 다른 유저 정보 보기
 export async function getUserInfo(nickname) {
+  console.log('받은', nickname);
   const res = await apiInstance.get(`/users/private/${nickname}`, {});
   return res;
 }
@@ -82,5 +83,53 @@ export async function getUserScrab(currentPage, nickname) {
 // 프로필 이미지
 export async function getUserImage() {
   const res = await apiInstance.get(`/users/profile/image`, {});
+  return res;
+}
+
+// *---------스터디룸 관련
+// 참여요청 스터디룸 리스트
+export async function getRequestsRoomApi(currentMyListPage) {
+  const res = await apiInstance.get(`/study-rooms/requests`, {
+    params: { page: currentMyListPage - 1, size: 6 },
+  });
+  return res;
+}
+
+// 참여중인 스터디룸 리스트
+export async function getJoinedUserApi(currentMyListPage) {
+  const res = await apiInstance.get(`/study-rooms/users`, {
+    params: { page: currentMyListPage - 1, size: 6 },
+  });
+  return res;
+}
+
+// 스터디룸 가입승인
+export async function asignJoinUserApi(roomId, userId, sendStatus = true) {
+  console.log("status", sendStatus);
+  const res = await apiInstance.post(`/study-rooms/accept/${roomId}/${userId}?status=${sendStatus}`, {
+    // params: { status: sendStatus },
+  });
+  return res;
+}
+
+// 스터디룸 내보내기
+export async function deleteUser(roomId, nickname) {
+  const res = await apiInstance.delete(`/study-rooms/expel/${roomId}/${nickname}`, {
+    params: { studyRoomId: roomId, nickname: nickname },
+  });
+  return res;
+}
+
+// 스터디룸 나가기
+export async function selfRoomOutApi(roomId) {
+  const res = await apiInstance.delete(`/study-rooms/exit/${roomId}`, {});
+  return res;
+}
+
+// 스터디룸 권한설정
+export async function roomAuthApi(roomId, userId, value) {
+  const res = await apiInstance.put(`/study-rooms/authority/${roomId}/${userId}`, null, {
+    params: { studyRoomLevel: value },
+  });
   return res;
 }

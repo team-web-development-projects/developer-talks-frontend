@@ -22,7 +22,7 @@
 
 .page {
   margin: 0 auto;
-  padding-top: 40px;
+  padding: 40px 20px 0px 20px;
   max-width: $content-max-width;
   min-height: calc(100vh - 110px - 95px);
   @include media-mo {

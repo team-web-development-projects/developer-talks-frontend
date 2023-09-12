@@ -92,8 +92,6 @@ const Notification = ({ unRead, classname }) => {
       return getAlarmAll.data;
     });
 
-  console.log(";d", renderData);
-
   return (
     <div
       className={classnames(s.noti, {
