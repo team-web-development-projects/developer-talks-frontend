@@ -10,6 +10,7 @@ import classNames from "classnames";
 import Gravatar from "react-gravatar";
 import { parseJwt } from "hooks/useParseJwt";
 import { getUserImage } from "api/user";
+import { getCookie } from "util/authCookie";
 
 /**
  *
@@ -31,7 +32,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     queryKey: ["profileImg"],
     queryFn: getUserImage,
     // enabled: auth.accessToken !== null, // 회원가입페이지로 바로 진입시 에는 작동안하게
-    enabled: localStorage.getItem("dtrtk") !== null,
+    enabled: getCookie("dtrtk") !== null,
   });
 
   const handleChangeFirstProfileImage = async (event) => {

@@ -5,6 +5,7 @@ import { ROOT_API } from "constants/api";
 import { useNavigate } from "react-router-dom";
 import store from "store";
 import { SET_TOKEN, refreshAccessToken, tokenSlice } from "store/Auth";
+import { getCookie } from "util/authCookie";
 
 const apiInstance = axios.create({
   baseURL: "https://dtalks-api.site",
@@ -19,7 +20,7 @@ apiInstance.interceptors.request.use(
   async (config) => {
     // console.log('요청', config);
     const accessToken = store.getState().authToken.accessToken;
-    const refreshToken = localStorage.getItem("dtrtk");
+    const refreshToken = getCookie("dtrtk");
 
     // 글작성시엔 content-type을 지워야 함
     if(config.url !== '/post') {
@@ -79,7 +80,7 @@ apiInstance.interceptors.response.use(
     if (err.response && err.response.status === 401) {
       // 토큰 재발급 요청
       const data = await axios.post(`${ROOT_API}/token/refresh`, {
-        refreshToken: localStorage.getItem("dtrtk"),
+        refreshToken: getCookie("dtrtk"),
         headers: {
           accept: "*/*",
           "Content-Type": "application/json",
