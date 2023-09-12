@@ -83,3 +83,18 @@ export async function getUserImage() {
   const res = await apiInstance.get(`/users/profile/image`, {});
   return res;
 }
+
+// 신고
+export async function postUserReport(nickname, reportType, detail) {
+  const res = await apiInstance.post(
+    `/reports/user`,
+    {
+      reportType: reportType,
+      detail: detail,
+    },
+    {
+      params: { nickname: nickname },
+    }
+  );
+  return res;
+}
