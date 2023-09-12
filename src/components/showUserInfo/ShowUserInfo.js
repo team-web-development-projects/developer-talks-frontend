@@ -11,10 +11,12 @@ import { useNavigate } from "react-router-dom";
 import MessageModal from "components/portalModal/messagemodal/MessageModal";
 import { useOutOfClick } from "hooks/useOutOfClick";
 import { Modal } from "components/portalModal/Modal";
-import { getUserInfo } from "api/user";
+import { getUserInfo, postUserReport } from "api/user";
+import ReportModal from "components/portalModal/reportmodal/ReportModal";
 // import { useEffect } from "react";
 const ShowUserInfo = ({ userinfo, type }) => {
   const [modal, setModal] = useState(false);
+  const [modalReport, setModalReport] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const targetRef = useRef(null);
   let navigate = useNavigate();
@@ -34,7 +36,10 @@ const ShowUserInfo = ({ userinfo, type }) => {
       });
   };
 
-  // console.log("cc", nickname);
+  const handleReport = async (e) => {
+    //const res = postUserReport(userinfo.nickname, reportType, detail);
+  };
+
   useOutOfClick(targetRef, () => {
     setDropdown(false);
   });
@@ -56,6 +61,7 @@ const ShowUserInfo = ({ userinfo, type }) => {
             <DropDown>
               <li onClick={viewUserInfo}>유저정보보기</li>
               <li onClick={() => setModal(!modal)}>쪽지보내기</li>
+              <li onClick={() => setModalReport(!modalReport)}>신고하기</li>
             </DropDown>
           </div>
         )}
@@ -74,6 +80,22 @@ const ShowUserInfo = ({ userinfo, type }) => {
               setOnModal={() => setModal()}
               type="message-in-modal"
             />
+          </Modal.Content>
+        </MessageModal>
+      )}
+      
+      {modalReport && (
+        <MessageModal
+          setOnModal={() => setModalReport()}
+          dimClick={() => false}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <Modal.Content>
+            <ReportModal setOnModal={setModalReport} userinfo={userinfo} type="user"></ReportModal>
+
+            <MessageForm userinfo={userinfo} setOnModal={() => setModal()} type="message-in-modal" />
           </Modal.Content>
         </MessageModal>
       )}

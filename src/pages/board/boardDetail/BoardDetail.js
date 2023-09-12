@@ -1,6 +1,10 @@
+import { getReply } from "api/board";
 import axios from "axios";
 import BoardCount from "components/boardCount/BoardCount";
 import Button from "components/button/Button";
+import { Modal } from "components/portalModal/Modal";
+import MessageModal from "components/portalModal/messagemodal/MessageModal";
+import ReportModal from "components/portalModal/reportmodal/ReportModal";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import { ROOT_API } from "constants/api";
 import { useOutOfClick } from "hooks/useOutOfClick";
@@ -10,27 +14,27 @@ import { useEffect, useRef, useState } from "react";
 import Gravatar from "react-gravatar";
 import { AiOutlineStar } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
+import { RiAlarmWarningFill } from "react-icons/ri";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import AnswerList from "../_com/answerList/AnswerList";
 import s from "./boardDetail.module.scss";
-import { getReply } from "api/board";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const targetRef = useRef(null);
-
+  const [nickname, setNickName] = useState("");
   const [post, setPost] = useState({
     userInfo: {},
     imageUrls: [],
   });
-  const [nickname, setNickName] = useState("");
   const [checkStatus, setCheckStatus] = useState([]);
   const [showUserInfo, setShowUserInfo] = useState(false);
+  const [modalReport, setModalReport] = useState(false);
 
   const fetchPost = async (type, postId, auth) => {
     const response = await axios.get(`${ROOT_API}/${type}/${postId}`, {
@@ -102,6 +106,7 @@ const BoardDetail = ({ type }) => {
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
+                <RiAlarmWarningFill className={s.report} onClick={() => setModalReport(!modalReport)} />
               </div>
             </div>
           </div>
@@ -165,14 +170,22 @@ const BoardDetail = ({ type }) => {
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />
         ) : (
-          <AnswerList
-            nickname={nickname}
-            answerCnt={post.commentCount}
-            qnaNick={post.userInfo.nickname}
-            selectAnswer={post.selectAnswer}
-          />
+          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer} />
         )}
       </div>
+      {modalReport && (
+        <MessageModal
+          setOnModal={() => setModalReport()}
+          dimClick={() => false}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <Modal.Content>
+            <ReportModal setOnModal={setModalReport} type="board" postId={postId}></ReportModal>
+          </Modal.Content>
+        </MessageModal>
+      )}
     </>
   );
 };

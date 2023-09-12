@@ -86,6 +86,33 @@ export async function getUserImage() {
   return res;
 }
 
+// 신고
+export async function postUserReport(nickname, reportType, detail) {
+  const res = await apiInstance.post(
+    `/reports/user`,
+    {
+      reportType: reportType,
+      detail: detail,
+    },
+    {
+      params: { nickname: nickname },
+    }
+  );
+  return res;
+}
+
+export async function postBoardReport(postId, reportType, detail) {
+  const res = await apiInstance.post(
+    `/reports/post`,
+    {
+      reportType: reportType,
+      detail: detail,
+    },
+    {
+      params: { id: postId },
+    }
+  );
+}
 // *---------스터디룸 관련
 // 참여요청 스터디룸 리스트
 export async function getRequestsRoomApi(currentMyListPage) {
