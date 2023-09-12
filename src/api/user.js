@@ -98,3 +98,17 @@ export async function postUserReport(nickname, reportType, detail) {
   );
   return res;
 }
+
+export async function postBoardReport(postId, reportType, detail) {
+  const res = await apiInstance.post(
+    `/reports/post`,
+    {
+      reportType: reportType,
+      detail: detail,
+    },
+    {
+      params: { id: postId },
+    }
+  );
+  return res;
+}

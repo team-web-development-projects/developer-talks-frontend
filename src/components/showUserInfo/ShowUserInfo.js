@@ -91,7 +91,7 @@ const ShowUserInfo = ({ userinfo, type }) => {
           }}
         >
           <Modal.Content>
-            <ReportModal setOnModal={setModalReport} userinfo={userinfo}></ReportModal>
+            <ReportModal setOnModal={setModalReport} userinfo={userinfo} type="user"></ReportModal>
           </Modal.Content>
         </MessageModal>
       )}
