@@ -34,7 +34,7 @@ export async function sendMessage(senderNickname, receiverNickname, text) {
 // *---------유저정보
 // 다른 유저 정보 보기
 export async function getUserInfo(nickname) {
-  console.log('받은', nickname);
+  console.log("받은", nickname);
   const res = await apiInstance.get(`/users/private/${nickname}`, {});
   return res;
 }
@@ -85,6 +85,13 @@ export async function getUserImage() {
   const res = await apiInstance.get(`/users/profile/image`, {});
   return res;
 }
+
+// 프로필 이미지
+export async function getUserProfileApi(formData) {
+  const res = await apiInstance.put(`/users/profile/image`, null, {});
+  return res;
+}
+
 
 // 신고
 export async function postUserReport(nickname, reportType, detail) {
@@ -160,3 +167,4 @@ export async function roomAuthApi(roomId, userId, value) {
   });
   return res;
 }
+

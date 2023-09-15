@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { DELETE_TOKEN } from "store/Auth";
 import s from "./logout.module.scss";
 import { removeCookie } from "util/authCookie";
+import { INIT_STATE } from "store/User";
 
 const Logout = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const Logout = () => {
 
   const logout = () => {
     removeCookie("dtrtk", { path: "/" });
+    dispatch(INIT_STATE());
     dispatch(DELETE_TOKEN());
     navigate("/");
   };

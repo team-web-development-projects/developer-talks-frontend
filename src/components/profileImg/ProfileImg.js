@@ -21,6 +21,7 @@ import { getCookie } from "util/authCookie";
 
 const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nickname, border, type, className }) => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const queryClient = useQueryClient();
 
   // 초기 회원가입때는 프로필 이미지가 없으니 있으면안된다.
@@ -54,8 +55,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       });
   };
 
-  // 서버 상태 관리
-
   const { isLoading: isPostingTutorial, mutate: chnageImg } = useMutation(
     ["profileChange"],
     (formData) =>
@@ -76,20 +75,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     formData.append("file", file);
 
     chnageImg(formData);
-
-    // axios
-    //   .put(`${ROOT_API}/users/profile/image`, formData, {
-    //     headers: { "X-AUTH-TOKEN": auth.accessToken },
-    //   })
-    //   .then((response) => {
-    //     setProfileImgData({
-    //       id: response.data.id,
-    //       url: response.data.url,
-    //       inputName: response.data.inputName,
-    //     });
-    //   });
   };
-  // console.log('get image:', data.url)
 
   return (
     <div
@@ -99,21 +85,20 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
         [s.regist_page]: type === "regist",
       })}
     >
-      {/* <Gravatar email={parseJwt(auth.accessToken).nickname} /> */}
       {/* 마이페이지에 이미지가 있는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && !getLoading && data.url && <img src={data.url} alt="프로필이미지" />}
       {/* 마이페이지에 이미지가 없는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && data.url === null && (
         // <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
-        <Gravatar email={parseJwt(auth.accessToken).nickname} />
+        <Gravatar email={user.nickname} />
       )}
-      {!auth.accessToken && (
+      {/* {!auth.accessToken && (
         <img
           src={profileImgData.url ? profileImgData.url : defaultUserImage}
           alt="이미지 추가"
           className={classNames("", { [s.is_select]: profileImgData.url })}
         />
-      )}
+      )} */}
       {type !== "header" && (
         <input
           accept="image/*"

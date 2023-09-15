@@ -1,23 +1,27 @@
-// import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-// export const userSlice = createSlice({
-//   name: "user",
-//   initialState: {
-//     joinStudyRoomList: {},
-//   },
-//   reducers: {
-//     SET_JOIN_STUDYROOMLIST: (state, action) => {
-//       return {
-//         ...state,
-//         joinStudyRoomList: action.payload
-//       };
-//     },
-//     DELETE_STATE: (state) => {
-//       state.joinStudyRoomList = {};
-//     },
-//   },
-// });
+const initialState = {
+  description: "",
+  email: "",
+  nickname: "",
+  registrationId: "",
+  skills: [],
+  userid: "",
+};
 
-// export const { DELETE_TOKEN, SET_JOIN_STUDYROOMLIST } = userSlice.actions;
+export const userSlice = createSlice({
+  name: "userStore",
+  initialState,
+  reducers: {
+    SET_USER_INFO: (state, action) => {
+      state.nickname = action.payload.nickname;
+    },
+    INIT_STATE: (state) => {
+      return initialState;
+    },
+  },
+});
 
-// export default userSlice.reducer;
+export const { SET_USER_INFO, INIT_STATE } = userSlice.actions;
+
+export default userSlice.reducer;
