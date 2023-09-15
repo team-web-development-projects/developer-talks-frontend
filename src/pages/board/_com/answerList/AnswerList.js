@@ -2,15 +2,14 @@ import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import s from "./anwerList.module.scss";
 import AnswerItem from "../answerItem/AnswerItem";
-import { parseJwt } from "hooks/useParseJwt";
+import s from "./anwerList.module.scss";
 
-const AnswerList = ({nickname, answerCnt, qnaNick, selectAnswer }) => {
+const AnswerList = ({ nickname, answerCnt, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const { postId } = useParams();
@@ -35,7 +34,6 @@ const AnswerList = ({nickname, answerCnt, qnaNick, selectAnswer }) => {
         setIsToggle((prev) => !prev);
         setForm({ ["content"]: "" });
         queryClient.invalidateQueries(["answerList"]);
-        queryClient.invalidateQueries(["boardDetail"]);
       },
     }
   );

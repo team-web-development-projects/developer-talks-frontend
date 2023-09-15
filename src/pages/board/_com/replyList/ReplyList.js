@@ -1,6 +1,6 @@
 import axios from "axios";
 import Button from "components/button/Button";
-import CkEditor from "components/ckeditor/CkEditor";
+import TextArea from "components/textarea/TextArea";
 import { ROOT_API } from "constants/api";
 import ReplyItem from "pages/board/_com/replyItem/ReplyItem";
 import { useState } from "react";
@@ -8,7 +8,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import s from "./replyList.module.scss";
-import TextArea from 'components/textarea/TextArea';
 
 const ReplyList = ({ nickname, replyCnt }) => {
   const auth = useSelector((state) => state.authToken);
@@ -19,12 +18,7 @@ const ReplyList = ({ nickname, replyCnt }) => {
     content: "",
     secret: false,
   });
-  // const scrollDown = () => {
-  //   window.scrollTo({
-  //     top: document.documentElement.scrollHeight,
-  //     behavior: "smooth",
-  //   });
-  // };
+
   const handleClick = () => {
     setIsToggle((prev) => !prev);
     setForm({ ["content"]: "", ["secret"]: false });
@@ -43,7 +37,6 @@ const ReplyList = ({ nickname, replyCnt }) => {
         setIsToggle((prev) => !prev);
         setForm({ ["content"]: "", ["secret"]: false });
         queryClient.invalidateQueries(["replyList"]);
-        queryClient.invalidateQueries(["boardDetail"]);
       },
     }
   );
