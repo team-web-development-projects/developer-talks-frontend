@@ -11,12 +11,7 @@ import s from "./boardItem.module.scss";
 
 const BoardItem = ({ data, type }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  // const [showUserInfo, setShowUserInfo] = useState(false);
-  const auth = useSelector((state) => state.authToken);
-  const [showUserInfo, setShowUserInfo] = useState(false);
   const [meesageModal, setMeesageModal] = useState(false);
-  const targetRef = useRef(null);
 
   const linkClick = (id, type) => {
     if (type === "post") {
@@ -25,10 +20,6 @@ const BoardItem = ({ data, type }) => {
       navigate(`/qna/${id}`);
     }
   };
-
-  useOutOfClick(targetRef, () => {
-    setShowUserInfo(false);
-  });
 
   return (
     <>

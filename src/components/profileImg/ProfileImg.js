@@ -1,16 +1,13 @@
+import { getUserImage } from "api/user";
 import axios from "axios";
 import classnames from "classnames";
 import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
+import Gravatar from "react-gravatar";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import defaultUserImage from "./defaultUserImage.svg";
-import s from "./profileimg.module.scss";
-import classNames from "classnames";
-import Gravatar from "react-gravatar";
-import { parseJwt } from "hooks/useParseJwt";
-import { getUserImage } from "api/user";
 import { getCookie } from "util/authCookie";
+import s from "./profileimg.module.scss";
 
 /**
  *

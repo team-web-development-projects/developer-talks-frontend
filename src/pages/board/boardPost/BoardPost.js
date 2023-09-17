@@ -10,9 +10,7 @@ import s from "./boardPost.module.scss";
 import { postBoard } from "api/board";
 
 export default function BoardPost({ type }) {
-  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.authToken);
   const inputRef = useRef();
   const [form, setForm] = useState({
     title: "",
@@ -65,13 +63,6 @@ export default function BoardPost({ type }) {
 
     const res = postBoard(type, frm);
     res
-
-    // axios
-    //   .post(`${ROOT_API}/${type}`, frm, {
-    //     headers: {
-    //       "X-AUTH-TOKEN": auth.accessToken,
-    //     },
-    //   })
       .then(() => {
         navigate(`/${getType}`);
       })

@@ -23,7 +23,7 @@ const UserInfoList = ({ user }) => {
   const getUserProfile = location.state && location.state.userProfile;
 
   const getuser = user ? user.nickname : storeUser.nickname;
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["getActivity", select, getuser],
     queryFn: async () => {
       switch (select) {
@@ -44,6 +44,8 @@ const UserInfoList = ({ user }) => {
     setSelect(type);
   };
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
+
+  console.log("userdata", data && data.content);
 
   return (
     <>
@@ -79,7 +81,8 @@ const UserInfoList = ({ user }) => {
         */}
           {/*
            */}
-          {data && data.content.length !== 0 ? (
+          {isLoading && <>로딩중..</>}
+          {data && data.content.length !== 0 && (
             data.content.map((item, index) => (
               <div key={index} className={s.userdata}>
                 {select === 0 && MyActivity(item)}
@@ -88,9 +91,8 @@ const UserInfoList = ({ user }) => {
                 {select === 3 && MyScrab(item)}
               </div>
             ))
-          ) : (
-            <>내용이 없습니다.</>
           )}
+          {!isLoading && data && data.content.length === 0 && <>내용이 없습니다.</>}
         </div>
 
         <Pagination totalPage={data && data.totalPages} name="userinfo" />

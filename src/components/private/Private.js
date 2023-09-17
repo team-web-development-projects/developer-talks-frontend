@@ -1,27 +1,23 @@
-import React from "react";
-import axios from "axios";
-import { useState } from "react";
-import { ROOT_API } from "constants/api";
-import { useDispatch, useSelector } from "react-redux";
-import { showToast } from "components/toast/showToast";
-import s from "./private.module.scss";
-import { useEffect } from "react";
-import { parseJwt } from "hooks/useParseJwt";
-import { useNavigate, useParams } from "react-router-dom";
 import { getUserInfo, putPrivate } from "api/user";
 import classNames from "classnames";
+import { showToast } from "components/toast/showToast";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { DELETE_TOKEN } from "store/Auth";
 import { removeCookie } from "util/authCookie";
+import s from "./private.module.scss";
 
 const Private = () => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const dispatch = useDispatch();
   const [status, setStatus] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (auth.accessToken) {
-      const res = getUserInfo(parseJwt(auth.accessToken).userid);
+      const res = getUserInfo(user.userid);
       res.then((response) => {
         setStatus(response);
         if (response === false) {

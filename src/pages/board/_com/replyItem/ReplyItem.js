@@ -1,23 +1,20 @@
-import axios from "axios";
+import { deleteReply, postReply, putReply } from "api/board";
 import Button from "components/button/Button";
-import CkEditor from "components/ckeditor/CkEditor";
-import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
+import TextArea from "components/textarea/TextArea";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 import { useEffect, useState } from "react";
+import Gravatar from "react-gravatar";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { BsLock } from "react-icons/bs";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import Gravatar from "react-gravatar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
-import TextArea from "components/textarea/TextArea";
-import { deleteReply, postReply, putReply } from "api/board";
 
 const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const queryClient = useQueryClient();
   const [ispostToggle, setIsPostToggle] = useState(false);
   const [isgetToggle, setIsGetToggle] = useState(true);
@@ -118,8 +115,7 @@ const ReplyItem = ({ postId, reply }) => {
 
   useEffect(() => {
     if (auth.accessToken !== null) {
-      const nickname = parseJwt(auth.accessToken).nickname;
-      if (nickname === reply.userInfo.nickname) {
+      if (user.nickname === reply.userInfo.nickname) {
         setIsSelf(true);
       }
     }

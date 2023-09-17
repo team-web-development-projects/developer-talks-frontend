@@ -28,7 +28,6 @@ const Password = ({ disabled }) => {
   };
 
   const onSubmitPassword = async () => {
-    console.log(auth.accessToken);
     console.log(watch().newPassword);
     axios
       .put(

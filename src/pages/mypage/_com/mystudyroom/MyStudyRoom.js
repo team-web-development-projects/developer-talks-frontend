@@ -23,7 +23,7 @@ const MyStudyRoom = () => {
   const pageNumber = useSelector((state) => state.paginationStore);
   const targetRef = useRef(null);
   const queryClient = useQueryClient();
-  const { getNickname } = getUer(auth.accessToken);
+  const getNickname = useSelector((state) => state.userStore.nickname);
   const [personModal, setPerseonModal] = useState(false);
   const [roomid, setRoomid] = useState();
   const [drop, setDrop] = useState({

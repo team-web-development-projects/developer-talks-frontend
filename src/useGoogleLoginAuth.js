@@ -8,6 +8,7 @@ import { setCookie } from "util/authCookie";
 
 const useGoogleLoginAuth = () => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +22,7 @@ const useGoogleLoginAuth = () => {
       const searchParams = new URLSearchParams(window.location.search);
       const accessToken = searchParams.get("accessToken");
       const refreshToken = searchParams.get("refreshToken");
-      if (parseJwt(accessToken).nickname) {
+      if (user.nickname) {
         dispatch(SET_TOKEN({ accessToken: accessToken }));
         navigate("/", { replace: true });
       } else {
@@ -34,7 +35,7 @@ const useGoogleLoginAuth = () => {
         secure: "/",
       });
     }
-  }, [dispatch, navigate, location, auth.accessToken]);
+  }, [dispatch, navigate, location, user.nickname]);
 };
 
 export default useGoogleLoginAuth;

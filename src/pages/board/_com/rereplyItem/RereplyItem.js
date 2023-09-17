@@ -1,7 +1,6 @@
 import { deleteRereply, postRereply, putRereply } from "api/board";
 import Button from "components/button/Button";
 import TextArea from "components/textarea/TextArea";
-import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import Gravatar from "react-gravatar";
 import { BsLock } from "react-icons/bs";
@@ -12,6 +11,7 @@ import s from "./rereplyItem.module.scss";
 
 const RereplyItem = ({ rr, postId }) => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const queryClient = useQueryClient();
   const [isSelf, setIsSelf] = useState(false);
   const [isUpdateToggle, setIsUpdateToggle] = useState(false);
@@ -90,8 +90,7 @@ const RereplyItem = ({ rr, postId }) => {
 
   useEffect(() => {
     if (auth.accessToken !== null) {
-      const nickname = parseJwt(auth.accessToken).nickname;
-      if (nickname === rr.userInfo.nickname) {
+      if (user.nickname === rr.userInfo.nickname) {
         setIsSelf(true);
       }
     }
