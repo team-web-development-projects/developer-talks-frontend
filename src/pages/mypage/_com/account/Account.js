@@ -111,7 +111,6 @@ function Account() {
               <span>내 정보 비공개</span>
               <Private />
             </div>
-            <p>상태 변경시 로그아웃 됩니다.</p>
             <Description
               userData={userData}
               handleChange={handleChange}
@@ -119,7 +118,6 @@ function Account() {
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />
-            {/* <LineStyle>기본정보를 입력해주세요</LineStyle> */}
             <Nickname userData={userData} handleChange={handleChange} />
             <Email userData={userData} handleChange={handleChange} />
             <Userid userData={userData} handleChange={handleChange} />
@@ -129,7 +127,7 @@ function Account() {
         {select === 1 && (
           <Form onSubmit={handleSubmit(deleteId)}>
             <div className={s.deletgaider}>
-              회원 탈퇴일로부터 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다.
+              회원 탈퇴시점부터 모든 개인 정보는 완전히 삭제되며 더 이상 복구할 수 없게 됩니다.
             </div>
             <Table>
               <div>

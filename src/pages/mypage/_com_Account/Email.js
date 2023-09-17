@@ -144,7 +144,7 @@ const Email = ({ userData, handleChange }) => {
           </div>
         </div>
       </Table>
-      {timer}
+      {/* {timer} */}
       <Button type="submit" onClick={onSubmitEmail} FullWidth size="large">
         저장
       </Button>
