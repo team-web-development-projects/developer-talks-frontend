@@ -15,6 +15,7 @@ export const userSlice = createSlice({
   reducers: {
     SET_USER_INFO: (state, action) => {
       state.nickname = action.payload.nickname;
+      state.userid = action.payload.userid;
     },
     INIT_STATE: (state) => {
       return initialState;

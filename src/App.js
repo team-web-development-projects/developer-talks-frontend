@@ -51,8 +51,8 @@ function App() {
   //     const token = await getToken(messaging, {
   //       vapidKey: "BOWbgLD10kyQ6zwV8RpnBg84oLQCD6Ll1t2u0AWjDxd1-u3sbTNy1DbKHEvJpvgLrUAhinaytkHIDakxn0HETaI",
   //     });
-  console.log("쿠키", getCookie("dtrtk"));
-  console.log("access-token : ", auth.accessToken);
+  // console.log("쿠키", getCookie("dtrtk"));
+  // console.log("access-token : ", auth.accessToken);
   //   } else if (permission === "denied") {
   //     console.log("denied");
   //   }
@@ -66,10 +66,9 @@ function App() {
   });
 
   if (data) {
-    console.log("받은 data", data);
-    dispatch(SET_USER_INFO({ nickname: data.nickname }));
+    dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
   }
-  console.log("저장된 user", user.nickname);
+  // console.log("저장된 user", user);
 
   // console.log("auth", auth.accessToken);
 
