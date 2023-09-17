@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import s from "./answerItem.module.scss";
+import { showToast } from "components/toast/showToast";
 
 const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
@@ -75,7 +76,7 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
 
   const handleUpdate = () => {
     setIsUpdateToggle((prev) => !prev);
-    setForm({ ["content"]: answer.content });
+    setForm({ content: answer.content });
   };
 
   const handleUpdatePost = (e) => {
@@ -88,7 +89,7 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   };
 
   const handleUpdateCancle = () => {
-    setForm({ ["content"]: answer.content });
+    setForm({ content: answer.content });
     setIsUpdateToggle((prev) => !prev);
   };
 
@@ -102,7 +103,7 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
       e.preventDefault();
       selectCommentMutation.mutate();
     } else {
-      toast.error("채택은 한개만 가능합니다.");
+      showToast("success", "채택은 한개만 가능합니다.");
     }
   };
   useEffect(() => {

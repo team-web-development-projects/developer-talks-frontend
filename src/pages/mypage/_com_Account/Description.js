@@ -34,6 +34,12 @@ const Description = ({ userData, handleChange, account, selectedTags, setSelecte
   };
   return (
     <form onSubmit={onSubmitDescription}>
+      <div>
+        <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 태그설정"} />
+        <Button FullWidth size="large" type="submit">
+          저장
+        </Button>
+      </div>
       <Table>
         <div>
           <div>
@@ -53,8 +59,6 @@ const Description = ({ userData, handleChange, account, selectedTags, setSelecte
       <Button FullWidth size="large" type="submit">
         저장
       </Button>
-      <br />
-      <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} text={"관심있는 태그설정"} />
     </form>
   );
 };
