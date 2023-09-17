@@ -13,11 +13,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
-import s from "../regist.module.scss";
 import { setCookie } from "util/authCookie";
+import s from "../regist.module.scss";
 
 const Userregist = () => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [authlogins, setAutologins] = useState("");
@@ -103,7 +104,7 @@ const Userregist = () => {
   };
   useEffect(() => {
     if (auth.accessToken) {
-      setUserEmail(parseJwt(auth.accessToken).sub); //NOTE 이메일 토큰으로 넣기 //ok
+      setUserEmail(user.email); //NOTE 이메일 토큰으로 넣기 //ok
       setAutologins(parseJwt(auth.accessToken).provider);
     }
   }, [auth.accessToken, userEmail]);

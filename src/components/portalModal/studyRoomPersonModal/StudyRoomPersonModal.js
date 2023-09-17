@@ -1,20 +1,15 @@
-import axios from "axios";
+import { getStudyroomInfoList } from "api/studyroom";
+import { asignJoinUserApi, deleteUser, roomAuthApi, selfRoomOutApi } from "api/user";
 import classNames from "classnames";
 import Button from "components/button/Button";
-import { ROOT_API } from "constants/api";
-import { getUer } from "hooks/useAuth";
-import { Fragment, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import ModalFrame from "../ModalFrame";
 import "./studyroompersonmodal.scss";
-import { asignJoinUserApi, deleteUser, getJoinedUserApi, roomAuthApi, selfRoomOutApi } from "api/user";
-import { useQueryClient, useQuery } from "react-query";
-import { getStudyroomInfoList } from "api/studyroom";
 
 const StudyRoomPersonModal = ({ setOnModal, roomId }) => {
-  const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const queryClient = useQueryClient();
-  const { getNickname } = getUer(auth.accessToken);
 
   const { data, isSuccess } = useQuery({
     queryKey: ["joinedRoomPersons"],
@@ -73,7 +68,8 @@ const StudyRoomPersonModal = ({ setOnModal, roomId }) => {
   };
 
   const buttonType = (data, index) => {
-    const isLeader = data.filter((item) => item.nickname === getNickname && item.studyRoomLevel === "LEADER");
+    console.log('스터디룸 참여인원 정보: ', data);
+    const isLeader = data.filter((item) => item.nickname === user.nickname && item.studyRoomLevel === "LEADER");
     return (
       <>
         {data[index].status &&
@@ -117,15 +113,15 @@ const StudyRoomPersonModal = ({ setOnModal, roomId }) => {
           data.studyRoomUsers.map((item, index) => (
             <li key={index} className="user-list">
               <div>
-                {item.nickname} {item.nickname === getNickname && <span className="me">나</span>}
+                {item.nickname} {item.nickname === user.nickname && <span className="me">나</span>}
               </div>
               <div
                 className={classNames("btn-wrap", {
-                  "is-my": item.nickname === getNickname,
+                  "is-my": item.nickname === user.nickname,
                 })}
               >
                 {buttonType(data.studyRoomUsers, index)}
-                {item.nickname === getNickname && (
+                {item.nickname === user.nickname && (
                   <Button classname="btn-outroom" size="small" onClick={selfOut}>
                     나가기
                   </Button>

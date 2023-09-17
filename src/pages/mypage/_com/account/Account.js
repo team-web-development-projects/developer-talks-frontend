@@ -2,7 +2,6 @@ import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
 import Label from "components/label/Label";
-import LineStyle from "components/lineStyle/LineStyle";
 import Private from "components/private/Private";
 import Table from "components/table/Table";
 import { showToast } from "components/toast/showToast";
@@ -19,9 +18,9 @@ import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { DELETE_TOKEN } from "store/Auth";
+import { removeCookie } from "util/authCookie";
 import s from "../../mypagecontent.module.scss";
 import account from "./account.module.scss";
-import { removeCookie } from "util/authCookie";
 
 function Account() {
   const auth = useSelector((state) => state.authToken);
@@ -84,7 +83,7 @@ function Account() {
     {
       onSuccess: (res) => {
         showToast("success", "😎 삭제 되었습니다");
-        removeCookie('dtrtk', {path:'/'});
+        removeCookie("dtrtk", { path: "/" });
         dispatch(DELETE_TOKEN());
         navigate("/");
       },

@@ -8,8 +8,6 @@ import { Modal } from "../Modal";
 import s from "./reportmodal.module.scss";
 
 const ReportModal = ({ setOnModal, userinfo, type, postId }) => {
-  const queryClient = useQueryClient();
-  const auth = useSelector((state) => state.authToken);
   const {
     register,
     handleSubmit,
@@ -22,13 +20,16 @@ const ReportModal = ({ setOnModal, userinfo, type, postId }) => {
   const handleInputChange = (event) => {
     event.stopPropagation(); // 클릭 이벤트 전파 중지
   };
-  const userReportMutation = useMutation(() => postUserReport(userinfo?.nickname || watch().nickname, watch().reportType, watch().detail), {
-    onSuccess: () => {
-      showToast("success", "신고가 접수되었습니다.");
-      setOnModal(false);
-      reset();
-    },
-  });
+  const userReportMutation = useMutation(
+    () => postUserReport(userinfo?.nickname || watch().nickname, watch().reportType, watch().detail),
+    {
+      onSuccess: () => {
+        showToast("success", "신고가 접수되었습니다.");
+        setOnModal(false);
+        reset();
+      },
+    }
+  );
 
   const boardReportMutation = useMutation(() => postBoardReport(postId, watch().reportType, watch().detail), {
     onSuccess: () => {

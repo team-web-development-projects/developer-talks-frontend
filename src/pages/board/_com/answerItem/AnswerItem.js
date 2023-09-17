@@ -2,7 +2,6 @@ import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
 import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
 import { useEffect, useState } from "react";
 import Gravatar from "react-gravatar";
 import { AiOutlineCheckCircle } from "react-icons/ai";
@@ -13,8 +12,8 @@ import s from "./answerItem.module.scss";
 
 const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
+  const nickname = useSelector((state) => state.userStore.nickname);
   const queryClient = useQueryClient();
-  const [nickname, setNickName] = useState("");
   const [isUpdateToggle, setIsUpdateToggle] = useState(false);
   const [form, setForm] = useState({
     content: answer.content,
@@ -109,8 +108,6 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   useEffect(() => {
     console.log(answer.id);
     if (auth.accessToken !== null) {
-      const nickname = parseJwt(auth.accessToken).nickname;
-      setNickName(nickname);
       if (nickname === answer.userInfo.nickname) {
         setIsSelf(true);
       }

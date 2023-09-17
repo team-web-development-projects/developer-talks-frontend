@@ -4,7 +4,6 @@ import { Modal } from "components/portalModal/Modal";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
 import Tag from "components/tag/Tag";
-import { parseJwt } from "hooks/useParseJwt";
 import { useState } from "react";
 import { BsGearFill, BsLock, BsUnlock } from "react-icons/bs";
 import { useQuery } from "react-query";
@@ -16,6 +15,7 @@ const StudyRoomInfo = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const [secretModal, setSecretModal] = useState(false);
   const [inModal, setInModal] = useState(false);
   const [settingModal, setSettingModal] = useState(false);
@@ -37,7 +37,7 @@ const StudyRoomInfo = () => {
       setInModal(true);
     }
     if (!data.autoJoin) {
-      if (parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname) {
+      if (user.nickname === data.studyRoomUsers[0].nickname) {
         navigate(`/studyroom/${postId}`);
       } else {
         setSecretModal(true);
@@ -110,7 +110,7 @@ const StudyRoomInfo = () => {
           )}
           {data && (
             <>
-              {parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname && (
+              {user.nickname === data.studyRoomUsers[0].nickname && (
                 <div className="setting" onClick={() => setSettingModal(true)}>
                   <BsGearFill size={22} />
                 </div>

@@ -1,17 +1,13 @@
-import { ROOT_API } from "constants/api";
-import React, { useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { useQuery } from "react-query";
-import Button from "components/button/Button";
-import "./instudyroomboard.scss";
-import InStudyRoomPostModal from "components/portalModal/inStudyroomPostModal/InStudyRoomPostModal";
-import { boardDay } from "util/day";
-import classNames from "classnames";
 import { getInStudyRoomBoard } from "api/studyroom";
+import classNames from "classnames";
+import Button from "components/button/Button";
+import InStudyRoomPostModal from "components/portalModal/inStudyroomPostModal/InStudyRoomPostModal";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { boardDay } from "util/day";
+import "./instudyroomboard.scss";
 
 const InStudyRoomBoard = ({ postId }) => {
-  const auth = useSelector((state) => state.authToken);
   const [currentPage, setCurrentPage] = useState(1);
   const [showmodal, setShowmodal] = useState(false);
   const [postType, setPostType] = useState("");

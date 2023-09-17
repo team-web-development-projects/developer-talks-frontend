@@ -17,3 +17,9 @@ export async function getJoinedStudyroomList() {
   });
   return res;
 }
+
+// acees token을 이용해서 유저 정보 가져오기
+export async function getUserInfoApi() {
+  const res = await apiInstance.get(`/users/info`, {});
+  return res;
+}

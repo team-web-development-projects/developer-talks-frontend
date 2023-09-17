@@ -8,7 +8,6 @@ import ReportModal from "components/portalModal/reportmodal/ReportModal";
 import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import { ROOT_API } from "constants/api";
 import { useOutOfClick } from "hooks/useOutOfClick";
-import { parseJwt } from "hooks/useParseJwt";
 import ReplyList from "pages/board/_com/replyList/ReplyList";
 import { useEffect, useRef, useState } from "react";
 import Gravatar from "react-gravatar";
@@ -27,7 +26,7 @@ const BoardDetail = ({ type }) => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authToken);
   const targetRef = useRef(null);
-  const [nickname, setNickName] = useState("");
+  const nickname = useSelector((state) => state.userStore.nickname);
   const [post, setPost] = useState({
     userInfo: {},
     imageUrls: [],
@@ -36,7 +35,7 @@ const BoardDetail = ({ type }) => {
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [modalReport, setModalReport] = useState(false);
 
-  const fetchPost = async (type, postId, auth) => {
+  const fetchPost = async (type, postId) => {
     const response = await axios.get(`${ROOT_API}/${type}/${postId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -51,11 +50,10 @@ const BoardDetail = ({ type }) => {
     console.log(response.data);
   };
 
-  const { isLoading, isError } = useQuery(["boardDetail"], () => fetchPost(type, postId, auth));
+  const { isLoading, isError } = useQuery(["boardDetail"], () => fetchPost(type, postId));
 
   useEffect(() => {
     if (auth.accessToken !== null) {
-      setNickName(auth && parseJwt(auth.accessToken).nickname);
       const res = getReply(type, postId);
       res
         .then((res) => {
@@ -170,7 +168,12 @@ const BoardDetail = ({ type }) => {
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />
         ) : (
-          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer} />
+          <AnswerList
+            nickname={nickname}
+            answerCnt={post.commentCount}
+            qnaNick={post.userInfo.nickname}
+            selectAnswer={post.selectAnswer}
+          />
         )}
       </div>
       {modalReport && (

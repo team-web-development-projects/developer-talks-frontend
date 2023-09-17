@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { dayChat } from "util/day";
@@ -11,7 +10,7 @@ import "./chat.scss";
 const ChatList = ({ postId, upText }) => {
   const scroll = useRef();
   const auth = useSelector((state) => state.authToken);
-  const nickname = auth && parseJwt(auth.accessToken).nickname;
+  const nickname = useSelector((state) => state.userStore.nickname);
   const [dataPage, setDataPage] = useState(0);
   const [dataSize, setDataSize] = useState(20);
   const [atBottom, setAtBottom] = useState(false);

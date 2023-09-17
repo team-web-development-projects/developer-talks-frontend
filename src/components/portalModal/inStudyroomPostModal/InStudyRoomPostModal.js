@@ -8,13 +8,13 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ModalFrame from "../ModalFrame";
 import { postInStudyRoomBoard } from "api/studyroom";
-import { parseJwt } from "hooks/useParseJwt";
 import s from './instudyroompostmodal.module.scss';
 
 const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
   const [selectedOption, setSelectedOption] = useState("NORMAL");
   const [boardDetail, setBoardDetail] = useState();
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const queryClient = useQueryClient();
 
   const [form, setForm] = useState({
@@ -88,7 +88,7 @@ const InStudyRoomPostModal = ({ setOnModal, postId, boardId, type }) => {
       )}
       {type === "detail" && boardDetail && (
         <>
-          {parseJwt(auth.accessToken).nickname === boardDetail.writer && (
+          {user.nickname === boardDetail.writer && (
             <div className={s.btn_wrap}>
               <Button size="small">수정</Button>
               <Button size="small" theme="cancle">

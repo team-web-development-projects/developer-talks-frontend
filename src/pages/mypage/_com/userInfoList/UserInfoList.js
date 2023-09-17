@@ -1,21 +1,17 @@
-import axios from "axios";
-import { ROOT_API } from "constants/api";
-import { parseJwt } from "hooks/useParseJwt";
-import { useEffect, useState } from "react";
+import { getUserActivity, getUserPost, getUserReply, getUserScrab } from "api/user";
+import Pagination from "components/pagination/Pagination";
+import { useState } from "react";
+import Gravatar from "react-gravatar";
+import { useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { INIT_PAGING } from "store/PagiNation";
 import { MyActivity, MyPost, MyReply, MyScrab } from "./Constans";
 import s from "./userinfolist.module.scss";
-import { useQueries, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
-import Gravatar from "react-gravatar";
-import Pagination from "components/pagination/Pagination";
-import { getInStudyRoomBoard, getUserActivity, getUserPost, getUserReply, getUserScrab } from "api/user";
-import { INIT_PAGING } from "store/PagiNation";
 
 const UserInfoList = ({ user }) => {
-  const auth = useSelector((state) => state.authToken);
   const pageNumber = useSelector((state) => state.paginationStore);
+  const storeUser = useSelector((state) => state.userStore);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -25,56 +21,36 @@ const UserInfoList = ({ user }) => {
 
   const getNickname = location.state && location.state.nickname;
   const getUserProfile = location.state && location.state.userProfile;
-  const [nickname, setNickName] = useState("");
-  const [data, setData] = useState([]);
-  const [pageData, setPageData] = useState();
 
-  useEffect(() => {
-    setNickName(user ? user.nickname : parseJwt(auth.accessToken).nickname);
-  }, [auth, user]);
-
-  useEffect(() => {
-    const getuser = user ? user.nickname : parseJwt(auth.accessToken).nickname;
-
-    switch (select) {
-      case 1:
-        getUserPost(pageNumber["userinfo"].item, getuser).then((res) => {
-          setPageData(res);
-          setData(res.content);
-        });
-        break;
-      case 2:
-        getUserReply(pageNumber["userinfo"].item, getuser).then((res) => {
-          setPageData(res);
-          setData(res.content);
-        });
-        break;
-      case 3:
-        getUserScrab(pageNumber["userinfo"].item, getuser).then((res) => {
-          setPageData(res);
-          setData(res.content);
-        });
-        break;
-      default:
-        // BUG: 자신의 개인정보가 비공개일때 자신의 활동내역도 안보임.
-        // activity().then((error) => console.log('error', error));
-        getUserActivity(pageNumber["userinfo"].item, getuser).then((res) => {
-          setPageData(res);
-          setData(res.content);
-        });
-        break;
-    }
-  }, [nickname, pageNumber, user, auth, select]);
+  const getuser = user ? user.nickname : storeUser.nickname;
+  const { data, isLoading } = useQuery({
+    queryKey: ["getActivity", select, getuser],
+    queryFn: async () => {
+      switch (select) {
+        case 1:
+          return getUserPost(pageNumber["userinfo"].item, getuser);
+        case 2:
+          return getUserReply(pageNumber["userinfo"].item, getuser);
+        case 3:
+          return getUserScrab(pageNumber["userinfo"].item, getuser);
+        default:
+          return getUserActivity(pageNumber["userinfo"].item, getuser);
+      }
+    },
+    enabled: storeUser.nickname !== "",
+  });
 
   const onSelect = (type) => {
     setSelect(type);
   };
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
+  console.log("userdata", data && data.content);
+
   return (
     <>
       <section className={s.contentWrap}>
-        {getNickname !== parseJwt(auth.accessToken).nickname && (
+        {getNickname !== storeUser.nickname && (
           <div>
             {getUserProfile ? (
               <img className={s.userProfile} src={getUserProfile} alt="프로필 이미지" />
@@ -105,8 +81,9 @@ const UserInfoList = ({ user }) => {
         */}
           {/*
            */}
-          {data.length !== 0 ? (
-            data.map((item, index) => (
+          {isLoading && <>로딩중..</>}
+          {data && data.content.length !== 0 && (
+            data.content.map((item, index) => (
               <div key={index} className={s.userdata}>
                 {select === 0 && MyActivity(item)}
                 {select === 1 && MyPost(item)}
@@ -114,12 +91,11 @@ const UserInfoList = ({ user }) => {
                 {select === 3 && MyScrab(item)}
               </div>
             ))
-          ) : (
-            <>내용이 없습니다.</>
           )}
+          {!isLoading && data && data.content.length === 0 && <>내용이 없습니다.</>}
         </div>
 
-        <Pagination totalPage={pageData && pageData.totalPages} name="userinfo" />
+        <Pagination totalPage={data && data.totalPages} name="userinfo" />
       </section>
     </>
   );

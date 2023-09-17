@@ -29,6 +29,9 @@ import classnames from "classnames";
 import Footer from "components/footer/Footer";
 import { SET_ROUTER } from "store/PageRouter";
 import { getCookie } from "util/authCookie";
+import { useQuery } from "react-query";
+import { getUserInfoApi } from "api/auth";
+import { SET_USER_INFO } from "store/User";
 // import createAxiosInstance from "./module/useInterceptor";
 
 // FCM 테스트
@@ -38,7 +41,8 @@ import { getCookie } from "util/authCookie";
 
 function App() {
   const auth = useSelector((state) => state.authToken);
-  console.log("쿠키", getCookie("dtrtk"));
+  const user = useSelector((state) => state.userStore);
+  const dispatch = useDispatch();
   // createAxiosInstance();
 
   // async function requestPermission() {
@@ -47,7 +51,8 @@ function App() {
   //     const token = await getToken(messaging, {
   //       vapidKey: "BOWbgLD10kyQ6zwV8RpnBg84oLQCD6Ll1t2u0AWjDxd1-u3sbTNy1DbKHEvJpvgLrUAhinaytkHIDakxn0HETaI",
   //     });
-  // console.log("token : ", auth.accessToken);
+  console.log("쿠키", getCookie("dtrtk"));
+  console.log("access-token : ", auth.accessToken);
   //   } else if (permission === "denied") {
   //     console.log("denied");
   //   }
@@ -55,6 +60,16 @@ function App() {
   // useEffect(() => {
   //   requestPermission();
   // }, []);
+  const { data } = useQuery({
+    queryKey: ["getuser"],
+    queryFn: () => getUserInfoApi(),
+  });
+
+  if (data) {
+    console.log("받은 data", data);
+    dispatch(SET_USER_INFO({ nickname: data.nickname }));
+  }
+  console.log("저장된 user", user.nickname);
 
   // console.log("auth", auth.accessToken);
 

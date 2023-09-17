@@ -94,7 +94,7 @@ const BoardList = ({ type }) => {
             })}
           >
             {data && data.content.length !== 0 ? (
-              data.content.map((item, index) => (
+              data.content.reverse().map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <span className={s.lock}>{item.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}</span>

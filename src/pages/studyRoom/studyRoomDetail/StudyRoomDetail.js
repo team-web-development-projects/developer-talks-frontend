@@ -6,7 +6,6 @@ import { getStudyroomInfoList } from "api/studyroom";
 import Chat from "components/chat/Chat";
 import ChatList from "components/chat/ChatList";
 import StudyRoomSettingModal from "components/portalModal/studyRoomSettingModal/StudyRoomSettingModal";
-import { parseJwt } from "hooks/useParseJwt";
 import { BsGearFill } from "react-icons/bs";
 import { useQuery } from "react-query";
 import InStudyRoomBoard from "../inStudyRoomBoard/InStudyRoomBoard";
@@ -14,7 +13,7 @@ import { useSelector } from "react-redux";
 
 const StudyRoomDetail = () => {
   const { postId } = useParams();
-  const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const [upText, setUpText] = useState([{}]);
   const [settingModal, setSettingModal] = useState(false);
 
@@ -36,7 +35,7 @@ const StudyRoomDetail = () => {
           dimClick={() => setSettingModal()}
         />
       )}
-      {isSuccess && parseJwt(auth.accessToken).nickname === data.studyRoomUsers[0].nickname && (
+      {isSuccess && user.nickname === data.studyRoomUsers[0].nickname && (
         <div className="setting" onClick={() => setSettingModal(true)}>
           <BsGearFill size={22} />
         </div>

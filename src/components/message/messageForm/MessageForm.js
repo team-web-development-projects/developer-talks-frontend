@@ -3,7 +3,6 @@ import classNames from "classnames";
 import Button from "components/button/Button";
 import { Modal } from "components/portalModal/Modal";
 import { showToast } from "components/toast/showToast";
-import { parseJwt } from "hooks/useParseJwt";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
@@ -14,7 +13,7 @@ const MessageForm = ({ userinfo, setOnModal, type }) => {
   const handleInputChange = (event) => {
     event.stopPropagation(); // 클릭 이벤트 전파 중지
   };
-  const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const {
     register,
     handleSubmit,
@@ -26,8 +25,7 @@ const MessageForm = ({ userinfo, setOnModal, type }) => {
   });
 
   const sendMessageMutation = useMutation(
-    () =>
-      sendMessage(parseJwt(auth.accessToken).nickname, userinfo?.nickname || watch().receiverNickname, watch().text),
+    () => sendMessage(user.nickname, userinfo?.nickname || watch().receiverNickname, watch().text),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["getMessageList"]);
