@@ -61,6 +61,16 @@ function App() {
   //   requestPermission();
   // }, []);
   
+  const { data } = useQuery({
+    queryKey: ["getuser"],
+    queryFn: () => getUserInfoApi(),
+  });
+
+  if (data) {
+    dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
+  }
+  // console.log("저장된 user", user);
+
   // console.log("auth", auth.accessToken);
 
   useGoogleLoginAuth();
