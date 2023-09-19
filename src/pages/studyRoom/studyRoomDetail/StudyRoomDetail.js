@@ -22,7 +22,8 @@ const StudyRoomDetail = () => {
     queryFn: () => getStudyroomInfoList(postId),
   });
 
-  console.log('dc', data);
+  console.log("user: ", user.nickname);
+  console.log("data: ", data);
 
   return (
     <>

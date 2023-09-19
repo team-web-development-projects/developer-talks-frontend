@@ -12,8 +12,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
-import { login } from "api/auth";
+import { getUserInfoApi, login } from "api/auth";
 import { setCookie } from "util/authCookie";
+import { SET_USER_INFO } from "store/User";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -37,6 +38,10 @@ const Login = () => {
           expires: today,
         });
         dispatch(SET_TOKEN({ accessToken: res.accessToken }));
+        const ress = getUserInfoApi();
+        ress.then((data) => {
+          dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
+        });
         // NOTE: SSE를 위한 코드
         // axios
         //   .get(`${ROOT_API}/notifications/subscribe`, {
