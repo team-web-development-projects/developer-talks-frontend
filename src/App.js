@@ -60,15 +60,16 @@ function App() {
   // useEffect(() => {
   //   requestPermission();
   // }, []);
-  
-  const { data } = useQuery({
-    queryKey: ["getuser"],
-    queryFn: () => getUserInfoApi(),
-  });
 
-  if (data) {
-    dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
-  }
+  // NOTE: 이 코드가 있어야 마이페이지에서 새로고침시 활동내역이 제대로 가져옴
+  // const { data } = useQuery({
+  //   queryKey: ["getuser"],
+  //   queryFn: () => getUserInfoApi(),
+  // });
+
+  // if (data) {
+  //   dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
+  // }
   // console.log("저장된 user", user);
 
   // console.log("auth", auth.accessToken);

@@ -2,12 +2,14 @@ import { getUserActivity, getUserPost, getUserReply, getUserScrab } from "api/us
 import Pagination from "components/pagination/Pagination";
 import { useState } from "react";
 import Gravatar from "react-gravatar";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueries, useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { INIT_PAGING } from "store/PagiNation";
 import { MyActivity, MyPost, MyReply, MyScrab } from "./Constans";
 import s from "./userinfolist.module.scss";
+import { getUserInfoApi } from "api/auth";
+import { SET_USER_INFO } from "store/User";
 
 const UserInfoList = ({ user }) => {
   const pageNumber = useSelector((state) => state.paginationStore);
@@ -23,29 +25,60 @@ const UserInfoList = ({ user }) => {
   const getUserProfile = location.state && location.state.userProfile;
 
   const getuser = user ? user.nickname : storeUser.nickname;
-  const { data, isLoading } = useQuery({
-    queryKey: ["getActivity", select, getuser],
-    queryFn: async () => {
-      switch (select) {
-        case 1:
-          return getUserPost(pageNumber["userinfo"].item, getuser);
-        case 2:
-          return getUserReply(pageNumber["userinfo"].item, getuser);
-        case 3:
-          return getUserScrab(pageNumber["userinfo"].item, getuser);
-        default:
-          return getUserActivity(pageNumber["userinfo"].item, getuser);
-      }
+  console.log("cc", getuser);
+
+  const queries = useQueries([
+    { queryKey: ["getuser"], queryFn: () => getUserInfoApi() },
+    {
+      queryKey: ["getActivity", select, getuser],
+      queryFn: async () => {
+        switch (select) {
+          case 1:
+            return getUserPost(pageNumber["userinfo"].item, getuser);
+          case 2:
+            return getUserReply(pageNumber["userinfo"].item, getuser);
+          case 3:
+            return getUserScrab(pageNumber["userinfo"].item, getuser);
+          default:
+            return getUserActivity(pageNumber["userinfo"].item, getuser);
+        }
+      },
+      enabled: storeUser.nickname !== "",
     },
-    enabled: storeUser.nickname !== "",
-  });
+  ]);
+
+  const userdata = queries[0].data;
+  const isUserdataLoading = queries[0].isLoading;
+  // console.log('czdsf', userdata);
+  if (!isUserdataLoading) {
+    dispatch(SET_USER_INFO({ nickname: userdata.nickname, userid: userdata.userid }));
+  }
+
+  const data = queries[1].data;
+  const isLoading = queries[1].isLoading;
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["getActivity", select, getuser],
+  //   queryFn: async () => {
+  //     switch (select) {
+  //       case 1:
+  //         return getUserPost(pageNumber["userinfo"].item, getuser);
+  //       case 2:
+  //         return getUserReply(pageNumber["userinfo"].item, getuser);
+  //       case 3:
+  //         return getUserScrab(pageNumber["userinfo"].item, getuser);
+  //       default:
+  //         return getUserActivity(pageNumber["userinfo"].item, getuser);
+  //     }
+  //   },
+  //   enabled: storeUser.nickname !== "",
+  // });
 
   const onSelect = (type) => {
     setSelect(type);
   };
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
-  console.log("userdata", data && data.content);
 
   return (
     <>
@@ -82,7 +115,8 @@ const UserInfoList = ({ user }) => {
           {/*
            */}
           {isLoading && <>로딩중..</>}
-          {data && data.content.length !== 0 && (
+          {data &&
+            data.content.length !== 0 &&
             data.content.map((item, index) => (
               <div key={index} className={s.userdata}>
                 {select === 0 && MyActivity(item)}
@@ -90,8 +124,7 @@ const UserInfoList = ({ user }) => {
                 {select === 2 && MyReply(item)}
                 {select === 3 && MyScrab(item)}
               </div>
-            ))
-          )}
+            ))}
           {!isLoading && data && data.content.length === 0 && <>내용이 없습니다.</>}
         </div>
 
