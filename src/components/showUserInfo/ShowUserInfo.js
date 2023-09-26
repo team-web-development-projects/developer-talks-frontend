@@ -1,20 +1,20 @@
-import React from "react";
-import s from "./showuserinfo.module.scss";
-import { useState, useRef } from "react";
+import { getUserInfo } from "api/user";
+import classname from "classnames";
 import DropDown from "components/dropdown/DropDown";
 import MessageForm from "components/message/messageForm/MessageForm";
-import classname from "classnames";
-import axios from "axios";
-import { ROOT_API } from "constants/api";
-import { showToast } from "components/toast/showToast";
-import { useNavigate } from "react-router-dom";
-import MessageModal from "components/portalModal/messagemodal/MessageModal";
-import { useOutOfClick } from "hooks/useOutOfClick";
 import { Modal } from "components/portalModal/Modal";
-import { getUserInfo, postUserReport } from "api/user";
+import MessageModal from "components/portalModal/messagemodal/MessageModal";
 import ReportModal from "components/portalModal/reportmodal/ReportModal";
+import { showToast } from "components/toast/showToast";
+import { useOutOfClick } from "hooks/useOutOfClick";
+import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import s from "./showuserinfo.module.scss";
 // import { useEffect } from "react";
 const ShowUserInfo = ({ userinfo, type }) => {
+  const auth = useSelector((state) => state.authToken);
   const [modal, setModal] = useState(false);
   const [modalReport, setModalReport] = useState(false);
   const [dropdown, setDropdown] = useState(false);
@@ -34,10 +34,6 @@ const ShowUserInfo = ({ userinfo, type }) => {
       .catch((error) => {
         showToast("error", error.response.data.message);
       });
-  };
-
-  const handleReport = async (e) => {
-    //const res = postUserReport(userinfo.nickname, reportType, detail);
   };
 
   useOutOfClick(targetRef, () => {
@@ -60,8 +56,20 @@ const ShowUserInfo = ({ userinfo, type }) => {
           <div ref={targetRef}>
             <DropDown>
               <li onClick={viewUserInfo}>유저정보보기</li>
-              <li onClick={() => setModal(!modal)}>쪽지보내기</li>
-              <li onClick={() => setModalReport(!modalReport)}>신고하기</li>
+              <li
+                onClick={() => {
+                  auth.accessToken ? setModal(!modal) : toast.error("로그인 후 이용해주세요");
+                }}
+              >
+                쪽지보내기
+              </li>
+              <li
+                onClick={() => {
+                  auth.accessToken ? setModalReport(!modalReport) : toast.error("로그인 후 이용해주세요");
+                }}
+              >
+                신고하기
+              </li>
             </DropDown>
           </div>
         )}
@@ -75,15 +83,11 @@ const ShowUserInfo = ({ userinfo, type }) => {
           }}
         >
           <Modal.Content>
-            <MessageForm
-              userinfo={userinfo}
-              setOnModal={() => setModal()}
-              type="message-in-modal"
-            />
+            <MessageForm userinfo={userinfo} setOnModal={() => setModal()} type="message-in-modal" />
           </Modal.Content>
         </MessageModal>
       )}
-      
+
       {modalReport && (
         <MessageModal
           setOnModal={() => setModalReport()}
@@ -94,8 +98,6 @@ const ShowUserInfo = ({ userinfo, type }) => {
         >
           <Modal.Content>
             <ReportModal setOnModal={setModalReport} userinfo={userinfo} type="user"></ReportModal>
-
-            <MessageForm userinfo={userinfo} setOnModal={() => setModal()} type="message-in-modal" />
           </Modal.Content>
         </MessageModal>
       )}
