@@ -1,3 +1,4 @@
+import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
@@ -16,7 +17,11 @@ import { getUserInfoApi, login } from "api/auth";
 import { setCookie } from "util/authCookie";
 import { SET_USER_INFO } from "store/User";
 
+import { useSelector } from "react-redux";
+import { API_HEADER, ROOT_API } from "constants/api";
 const Login = () => {
+  const auth = useSelector((state) => state.authToken);
+
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [typetoggle, setTypetoggle] = useState("password");
@@ -54,6 +59,22 @@ const Login = () => {
         //   .then((res) => console.log("test: ", res));
         navigate("/");
         reset();
+        axios.post(
+          `${ROOT_API}/visitors/increase`,
+          {},
+          {
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+
+            },
+          }
+        )
+          .then(function (increaseResponse) {
+            console.log("Visitors Increased:", increaseResponse);
+          })
+          .catch(function (increaseError) {
+            console.error("Failed to increase visitors:", increaseError);
+          });
       })
       .catch((error) => {
         console.log("ee", error);
