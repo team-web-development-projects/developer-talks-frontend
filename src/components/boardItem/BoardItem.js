@@ -3,7 +3,7 @@ import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import { useOutOfClick } from "hooks/useOutOfClick";
 import { useRef, useState } from "react";
 import Gravatar from "react-gravatar";
-import { AiOutlineComment, AiOutlineEye, AiOutlineStar } from "react-icons/ai";
+import { AiOutlineComment, AiOutlineEye, AiOutlineStar, AiFillCheckCircle } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -42,12 +42,21 @@ const BoardItem = ({ data, type, currentPage }) => {
         }}
       >
         <div className={s.frontContainer}>
-          {type !== "post" && (
-            <div className={s.answerContainer}>
-              <p>답변</p>
-              <p>{data.commentCount}</p>
-            </div>
-          )}
+          {type !== "post" &&
+            (data.selectAnswer ? (
+              <div className={s.selectAnswerContainer}>
+                <p>답변</p>
+                <div>
+                  {/* <AiFillCheckCircle /> */}
+                  <p>{data.commentCount}</p>
+                </div>
+              </div>
+            ) : (
+              <div className={s.answerContainer}>
+                <p>답변</p>
+                <p>{data.commentCount}</p>
+              </div>
+            ))}
           <div className={s.boardInfo}>
             <div className={s.info_wrap}>
               {data.userInfo.userProfile !== null ? (

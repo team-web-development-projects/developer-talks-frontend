@@ -23,6 +23,7 @@ import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
 import Sse from "sse";
 import { useEffect } from "react";
+import useGetToken from "firebase-get-token";
 
 // FCM 테스트
 // import "./firebase-get-token";
@@ -51,20 +52,23 @@ function App() {
 
   useGoogleLoginAuth();
   useRefreshToken();
+  useGetToken();
   // Sse();
   return (
     <div className="App">
+      <ToastCont />
       <Routes>
         <Route path="/" element={<NavigateMain />}>
           <Route index element={<Main />} />
           <Route path="developer-talks-frontend" element={<Main />} />
+          {/* <Route exact path="/" element={<Main />} /> */}
           <Route path="showuser" element={<Index />} />
 
           <Route path="studyroom" element={<StudyRoom />} />
           <Route path="board" element={<BoardList type="post" />} />
           <Route path="board/search/:keyword" element={<BoardList type="post" />} />
           <Route path="/board/:postId" element={<BoardDetail type="post" />} />
-          <Route path="/studyroom/info/:postId" element={<StudyRoomInfo />} />
+          <Route path="studyroom/info/:postId" element={<StudyRoomInfo />} />
           <Route path="/studyroom/:postId" element={<StudyRoomDetail />} />
           <Route path="qna" element={<BoardList type="questions" />} />
           <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />

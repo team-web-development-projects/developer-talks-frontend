@@ -8,18 +8,18 @@ import Gravatar from "react-gravatar";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import s from "./answerItem.module.scss";
 
-const AnswerItem = ({ answer }) => {
+const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
+  const [nickname, setNickName] = useState("");
   const [isUpdateToggle, setIsUpdateToggle] = useState(false);
   const [form, setForm] = useState({
     content: answer.content,
   });
   const [isSelf, setIsSelf] = useState(false);
-  const [isSelect, setIsSelect] = useState(false);
 
   const updateCommentMutation = useMutation(
     (updatedComment) =>
@@ -56,16 +56,19 @@ const AnswerItem = ({ answer }) => {
 
   const selectCommentMutation = useMutation(
     () =>
-      axios.post(`${ROOT_API}/answers/${answer.id}/select`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-AUTH-TOKEN": auth.accessToken,
-        },
-      }),
+      axios.post(
+        `${ROOT_API}/answers/${answer.id}/select`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-AUTH-TOKEN": auth.accessToken,
+          },
+        }
+      ),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["answerList"]);
-        setIsSelect(true);
         toast.success("채택되었습니다.");
       },
     }
@@ -96,12 +99,18 @@ const AnswerItem = ({ answer }) => {
   };
 
   const handleSelect = (e) => {
-    e.preventDefault();
-    selectCommentMutation.mutate();
+    if (!selectAnswer) {
+      e.preventDefault();
+      selectCommentMutation.mutate();
+    } else {
+      toast.error("채택은 한개만 가능합니다.");
+    }
   };
   useEffect(() => {
+    console.log(answer.id);
     if (auth.accessToken !== null) {
       const nickname = parseJwt(auth.accessToken).nickname;
+      setNickName(nickname);
       if (nickname === answer.userInfo.nickname) {
         setIsSelf(true);
       }
@@ -110,11 +119,29 @@ const AnswerItem = ({ answer }) => {
 
   return (
     <li className={s.container}>
-      <div className={isSelect ? s.selectContainer : s.noSelectContainer} onClick={handleSelect}>
-        <AiOutlineCheckCircle className={isSelect?s.selectInner:s.noSelectInner}/>
-        &nbsp;
-        <p className={isSelect?s.selectInner:s.noSelectInner}>채택하기</p>
-      </div>
+      {nickname === qnaNick ? (
+        answer.selected ? (
+          <div className={s.selectContainer}>
+            <AiOutlineCheckCircle className={s.selectInner} />
+            &nbsp;
+            <p className={s.selectInner}>채택완료</p>
+          </div>
+        ) : (
+          <div className={s.noSelectContainer} onClick={handleSelect}>
+            <AiOutlineCheckCircle className={s.noSelectInner} />
+            &nbsp;
+            <p className={s.noSelectInner}>채택하기</p>
+          </div>
+        )
+      ) : (
+        answer.selected && (
+          <div className={s.selectContainer}>
+            <AiOutlineCheckCircle className={s.selectInner} />
+            &nbsp;
+            <p className={s.selectInner}>채택답변</p>
+          </div>
+        )
+      )}
       <div>
         <div className={s.info}>
           {answer.userInfo.userProfile !== null ? (
@@ -153,6 +180,7 @@ const AnswerItem = ({ answer }) => {
           <div className={s.content} dangerouslySetInnerHTML={{ __html: answer.content }}></div>
         )}
       </div>
+      <ToastContainer />
     </li>
   );
 };

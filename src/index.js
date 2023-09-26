@@ -1,15 +1,16 @@
 import ReactDOM from "react-dom/client";
 // import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// import { unstable_HistoryRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
 import { isDev } from "util/Util";
 import App from "./App";
 import "./assets/style/index.scss";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,7 +25,7 @@ const queryClient = new QueryClient({
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register("publlc/firebase-messaging-sw.js")
+    .register("firebase-messaging-sw.js")
     .then(function (registration) {
       console.log("Registration successful, scope is:", registration.scope);
     })
@@ -37,10 +38,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
+      {/* <Router history={history}> */}
       <BrowserRouter basename={isDev ? "/" : "/developer-talks-frontend/"}>
         <App />
         <ReactQueryDevtools initialIsOpen={false} />
       </BrowserRouter>
+      {/* </Router> */}
     </QueryClientProvider>
   </Provider>
 );
