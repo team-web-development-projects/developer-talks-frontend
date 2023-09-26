@@ -1,3 +1,4 @@
+import axios from "axios";
 import Button from "components/button/Button";
 import Form from "components/form/Form";
 import FormUserGuide from "components/form/FormUserGuide";
@@ -15,7 +16,7 @@ import s from "./login.module.scss";
 import { login } from "api/auth";
 import { setCookie } from "util/authCookie";
 import { useSelector } from "react-redux";
-
+import { API_HEADER, ROOT_API } from "constants/api";
 const Login = () => {
   const auth = useSelector((state) => state.authToken);
 
@@ -50,6 +51,8 @@ const Login = () => {
         //     },
         //   })
         //   .then((res) => console.log("test: ", res));
+        navigate("/");
+        reset();
         axios.post(
           `${ROOT_API}/visitors/increase`,
           {},
@@ -66,8 +69,6 @@ const Login = () => {
           .catch(function (increaseError) {
             console.error("Failed to increase visitors:", increaseError);
           });
-        navigate("/");
-        reset();
       })
       .catch((error) => {
         console.log("ee", error);
