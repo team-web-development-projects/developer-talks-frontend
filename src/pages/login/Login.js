@@ -14,8 +14,11 @@ import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
 import { login } from "api/auth";
 import { setCookie } from "util/authCookie";
+import { useSelector } from "react-redux";
 
 const Login = () => {
+  const auth = useSelector((state) => state.authToken);
+
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [typetoggle, setTypetoggle] = useState("password");
@@ -47,6 +50,22 @@ const Login = () => {
         //     },
         //   })
         //   .then((res) => console.log("test: ", res));
+        axios.post(
+          `${ROOT_API}/visitors/increase`,
+          {},
+          {
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+
+            },
+          }
+        )
+          .then(function (increaseResponse) {
+            console.log("Visitors Increased:", increaseResponse);
+          })
+          .catch(function (increaseError) {
+            console.error("Failed to increase visitors:", increaseError);
+          });
         navigate("/");
         reset();
       })
