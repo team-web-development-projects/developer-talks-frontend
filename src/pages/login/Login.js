@@ -15,8 +15,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
+import { useSelector } from "react-redux";
 
 const Login = () => {
+  const auth = useSelector((state) => state.authToken);
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
@@ -51,6 +53,22 @@ const Login = () => {
         //     },
         //   })
         //   .then((res) => console.log("test: ", res));
+        axios.post(
+          `${ROOT_API}/visitors/increase`,
+          {},
+          {
+            headers: {
+              "X-AUTH-TOKEN": auth.accessToken,
+
+            },
+          }
+        )
+          .then(function (increaseResponse) {
+            console.log("Visitors Increased:", increaseResponse);
+          })
+          .catch(function (increaseError) {
+            console.error("Failed to increase visitors:", increaseError);
+          });
         navigate("/");
         setModal(true);
         reset();
