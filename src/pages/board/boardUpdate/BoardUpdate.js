@@ -1,6 +1,7 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
+import { Modal } from "components/portalModal/Modal";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { ROOT_API } from "constants/api";
 import { useState } from "react";
@@ -68,18 +69,30 @@ const BoardUpdate = ({ type }) => {
     <>
       {modalY && (
         <BasicModal setOnModal={() => setModalY()}>
-          게시글이 정상적으로 수정되었습니다.
-          <br />
-          확인을 눌러주세요.
-          <button onClick={() => navigate(-1)}>확인</button>
+          <Modal.Content>
+            게시글이 정상적으로 수정되었습니다.
+            <br />
+            확인을 눌러주세요.
+          </Modal.Content>
+          <Modal.Buttons>
+            <Button size="small" theme="outline" onClick={() => navigate(-1)}>
+              확인
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       {modalN && (
         <BasicModal setOnModal={() => setModalY()}>
-          글 수정을 취소하시겠습니까?
-          <br />
-          수정된 내용은 저장되지 않습니다.
-          <button onClick={() => navigate(-1)}>확인</button>
+          <Modal.Content>
+            글 수정을 취소하시겠습니까?
+            <br />
+            수정된 내용은 저장되지 않습니다.
+          </Modal.Content>
+          <Modal.Buttons>
+            <Button size="small" onClick={() => navigate(-1)}>
+              확인
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>
