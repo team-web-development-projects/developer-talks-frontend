@@ -9,14 +9,16 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { FiMenu } from "react-icons/fi";
 import { TfiBell } from "react-icons/tfi";
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
+import { SET_USER_INFO } from "store/User";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
   const noti = useSelector((state) => state.notification);
   // const noti = useSelector((state) => state.noti);
+  const dispatch = useDispatch();
   const [popover, setPopover] = useState(false);
   const targetRef = useRef(null);
   const location = useLocation();
@@ -52,10 +54,15 @@ const Header = () => {
     setToggleShow(!toggleShow);
   };
 
-  const { data } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: [auth],
     queryFn: () => getUserInfoApi(),
+    enabled: auth.accessToken !== null
   });
+
+  if(isSuccess){
+    dispatch(SET_USER_INFO({ nickname: data.nickname}))
+  }
 
   return (
     <>

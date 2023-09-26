@@ -3,28 +3,32 @@ import classnames from "classnames";
 import { useEffect, useState } from "react";
 import { useMutation, useQueries, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { OFF_NOTI, ON_NOTI } from "store/Notification";
 import s from "./notification.module.scss";
 import classNames from "classnames";
+import { getCookie } from "util/authCookie";
 
 const Notification = ({ unRead, classname }) => {
   const auth = useSelector((state) => state.authToken);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [filteredData, setFilteredData] = useState();
   const [nav, setNav] = useState("all");
 
   const queries = useQueries([
     {
-      queryKey: ["alaram"],
+      queryKey: ["alaram", location],
       queryFn: () => getAlarm(),
       enabled: auth.accessToken !== null,
+      initialData: [],
     },
     {
-      queryKey: ["alaramUnRead"],
+      queryKey: ["alaramUnRead", location],
       queryFn: () => ApigetAlarmUnRead(),
       enabled: auth.accessToken !== null,
+      initialData: [],
     },
   ]);
   const getAlarmAll = queries[0];

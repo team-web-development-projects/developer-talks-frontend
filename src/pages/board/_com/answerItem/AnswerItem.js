@@ -108,7 +108,6 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
     }
   };
   useEffect(() => {
-    console.log(answer.id);
     if (auth.accessToken !== null) {
       if (nickname === answer.userInfo.nickname) {
         setIsSelf(true);

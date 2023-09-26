@@ -61,8 +61,6 @@ const BoardList = ({ type }) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("스터디룸 목록", data);
-
   return (
     <>
       {auth.accessToken !== null ? (
@@ -94,7 +92,7 @@ const BoardList = ({ type }) => {
             })}
           >
             {data && data.content.length !== 0 ? (
-              data.content.reverse().map((item, index) => (
+              data.content.map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <span className={s.lock}>{item.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}</span>

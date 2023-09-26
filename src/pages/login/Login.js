@@ -59,19 +59,16 @@ const Login = () => {
         //   .then((res) => console.log("test: ", res));
         navigate("/");
         reset();
-        axios.post(
-          `${ROOT_API}/visitors/increase`,
-          {},
-          {
-            headers: {
-              "X-AUTH-TOKEN": auth.accessToken,
-
-            },
-          }
-        )
-          .then(function (increaseResponse) {
-            console.log("Visitors Increased:", increaseResponse);
-          })
+        axios
+          .post(
+            `${ROOT_API}/visitors/increase`,
+            {},
+            {
+              headers: {
+                "X-AUTH-TOKEN": auth.accessToken,
+              },
+            }
+          )
           .catch(function (increaseError) {
             console.error("Failed to increase visitors:", increaseError);
           });

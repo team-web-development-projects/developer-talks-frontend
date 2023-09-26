@@ -37,7 +37,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-    console.log("form", formData);
     axios
       .post(`${ROOT_API}/users/profile/image`, formData, {
         // headers: { "X-AUTH-TOKEN": auth.accessToken },
