@@ -22,6 +22,7 @@ const BoardUpdate = ({ type }) => {
     content: state.content,
     userInfo: {},
     files: [],
+    filesOrder: [],
     imgUrls: state.imgUrls,
   });
   const handleSubmit = async (e) => {
@@ -35,17 +36,41 @@ const BoardUpdate = ({ type }) => {
       return;
     }
     await new Promise((r) => setTimeout(r, 1000));
-    form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
+    // form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
+    console.log("form 정보: ", form);
     const frm = new FormData();
     if (form.files.length !== 0) {
-      form.files.forEach((file) => {
-        frm.append("files", file);
+      form.files.forEach((file, idx) => {
+        frm.append(`files[${idx}].file`, file);
+      });
+      form.filesOrder.forEach((order, idx) => {
+        frm.append(`files[${idx}].orderNum`, order);
       });
     }
     frm.append("title", form.title);
     frm.append("content", form.content);
     if (form.imgUrls.length !== 0) {
-      frm.append("imgUrls", form.imgUrls);
+      if (form.files.length !== 0) {
+        const imgCnt = form.imgUrls.length + form.files.length;
+        let arr = new Array(imgCnt).fill(true);
+        for (let i = 0; i < form.files.length; i++) {
+          arr[form.filesOrder[i]] = false;
+        }
+        let imgUrlIdx = 0;
+        for (let i = 0; i < imgCnt; i++) {
+          if (arr[i]) {
+            frm.append(`imgUrls[${imgUrlIdx}].orderNum`, i);
+            imgUrlIdx++;
+          }
+        }
+      } else {
+        form.imgUrls.forEach((imgUrl, idx) => {
+          frm.append(`imgUrls[${idx}].orderNum`, idx);
+        });
+      }
+      form.imgUrls.forEach((imgUrl, idx) => {
+        frm.append(`imgUrls[${idx}].url`, imgUrl);
+      });
     }
 
     axios
@@ -75,7 +100,7 @@ const BoardUpdate = ({ type }) => {
             확인을 눌러주세요.
           </Modal.Content>
           <Modal.Buttons>
-            <Button size="small" theme="outline" onClick={() => navigate(-1)}>
+            <Button size="small" onClick={() => navigate(-1)}>
               확인
             </Button>
           </Modal.Buttons>
