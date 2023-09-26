@@ -1,21 +1,17 @@
-import axios from "axios";
+import { asignJoinUserApi, getJoinedUserApi, getRequestsRoomApi, getUserInfo } from "api/user";
 import classNames from "classnames";
 import DropDown from "components/dropdown/DropDown";
 import Pagination from "components/pagination/Pagination";
 import StudyRoomPersonModal from "components/portalModal/studyRoomPersonModal/StudyRoomPersonModal";
-import { ROOT_API } from "constants/api";
-import { getUer } from "hooks/useAuth";
-import { useEffect, useRef, useState } from "react";
+import { showToast } from "components/toast/showToast";
+import { useOutOfClick } from "hooks/useOutOfClick";
+import { useRef, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
+import { useQueries, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import MypageContent from "../../MyPageContent";
 import s from "../../mypagecontent.module.scss";
 import mystudy from "./mystudyroom.module.scss";
-import { useQueries, useQuery, useQueryClient } from "react-query";
-import { asignJoinUserApi, getJoinedUser, getJoinedUserApi, getRequestsRoomApi, getUserInfo } from "api/user";
-import { useOutOfClick } from "hooks/useOutOfClick";
-import { showToast } from "components/toast/showToast";
 
 const MyStudyRoom = () => {
   const navigate = useNavigate();
@@ -124,7 +120,7 @@ const MyStudyRoom = () => {
                 <li key={index} className={mystudy.list_item}>
                   <div className={mystudy.room_title}>{item.title}</div>
                   <span className={mystudy.user} onClick={(e) => clickUser(e, index)} ref={targetRef}>
-                    {item.nickname}
+                    {item.userInfo.nickname}
                     {drop.index === index && drop.state && (
                       <DropDown>
                         <li onClick={() => asignUser(item.studyRoomId, item.studyRoomUserId)}>승인하기</li>
@@ -158,7 +154,7 @@ const MyStudyRoom = () => {
                       item.studyRoomUsers.filter((item) => item.nickname === getNickname && item.status === true)
                         .length === 1
                     ) {
-                      navigate(`/studyroom/${item.id}`);
+                      navigate(`/study-rooms/${item.id}`);
                     } else {
                       alert("승인요청중입니다");
                     }

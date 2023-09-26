@@ -15,9 +15,9 @@ const BoardItem = ({ data, type }) => {
 
   const linkClick = (id, type) => {
     if (type === "post") {
-      navigate(`/board/${id}`);
+      navigate(`/post/${id}`);
     } else {
-      navigate(`/qna/${id}`);
+      navigate(`/questions/${id}`);
     }
   };
 

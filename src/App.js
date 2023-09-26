@@ -60,14 +60,16 @@ function App() {
   // useEffect(() => {
   //   requestPermission();
   // }, []);
-  const { data } = useQuery({
-    queryKey: ["getuser"],
-    queryFn: () => getUserInfoApi(),
-  });
 
-  if (data) {
-    dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
-  }
+  // NOTE: 이 코드가 있어야 마이페이지에서 새로고침시 활동내역이 제대로 가져옴
+  // const { data } = useQuery({
+  //   queryKey: ["getuser"],
+  //   queryFn: () => getUserInfoApi(),
+  // });
+
+  // if (data) {
+  //   dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
+  // }
   // console.log("저장된 user", user);
 
   // console.log("auth", auth.accessToken);
@@ -87,28 +89,28 @@ function App() {
           {/* <Route exact path="/" element={<Main />} /> */}
           <Route path="showuser" element={<Index />} />
 
-          <Route path="studyroom" element={<StudyRoom />} />
-          <Route path="board" element={<BoardList type="post" />} />
-          <Route path="board/search/:keyword" element={<BoardList type="post" />} />
-          <Route path="/board/:postId" element={<BoardDetail type="post" />} />
-          <Route path="studyroom/info/:postId" element={<StudyRoomInfo />} />
-          <Route path="/studyroom/:postId" element={<StudyRoomDetail />} />
-          <Route path="qna" element={<BoardList type="questions" />} />
-          <Route path="qna/search/:keyword" element={<BoardList type="questions" />} />
-          <Route path="/qna/:postId" element={<BoardDetail type="questions" />} />
+          <Route path="study-rooms" element={<StudyRoom />} />
+          <Route path="post" element={<BoardList type="post" />} />
+          <Route path="post/search/:keyword" element={<BoardList type="post" />} />
+          <Route path="/post/:postId" element={<BoardDetail type="post" />} />
+          <Route path="study-rooms/info/:postId" element={<StudyRoomInfo />} />
+          <Route path="/study-rooms/:postId" element={<StudyRoomDetail />} />
+          <Route path="questions" element={<BoardList type="questions" />} />
+          <Route path="questions/search/:keyword" element={<BoardList type="questions" />} />
+          <Route path="/questions/:postId" element={<BoardDetail type="questions" />} />
           {/* <Route path="*" element={<NotPage />} /> */}
         </Route>
 
         <Route element={<NavigatePost />}>
-          <Route path="studyroom/post" element={<StudyRoomPost type="studyroom" />} />
-          <Route path="/board/post" element={<BoardPost type="post" />} />
-          <Route path="/qna/post" element={<BoardPost type="questions" />} />
-          <Route path="/board/update/:postId" element={<BoardUpdate type="post" />} />
+          <Route path="study-rooms/post" element={<StudyRoomPost type="studyroom" />} />
+          <Route path="/post/post" element={<BoardPost type="post" />} />
+          <Route path="/questions/post" element={<BoardPost type="questions" />} />
+          <Route path="/post/update/:postId" element={<BoardUpdate type="post" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/finduser" element={<FindUser />} />
           <Route path="/findpassword" element={<FindPassword />} />
 
-          <Route path="/qna/update/:postId" element={<BoardUpdate type="questions" />} />
+          <Route path="/questions/update/:postId" element={<BoardUpdate type="questions" />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/login" element={<Login />} />
           <Route path="/userregist" element={<Userregist />} />

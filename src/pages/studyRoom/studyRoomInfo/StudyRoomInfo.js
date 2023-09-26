@@ -38,7 +38,7 @@ const StudyRoomInfo = () => {
     }
     if (!data.autoJoin) {
       if (user.nickname === data.studyRoomUsers[0].nickname) {
-        navigate(`/studyroom/${postId}`);
+        navigate(`/study-rooms/${postId}`);
       } else {
         setSecretModal(true);
       }
@@ -88,7 +88,7 @@ const StudyRoomInfo = () => {
                   size="small"
                   onClick={() => {
                     requestRoom();
-                    navigate(`/studyroom/${postId}`);
+                    navigate(`/study-rooms/${postId}`);
                   }}
                 >
                   입장하기

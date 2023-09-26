@@ -37,7 +37,6 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-    console.log("form", formData);
     axios
       .post(`${ROOT_API}/users/profile/image`, formData, {
         // headers: { "X-AUTH-TOKEN": auth.accessToken },
@@ -85,7 +84,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       {/* 마이페이지에 이미지가 있는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && !getLoading && data.url && <img src={data.url} alt="프로필이미지" />}
       {/* 마이페이지에 이미지가 없는 경우, 회원가입 페이지는 포함 안됨. */}
-      {auth.accessToken && data && data.url === null && (
+      {auth.accessToken && data && data.url === null && user.nickname && (
         // <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
         <Gravatar email={user.nickname} />
       )}

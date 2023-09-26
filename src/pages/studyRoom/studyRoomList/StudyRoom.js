@@ -32,7 +32,7 @@ const BoardList = ({ type }) => {
   };
 
   const handleClick = () => {
-    auth && auth.accessToken ? navigate(`/studyroom/post`) : setModal(true);
+    auth && auth.accessToken ? navigate(`/study-rooms/post`) : setModal(true);
   };
 
   const joinRoomClick = (id) => {
@@ -42,9 +42,9 @@ const BoardList = ({ type }) => {
       const find = res.content.find((item) => item.id === id);
       console.log("re", res, find);
       if (find === undefined) {
-        navigate(`/studyroom/info/${id}`);
+        navigate(`/study-rooms/info/${id}`);
       } else {
-        navigate(`/studyroom/${id}`);
+        navigate(`/study-rooms/${id}`);
       }
     });
   };
@@ -60,8 +60,6 @@ const BoardList = ({ type }) => {
   }, [keyword]);
 
   if (isLoading) return <div>Loading...</div>;
-
-  console.log("스터디룸 목록", data);
 
   return (
     <>
@@ -94,7 +92,7 @@ const BoardList = ({ type }) => {
             })}
           >
             {data && data.content.length !== 0 ? (
-              data.content.reverse().map((item, index) => (
+              data.content.map((item, index) => (
                 <li key={index} className={s.card_list} onClick={() => joinRoomClick(item.id)}>
                   <div className={s.title}>{item.title}</div>
                   <span className={s.lock}>{item.autoJoin ? <BsUnlock size={18} /> : <BsLock size={18} />}</span>

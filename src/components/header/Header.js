@@ -9,14 +9,17 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { FiMenu } from "react-icons/fi";
 import { TfiBell } from "react-icons/tfi";
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
+import { SET_USER_INFO } from "store/User";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const noti = useSelector((state) => state.notification);
   // const noti = useSelector((state) => state.noti);
+  const dispatch = useDispatch();
   const [popover, setPopover] = useState(false);
   const targetRef = useRef(null);
   const location = useLocation();
@@ -32,15 +35,15 @@ const Header = () => {
 
   const menuRouter = [
     {
-      link: "/qna",
+      link: "/questions",
       text: "Q&A",
     },
     {
-      link: "/board",
+      link: "/post",
       text: "커뮤니티",
     },
     {
-      link: "/studyroom",
+      link: "/study-rooms",
       text: "스터디룸",
     },
   ];
@@ -52,10 +55,17 @@ const Header = () => {
     setToggleShow(!toggleShow);
   };
 
-  const { data } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: [auth],
     queryFn: () => getUserInfoApi(),
+    enabled: auth.accessToken !== null,
   });
+
+  useEffect(() => {
+    if (isSuccess && user.nickname === "") {
+      dispatch(SET_USER_INFO({ nickname: data.nickname }));
+    }
+  }, [user.nickname, isSuccess, dispatch]);
 
   return (
     <>

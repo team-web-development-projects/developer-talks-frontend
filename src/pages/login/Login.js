@@ -13,8 +13,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_TOKEN } from "store/Auth";
 import s from "./login.module.scss";
-import { login } from "api/auth";
+import { getUserInfoApi, login } from "api/auth";
 import { setCookie } from "util/authCookie";
+import { SET_USER_INFO } from "store/User";
+
 import { useSelector } from "react-redux";
 import { API_HEADER, ROOT_API } from "constants/api";
 const Login = () => {
@@ -41,6 +43,10 @@ const Login = () => {
           expires: today,
         });
         dispatch(SET_TOKEN({ accessToken: res.accessToken }));
+        const ress = getUserInfoApi();
+        ress.then((data) => {
+          dispatch(SET_USER_INFO({ nickname: data.nickname, userid: data.userid }));
+        });
         // NOTE: SSE를 위한 코드
         // axios
         //   .get(`${ROOT_API}/notifications/subscribe`, {
@@ -53,19 +59,16 @@ const Login = () => {
         //   .then((res) => console.log("test: ", res));
         navigate("/");
         reset();
-        axios.post(
-          `${ROOT_API}/visitors/increase`,
-          {},
-          {
-            headers: {
-              "X-AUTH-TOKEN": auth.accessToken,
-
-            },
-          }
-        )
-          .then(function (increaseResponse) {
-            console.log("Visitors Increased:", increaseResponse);
-          })
+        axios
+          .post(
+            `${ROOT_API}/visitors/increase`,
+            {},
+            {
+              headers: {
+                "X-AUTH-TOKEN": auth.accessToken,
+              },
+            }
+          )
           .catch(function (increaseError) {
             console.error("Failed to increase visitors:", increaseError);
           });

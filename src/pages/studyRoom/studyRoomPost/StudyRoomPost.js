@@ -108,13 +108,13 @@ const StudyRoomPost = () => {
   return (
     <>
       {modal && (
-        <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/studyroom`)}>
+        <BasicModal setOnModal={() => setModal()} dimClick={() => navigate(`/study-rooms`)}>
           <Modal.Content>
             게시글이 정상적으로 등록되었습니다. <br />
             확인을 눌러주세요.
           </Modal.Content>
           <Modal.Buttons>
-            <Button onClick={() => navigate(`/studyroom`)} theme="success" size="small">
+            <Button onClick={() => navigate(`/study-rooms`)} theme="success" size="small">
               확인
             </Button>
           </Modal.Buttons>
@@ -171,7 +171,7 @@ const StudyRoomPost = () => {
               <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
             </div>
             <div className={s.btnRgn}>
-              <Link to="/studyroom" className={s.cancel}>
+              <Link to="/study-rooms" className={s.cancel}>
                 취소
               </Link>
               <Button>저장</Button>

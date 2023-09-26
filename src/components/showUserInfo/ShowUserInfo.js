@@ -40,6 +40,8 @@ const ShowUserInfo = ({ userinfo, type }) => {
     setDropdown(false);
   });
 
+  // 배포 테스트
+
   return (
     <>
       <span

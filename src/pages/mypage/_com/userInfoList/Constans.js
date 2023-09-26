@@ -37,9 +37,8 @@ export const MyActivity = (item) => {
       return (
         <Link
           className={types.text_wrap}
-          to={`/studyroom/${item.id}`}
+          to={`/study-rooms/${item.id}`}
           onClick={() => {
-            // navigate(`/studyroom/${item.id}`);
           }}
         >
           <div className={types.title}>
@@ -55,7 +54,7 @@ export const MyActivity = (item) => {
       return (
         <Link
           className={types.text_wrap}
-          to={`/board/${item.id}`}
+          to={`/post/${item.id}`}
           onClick={() => {
             // navigate(`/board/${item.id}`);
             // dispatch(TAB_ROUTER({ tab: "tab0" }));
@@ -89,7 +88,7 @@ export const MyActivity = (item) => {
 
 export const MyPost = (item) => {
   return (
-    <Link className={types.text_wrap} to={`/board/${item.id}`}>
+    <Link className={types.text_wrap} to={`/post/${item.id}`}>
       <div className={types.title}>
         <div>
           <span>게시글</span>을 작성하였습니다.
@@ -120,7 +119,7 @@ export const MyReply = (item) => {
 
 export const MyScrab = (item) => {
   return (
-    <Link className={types.text_wrap} to={`/board/${item.id}`}>
+    <Link className={types.text_wrap} to={`/post/${item.id}`}>
       <div className={types.title}>
         <div>
           <span>{item.postTitle}</span> <span>게시글</span>을 스크랩하였습니다.

@@ -5,6 +5,7 @@ import { ROOT_API } from "constants/api";
 import { useNavigate } from "react-router-dom";
 import store from "store";
 import { SET_TOKEN, refreshAccessToken, tokenSlice } from "store/Auth";
+import { SET_USER_INFO } from "store/User";
 import { getCookie } from "util/authCookie";
 
 const apiInstance = axios.create({
@@ -23,7 +24,7 @@ apiInstance.interceptors.request.use(
     const refreshToken = getCookie("dtrtk");
 
     // 글작성시엔 content-type을 지워야 함
-    if(config.url !== '/post') {
+    if (config.url !== "/post") {
       config.headers["Content-Type"] = "application/json";
     }
     if (accessToken) {
@@ -67,44 +68,44 @@ apiInstance.interceptors.response.use(
       const originalResponse = await axios.request(err.config);
       return originalResponse.data;
     }
-
     // 유효하지 않은 토큰
     if (err.response && err.response.status === 400) {
-      console.log('err', err);
       const navigate = useNavigate();
-      navigate('/');
-
+      navigate("/");
     }
 
     // 인증실패
     if (err.response && err.response.status === 401) {
-      // 토큰 재발급 요청
-      const data = await axios.post(`${ROOT_API}/token/refresh`, {
-        refreshToken: getCookie("dtrtk"),
-        headers: {
-          accept: "*/*",
+      // 쿠키의 리프레쉬가 언디파인드가 아닐때만 토큰 재발급
+      if (getCookie("dtrtk") !== "undefined") {
+        const data = await axios.post(`${ROOT_API}/token/refresh`, {
+          refreshToken: getCookie("dtrtk"),
+          headers: {
+            accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        });
+
+        // store 갱신
+        store.dispatch(
+          SET_TOKEN({
+            accessToken: `${data.data.accessToken}`,
+          })
+        );
+
+        // 헤더에 담긴 토큰 값 변경
+        err.config.headers = {
           "Content-Type": "application/json",
-        },
-      });
+          "X-AUTH-TOKEN": `${data.data.accessToken}`,
+        };
 
-      // store 갱신
-      store.dispatch(
-        SET_TOKEN({
-          accessToken: `${data.data.accessToken}`,
-        })
-      );
-
-      // 헤더에 담긴 토큰 값 변경
-      err.config.headers = {
-        "Content-Type": "application/json",
-        "X-AUTH-TOKEN": `${data.data.accessToken}`,
-      };
-
-      // 재요청
-      const originalResponse = await axios.request(err.config);
-      return originalResponse.data;
+        // 재요청
+        const originalResponse = await axios.request(err.config);
+        return originalResponse.data;
+      }
+      // 토큰 재발급 요청
+      return Promise.reject(err);
     }
-    return Promise.reject(err);
   }
 );
 

@@ -93,7 +93,7 @@ export default function BoardPost({ type }) {
             <CkEditor form={form} setForm={setForm} placeholder={"내용을 입력해주세요."} />
           </div>
           <div className={s.btnRgn}>
-            <Link to="/board" className={s.cancel}>
+            <Link to="/post" className={s.cancel}>
               취소
             </Link>
             <Button>저장</Button>
