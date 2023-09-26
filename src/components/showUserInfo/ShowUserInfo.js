@@ -45,6 +45,7 @@ const ShowUserInfo = ({ userinfo, type }) => {
       <span
         className={classname(`${s.nick} ${type}`, {
           [s.is_detail]: type === "detail",
+          [s.is_reply]: type === "reply",
         })}
         onClick={(e) => {
           e.stopPropagation();

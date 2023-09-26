@@ -1,5 +1,6 @@
 import { deleteReply, postReply, putReply } from "api/board";
 import Button from "components/button/Button";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import TextArea from "components/textarea/TextArea";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 import { useEffect, useState } from "react";
@@ -136,7 +137,7 @@ const ReplyItem = ({ postId, reply }) => {
               <Gravatar email={reply.userInfo.nickname} className={s.profile} />
             )}
             <div>
-              <p className={s.nickname}>{reply.userInfo.nickname}</p>
+              <ShowUserInfo userinfo={reply.userInfo} type="reply" />
               <p className={s.date}>{reply.modifiedDate}</p>
             </div>
             {reply.secret && <BsLock size={20} />}

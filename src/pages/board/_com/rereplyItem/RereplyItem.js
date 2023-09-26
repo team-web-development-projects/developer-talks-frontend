@@ -1,5 +1,6 @@
 import { deleteRereply, postRereply, putRereply } from "api/board";
 import Button from "components/button/Button";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import TextArea from "components/textarea/TextArea";
 import { useEffect, useState } from "react";
 import Gravatar from "react-gravatar";
@@ -110,7 +111,7 @@ const RereplyItem = ({ rr, postId }) => {
               <Gravatar email={rr.userInfo.nickname} className={s.profile} />
             )}
             <div>
-              <p className={s.nickname}>{rr.userInfo.nickname}</p>
+              <ShowUserInfo userinfo={rr.userInfo} type="reply" />
               <p className={s.date}>{rr.modifiedDate}</p>
             </div>
             {rr.secret && <BsLock size={20} />}

@@ -1,6 +1,8 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
+import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
 import { useEffect, useState } from "react";
 import Gravatar from "react-gravatar";
@@ -9,7 +11,6 @@ import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import s from "./answerItem.module.scss";
-import { showToast } from "components/toast/showToast";
 
 const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
@@ -148,7 +149,7 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
             <Gravatar email={answer.userInfo.nickname} className={s.profile} />
           )}
           <div>
-            <p className={s.nickname}>{answer.userInfo.nickname}</p>
+            <ShowUserInfo userinfo={answer.userInfo} type="reply" />
             <p className={s.date}>{answer.modifiedDate}</p>
           </div>
           {isSelf ? (
