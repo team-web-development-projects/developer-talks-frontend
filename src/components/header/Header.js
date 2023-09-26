@@ -16,6 +16,7 @@ import { SET_USER_INFO } from "store/User";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
+  const user = useSelector((state) => state.userStore);
   const noti = useSelector((state) => state.notification);
   // const noti = useSelector((state) => state.noti);
   const dispatch = useDispatch();
@@ -57,12 +58,14 @@ const Header = () => {
   const { data, isSuccess } = useQuery({
     queryKey: [auth],
     queryFn: () => getUserInfoApi(),
-    enabled: auth.accessToken !== null
+    enabled: auth.accessToken !== null,
   });
 
-  if(isSuccess){
-    dispatch(SET_USER_INFO({ nickname: data.nickname}))
-  }
+  useEffect(() => {
+    if (isSuccess && user.nickname === "") {
+      dispatch(SET_USER_INFO({ nickname: data.nickname }));
+    }
+  }, [user.nickname, isSuccess, dispatch]);
 
   return (
     <>
