@@ -72,7 +72,11 @@ const RereplyItem = ({ rr, postId }) => {
     deleteCommentMutation.mutate();
   };
   const handlePostClick = () => {
-    setIsPostToggle(true);
+    if (auth.accessToken) {
+      setIsPostToggle(true);
+    } else {
+      toast.error("로그인 후 이용해주세요.");
+    }
   };
   const handlePost = (e) => {
     e.preventDefault();
@@ -139,13 +143,7 @@ const RereplyItem = ({ rr, postId }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button
-                    classname={s.cancle}
-                    theme="outline"
-                    color="#9ca3af"
-                    size="medium"
-                    onClick={handleUpdateCancle}
-                  >
+                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -155,21 +153,13 @@ const RereplyItem = ({ rr, postId }) => {
           ) : (
             <>
               <div className={s.tagContentName}>@{rr.parentNickname}</div>
-              {/* <div className={s.content} onClick={handlePostClick}>
-                {rr.content}
-              </div> */}
-              <div
-                className={s.content}
-                dangerouslySetInnerHTML={{ __html: rr.content }}
-                onClick={handlePostClick}
-              ></div>
+              <div className={s.content} dangerouslySetInnerHTML={{ __html: rr.content }} onClick={handlePostClick}></div>
             </>
           )}
 
           {isPostToggle && !isUpdateToggle && (
             <form onSubmit={handlePost}>
               <div className={s.postConatiner}>
-                {/* <CkEditor form={reForm} setForm={setReForm} /> */}
                 <div className={s.tagName}>@{rr.userInfo.nickname}</div>
                 <TextArea form={reForm} setForm={setReForm} />
                 <div className={s.btnRgn}>
