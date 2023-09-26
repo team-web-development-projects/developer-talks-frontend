@@ -1,5 +1,6 @@
 import { deleteReply, postReply, putReply } from "api/board";
 import Button from "components/button/Button";
+import ShowUserInfo from "components/showUserInfo/ShowUserInfo";
 import TextArea from "components/textarea/TextArea";
 import RereplyItem from "pages/board/_com/rereplyItem/RereplyItem";
 import { useEffect, useState } from "react";
@@ -44,8 +45,12 @@ const ReplyItem = ({ postId, reply }) => {
   };
 
   const handleReToggle = () => {
-    setReForm({ content: "", secret: false });
-    setIsPostToggle((prev) => !prev);
+    if (auth.accessToken) {
+      setReForm({ content: "", secret: false });
+      setIsPostToggle((prev) => !prev);
+    } else {
+      toast.error("로그인 후 이용해주세요.");
+    }
   };
 
   const handleClickReRe = () => {
@@ -132,7 +137,7 @@ const ReplyItem = ({ postId, reply }) => {
               <Gravatar email={reply.userInfo.nickname} className={s.profile} />
             )}
             <div>
-              <p className={s.nickname}>{reply.userInfo.nickname}</p>
+              <ShowUserInfo userinfo={reply.userInfo} type="reply" />
               <p className={s.date}>{reply.modifiedDate}</p>
             </div>
             {reply.secret && <BsLock size={20} />}
@@ -164,13 +169,7 @@ const ReplyItem = ({ postId, reply }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button
-                    classname={s.cancle}
-                    theme="outline"
-                    color="#9ca3af"
-                    size="medium"
-                    onClick={handleUpdateCancle}
-                  >
+                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -222,13 +221,7 @@ const ReplyItem = ({ postId, reply }) => {
                       />{" "}
                       시크릿 댓글
                     </label>
-                    <Button
-                      classname={s.cancle}
-                      theme="outline"
-                      color="#9ca3af"
-                      size="medium"
-                      onClick={handleRePostCancle}
-                    >
+                    <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
                       취소
                     </Button>
                     <Button size="medium">등록</Button>
@@ -236,10 +229,7 @@ const ReplyItem = ({ postId, reply }) => {
                   {/* </div> */}
                 </form>
               )}
-              <div>
-                {isgetToggle &&
-                  reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}
-              </div>
+              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}</div>
             </div>
           </div>
         </div>

@@ -16,6 +16,7 @@ export default function BoardPost({ type }) {
     title: "",
     content: "",
     files: [],
+    imgUrls: [],
   });
   const [getType, setGetType] = useState();
 
