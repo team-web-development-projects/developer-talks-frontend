@@ -104,7 +104,7 @@ const BoardDetail = ({ type }) => {
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
-                <RiAlarmWarningFill className={s.report} onClick={() => setModalReport(!modalReport)} />
+                {auth.accessToken && <RiAlarmWarningFill className={s.report} onClick={() => setModalReport(!modalReport)} />}
               </div>
             </div>
           </div>
@@ -168,12 +168,7 @@ const BoardDetail = ({ type }) => {
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />
         ) : (
-          <AnswerList
-            nickname={nickname}
-            answerCnt={post.commentCount}
-            qnaNick={post.userInfo.nickname}
-            selectAnswer={post.selectAnswer}
-          />
+          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer} />
         )}
       </div>
       {modalReport && (

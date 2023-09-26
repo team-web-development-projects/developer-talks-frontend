@@ -1,6 +1,7 @@
 import axios from "axios";
 import Button from "components/button/Button";
 import CkEditor from "components/ckeditor/CkEditor";
+import { Modal } from "components/portalModal/Modal";
 import BasicModal from "components/portalModal/basicmodal/BasicModal";
 import { ROOT_API } from "constants/api";
 import { useState } from "react";
@@ -21,6 +22,7 @@ const BoardUpdate = ({ type }) => {
     content: state.content,
     userInfo: {},
     files: [],
+    filesOrder: [],
     imgUrls: state.imgUrls,
   });
   const handleSubmit = async (e) => {
@@ -34,17 +36,42 @@ const BoardUpdate = ({ type }) => {
       return;
     }
     await new Promise((r) => setTimeout(r, 1000));
-    form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
+    // form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
+    console.log("form 정보: ", form);
     const frm = new FormData();
+    form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
     if (form.files.length !== 0) {
-      form.files.forEach((file) => {
-        frm.append("files", file);
+      form.files.forEach((file, idx) => {
+        frm.append(`files[${idx}].file`, file);
+      });
+      form.filesOrder.forEach((order, idx) => {
+        frm.append(`files[${idx}].orderNum`, order);
       });
     }
     frm.append("title", form.title);
     frm.append("content", form.content);
     if (form.imgUrls.length !== 0) {
-      frm.append("imgUrls", form.imgUrls);
+      if (form.files.length !== 0) {
+        const imgCnt = form.imgUrls.length + form.files.length;
+        let arr = new Array(imgCnt).fill(true);
+        for (let i = 0; i < form.files.length; i++) {
+          arr[form.filesOrder[i]] = false;
+        }
+        let imgUrlIdx = 0;
+        for (let i = 0; i < imgCnt; i++) {
+          if (arr[i]) {
+            frm.append(`imgUrls[${imgUrlIdx}].orderNum`, i);
+            imgUrlIdx++;
+          }
+        }
+      } else {
+        form.imgUrls.forEach((imgUrl, idx) => {
+          frm.append(`imgUrls[${idx}].orderNum`, idx);
+        });
+      }
+      form.imgUrls.forEach((imgUrl, idx) => {
+        frm.append(`imgUrls[${idx}].url`, imgUrl);
+      });
     }
 
     axios
@@ -68,18 +95,30 @@ const BoardUpdate = ({ type }) => {
     <>
       {modalY && (
         <BasicModal setOnModal={() => setModalY()}>
-          게시글이 정상적으로 수정되었습니다.
-          <br />
-          확인을 눌러주세요.
-          <button onClick={() => navigate(-1)}>확인</button>
+          <Modal.Content>
+            게시글이 정상적으로 수정되었습니다.
+            <br />
+            확인을 눌러주세요.
+          </Modal.Content>
+          <Modal.Buttons>
+            <Button size="small" onClick={() => navigate(-1)}>
+              확인
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       {modalN && (
         <BasicModal setOnModal={() => setModalY()}>
-          글 수정을 취소하시겠습니까?
-          <br />
-          수정된 내용은 저장되지 않습니다.
-          <button onClick={() => navigate(-1)}>확인</button>
+          <Modal.Content>
+            글 수정을 취소하시겠습니까?
+            <br />
+            수정된 내용은 저장되지 않습니다.
+          </Modal.Content>
+          <Modal.Buttons>
+            <Button size="small" onClick={() => navigate(-1)}>
+              확인
+            </Button>
+          </Modal.Buttons>
         </BasicModal>
       )}
       <form onSubmit={handleSubmit}>
