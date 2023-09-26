@@ -39,6 +39,7 @@ const BoardUpdate = ({ type }) => {
     // form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
     console.log("form 정보: ", form);
     const frm = new FormData();
+    form.content = form.content.replace(/<img src=[^>]*>/g, "<img>");
     if (form.files.length !== 0) {
       form.files.forEach((file, idx) => {
         frm.append(`files[${idx}].file`, file);
