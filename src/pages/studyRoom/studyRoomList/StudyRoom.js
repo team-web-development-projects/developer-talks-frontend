@@ -32,7 +32,7 @@ const BoardList = ({ type }) => {
   };
 
   const handleClick = () => {
-    auth && auth.accessToken ? navigate(`/studyroom/post`) : setModal(true);
+    auth && auth.accessToken ? navigate(`/study-rooms/post`) : setModal(true);
   };
 
   const joinRoomClick = (id) => {
@@ -42,9 +42,9 @@ const BoardList = ({ type }) => {
       const find = res.content.find((item) => item.id === id);
       console.log("re", res, find);
       if (find === undefined) {
-        navigate(`/studyroom/info/${id}`);
+        navigate(`/study-rooms/info/${id}`);
       } else {
-        navigate(`/studyroom/${id}`);
+        navigate(`/study-rooms/${id}`);
       }
     });
   };

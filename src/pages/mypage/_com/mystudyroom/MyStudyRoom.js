@@ -154,7 +154,7 @@ const MyStudyRoom = () => {
                       item.studyRoomUsers.filter((item) => item.nickname === getNickname && item.status === true)
                         .length === 1
                     ) {
-                      navigate(`/studyroom/${item.id}`);
+                      navigate(`/study-rooms/${item.id}`);
                     } else {
                       alert("승인요청중입니다");
                     }

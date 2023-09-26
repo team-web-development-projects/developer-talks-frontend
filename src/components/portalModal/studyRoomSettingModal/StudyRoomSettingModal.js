@@ -32,7 +32,7 @@ const StudyRoomSettingModal = ({ setOnModal, id, data, setGetData }) => {
       })
       .then(() => {
         setModals(false);
-        navigate("/studyroom/");
+        navigate("/study-rooms/");
       })
       .catch((error) => {showToast("error", "본인 이외의 스터디원이 있으면 삭제가 불가능합니다.")
         console.log('error', error);

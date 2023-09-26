@@ -24,7 +24,7 @@ const Best = () => {
       <ul>
         {data && data.length !== 0  ?
           data.map((item, index) => (
-            <li key={index} onClick={() => naviate(`/board/${item.id}`)}>
+            <li key={index} onClick={() => naviate(`/post/${item.id}`)}>
               <div className="info">
                 <span>
                   {item.nickname} {item.createDate}

@@ -35,15 +35,15 @@ const Header = () => {
 
   const menuRouter = [
     {
-      link: "/qna",
+      link: "/questions",
       text: "Q&A",
     },
     {
-      link: "/board",
+      link: "/post",
       text: "커뮤니티",
     },
     {
-      link: "/studyroom",
+      link: "/study-rooms",
       text: "스터디룸",
     },
   ];
