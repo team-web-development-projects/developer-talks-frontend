@@ -99,7 +99,7 @@ const UserInfoList = ({ user }) => {
 
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
-  console.log('data', data && data.content);
+  // console.log('data', data && data.content);
 
   // console.log("pageNumber : ", pageNumber.showuserTab, "user: ", user, "location :", location);
 
