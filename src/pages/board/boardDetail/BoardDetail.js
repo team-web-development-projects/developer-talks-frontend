@@ -20,6 +20,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import AnswerList from "../_com/answerList/AnswerList";
 import s from "./boardDetail.module.scss";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorCallback from "components/errorCallback/ErrorCallback";
 
 const BoardDetail = ({ type }) => {
   const { postId } = useParams();
@@ -54,13 +56,12 @@ const BoardDetail = ({ type }) => {
 
   useEffect(() => {
     if (auth.accessToken !== null) {
-      const res = getReply(type, postId);
-      res
-        .then((res) => {
-          setCheckStatus(res);
-          console.log(res);
-        })
-        .catch((error) => console.log(error));
+      try {
+        const res = getReply(type, postId);
+        setCheckStatus(res);
+      } catch (error) {
+        console.log("에러: ", error);
+      }
     }
   }, []);
 
@@ -89,7 +90,7 @@ const BoardDetail = ({ type }) => {
   if (isError) return <div>error...</div>;
 
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorCallback}>
       <div className={s.container}>
         <header>
           <div className={s.userInfoContainer}>
@@ -104,7 +105,9 @@ const BoardDetail = ({ type }) => {
               <div className={s.info}>
                 <span>{post.createDate}&nbsp;&nbsp;&nbsp;</span>
                 <span>조회수 {post.viewCount}</span>
-                {auth.accessToken && <RiAlarmWarningFill className={s.report} onClick={() => setModalReport(!modalReport)} />}
+                {auth.accessToken && (
+                  <RiAlarmWarningFill className={s.report} onClick={() => setModalReport(!modalReport)} />
+                )}
               </div>
             </div>
           </div>
@@ -150,6 +153,7 @@ const BoardDetail = ({ type }) => {
             <AiOutlineStar />
             <span>{post.favoriteCount}</span>
           </BoardCount>
+
           <BoardCount
             ttype={type}
             type={"recommend"}
@@ -168,7 +172,12 @@ const BoardDetail = ({ type }) => {
         {type === "post" ? (
           <ReplyList nickname={nickname} replyCnt={post.commentCount} />
         ) : (
-          <AnswerList nickname={nickname} answerCnt={post.commentCount} qnaNick={post.userInfo.nickname} selectAnswer={post.selectAnswer} />
+          <AnswerList
+            nickname={nickname}
+            answerCnt={post.commentCount}
+            qnaNick={post.userInfo.nickname}
+            selectAnswer={post.selectAnswer}
+          />
         )}
       </div>
       {modalReport && (
@@ -184,7 +193,7 @@ const BoardDetail = ({ type }) => {
           </Modal.Content>
         </MessageModal>
       )}
-    </>
+    </ErrorBoundary>
   );
 };
 

@@ -1,7 +1,7 @@
 import Logout from "components/logout/Logout";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Userside.scss";
 // import ProfileImg from "components/profileImg/ProfileImg";
 import classNames from "classnames";
@@ -17,6 +17,7 @@ const Userside = () => {
   const [isActive, setIsActive] = useState("mypage");
   const [viewSide, setViewSide] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   // const [profileImgData, setProfileImgData] = useState({
   //   id: "",
   //   url: "",
@@ -27,6 +28,7 @@ const Userside = () => {
   };
 
   useEffect(() => {
+    console.log("userSide: ", location.state);
     if (location.state && location.state.nickname !== null) {
       if (location.state && location.state.nickname === nickname) {
         setViewSide(true);
@@ -58,25 +60,37 @@ const Userside = () => {
             <ul className="nav">
               <li
                 className={classNames("", { "is-active": isActive === "mypage" })}
-                onClick={() => handleClick("mypage")}
+                onClick={() => {
+                  handleClick("mypage");
+                  navigate("/mypage/activity");
+                }}
               >
                 활동내역
               </li>
               <li
                 className={classNames("", { "is-active": isActive === "my-studyroom" })}
-                onClick={() => handleClick("my-studyroom")}
+                onClick={() => {
+                  handleClick("my-studyroom");
+                  navigate("/mypage/my-studyrooms");
+                }}
               >
                 스터디룸
               </li>
               <li
                 className={classNames("", { "is-active": isActive === "my-message" })}
-                onClick={() => handleClick("my-message")}
+                onClick={() => {
+                  handleClick("my-message");
+                  navigate("/mypage/my-message");
+                }}
               >
                 쪽지
               </li>
               <li
                 className={classNames("", { "is-active": isActive === "account" })}
-                onClick={() => handleClick("account")}
+                onClick={() => {
+                  handleClick("account");
+                  navigate("/mypage/account");
+                }}
               >
                 회원정보수정 및 탈퇴
               </li>

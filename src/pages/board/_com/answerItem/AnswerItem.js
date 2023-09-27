@@ -116,7 +116,7 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   }, []);
 
   return (
-    <li className={s.container}>
+    <div className={s.container} id={answer.id} name={answer.id}>
       {nickname === qnaNick ? (
         answer.selected ? (
           <div className={s.selectContainer}>
@@ -179,7 +179,7 @@ const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
         )}
       </div>
       <ToastContainer />
-    </li>
+    </div>
   );
 };
 

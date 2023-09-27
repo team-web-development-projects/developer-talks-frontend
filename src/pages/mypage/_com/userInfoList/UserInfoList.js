@@ -1,12 +1,13 @@
 import { getUserActivity, getUserPost, getUserReply, getUserScrab } from "api/user";
 import Pagination from "components/pagination/Pagination";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Gravatar from "react-gravatar";
 import { useQueries, useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { INIT_PAGING } from "store/PagiNation";
-import { MyActivity, MyPost, MyReply, MyScrab } from "./Constans";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { INIT_PAGING, SET_PAGING } from "store/PagiNation";
+import { MyActivity, MyPost, MyScrab, MyReply } from "./Constans";
+// import MyReply from "./MyReply";
 import s from "./userinfolist.module.scss";
 import { getUserInfoApi } from "api/auth";
 import { SET_USER_INFO } from "store/User";
@@ -14,6 +15,7 @@ import { SET_USER_INFO } from "store/User";
 const UserInfoList = ({ user }) => {
   const pageNumber = useSelector((state) => state.paginationStore);
   const storeUser = useSelector((state) => state.userStore);
+  const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -25,12 +27,11 @@ const UserInfoList = ({ user }) => {
   const getUserProfile = location.state && location.state.userProfile;
 
   const getuser = user ? user.nickname : storeUser.nickname;
-  console.log("cc", getuser);
 
   const queries = useQueries([
     { queryKey: ["getuser"], queryFn: () => getUserInfoApi() },
     {
-      queryKey: ["getActivity", select, getuser],
+      queryKey: ["getActivity", select, getuser, pageNumber],
       queryFn: async () => {
         switch (select) {
           case 1:
@@ -57,28 +58,50 @@ const UserInfoList = ({ user }) => {
   const data = queries[1].data;
   const isLoading = queries[1].isLoading;
 
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["getActivity", select, getuser],
-  //   queryFn: async () => {
-  //     switch (select) {
-  //       case 1:
-  //         return getUserPost(pageNumber["userinfo"].item, getuser);
-  //       case 2:
-  //         return getUserReply(pageNumber["userinfo"].item, getuser);
-  //       case 3:
-  //         return getUserScrab(pageNumber["userinfo"].item, getuser);
-  //       default:
-  //         return getUserActivity(pageNumber["userinfo"].item, getuser);
-  //     }
-  //   },
-  //   enabled: storeUser.nickname !== "",
-  // });
+  useEffect(() => {
+    if (user === null) {
+      setSelect(0);
+    }
+  }, [user]);
 
   const onSelect = (type) => {
     setSelect(type);
+    switch (type) {
+      case 1:
+        navigate(`/user/write/${getuser}`, { state: user });
+        break;
+      case 2:
+        navigate(`/user/comment/${getuser}`, { state: user });
+        break;
+      case 3:
+        navigate(`/user/scrab/${getuser}`, { state: user });
+        break;
+      default:
+        navigate(`/user/recent/${getuser}`, { state: user });
+        break;
+    }
   };
+
+  useEffect(() => {
+    if (location.pathname.includes("user/recent")) {
+      setSelect(0);
+    }
+    if (location.pathname.includes("user/write")) {
+      setSelect(1);
+    }
+    if (location.pathname.includes("user/comment")) {
+      setSelect(2);
+    }
+    if (location.pathname.includes("user/scrab")) {
+      setSelect(3);
+    }
+  }, []);
+
   const contacts = ["최근활동", "내가 쓴 글", "댓글", "스크랩"];
 
+  console.log('data', data && data.content);
+
+  // console.log("pageNumber : ", pageNumber.showuserTab, "user: ", user, "location :", location);
 
   return (
     <>
@@ -99,7 +122,6 @@ const UserInfoList = ({ user }) => {
               <button
                 onClick={() => {
                   onSelect(index);
-                  dispatch(INIT_PAGING({ name: "userinfo" }));
                 }}
                 className={`${select === index ? `${s.select}` : ""}`}
               >
@@ -119,10 +141,10 @@ const UserInfoList = ({ user }) => {
             data.content.length !== 0 &&
             data.content.map((item, index) => (
               <div key={index} className={s.userdata}>
-                {select === 0 && MyActivity(item)}
-                {select === 1 && MyPost(item)}
-                {select === 2 && MyReply(item)}
-                {select === 3 && MyScrab(item)}
+                {select === 0 && MyActivity(item, 0)}
+                {select === 1 && MyPost(item, 1)}
+                {select === 2 && MyReply(item, 2)}
+                {select === 3 && MyScrab(item, 3)}
               </div>
             ))}
           {!isLoading && data && data.content.length === 0 && <>내용이 없습니다.</>}

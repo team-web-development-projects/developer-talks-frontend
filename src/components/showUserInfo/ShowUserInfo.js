@@ -8,18 +8,22 @@ import ReportModal from "components/portalModal/reportmodal/ReportModal";
 import { showToast } from "components/toast/showToast";
 import { useOutOfClick } from "hooks/useOutOfClick";
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import s from "./showuserinfo.module.scss";
+import { SET_PAGING } from "store/PagiNation";
 // import { useEffect } from "react";
 const ShowUserInfo = ({ userinfo, type }) => {
   const auth = useSelector((state) => state.authToken);
+  const pageNumber = useSelector((state) => state.paginationStore);
   const [modal, setModal] = useState(false);
   const [modalReport, setModalReport] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const targetRef = useRef(null);
   let navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
 
   const viewUserInfo = async (e) => {
     const res = getUserInfo(userinfo.nickname);
@@ -28,7 +32,7 @@ const ShowUserInfo = ({ userinfo, type }) => {
         if (response) {
           showToast("success", "😎 유저가 비공개인 상태입니다.");
         } else {
-          navigate(`/showuser/`, { state: userinfo });
+          navigate(`/user/comment/${userinfo.nickname}`, { state: userinfo });
         }
       })
       .catch((error) => {

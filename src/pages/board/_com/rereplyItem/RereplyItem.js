@@ -100,10 +100,11 @@ const RereplyItem = ({ rr, postId }) => {
       }
     }
   }, []);
+
   return (
     <>
       {(!rr.secret || (rr.secret && isSelf)) && (
-        <div className={s.container}>
+        <div className={s.container} id={`${rr.id}`} name={`${rr.id}`}>
           <div className={s.info}>
             {rr.userInfo.userProfile !== null ? (
               <img className={s.profile} src={rr.userInfo.userProfile} alt="프로필 이미지" />
