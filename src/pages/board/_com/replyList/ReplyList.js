@@ -79,7 +79,7 @@ const ReplyList = ({ nickname, replyCnt }) => {
                     type="checkbox"
                     name="secret"
                     onChange={() => {
-                      setForm({ ...form, ["secret"]: !form.secret });
+                      setForm({ ...form, "secret": !form.secret });
                     }}
                   />{" "}
                   시크릿 댓글

@@ -55,3 +55,12 @@
 .pointer {
   cursor: pointer;
 }
+
+.focus-link {
+  cursor: auto;
+  scroll-behavior: smooth;
+  &:focus {
+    outline: none;
+    border: none;
+  }
+}

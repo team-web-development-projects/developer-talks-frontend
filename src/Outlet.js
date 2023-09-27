@@ -11,7 +11,7 @@ export const NavigateMain = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const pageRouter = useSelector((state) => state.pageRouter);
-  const mypage = ["/mypage", "/my-studyroom", "/account"];
+  const mypage = ["", "/my-studyroom", "/account"];
 
   useEffect(() => {
     if (mypage.includes(location.pathname)) {

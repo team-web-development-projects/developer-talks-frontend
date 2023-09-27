@@ -10,18 +10,21 @@ import { FiMenu } from "react-icons/fi";
 import { TfiBell } from "react-icons/tfi";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./header.scss";
 import { SET_USER_INFO } from "store/User";
+import { SET_PAGING } from "store/PagiNation";
 
 const Header = () => {
   const auth = useSelector((state) => state.authToken);
   const user = useSelector((state) => state.userStore);
   const noti = useSelector((state) => state.notification);
+  const pageNumber = useSelector((state) => state.paginationStore);
   // const noti = useSelector((state) => state.noti);
   const dispatch = useDispatch();
   const [popover, setPopover] = useState(false);
   const targetRef = useRef(null);
+  const navigate = useNavigate();
   const location = useLocation();
   const [toggleShow, setToggleShow] = useState(false);
 
@@ -67,6 +70,11 @@ const Header = () => {
     }
   }, [user.nickname, isSuccess, dispatch]);
 
+  const goMypage = () => {
+    navigate(`/user/activity/${data.nickname}`);
+    // dispatch(SET_PAGING({ name: "showuserTab", item: 0 }));
+  };
+
   return (
     <>
       <div className={`${toggleShow && "mobile_wrap"}`}></div>
@@ -100,9 +108,9 @@ const Header = () => {
                 </span>
               </li>
               <li className="header-user">
-                <Link to="/showuser">
+                <div onClick={goMypage}>
                   {data && data.nickname ? <ProfileImg border="color" type="header" /> : <BsFillPersonFill size={24} />}
-                </Link>
+                </div>
                 {data && data.nickname && <span>{`${data.nickname}님`}</span>}
               </li>
             </ul>

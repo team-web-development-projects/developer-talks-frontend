@@ -17,7 +17,7 @@ import StudyRoom from "pages/studyRoom/studyRoomList/StudyRoom";
 import StudyRoomPost from "pages/studyRoom/studyRoomPost/StudyRoomPost";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Route, Routes, useLocation, Outlet } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, Outlet, useSearchParams } from "react-router-dom";
 import useGoogleLoginAuth from "useGoogleLoginAuth";
 import useRefreshToken from "useRefreshToken";
 import { NavigateMain, NavigatePost } from "./Outlet";
@@ -32,6 +32,9 @@ import { getCookie } from "util/authCookie";
 import { useQuery } from "react-query";
 import { getUserInfoApi } from "api/auth";
 import { SET_USER_INFO } from "store/User";
+import MyStudyRoom from "pages/mypage/_com/mystudyroom/MyStudyRoom";
+import MyMessage from "pages/mypage/_com/mymessage/MyMessage";
+import Account from "pages/mypage/_com/account/Account";
 // import createAxiosInstance from "./module/useInterceptor";
 
 // FCM 테스트
@@ -87,7 +90,7 @@ function App() {
           <Route index element={<Main />} />
           {/* <Route path="developer-talks-frontend" element={<Main />} /> */}
           {/* <Route exact path="/" element={<Main />} /> */}
-          <Route path="showuser" element={<Index />} />
+          <Route path="user/*" element={<Index />} />
 
           <Route path="study-rooms" element={<StudyRoom />} />
           <Route path="post" element={<BoardList type="post" />} />

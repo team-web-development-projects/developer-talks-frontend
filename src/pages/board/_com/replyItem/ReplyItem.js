@@ -129,7 +129,7 @@ const ReplyItem = ({ postId, reply }) => {
   return (
     <>
       {(!reply.secret || (reply.secret && isSelf)) && (
-        <div className={s.container}>
+        <div className={s.container} id={reply.id}>
           <div className={s.info}>
             {reply.userInfo.userProfile !== null ? (
               <img className={s.profile} src={reply.userInfo.userProfile} alt="프로필 이미지" />
@@ -169,7 +169,13 @@ const ReplyItem = ({ postId, reply }) => {
                     />{" "}
                     시크릿 댓글
                   </label>
-                  <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleUpdateCancle}>
+                  <Button
+                    classname={s.cancle}
+                    theme="outline"
+                    color="#9ca3af"
+                    size="medium"
+                    onClick={handleUpdateCancle}
+                  >
                     취소
                   </Button>
                   <Button size="medium">수정</Button>
@@ -221,7 +227,13 @@ const ReplyItem = ({ postId, reply }) => {
                       />{" "}
                       시크릿 댓글
                     </label>
-                    <Button classname={s.cancle} theme="outline" color="#9ca3af" size="medium" onClick={handleRePostCancle}>
+                    <Button
+                      classname={s.cancle}
+                      theme="outline"
+                      color="#9ca3af"
+                      size="medium"
+                      onClick={handleRePostCancle}
+                    >
                       취소
                     </Button>
                     <Button size="medium">등록</Button>
@@ -229,7 +241,10 @@ const ReplyItem = ({ postId, reply }) => {
                   {/* </div> */}
                 </form>
               )}
-              <div>{isgetToggle && reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}</div>
+              <div>
+                {isgetToggle &&
+                  reply.childrenList.map((rereply) => <RereplyItem key={rereply.id} rr={rereply} postId={postId} />)}
+              </div>
             </div>
           </div>
         </div>

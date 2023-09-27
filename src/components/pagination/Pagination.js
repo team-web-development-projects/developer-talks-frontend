@@ -12,8 +12,6 @@ const Pagination = ({ totalPage, name }) => {
     pageNumbers.push(i);
   }
 
-  // console.log('c c', pageNumber);
-
   return (
     <>
       <ul className={s.container}>

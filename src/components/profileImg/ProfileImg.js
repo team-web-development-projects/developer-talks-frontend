@@ -86,7 +86,7 @@ const ProfileImg = ({ size = "small", profileImgData, setProfileImgData, nicknam
       {/* 마이페이지에 이미지가 없는 경우, 회원가입 페이지는 포함 안됨. */}
       {auth.accessToken && data && data.url === null && user.nickname && (
         // <div className={s.img} dangerouslySetInnerHTML={{ __html: randomProfile(auth.accessToken) }} />
-        <Gravatar email={user.nickname} />
+        <Gravatar email={user.nickname}/>
       )}
       {/* {!auth.accessToken && (
         <img

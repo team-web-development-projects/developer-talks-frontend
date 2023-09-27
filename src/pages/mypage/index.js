@@ -13,6 +13,7 @@ const Index = () => {
       navigate("/login", { replace: true });
     }
   }, [auth.accessToken, navigate]);
+
   return <div>{auth.accessToken !== null ? <Userside /> : null}</div>;
 };
 

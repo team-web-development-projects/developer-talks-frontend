@@ -11,7 +11,7 @@ export const MyActivity = (item) => {
   switch (item.type) {
     case "QUESTION":
       return (
-        <Link className={types.text_wrap}>
+        <Link className={types.text_wrap} to={`/questions/${item.id}`}>
           <div className={types.title}>
             <div>
               <span>질문글</span>을 생성하였습니다.
@@ -23,7 +23,7 @@ export const MyActivity = (item) => {
       );
     case "ANSWER":
       return (
-        <Link className={types.text_wrap}>
+        <Link className={types.text_wrap} to={`/questions/${item.id}/#${item.subId}`}>
           <div className={types.title}>
             <div>
               <span>{item.writer}</span>님의 <span>질문</span>글에 <span>댓글</span>을 달았습니다.
@@ -35,12 +35,7 @@ export const MyActivity = (item) => {
       );
     case "STUDY_CREATE":
       return (
-        <Link
-          className={types.text_wrap}
-          to={`/study-rooms/${item.id}`}
-          onClick={() => {
-          }}
-        >
+        <Link className={types.text_wrap} to={`/study-rooms/${item.id}`}>
           <div className={types.title}>
             <div>
               <span>스터디룸</span>을 생성하였습니다.
@@ -52,14 +47,7 @@ export const MyActivity = (item) => {
       );
     case "POST":
       return (
-        <Link
-          className={types.text_wrap}
-          to={`/post/${item.id}`}
-          onClick={() => {
-            // navigate(`/board/${item.id}`);
-            // dispatch(TAB_ROUTER({ tab: "tab0" }));
-          }}
-        >
+        <Link className={types.text_wrap} to={`/post/${item.id}`}>
           <div className={types.title}>
             <div>
               <span>게시글</span>을 생성하였습니다.
@@ -71,7 +59,7 @@ export const MyActivity = (item) => {
       );
     case "COMMENT":
       return (
-        <Link className={types.text_wrap}>
+        <Link className={types.text_wrap} to={`/post/${item.id}/#${item.subId}`}>
           <div className={types.title}>
             <div>
               <span>{item.writer}</span>님의 <span>게시글</span>에 <span>댓글</span>을 달았습니다.
@@ -102,7 +90,7 @@ export const MyPost = (item) => {
 
 export const MyReply = (item) => {
   return (
-    <Link className={types.text_wrap}>
+    <Link className={types.text_wrap} to={`/post/${item.postId}`}>
       <div className={types.title}>
         <div>
           <span>{item.postTitle}</span>에 <span>댓글</span>을 작성하였습니다.
