@@ -3,6 +3,7 @@ import axios from "axios";
 import { showToast } from "components/toast/showToast";
 import { ROOT_API } from "constants/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import store from "store";
 import { SET_TOKEN, refreshAccessToken, tokenSlice } from "store/Auth";
 import { SET_USER_INFO } from "store/User";
@@ -15,7 +16,7 @@ const apiInstance = axios.create({
   // },
   timeout: 5000,
 });
-
+let lastErrorMessage = "";
 // 요청하기전에?
 apiInstance.interceptors.request.use(
   async (config) => {
@@ -105,6 +106,16 @@ apiInstance.interceptors.response.use(
       }
       // 토큰 재발급 요청
       return Promise.reject(err);
+    }
+
+    if (err.response && err.response.status === 403) {
+      // 403 에러 처리
+      console.log("정지된 계정으로 이용하실 수 없습니다.");
+      const errorMessage = "정지된 계정으로, 게시글 조회 외에는 이용하실 수 없습니다.";
+      if (errorMessage !== lastErrorMessage) {
+        toast.error(errorMessage);
+        lastErrorMessage = errorMessage;
+      }
     }
   }
 );

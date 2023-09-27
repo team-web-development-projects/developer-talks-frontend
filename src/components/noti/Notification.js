@@ -8,6 +8,7 @@ import { OFF_NOTI, ON_NOTI } from "store/Notification";
 import s from "./notification.module.scss";
 import classNames from "classnames";
 import { getCookie } from "util/authCookie";
+import { get } from "react-hook-form";
 
 const Notification = ({ unRead, classname }) => {
   const auth = useSelector((state) => state.authToken);
@@ -86,6 +87,7 @@ const Notification = ({ unRead, classname }) => {
 
   const renderData =
     getAlarmAll.isSuccess &&
+    getAlarmAll.data &&
     getAlarmAll.data.filter((item) => {
       if (filteredData === "read") {
         return item.readStatus === "READ";
@@ -158,7 +160,7 @@ const Notification = ({ unRead, classname }) => {
 
       <ul>
         {getAlarmAll.isLoading && <li>로딩중입니다..</li>}
-        {renderData.length > 0 ? (
+        {renderData && renderData.length > 0 ? (
           renderData.map((item, i) => (
             <li
               key={i}

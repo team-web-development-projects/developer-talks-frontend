@@ -63,7 +63,7 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccess && user.nickname === "") {
-      dispatch(SET_USER_INFO({ nickname: data.nickname }));
+      dispatch(SET_USER_INFO({ nickname: data && data.nickname }));
     }
   }, [user.nickname, isSuccess, dispatch]);
 
@@ -100,9 +100,7 @@ const Header = () => {
                 </span>
               </li>
               <li className="header-user">
-                <Link to="/showuser">
-                  {data && data.nickname ? <ProfileImg border="color" type="header" /> : <BsFillPersonFill size={24} />}
-                </Link>
+                <Link to="/showuser" state={{ active: data }}>{data && data.nickname ? <ProfileImg border="color" type="header" /> : <BsFillPersonFill size={24} />}</Link>
                 {data && data.nickname && <span>{`${data.nickname}님`}</span>}
               </li>
             </ul>
@@ -115,11 +113,7 @@ const Header = () => {
         <div className={`mobile-nav ${toggleShow ? "is-open" : false}`}>
           <div className="header-user">
             <Link to="/showuser">
-              {data && data.nickname ? (
-                <ProfileImg border="color" type="header" className="profile" />
-              ) : (
-                <BsFillPersonFill size={24} />
-              )}
+              {data && data.nickname ? <ProfileImg border="color" type="header" className="profile" /> : <BsFillPersonFill size={24} />}
             </Link>
             {data && data.nickname && <span>{`${data.nickname}님`}</span>}
           </div>
