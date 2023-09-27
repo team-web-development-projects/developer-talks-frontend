@@ -49,6 +49,10 @@ const Header = () => {
       link: "/study-rooms",
       text: "스터디룸",
     },
+    // {
+    //   link: "/notice",
+    //   text: "공지사항",
+    // },
   ];
 
   useOutOfClick(targetRef, () => {
