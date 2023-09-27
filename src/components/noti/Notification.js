@@ -16,13 +16,18 @@ const Notification = ({ unRead, classname }) => {
   const location = useLocation();
   const [filteredData, setFilteredData] = useState();
   const [nav, setNav] = useState("all");
+  const [renderData, setRenderData] = useState([]);
 
   const queries = useQueries([
     {
       queryKey: ["alaram", location],
       queryFn: () => getAlarm(),
       enabled: auth.accessToken !== null,
-      initialData: [],
+      // initialData: [],
+      onError: () => {
+        console.log("온에러");
+      },
+      // setRenderData(['서버 출력 에러']),
     },
     {
       queryKey: ["alaramUnRead", location],
@@ -33,6 +38,20 @@ const Notification = ({ unRead, classname }) => {
   ]);
   const getAlarmAll = queries[0];
   const getAlarmUnRead = queries[1];
+
+  function onSu() {
+    // const data = getAlarmAll.data.filter((item) => {
+    //   if (filteredData === "read") {
+    //     return item.readStatus === "READ";
+    //   }
+    //   if (filteredData === "unread") {
+    //     return item.readStatus === "WAIT";
+    //   }
+    //   return getAlarmAll.data;
+    // });
+    // setRenderData(data);
+  }
+  console.log('error', getAlarmAll.isError, getAlarmAll.error)
 
   // 알람 모두 읽기
   const { isLoading: isLoadingAllREad, mutate: allread } = useMutation(["readAll"], () => postAlarmAllRead(), {
@@ -83,18 +102,6 @@ const Notification = ({ unRead, classname }) => {
       dispatch(ON_NOTI());
     }
   }, [dispatch, getAlarmUnRead]);
-
-  const renderData =
-    getAlarmAll.isSuccess &&
-    getAlarmAll.data.filter((item) => {
-      if (filteredData === "read") {
-        return item.readStatus === "READ";
-      }
-      if (filteredData === "unread") {
-        return item.readStatus === "WAIT";
-      }
-      return getAlarmAll.data;
-    });
 
   return (
     <div
@@ -158,7 +165,7 @@ const Notification = ({ unRead, classname }) => {
 
       <ul>
         {getAlarmAll.isLoading && <li>로딩중입니다..</li>}
-        {renderData.length > 0 ? (
+        {renderData.length > 0 &&
           renderData.map((item, i) => (
             <li
               key={i}
@@ -181,10 +188,9 @@ const Notification = ({ unRead, classname }) => {
                 </span>
               </span>
             </li>
-          ))
-        ) : (
-          <li className={s.not_alarm}>알람이 없습니다.</li>
-        )}
+          ))}
+        {getAlarmAll.error && <li className={s.not_alarm}>알람이 없습니다.</li>}
+        {getAlarmAll.isError && <li className={s.not_alarm}>서버에러</li>}
       </ul>
     </div>
   );
