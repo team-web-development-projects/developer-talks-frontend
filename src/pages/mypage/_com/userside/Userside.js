@@ -62,7 +62,7 @@ const Userside = () => {
                 className={classNames("", { "is-active": isActive === "mypage" })}
                 onClick={() => {
                   handleClick("mypage");
-                  navigate("/mypage/activity");
+                  navigate("/user/activity");
                 }}
               >
                 활동내역
@@ -71,7 +71,7 @@ const Userside = () => {
                 className={classNames("", { "is-active": isActive === "my-studyroom" })}
                 onClick={() => {
                   handleClick("my-studyroom");
-                  navigate("/mypage/my-studyrooms");
+                  navigate("/user/my-studyrooms");
                 }}
               >
                 스터디룸
@@ -80,7 +80,7 @@ const Userside = () => {
                 className={classNames("", { "is-active": isActive === "my-message" })}
                 onClick={() => {
                   handleClick("my-message");
-                  navigate("/mypage/my-message");
+                  navigate("/user/my-message");
                 }}
               >
                 쪽지
@@ -89,7 +89,7 @@ const Userside = () => {
                 className={classNames("", { "is-active": isActive === "account" })}
                 onClick={() => {
                   handleClick("account");
-                  navigate("/mypage/account");
+                  navigate("/user/account");
                 }}
               >
                 회원정보수정 및 탈퇴
