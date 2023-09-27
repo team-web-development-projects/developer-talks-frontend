@@ -61,17 +61,18 @@
       padding: 10px;
     }
     &.is_read {
-      a {
+      .noti_link {
         background: #fff;
         color: #b7b7b7!important;
         padding-right: 40px;
       }
     }
-    a {
+    .noti_link {
       padding: 10px;
       background: #eee;
       @include multi-dotdotdot(14px, 2);
       padding-right: 110px;
+      cursor: pointer;
     }
     .ctl {
       position: absolute;

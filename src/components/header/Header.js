@@ -30,6 +30,7 @@ const Header = () => {
 
   useEffect(() => {
     setToggleShow(false);
+    setPopover(false);
   }, [location]);
 
   const showPopover = () => {

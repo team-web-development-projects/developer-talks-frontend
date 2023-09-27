@@ -3,7 +3,7 @@ import classnames from "classnames";
 import { useEffect, useState } from "react";
 import { useMutation, useQueries, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { OFF_NOTI, ON_NOTI } from "store/Notification";
 import s from "./notification.module.scss";
 import classNames from "classnames";
@@ -14,18 +14,19 @@ const Notification = ({ unRead, classname }) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const [filteredData, setFilteredData] = useState();
   const [nav, setNav] = useState("all");
 
   const queries = useQueries([
     {
-      queryKey: ["alaram", location],
+      queryKey: ["alaram"],
       queryFn: () => getAlarm(),
       enabled: auth.accessToken !== null,
       initialData: [],
     },
     {
-      queryKey: ["alaramUnRead", location],
+      queryKey: ["alaramUnRead"],
       queryFn: () => ApigetAlarmUnRead(),
       enabled: auth.accessToken !== null,
       initialData: [],
@@ -95,6 +96,15 @@ const Notification = ({ unRead, classname }) => {
       }
       return getAlarmAll.data;
     });
+
+  const move = (val) => {
+    console.log("ccc: ", val, typeof val);
+    if (val != null) {
+      navigate(`${val}`);
+    } else {
+      alert("삭제되거나 없는 경로입니다.");
+    }
+  };
 
   return (
     <div
@@ -167,9 +177,9 @@ const Notification = ({ unRead, classname }) => {
               })}
               onClick={(e) => readId(e, item.id)}
             >
-              <Link to={item.url} className="noti_link">
+              <div className={s.noti_link} onClick={() => move(item.url)}>
                 {item.message}
-              </Link>
+              </div>
               <span className={s.ctl}>
                 {item.readStatus !== "READ" && (
                   <span onClick={(e) => readId(e, item.id)} className={s.read_log}>
