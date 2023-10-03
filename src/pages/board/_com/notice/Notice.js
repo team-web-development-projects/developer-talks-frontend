@@ -14,7 +14,7 @@ const Notice = () => {
       headers: {
         "Content-Type": "application/json",
         "X-AUTH-TOKEN": auth.accessToken,
-      }
+      },
     });
     return data;
   }
@@ -27,11 +27,17 @@ const Notice = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>error...</div>;
 
+  console.log("dd", data);
+
   return (
     <section>
       <strong>공지글</strong>
       <ul>
-        {data.totalElements ? data.content.map((board, index) => <TableItem2 key={index} data={board} />) : <li>등록된 유저가 없습니다.</li>}
+        {data.totalElements ? (
+          data.content.map((board, index) => <TableItem2 key={index} data={board} />)
+        ) : (
+          <li>등록된 유저가 없습니다.</li>
+        )}
       </ul>
     </section>
   );

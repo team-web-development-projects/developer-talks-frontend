@@ -23,7 +23,7 @@ const BoardList = ({ type }) => {
   const [selectText, setSelectText] = useState("");
 
   const handleClickPost = () => {
-    auth && auth.accessToken ? navigate(`/${type === "post" ? "board" : "qna"}/post`) : setModal(true);
+    auth && auth.accessToken ? navigate(`/${type === "post" ? "post" : "questions"}/post`) : setModal(true);
   };
 
   const { data, isLoading, refetch } = useQuery({

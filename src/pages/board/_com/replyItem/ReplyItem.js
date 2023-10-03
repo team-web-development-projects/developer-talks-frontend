@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import s from "./replyItem.module.scss";
+import { NavHashLink } from "react-router-hash-link";
 
 const ReplyItem = ({ postId, reply }) => {
   const auth = useSelector((state) => state.authToken);
@@ -129,7 +130,12 @@ const ReplyItem = ({ postId, reply }) => {
   return (
     <>
       {(!reply.secret || (reply.secret && isSelf)) && (
-        <div className={s.container} id={reply.id}>
+        <NavHashLink
+          className={s.container}
+          to={`/post/${postId}/#${reply.id}`}
+          smooth
+          activeStyle={{ fontWeight: "bold", color: "#ff0000" }}
+        >
           <div className={s.info}>
             {reply.userInfo.userProfile !== null ? (
               <img className={s.profile} src={reply.userInfo.userProfile} alt="프로필 이미지" />
@@ -247,7 +253,7 @@ const ReplyItem = ({ postId, reply }) => {
               </div>
             </div>
           </div>
-        </div>
+        </NavHashLink>
       )}
     </>
   );

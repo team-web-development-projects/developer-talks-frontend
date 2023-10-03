@@ -35,6 +35,7 @@ import { SET_USER_INFO } from "store/User";
 import MyStudyRoom from "pages/mypage/_com/mystudyroom/MyStudyRoom";
 import MyMessage from "pages/mypage/_com/mymessage/MyMessage";
 import Account from "pages/mypage/_com/account/Account";
+import Notice from "pages/board/_com/notice/Notice";
 // import createAxiosInstance from "./module/useInterceptor";
 
 // FCM 테스트
@@ -101,6 +102,7 @@ function App() {
           <Route path="questions" element={<BoardList type="questions" />} />
           <Route path="questions/search/:keyword" element={<BoardList type="questions" />} />
           <Route path="/questions/:postId" element={<BoardDetail type="questions" />} />
+          {/* <Route path="notice" element={<Notice />} /> */}
           {/* <Route path="*" element={<NotPage />} /> */}
         </Route>
 

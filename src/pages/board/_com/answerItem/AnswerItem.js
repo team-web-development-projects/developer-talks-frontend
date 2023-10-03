@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import s from "./answerItem.module.scss";
+import { NavHashLink } from "react-router-hash-link";
 
 const AnswerItem = ({ answer, qnaNick, selectAnswer }) => {
   const auth = useSelector((state) => state.authToken);
