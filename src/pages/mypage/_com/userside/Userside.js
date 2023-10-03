@@ -28,7 +28,7 @@ const Userside = () => {
   };
 
   useEffect(() => {
-    console.log("userSide: ", location.state);
+    // console.log("userSide: ", location.state);
     if (location.state && location.state.nickname !== null) {
       if (location.state && location.state.nickname === nickname) {
         setViewSide(true);

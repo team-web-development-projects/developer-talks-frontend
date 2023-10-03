@@ -32,7 +32,7 @@ const ShowUserInfo = ({ userinfo, type }) => {
         if (response) {
           showToast("success", "😎 유저가 비공개인 상태입니다.");
         } else {
-          navigate(`/user/comment/${userinfo.nickname}`, { state: userinfo });
+          navigate(`/user/recent/${userinfo.nickname}`, { state: userinfo });
         }
       })
       .catch((error) => {

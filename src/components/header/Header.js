@@ -76,8 +76,7 @@ const Header = () => {
   }, [user.nickname, isSuccess, dispatch]);
 
   const goMypage = () => {
-    navigate(`/user/activity/${data.nickname}`);
-    // dispatch(SET_PAGING({ name: "showuserTab", item: 0 }));
+    // navigate(`/user/activity/${data.nickname}`);
   };
 
   return (
@@ -113,9 +112,9 @@ const Header = () => {
                 </span>
               </li>
               <li className="header-user">
-                <div onClick={goMypage}>
+                <Link to="/user">
                   {data && data.nickname ? <ProfileImg border="color" type="header" /> : <BsFillPersonFill size={24} />}
-                </div>
+                </Link>
                 {data && data.nickname && <span>{`${data.nickname}님`}</span>}
               </li>
             </ul>
@@ -127,7 +126,7 @@ const Header = () => {
 
         <div className={`mobile-nav ${toggleShow ? "is-open" : false}`}>
           <div className="header-user">
-            <Link to="/showuser">
+            <Link to="/user">
               {data && data.nickname ? (
                 <ProfileImg border="color" type="header" className="profile" />
               ) : (
